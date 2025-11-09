@@ -1,0 +1,277 @@
+import React, { useState } from 'react';
+import Toast from './Toast';
+import './Enquiries.css';
+
+const ViewCustomerStatement = ({ setCurrentPage }) => {
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
+  const [emailPhoneCollapsed, setEmailPhoneCollapsed] = useState(false);
+  const [classificationCollapsed, setClassificationCollapsed] = useState(false);
+  const [activeTab, setActiveTab] = useState('relationships');
+
+  const customerData = JSON.parse(sessionStorage.getItem('selectedCustomerStatement') || '{}');
+
+  const [formData] = useState({
+    customerId: '3.1',
+    name: customerData.name || 'Seatrium (SG) Pte. Ltd.',
+    type: 'Company',
+    companyName: customerData.name || 'Seatrium (SG) Pte. Ltd.',
+    email: '',
+    phone: '',
+    altPhone: '',
+    fax: '',
+    address: 'Seatrium (SG) Pte. Ltd.\n55 Tanjong Road West, Singapore 769956\nSingapore',
+    status: 'CUSTOMER-Renewal',
+    salesRep: 'MEP004 Kandasamy Kannan',
+    webAddress: '',
+    category: 'Shipyard',
+    defaultOrderPriority: '',
+    comments: '',
+    primarySubsidiary: 'Tech Offshore Marine (DO) Pte Ltd',
+    lastSalesActivity: ''
+  });
+
+  const tabs = [
+    { id: 'relationships', label: 'Relationships' },
+    { id: 'communication', label: 'Communication' },
+    { id: 'address', label: 'Address' },
+    { id: 'sales', label: 'Sales' },
+    { id: 'marketing', label: 'Marketing' },
+    { id: 'financial', label: 'Financial' },
+    { id: 'preferences', label: 'Preferences' },
+    { id: 'system-info', label: 'System Information' },
+    { id: 'custom', label: 'Custom' },
+    { id: 'access', label: 'Access' },
+    { id: 'subsidiaries', label: 'Subsidiaries' }
+  ];
+
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+  };
+
+  const handleEdit = () => {
+    setCurrentPage('edit-customer-statement');
+  };
+
+  const handleBack = () => {
+    setCurrentPage('generate-statements');
+  };
+
+  return (
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-user"></i>
+          <div>
+            <h1>Customer</h1>
+            <div className="detail-subtitle">
+              <span>{formData.customerId} {formData.name}</span>
+            </div>
+          </div>
+        </div>
+        <div className="detail-actions">
+          <button className="btn-action" onClick={handleBack}>
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <button className="btn-action">
+            <i className="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleEdit}>
+          <i className="fas fa-edit"></i>
+          Edit
+        </button>
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar" onClick={() => showToast('Accept Payment', 'info')}>
+          Accept Payment
+        </button>
+        <button className="btn-toolbar" onClick={() => showToast('Print', 'info')}>
+          <i className="fas fa-print"></i>
+          Print
+        </button>
+        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
+          <button className="btn-toolbar">
+            <i className="fas fa-cog"></i>
+            Actions
+            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
+          </button>
+        </div>
+      </div>
+
+      <div className="detail-content">
+        {/* Primary Information */}
+        <div className={`detail-section ${primaryInfoCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header" onClick={() => setPrimaryInfoCollapsed(!primaryInfoCollapsed)}>
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>CUSTOMER ID</label>
+                <div className="field-value">{formData.customerId}</div>
+              </div>
+              <div className="detail-field">
+                <label>STATUS</label>
+                <div className="field-value">{formData.status}</div>
+              </div>
+              <div className="detail-field">
+                <label>NAME</label>
+                <div className="field-value">{formData.name}</div>
+              </div>
+              <div className="detail-field">
+                <label>SALES REP</label>
+                <div className="field-value">{formData.salesRep}</div>
+              </div>
+              <div className="detail-field">
+                <label>TYPE</label>
+                <div className="field-value">
+                  <i className="fas fa-building" style={{ marginRight: '0.5rem' }}></i>
+                  {formData.type}
+                </div>
+              </div>
+              <div className="detail-field">
+                <label>WEB ADDRESS</label>
+                <div className="field-value">{formData.webAddress || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>COMPANY NAME</label>
+                <div className="field-value">{formData.companyName}</div>
+              </div>
+              <div className="detail-field">
+                <label>CATEGORY</label>
+                <div className="field-value">{formData.category}</div>
+              </div>
+              <div className="detail-field">
+                <label>DEFAULT ORDER PRIORITY</label>
+                <div className="field-value">{formData.defaultOrderPriority || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>COMMENTS</label>
+                <div className="field-value">{formData.comments || '-'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Email | Phone | Address */}
+        <div className={`detail-section ${emailPhoneCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header" onClick={() => setEmailPhoneCollapsed(!emailPhoneCollapsed)}>
+            <i className="fas fa-chevron-down"></i>
+            <h3>Email | Phone | Address</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>EMAIL</label>
+                <div className="field-value">{formData.email || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>ALT. PHONE</label>
+                <div className="field-value">{formData.altPhone || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>PHONE</label>
+                <div className="field-value">{formData.phone || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>ADDRESS</label>
+                <div className="field-value" style={{ whiteSpace: 'pre-line' }}>
+                  {formData.address}
+                </div>
+              </div>
+              <div className="detail-field">
+                <label>FAX</label>
+                <div className="field-value">{formData.fax || '-'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Classification */}
+        <div className={`detail-section ${classificationCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header" onClick={() => setClassificationCollapsed(!classificationCollapsed)}>
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>PRIMARY SUBSIDIARY</label>
+                <div className="field-value">{formData.primarySubsidiary}</div>
+              </div>
+              <div className="detail-field">
+                <label>LAST SALES ACTIVITY</label>
+                <div className="field-value">{formData.lastSalesActivity || '-'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="detail-tabs">
+          <div className="tabs-header">
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="tabs-content">
+            {activeTab === 'relationships' && (
+              <div style={{ padding: '1.5rem' }}>
+                <h4 style={{ 
+                  fontSize: '0.875rem', 
+                  fontWeight: '600', 
+                  color: '#666', 
+                  marginBottom: '1rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  OTHER RELATIONSHIPS
+                </h4>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.5rem',
+                  padding: '1rem',
+                  background: '#f8f9fa',
+                  borderRadius: '4px'
+                }}>
+                  <i className="fas fa-link" style={{ color: '#999' }}></i>
+                  <span style={{ color: '#666', fontSize: '0.875rem' }}>No relationships defined</span>
+                </div>
+              </div>
+            )}
+
+            {activeTab !== 'relationships' && (
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>
+                No data available for this tab
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        show={toast.show} 
+        onClose={() => setToast({ ...toast, show: false })} 
+      />
+    </div>
+  );
+};
+
+export default ViewCustomerStatement;
