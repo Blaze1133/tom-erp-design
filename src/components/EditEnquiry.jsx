@@ -9,8 +9,7 @@ const EditEnquiry = ({ setCurrentPage }) => {
   const [formData, setFormData] = useState({
     documentNumber: 'E22TOM80024',
     customForm: 'Standard Enquiry',
-    company: '7 Test Customer',
-    customerProject: 'TOM22-00733',
+    company: 'TOM22-00733',
     salesRep: '',
     title: 'Test Enquiry',
     status: 'Proposal',
@@ -156,20 +155,10 @@ const EditEnquiry = ({ setCurrentPage }) => {
             
             <div className="form-group">
               <label className="form-label required">Customer</label>
-              <input 
-                type="text" 
+              <select 
                 className="form-control"
                 value={formData.company}
                 onChange={(e) => handleFormChange('company', e.target.value)}
-              />
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label">Customer Project</label>
-              <select
-                className="form-control"
-                value={formData.customerProject}
-                onChange={(e) => handleFormChange('customerProject', e.target.value)}
               >
                 <option value="">Select...</option>
                 <option value="100 - 102">100 Baroid Surface Solutions, Halliburton Energy Services Inc</option>
