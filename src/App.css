@@ -73,7 +73,7 @@ textarea.form-control {
 }
 
 .logo-container {
-    padding: 1.5rem;
+    padding: 0.75rem 1.5rem;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
@@ -85,7 +85,7 @@ textarea.form-control {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 0.5rem;
     height: 60px;
     transition: all 0.3s ease;
 }
@@ -138,7 +138,7 @@ textarea.form-control {
 }
 
 .nav-menu {
-    padding: 1rem 0;
+    padding: 0.5rem 0;
 }
 
 .nav-item {
@@ -190,13 +190,17 @@ textarea.form-control {
 .nav-item-parent::before {
     content: '';
     position: fixed;
-    left: 100%;
+    left: var(--sidebar-width);
     top: 0;
     bottom: 0;
-    width: 20px;
-    z-index: 9999;
+    width: 10px;
+    z-index: 9998;
     display: none;
     pointer-events: auto;
+}
+
+.sidebar.collapsed .nav-item-parent::before {
+    left: var(--sidebar-collapsed);
 }
 
 .nav-item-parent:hover::before {
@@ -227,9 +231,9 @@ textarea.form-control {
     background: #3a4150;
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
     padding: 0.5rem 0;
-    z-index: 99999;
+    z-index: 9999;
     border-radius: 8px;
-    margin-left: -2px;
+    margin-left: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     min-height: 100px;
 }
@@ -321,11 +325,15 @@ textarea.form-control {
     background: #2a3240;
     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
     padding: 0.5rem 0;
-    z-index: 100000;
+    z-index: 10000;
     border-radius: 8px;
     min-width: 150px;
     margin-left: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar.collapsed .nested-submenu {
+    left: calc(var(--sidebar-collapsed) + 320px);
 }
 
 .submenu-item-wrapper {
@@ -337,16 +345,21 @@ textarea.form-control {
     display: block;
 }
 
-/* Create invisible bridge to prevent gap */
+/* Create invisible bridge to prevent gap between submenu and nested submenu */
 .submenu-item-wrapper::after {
     content: '';
-    position: absolute;
-    left: 100%;
+    position: fixed;
+    left: calc(var(--sidebar-width) + 320px);
     top: 0;
     bottom: 0;
-    width: 50px;
+    width: 10px;
     display: none;
     z-index: 9999;
+    pointer-events: auto;
+}
+
+.sidebar.collapsed .submenu-item-wrapper::after {
+    left: calc(var(--sidebar-collapsed) + 320px);
 }
 
 .submenu-item-wrapper:hover::after {
@@ -1170,6 +1183,23 @@ textarea.form-control {
         width: calc(100% - var(--sidebar-collapsed));
     }
     
+    /* Adjust submenu positioning for collapsed sidebar on tablets */
+    .submenu {
+        left: var(--sidebar-collapsed);
+    }
+    
+    .nested-submenu {
+        left: calc(var(--sidebar-collapsed) + 320px);
+    }
+    
+    .nav-item-parent::before {
+        left: var(--sidebar-collapsed);
+    }
+    
+    .submenu-item-wrapper::after {
+        left: calc(var(--sidebar-collapsed) + 320px);
+    }
+    
     .action-buttons {
         flex-direction: column;
         width: 100%;
@@ -1192,6 +1222,21 @@ textarea.form-control {
         gap: 1rem;
     }
     
+    /* Adjust submenu width for mobile */
+    .submenu {
+        width: 280px;
+        max-height: calc(100vh - 50px);
+    }
+    
+    .nested-submenu {
+        left: calc(var(--sidebar-collapsed) + 280px);
+        min-width: 120px;
+    }
+    
+    .submenu-item-wrapper::after {
+        left: calc(var(--sidebar-collapsed) + 280px);
+    }
+    
     .footer-actions {
         flex-direction: column-reverse;
         gap: 0.75rem;
@@ -1202,5 +1247,18 @@ textarea.form-control {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .submenu {
+        width: calc(100vw - var(--sidebar-collapsed) - 20px);
+        max-width: 280px;
+    }
+    
+    .nested-submenu {
+        left: calc(var(--sidebar-collapsed) + min(280px, calc(100vw - var(--sidebar-collapsed) - 20px)));
+        width: 150px;
     }
 }

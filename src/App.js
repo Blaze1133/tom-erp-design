@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
+import Login from './components/Login';
 import Quotation from './components/Quotation';
 import SalesOrder from './components/SalesOrder';
 import CreateEnquiries from './components/CreateEnquiries';
@@ -160,8 +161,13 @@ import EditPriceListCustomer from './components/EditPriceListCustomer';
 import IndividualPriceList from './components/IndividualPriceList';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState('dashboard');
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
 
   // Handle hash-based navigation
   React.useEffect(() => {
@@ -573,6 +579,8 @@ function App() {
       case 'view-statistical-journal-entries':
       case 'view-statistical-schedules':
         return <div style={{ padding: '30px' }}><h1>{currentPage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} - Coming Soon</h1></div>;
+      case 'payroll':
+        return <div style={{ padding: '30px' }}><h1>Payroll Module - Coming Soon</h1></div>;
       case 'setup':
         return <div style={{ padding: '30px' }}><h1>Setup Module - Coming Soon</h1></div>;
       case 'reports':
@@ -581,6 +589,11 @@ function App() {
         return <Dashboard />;
     }
   };
+
+  // Show login screen if not logged in
+  if (!isLoggedIn) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div className="app">

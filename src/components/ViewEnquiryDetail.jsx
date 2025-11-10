@@ -18,6 +18,7 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
     expectedClose: '15/7/2022',
     actualClose: '',
     customer: '7 Test Customer',
+    customerProject: 'TOM22-00733 TECH ONSHORE MEP-PREFABRICATORS PTE LTD : 25-00010-TOM-Riser Concept',
     details: '',
     probability: '50.0%',
     winLossReason: '',
@@ -157,6 +158,10 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
               <div className="detail-field">
                 <label>COMPANY</label>
                 <div className="field-value">{enquiryData.customer}</div>
+              </div>
+              <div className="detail-field">
+                <label>CUSTOMER PROJECT</label>
+                <div className="field-value">{enquiryData.customerProject || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>PROBABILITY</label>

@@ -924,13 +924,13 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           </div>
         </div>
         
-        {/* Setup Menu */}
+        {/* Payroll Menu */}
         <div
-          className={`nav-item ${currentPage === 'setup' ? 'active' : ''}`}
-          onClick={() => setCurrentPage('setup')}
+          className={`nav-item ${currentPage === 'payroll' ? 'active' : ''}`}
+          onClick={() => setCurrentPage('payroll')}
         >
-          <i className="fas fa-cog"></i>
-          <span>Setup</span>
+          <i className="fas fa-money-bill-wave"></i>
+          <span>Payroll</span>
         </div>
         
         {/* Reports Menu */}
@@ -940,6 +940,15 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         >
           <i className="fas fa-chart-bar"></i>
           <span>Reports</span>
+        </div>
+        
+        {/* Setup Menu */}
+        <div
+          className={`nav-item ${currentPage === 'setup' ? 'active' : ''}`}
+          onClick={() => setCurrentPage('setup')}
+        >
+          <i className="fas fa-cog"></i>
+          <span>Setup</span>
         </div>
       </div>
     </div>

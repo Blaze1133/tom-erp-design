@@ -10,6 +10,7 @@ const EditEnquiry = ({ setCurrentPage }) => {
     documentNumber: 'E22TOM80024',
     customForm: 'Standard Enquiry',
     company: '7 Test Customer',
+    customerProject: 'TOM22-00733',
     salesRep: '',
     title: 'Test Enquiry',
     status: 'Proposal',
@@ -161,6 +162,27 @@ const EditEnquiry = ({ setCurrentPage }) => {
                 value={formData.company}
                 onChange={(e) => handleFormChange('company', e.target.value)}
               />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Customer Project</label>
+              <select
+                className="form-control"
+                value={formData.customerProject}
+                onChange={(e) => handleFormChange('customerProject', e.target.value)}
+              >
+                <option value="">Select...</option>
+                <option value="100 - 102">100 Baroid Surface Solutions, Halliburton Energy Services Inc</option>
+                <option value="1000">1000 TEAM LEAD CONSTRUCTION PTE LTD</option>
+                <option value="TOM22-00656">TOM22-00656 TEAM LEAD CONSTRUCTION PTE LTD : 25-00003-TLC-Nursing Home @ Hougang Ave 1</option>
+                <option value="1001">1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD</option>
+                <option value="TOM22-00733">TOM22-00733 TECH ONSHORE MEP-PREFABRICATORS PTE LTD : 25-00010-TOM-Riser Concept</option>
+                <option value="TOM22-00741">TOM22-00741 TECH ONSHORE MEP-PREFABRICATORS PTE LTD : 25-00015-TOM-TOM Innovation</option>
+                <option value="1002">1002 TECH MARINE OFFSHORE (S) PTE LTD</option>
+                <option value="1003">1003 TECH ELECTRIC AUTOMATION PTE LTD</option>
+                <option value="1004">1004 TECH OFFSHORE MARINE (DO) PTE LTD</option>
+                <option value="1005">1005 TECH OFFSHORE MARINE (SV) PTE LTD</option>
+              </select>
             </div>
             
             <div className="form-group">

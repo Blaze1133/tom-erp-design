@@ -1,0 +1,241 @@
+:root {
+    --red-primary: #E53E3E;
+    --red-dark: #C53030;
+    --dark-gray: #2D3748;
+    --white: #FFFFFF;
+    --blue-accent: #3182CE;
+    --gray-medium: #718096;
+    --gray-light: #E2E8F0;
+    --gray-ultralight: #F7FAFC;
+}
+
+.login-page {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    background: url('https://www.tom.sg/wp-content/uploads/2021/12/banner.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+}
+
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0%;
+    background: linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(0,0,0,0.3) 100%);
+    z-index: 0;
+}
+
+.login-box {
+    width: 40%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.login-container {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    padding: 3rem;
+    width: 100%;
+    max-width: 480px;
+    margin-left: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.logo-icon {
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.logo-icon img {
+    width: 200px;
+    margin-left: 80px;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+}
+
+.auth-header {
+    margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--dark-gray);
+    text-align: center;
+}
+
+.auth-header p {
+    color: var(--gray-medium);
+    font-size: 0.95rem;
+}
+
+.auth-form {
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.75rem;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--dark-gray);
+}
+
+.form-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--gray-light);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background-color: var(--gray-ultralight);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--blue-accent);
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+    background-color: var(--white);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 68%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--blue-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.auth-actions {
+    margin-top: 2rem;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--red-primary);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.auth-button:hover {
+    background-color: var(--red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+}
+
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.75rem;
+    font-size: 0.85rem;
+}
+
+.auth-link {
+    color: var(--blue-accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .login-container {
+        padding: 2.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .login-page {
+        flex-direction: column;
+        background-position: 65% center;
+    }
+    
+    .login-page::before {
+        left: 0;
+        top: 60%;
+        background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(0,0,0,0.3) 100%);
+    }
+    
+    .login-box {
+        width: 100%;
+        min-height: auto;
+        padding: 2rem 1.5rem;
+        justify-content: center;
+    }
+    
+    .login-container {
+        margin: 0 auto;
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-container {
+        padding: 2rem 1.5rem;
+    }
+    
+    .auth-button {
+        padding: 0.875rem;
+    }
+}
