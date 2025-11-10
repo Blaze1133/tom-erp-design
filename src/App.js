@@ -573,8 +573,8 @@ function App() {
       case 'view-statistical-journal-entries':
       case 'view-statistical-schedules':
         return <div style={{ padding: '30px' }}><h1>{currentPage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} - Coming Soon</h1></div>;
-      case 'expenses':
-        return <div style={{ padding: '30px' }}><h1>Expenses Module - Coming Soon</h1></div>;
+      case 'setup':
+        return <div style={{ padding: '30px' }}><h1>Setup Module - Coming Soon</h1></div>;
       case 'reports':
         return <div style={{ padding: '30px' }}><h1>Reports Module - Coming Soon</h1></div>;
       default:

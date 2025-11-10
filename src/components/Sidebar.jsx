@@ -500,8 +500,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const menuItems = [
     { id: 'dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
-    { id: 'expenses', icon: 'fas fa-file-invoice-dollar', label: 'Expenses' },
-    { id: 'reports', icon: 'fas fa-chart-bar', label: 'Reports' },
   ];
 
   return (
@@ -924,6 +922,24 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
               </div>
             ))}
           </div>
+        </div>
+        
+        {/* Setup Menu */}
+        <div
+          className={`nav-item ${currentPage === 'setup' ? 'active' : ''}`}
+          onClick={() => setCurrentPage('setup')}
+        >
+          <i className="fas fa-cog"></i>
+          <span>Setup</span>
+        </div>
+        
+        {/* Reports Menu */}
+        <div
+          className={`nav-item ${currentPage === 'reports' ? 'active' : ''}`}
+          onClick={() => setCurrentPage('reports')}
+        >
+          <i className="fas fa-chart-bar"></i>
+          <span>Reports</span>
         </div>
       </div>
     </div>
