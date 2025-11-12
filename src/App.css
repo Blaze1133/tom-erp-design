@@ -690,8 +690,8 @@ textarea.form-control {
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.75rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 1.5rem;
 }
 
 .form-group {

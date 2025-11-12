@@ -837,3 +837,48 @@
     border-top: 1px solid #e0e0e0;
     margin-top: 1.5rem;
 }
+
+/* Tabs Styling */
+.tabs-container {
+    margin-top: 2rem;
+}
+
+.tabs-header {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+}
+
+.tab-button {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    top: 2px;
+}
+
+.tab-button:hover {
+    color: #4a90e2;
+    border-bottom-color: #d0d0d0;
+}
+
+.tab-button.active {
+    background: transparent;
+    color: #4a90e2;
+    border-bottom-color: #4a90e2;
+}
+
+.tab-content {
+    padding: 1rem 0;
+}
+
+.system-notes-header {
+    margin-bottom: 1rem;
+}

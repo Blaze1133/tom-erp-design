@@ -48,6 +48,62 @@ import CreateAllocationSchedule from './components/CreateAllocationSchedule';
 import ViewAllocationSchedules from './components/ViewAllocationSchedules';
 import ViewAllocationScheduleDetail from './components/ViewAllocationScheduleDetail';
 import CreateIntercompanyAllocationSchedule from './components/CreateIntercompanyAllocationSchedule';
+import SetupCompanyInformation from './components/SetupCompanyInformation';
+import SubsidiarySettingsManager from './components/SubsidiarySettingsManager';
+import SubsidiarySettingsDetail from './components/SubsidiarySettingsDetail';
+import ViewSubsidiaries from './components/ViewSubsidiaries';
+import ViewSubsidiaryDetail from './components/ViewSubsidiaryDetail';
+import EditSubsidiary from './components/EditSubsidiary';
+import NewSubsidiary from './components/NewSubsidiary';
+import ViewDepartments from './components/ViewDepartments';
+import ViewDepartmentDetail from './components/ViewDepartmentDetail';
+import EditDepartment from './components/EditDepartment';
+import NewDepartment from './components/NewDepartment';
+import ViewLocations from './components/ViewLocations';
+import ViewLocationDetail from './components/ViewLocationDetail';
+import EditLocation from './components/EditLocation';
+import NewLocation from './components/NewLocation';
+import ViewClasses from './components/ViewClasses';
+import ViewClassDetail from './components/ViewClassDetail';
+import EditClass from './components/EditClass';
+import NewClass from './components/NewClass';
+import ViewAccountingLists from './components/ViewAccountingLists';
+import ViewAccountingListDetail from './components/ViewAccountingListDetail';
+import EditAccountingList from './components/EditAccountingList';
+import ViewExpenseCategories from './components/ViewExpenseCategories';
+import ViewExpenseCategoryDetail from './components/ViewExpenseCategoryDetail';
+import EditExpenseCategory from './components/EditExpenseCategory';
+import NewExpenseCategory from './components/NewExpenseCategory';
+import ViewExpenseReportPolicies from './components/ViewExpenseReportPolicies';
+import NewExpenseReportPolicy from './components/NewExpenseReportPolicy';
+import NewChartOfAccount from './components/NewChartOfAccount';
+import ViewChartOfAccounts from './components/ViewChartOfAccounts';
+import ViewChartOfAccountDetail from './components/ViewChartOfAccountDetail';
+import ManageAccountingPeriods from './components/ManageAccountingPeriods';
+import InvoicingPreferences from './components/InvoicingPreferences';
+import FinanceChargePreferences from './components/FinanceChargePreferences';
+import ViewTaxCodes from './components/ViewTaxCodes';
+import NewTaxCode from './components/NewTaxCode';
+import ViewTaxCodeDetail from './components/ViewTaxCodeDetail';
+import CustomerStatusList from './components/CustomerStatusList';
+import NewCustomerStatus from './components/NewCustomerStatus';
+import ViewCustomerStatusDetail from './components/ViewCustomerStatusDetail';
+import CRMLists from './components/CRMLists';
+import NewCRMList from './components/NewCRMList';
+import ViewCRMListDetail from './components/ViewCRMListDetail';
+import CRMPreferences from './components/CRMPreferences';
+import ManageUsers from './components/ManageUsers';
+import EditUser from './components/EditUser';
+import ViewUserVendorDetail from './components/ViewUserVendorDetail';
+import ViewRoleDetail from './components/ViewRoleDetail';
+import ShowRoleDifferences from './components/ShowRoleDifferences';
+import TwoFactorAuthRoles from './components/TwoFactorAuthRoles';
+import ManageIntegration from './components/ManageIntegration';
+import ViewIntegrationDetail from './components/ViewIntegrationDetail';
+import EditIntegration from './components/EditIntegration';
+import DocumentNumberSeriesList from './components/DocumentNumberSeriesList';
+import ViewDocumentSeriesDetail from './components/ViewDocumentSeriesDetail';
+import EditDocumentSeries from './components/EditDocumentSeries';
 import ViewIntercompanyAllocationSchedules from './components/ViewIntercompanyAllocationSchedules';
 import ViewIntercompanyAllocationScheduleDetail from './components/ViewIntercompanyAllocationScheduleDetail';
 import RevalueOpenCurrencyBalances from './components/RevalueOpenCurrencyBalances';
@@ -268,6 +324,8 @@ function App() {
         />;
       case 'edit-tom-custom-delivery-order':
         return <CreateCustomDeliveryOrder />;
+      case 'chart-of-accounts':
+        return <div style={{ padding: '30px' }}><h1>Chart of Accounts - Coming Soon</h1></div>;
       case 'make-journal-entries':
         return <MakeJournalEntries />;
       case 'view-journal-entries':
@@ -583,6 +641,176 @@ function App() {
         return <div style={{ padding: '30px' }}><h1>Payroll Module - Coming Soon</h1></div>;
       case 'setup':
         return <div style={{ padding: '30px' }}><h1>Setup Module - Coming Soon</h1></div>;
+      case 'setup-company':
+      case 'setup-company-information':
+        return <SetupCompanyInformation setCurrentPage={setCurrentPage} />;
+      case 'setup-enable-features':
+        return <div style={{ padding: '30px' }}><h1>Setup - Enable Features - Coming Soon</h1></div>;
+      case 'setup-subsidiary-settings-manager':
+        return <SubsidiarySettingsManager setCurrentPage={setCurrentPage} />;
+      case 'setup-subsidiary-settings-detail':
+        const subsidiaryData = JSON.parse(sessionStorage.getItem('selectedSubsidiary') || '{}');
+        return <SubsidiarySettingsDetail setCurrentPage={setCurrentPage} subsidiary={subsidiaryData} />;
+      case 'setup-subsidiaries':
+      case 'view-subsidiaries':
+        return <ViewSubsidiaries setCurrentPage={setCurrentPage} />;
+      case 'view-subsidiary-detail':
+        return <ViewSubsidiaryDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-subsidiary':
+        return <EditSubsidiary setCurrentPage={setCurrentPage} />;
+      case 'new-subsidiary':
+        return <NewSubsidiary setCurrentPage={setCurrentPage} />;
+      case 'setup-department':
+      case 'view-departments':
+        return <ViewDepartments setCurrentPage={setCurrentPage} />;
+      case 'view-department-detail':
+        return <ViewDepartmentDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-department':
+        return <EditDepartment setCurrentPage={setCurrentPage} />;
+      case 'new-department':
+        return <NewDepartment setCurrentPage={setCurrentPage} />;
+      case 'setup-location':
+      case 'view-locations':
+        return <ViewLocations setCurrentPage={setCurrentPage} />;
+      case 'view-location-detail':
+        return <ViewLocationDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-location':
+        return <EditLocation setCurrentPage={setCurrentPage} />;
+      case 'new-location':
+        return <NewLocation setCurrentPage={setCurrentPage} />;
+      case 'setup-classes':
+      case 'view-classes':
+        return <ViewClasses setCurrentPage={setCurrentPage} />;
+      case 'view-class-detail':
+        return <ViewClassDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-class':
+        return <EditClass setCurrentPage={setCurrentPage} />;
+      case 'new-class':
+        return <NewClass setCurrentPage={setCurrentPage} />;
+      case 'setup-accounting':
+        return <div style={{ padding: '30px' }}><h1>Setup - Accounting - Coming Soon</h1></div>;
+      case 'setup-accounting-list':
+        return <ViewAccountingLists setCurrentPage={setCurrentPage} />;
+      case 'view-accounting-list-detail':
+        return <ViewAccountingListDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-accounting-list':
+        return <EditAccountingList setCurrentPage={setCurrentPage} />;
+      case 'setup-expense-categories':
+        return <ViewExpenseCategories setCurrentPage={setCurrentPage} />;
+      case 'view-expense-category-detail':
+        return <ViewExpenseCategoryDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-expense-category':
+        return <EditExpenseCategory setCurrentPage={setCurrentPage} />;
+      case 'new-expense-category':
+        return <NewExpenseCategory setCurrentPage={setCurrentPage} />;
+      case 'setup-expense-report-policies':
+        return <ViewExpenseReportPolicies setCurrentPage={setCurrentPage} />;
+      case 'new-expense-report-policy':
+        return <NewExpenseReportPolicy setCurrentPage={setCurrentPage} />;
+      case 'edit-expense-report-policy':
+        return <NewExpenseReportPolicy setCurrentPage={setCurrentPage} />;
+      case 'view-expense-report-policy-detail':
+        return <NewExpenseReportPolicy setCurrentPage={setCurrentPage} />;
+      case 'setup-chart-of-accounts':
+        return <NewChartOfAccount setCurrentPage={setCurrentPage} />;
+      case 'view-chart-of-accounts':
+        return <ViewChartOfAccounts 
+          onNewClick={() => setCurrentPage('setup-chart-of-accounts')}
+          onViewClick={() => setCurrentPage('view-account-detail')}
+          onEditClick={() => setCurrentPage('setup-chart-of-accounts')}
+        />;
+      case 'view-account-detail':
+        return <ViewChartOfAccountDetail 
+          onBack={() => setCurrentPage('view-chart-of-accounts')}
+          onEdit={() => setCurrentPage('setup-chart-of-accounts')}
+        />;
+      case 'edit-account':
+        return <div style={{ padding: '30px' }}><h1>Edit Account - Coming Soon</h1></div>;
+      case 'new-account':
+        return <div style={{ padding: '30px' }}><h1>New Account - Coming Soon</h1></div>;
+      case 'setup-manage-accounting-periods':
+        return <ManageAccountingPeriods setCurrentPage={setCurrentPage} />;
+      case 'setup-accounting-preferences':
+        return <div style={{ padding: '30px' }}><h1>Accounting Preferences - Coming Soon</h1></div>;
+      case 'setup-invoicing-preferences':
+        return <InvoicingPreferences setCurrentPage={setCurrentPage} />;
+      case 'setup-finance-charge-preferences':
+        return <FinanceChargePreferences setCurrentPage={setCurrentPage} />;
+      case 'setup-tax-codes':
+        return <ViewTaxCodes setCurrentPage={setCurrentPage} />;
+      case 'new-tax-code':
+      case 'edit-tax-code':
+        return <NewTaxCode setCurrentPage={setCurrentPage} />;
+      case 'view-tax-code-detail':
+        return <ViewTaxCodeDetail 
+          onBack={() => setCurrentPage('setup-tax-codes')}
+          onEdit={() => setCurrentPage('edit-tax-code')}
+        />;
+      case 'setup-customer-status-list':
+        return <CustomerStatusList setCurrentPage={setCurrentPage} />;
+      case 'new-customer-status':
+      case 'edit-customer-status':
+        return <NewCustomerStatus setCurrentPage={setCurrentPage} />;
+      case 'view-customer-status-detail':
+        return <ViewCustomerStatusDetail 
+          onBack={() => setCurrentPage('setup-customer-status-list')}
+          onEdit={() => setCurrentPage('edit-customer-status')}
+        />;
+      case 'setup-crm-lists':
+        return <CRMLists setCurrentPage={setCurrentPage} />;
+      case 'new-crm-list':
+      case 'edit-crm-list':
+        return <NewCRMList setCurrentPage={setCurrentPage} />;
+      case 'view-crm-list-detail':
+        return <ViewCRMListDetail 
+          onBack={() => setCurrentPage('setup-crm-lists')}
+          onEdit={() => setCurrentPage('edit-crm-list')}
+        />;
+      case 'setup-crm-preferences':
+        return <CRMPreferences setCurrentPage={setCurrentPage} />;
+      case 'setup-crm':
+        return <div style={{ padding: '30px' }}><h1>Setup - CRM - Coming Soon</h1></div>;
+      case 'setup-manage-users':
+        return <ManageUsers setCurrentPage={setCurrentPage} />;
+      case 'edit-user':
+        return <EditUser setCurrentPage={setCurrentPage} />;
+      case 'view-user-vendor-detail':
+        return <ViewUserVendorDetail 
+          onBack={() => setCurrentPage('setup-manage-users')}
+          onEdit={() => setCurrentPage('edit-user')}
+        />;
+      case 'view-role-detail':
+        return <ViewRoleDetail onBack={() => setCurrentPage('setup-manage-users')} />;
+      case 'setup-show-role-differences':
+        return <ShowRoleDifferences setCurrentPage={setCurrentPage} />;
+      case 'setup-two-factor-auth-roles':
+        return <TwoFactorAuthRoles setCurrentPage={setCurrentPage} />;
+      case 'setup-users-roles':
+        return <div style={{ padding: '30px' }}><h1>Setup - Users/Roles - Coming Soon</h1></div>;
+      case 'setup-manage-integration':
+        return <ManageIntegration setCurrentPage={setCurrentPage} />;
+      case 'view-integration-detail':
+        return <ViewIntegrationDetail 
+          onBack={() => setCurrentPage('setup-manage-integration')}
+          onEdit={() => setCurrentPage('edit-integration')}
+        />;
+      case 'edit-integration':
+      case 'new-integration':
+        return <EditIntegration setCurrentPage={setCurrentPage} />;
+      case 'setup-integration':
+        return <div style={{ padding: '30px' }}><h1>Setup - Integration - Coming Soon</h1></div>;
+      case 'setup-document-number-series':
+        return <DocumentNumberSeriesList setCurrentPage={setCurrentPage} />;
+      case 'view-document-series-detail':
+        return <ViewDocumentSeriesDetail 
+          onBack={() => setCurrentPage('setup-document-number-series')}
+          onEdit={() => setCurrentPage('edit-document-series')}
+        />;
+      case 'edit-document-series':
+      case 'new-document-series':
+        return <EditDocumentSeries setCurrentPage={setCurrentPage} />;
+      case 'setup-custom':
+        return <div style={{ padding: '30px' }}><h1>Setup - Custom - Coming Soon</h1></div>;
       case 'reports':
         return <div style={{ padding: '30px' }}><h1>Reports Module - Coming Soon</h1></div>;
       default:

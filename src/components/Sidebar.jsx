@@ -9,6 +9,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const bankItemRef = useRef(null);
   const orderManagementItemRef = useRef(null);
   const customersItemRef = useRef(null);
+  const setupItemRef = useRef(null);
   const [submenuTop, setSubmenuTop] = useState(100);
   const [purchasesSubmenuTop, setPurchasesSubmenuTop] = useState(100);
   const [payablesSubmenuTop, setPayablesSubmenuTop] = useState(100);
@@ -17,6 +18,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const [bankSubmenuTop, setBankSubmenuTop] = useState(100);
   const [orderManagementSubmenuTop, setOrderManagementSubmenuTop] = useState(100);
   const [customersSubmenuTop, setCustomersSubmenuTop] = useState(100);
+  const [setupSubmenuTop, setSetupSubmenuTop] = useState(100);
   const [nestedSubmenuTop, setNestedSubmenuTop] = useState({});
 
   const handleSalesHover = () => {
@@ -95,6 +97,28 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       }
       
       setCustomersSubmenuTop(topPosition);
+    }
+  };
+
+  const handleSetupHover = () => {
+    if (setupItemRef.current) {
+      const rect = setupItemRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Calculate how much space we need (estimate based on number of items)
+      const estimatedSubmenuHeight = 300; // Approximate height for Setup submenu (6 items)
+      const spaceBelow = viewportHeight - rect.top;
+      
+      // If submenu would extend beyond viewport, position it higher
+      let topPosition = rect.top;
+      if (spaceBelow < estimatedSubmenuHeight) {
+        // Position submenu so bottom aligns with viewport bottom with some padding
+        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
+        // But don't go above the top of viewport
+        topPosition = Math.max(20, topPosition);
+      }
+      
+      setSetupSubmenuTop(topPosition);
     }
   };
 
@@ -299,6 +323,11 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const financialSubItems = [
     { 
+      id: 'chart-of-accounts',
+      label: 'Chart of Accounts',
+      hideArrow: true
+    },
+    { 
       id: 'make-journal-entries',
       label: 'Make Journal Entries',
       hasSubmenu: true,
@@ -496,6 +525,75 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { id: 'print-individual-statement', label: 'Print Individual Statement', hideArrow: true },
     { id: 'generate-price-lists', label: 'Generate Price Lists', hideArrow: true },
     { id: 'individual-price-list', label: 'Individual Price List', hideArrow: true },
+  ];
+
+  const setupSubItems = [
+    { 
+      id: 'setup-company', 
+      label: 'Company',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'setup-company-information', label: 'Company Information' },
+        { id: 'setup-enable-features', label: 'Enable Features' },
+        { id: 'setup-subsidiary-settings-manager', label: 'Subsidiary Settings Manager' },
+        { id: 'setup-subsidiaries', label: 'Subsidiaries' },
+        { id: 'setup-department', label: 'Department' },
+        { id: 'setup-location', label: 'Location' },
+        { id: 'setup-classes', label: 'Classes' }
+      ]
+    },
+    {
+      id: 'setup-accounting',
+      label: 'Accounting',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'setup-accounting-list', label: 'Accounting List' },
+        { id: 'setup-expense-categories', label: 'Expense Categories' },
+        { id: 'setup-expense-report-policies', label: 'Expense Report Policies' },
+        { id: 'view-chart-of-accounts', label: 'Chart of Accounts' },
+        { id: 'setup-manage-accounting-periods', label: 'Manage Accounting Periods' },
+        { id: 'setup-accounting-preferences', label: 'Accounting Preferences' },
+        { id: 'setup-invoicing-preferences', label: 'Invoicing Preferences' },
+        { id: 'setup-finance-charge-preferences', label: 'Finance Charge Preferences' },
+        { id: 'setup-tax-codes', label: 'Tax Codes' }
+      ]
+    },
+    {
+      id: 'setup-crm',
+      label: 'CRM',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'setup-customer-status-list', label: 'Customer Status List' },
+        { id: 'setup-crm-lists', label: 'CRM Lists' },
+        { id: 'setup-crm-preferences', label: 'CRM Preferences' }
+      ]
+    },
+    {
+      id: 'setup-users-roles',
+      label: 'Users/Roles',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'setup-manage-users', label: 'Manage Users' },
+        { id: 'setup-show-role-differences', label: 'Show Role Differences' },
+        { id: 'setup-two-factor-auth-roles', label: 'Two Factor Authentication Roles' }
+      ]
+    },
+    {
+      id: 'setup-integration',
+      label: 'Integration',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'setup-manage-integration', label: 'Manage Integration' }
+      ]
+    },
+    {
+      id: 'setup-custom',
+      label: 'Custom',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'setup-document-number-series', label: 'Document Number Series' }
+      ]
+    }
   ];
 
   const menuItems = [
@@ -942,13 +1040,53 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           <span>Reports</span>
         </div>
         
-        {/* Setup Menu */}
-        <div
-          className={`nav-item ${currentPage === 'setup' ? 'active' : ''}`}
-          onClick={() => setCurrentPage('setup')}
-        >
-          <i className="fas fa-cog"></i>
-          <span>Setup</span>
+        {/* Setup Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleSetupHover}>
+          <div
+            ref={setupItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-cog"></i>
+            <span>Setup</span>
+          </div>
+          <div className="submenu" style={{ top: `${setupSubmenuTop}px` }}>
+            {setupSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `setup-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`setup-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={() => setCurrentPage(nestedItem.id)}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
