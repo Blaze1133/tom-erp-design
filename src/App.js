@@ -249,6 +249,15 @@ import ViewEmployeeLeaveEnrollmentDetail from './components/ViewEmployeeLeaveEnr
 import CreateEmployeeLeaveEnrollment from './components/CreateEmployeeLeaveEnrollment';
 import ViewEmployeeLeaveReinstatements from './components/ViewEmployeeLeaveReinstatements';
 import CreateEmployeeLeaveReinstatement from './components/CreateEmployeeLeaveReinstatement';
+import CreateYardData from './components/CreateYardData';
+import ViewYardData from './components/ViewYardData';
+import ViewYardDataDetail from './components/ViewYardDataDetail';
+import CreateBiometricData from './components/CreateBiometricData';
+import ViewBiometricData from './components/ViewBiometricData';
+import ViewBiometricDataDetail from './components/ViewBiometricDataDetail';
+import CreateManualEntry from './components/CreateManualEntry';
+import ViewManualEntry from './components/ViewManualEntry';
+import ViewManualEntryDetail from './components/ViewManualEntryDetail';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1161,6 +1170,52 @@ function App() {
         return <EditDocumentSeries setCurrentPage={setCurrentPage} />;
       case 'setup-custom':
         return <div style={{ padding: '30px' }}><h1>Setup - Custom - Coming Soon</h1></div>;
+      
+      // Payroll - Yard Data
+      case 'create-yard-data':
+        return <CreateYardData />;
+      case 'view-yard-data':
+        return <ViewYardData 
+          onNewClick={() => setCurrentPage('create-yard-data')}
+          onViewClick={() => setCurrentPage('view-yard-data-detail')}
+          onEditClick={() => setCurrentPage('create-yard-data')}
+        />;
+      case 'view-yard-data-detail':
+        return <ViewYardDataDetail 
+          onBack={() => setCurrentPage('view-yard-data')}
+          onEdit={() => setCurrentPage('create-yard-data')}
+        />;
+      
+      // Payroll - Biometric Data
+      case 'create-biometric-data':
+        return <CreateBiometricData />;
+      case 'view-biometric-data':
+        return <ViewBiometricData 
+          onNewClick={() => setCurrentPage('create-biometric-data')}
+          onViewClick={() => setCurrentPage('view-biometric-data-detail')}
+          onEditClick={() => setCurrentPage('create-biometric-data')}
+        />;
+      case 'view-biometric-data-detail':
+        return <ViewBiometricDataDetail 
+          onBack={() => setCurrentPage('view-biometric-data')}
+          onEdit={() => setCurrentPage('create-biometric-data')}
+        />;
+      
+      // Payroll - Manual Entry
+      case 'create-manual-entry':
+        return <CreateManualEntry />;
+      case 'view-manual-entry':
+        return <ViewManualEntry 
+          onNewClick={() => setCurrentPage('create-manual-entry')}
+          onViewClick={() => setCurrentPage('view-manual-entry-detail')}
+          onEditClick={() => setCurrentPage('create-manual-entry')}
+        />;
+      case 'view-manual-entry-detail':
+        return <ViewManualEntryDetail 
+          onBack={() => setCurrentPage('view-manual-entry')}
+          onEdit={() => setCurrentPage('create-manual-entry')}
+        />;
+      
       case 'reports':
         return <div style={{ padding: '30px' }}><h1>Reports Module - Coming Soon</h1></div>;
       default:

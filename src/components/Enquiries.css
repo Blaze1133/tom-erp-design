@@ -882,3 +882,91 @@
 .system-notes-header {
     margin-bottom: 1rem;
 }
+
+/* Form Section Styling */
+.form-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.section-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Upload Zone */
+.upload-zone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 60px;
+    text-align: center;
+    background: #fafafa;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover {
+    border-color: #2196F3;
+    background: #f5f9ff;
+}
+
+.upload-label {
+    cursor: pointer;
+}
+
+.upload-label h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.upload-label p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Info Boxes */
+.info-box {
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.info-box.info {
+    background: #e3f2fd;
+    border-left: 4px solid #2196F3;
+    color: #333;
+}
+
+.info-box.info i {
+    color: #2196F3;
+}
+
+.info-box.error {
+    background: #ffebee;
+    border-left: 4px solid #f44336;
+    color: #333;
+}
+
+.info-box.error i {
+    color: #f44336;
+}
+
+.info-box.success {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    color: #333;
+}
+
+.info-box.success i {
+    color: #4caf50;
+}

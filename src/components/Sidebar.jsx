@@ -9,6 +9,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const bankItemRef = useRef(null);
   const orderManagementItemRef = useRef(null);
   const customersItemRef = useRef(null);
+  const payrollItemRef = useRef(null);
   const productionItemRef = useRef(null);
   const setupItemRef = useRef(null);
   const hrItemRef = useRef(null);
@@ -20,6 +21,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const [bankSubmenuTop, setBankSubmenuTop] = useState(100);
   const [orderManagementSubmenuTop, setOrderManagementSubmenuTop] = useState(100);
   const [customersSubmenuTop, setCustomersSubmenuTop] = useState(100);
+  const [payrollSubmenuTop, setPayrollSubmenuTop] = useState(100);
   const [productionSubmenuTop, setProductionSubmenuTop] = useState(100);
   const [setupSubmenuTop, setSetupSubmenuTop] = useState(100);
   const [hrSubmenuTop, setHrSubmenuTop] = useState(100);
@@ -130,6 +132,28 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       }
       
       setSetupSubmenuTop(topPosition);
+    }
+  };
+
+  const handlePayrollHover = () => {
+    if (payrollItemRef.current) {
+      const rect = payrollItemRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Calculate how much space we need (estimate based on number of items)
+      const estimatedSubmenuHeight = 250; // Approximate height for Payroll submenu (3 sub-modules)
+      const spaceBelow = viewportHeight - rect.top;
+      
+      // If submenu would extend beyond viewport, position it higher
+      let topPosition = rect.top;
+      if (spaceBelow < estimatedSubmenuHeight) {
+        // Position submenu so bottom aligns with viewport bottom with some padding
+        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
+        // But don't go above the top of viewport
+        topPosition = Math.max(20, topPosition);
+      }
+      
+      setPayrollSubmenuTop(topPosition);
     }
   };
 
@@ -558,6 +582,33 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { id: 'print-individual-statement', label: 'Print Individual Statement', hideArrow: true },
     { id: 'generate-price-lists', label: 'Generate Price Lists', hideArrow: true },
     { id: 'individual-price-list', label: 'Individual Price List', hideArrow: true },
+  ];
+
+  const payrollSubItems = [
+    { 
+      id: 'create-yard-data',
+      label: 'Yard Data Preparation',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-yard-data', label: 'List' }
+      ]
+    },
+    {
+      id: 'create-biometric-data',
+      label: 'Biometric Data Preparation',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-biometric-data', label: 'List' }
+      ]
+    },
+    {
+      id: 'create-manual-entry',
+      label: 'Manual Entry',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-manual-entry', label: 'List' }
+      ]
+    }
   ];
 
   const hrSubItems = [
@@ -1083,13 +1134,53 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           </div>
         </div>
         
-        {/* Payroll Menu */}
-        <div
-          className={`nav-item ${currentPage === 'payroll' ? 'active' : ''}`}
-          onClick={() => setCurrentPage('payroll')}
-        >
-          <i className="fas fa-money-bill-wave"></i>
-          <span>Payroll</span>
+        {/* Payroll Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handlePayrollHover}>
+          <div
+            ref={payrollItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-money-bill-wave"></i>
+            <span>Payroll</span>
+          </div>
+          <div className="submenu" style={{ top: `${payrollSubmenuTop}px` }}>
+            {payrollSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `payroll-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`payroll-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={() => setCurrentPage(nestedItem.id)}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
         
         {/* HR Menu with Submenu */}
