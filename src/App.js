@@ -217,6 +217,38 @@ import GeneratePriceLists from './components/GeneratePriceLists';
 import ViewPriceListCustomer from './components/ViewPriceListCustomer';
 import EditPriceListCustomer from './components/EditPriceListCustomer';
 import IndividualPriceList from './components/IndividualPriceList';
+import ViewEmployees from './components/ViewEmployees';
+import ViewEmployeeDetail from './components/ViewEmployeeDetail';
+import CreateEmployee from './components/CreateEmployee';
+import ViewLeavePayCalendars from './components/ViewLeavePayCalendars';
+import ViewLeavePayCalendarDetail from './components/ViewLeavePayCalendarDetail';
+import CreateLeavePayCalendar from './components/CreateLeavePayCalendar';
+import ViewShiftMasters from './components/ViewShiftMasters';
+import ViewShiftMasterDetail from './components/ViewShiftMasterDetail';
+import CreateShiftMaster from './components/CreateShiftMaster';
+import ViewAssetIssues from './components/ViewAssetIssues';
+import ViewAssetIssueDetail from './components/ViewAssetIssueDetail';
+import CreateAssetIssue from './components/CreateAssetIssue';
+import ViewEmployeeLoanApplications from './components/ViewEmployeeLoanApplications';
+import ViewEmployeeLoanDetail from './components/ViewEmployeeLoanDetail';
+import CreateEmployeeLoan from './components/CreateEmployeeLoan';
+import ViewCareerProgressions from './components/ViewCareerProgressions';
+import ViewCareerProgressionDetail from './components/ViewCareerProgressionDetail';
+import CreateCareerProgression from './components/CreateCareerProgression';
+import ViewEmployeeExitProcesses from './components/ViewEmployeeExitProcesses';
+import ViewEmployeeExitDetail from './components/ViewEmployeeExitDetail';
+import CreateEmployeeExit from './components/CreateEmployeeExit';
+import ViewLeaveTypes from './components/ViewLeaveTypes';
+import ViewLeaveTypeDetail from './components/ViewLeaveTypeDetail';
+import CreateLeaveType from './components/CreateLeaveType';
+import ViewEmployeeLeaveApplications from './components/ViewEmployeeLeaveApplications';
+import ViewEmployeeLeaveDetail from './components/ViewEmployeeLeaveDetail';
+import CreateEmployeeLeave from './components/CreateEmployeeLeave';
+import ViewEmployeeLeaveEnrollments from './components/ViewEmployeeLeaveEnrollments';
+import ViewEmployeeLeaveEnrollmentDetail from './components/ViewEmployeeLeaveEnrollmentDetail';
+import CreateEmployeeLeaveEnrollment from './components/CreateEmployeeLeaveEnrollment';
+import ViewEmployeeLeaveReinstatements from './components/ViewEmployeeLeaveReinstatements';
+import CreateEmployeeLeaveReinstatement from './components/CreateEmployeeLeaveReinstatement';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -641,6 +673,322 @@ function App() {
         return <div style={{ padding: '30px' }}><h1>{currentPage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} - Coming Soon</h1></div>;
       case 'payroll':
         return <div style={{ padding: '30px' }}><h1>Payroll Module - Coming Soon</h1></div>;
+      case 'hr':
+        return <div style={{ padding: '30px' }}><h1>HR Module - Coming Soon</h1></div>;
+      
+      // HR - Employee Master
+      case 'hr-employee-master':
+        return <ViewEmployees 
+          onNewClick={() => setCurrentPage('hr-employee-master-new')}
+          onViewClick={() => setCurrentPage('hr-employee-master-view')}
+          onEditClick={() => setCurrentPage('hr-employee-master-edit')}
+        />;
+      case 'hr-employee-master-view':
+        return <ViewEmployeeDetail 
+          onBack={() => setCurrentPage('hr-employee-master')}
+          onEdit={() => setCurrentPage('hr-employee-master-edit')}
+        />;
+      case 'hr-employee-master-new':
+        return <CreateEmployee 
+          onSave={() => setCurrentPage('hr-employee-master')}
+          onCancel={() => setCurrentPage('hr-employee-master')}
+        />;
+      case 'hr-employee-master-edit':
+        return <CreateEmployee 
+          employeeData={{
+            employeeId: 'MEP01 001',
+            name: 'JEGANATHAN SUNDARAVELU',
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
+            department: 'MEP MARINE'
+          }}
+          onSave={() => setCurrentPage('hr-employee-master-view')}
+          onCancel={() => setCurrentPage('hr-employee-master-view')}
+        />;
+      
+      // HR - Leave Pay Calendar
+      case 'hr-leave-pay-calendar':
+        return <ViewLeavePayCalendars 
+          onNewClick={() => setCurrentPage('hr-leave-pay-calendar-new')}
+          onViewClick={() => setCurrentPage('hr-leave-pay-calendar-view')}
+          onEditClick={() => setCurrentPage('hr-leave-pay-calendar-edit')}
+        />;
+      case 'hr-leave-pay-calendar-view':
+        return <ViewLeavePayCalendarDetail 
+          onBack={() => setCurrentPage('hr-leave-pay-calendar')}
+          onEdit={() => setCurrentPage('hr-leave-pay-calendar-edit')}
+        />;
+      case 'hr-leave-pay-calendar-new':
+        return <CreateLeavePayCalendar 
+          onSave={() => setCurrentPage('hr-leave-pay-calendar')}
+          onCancel={() => setCurrentPage('hr-leave-pay-calendar')}
+        />;
+      case 'hr-leave-pay-calendar-edit':
+        return <CreateLeavePayCalendar 
+          calendarData={{
+            name: '2021 (MEP)',
+            year: 2021,
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.'
+          }}
+          onSave={() => setCurrentPage('hr-leave-pay-calendar-view')}
+          onCancel={() => setCurrentPage('hr-leave-pay-calendar-view')}
+        />;
+      
+      // HR - Shift Master
+      case 'hr-shift-master':
+        return <ViewShiftMasters 
+          onNewClick={() => setCurrentPage('hr-shift-master-new')}
+          onViewClick={() => setCurrentPage('hr-shift-master-view')}
+          onEditClick={() => setCurrentPage('hr-shift-master-edit')}
+        />;
+      case 'hr-shift-master-view':
+        return <ViewShiftMasterDetail 
+          onBack={() => setCurrentPage('hr-shift-master')}
+          onEdit={() => setCurrentPage('hr-shift-master-edit')}
+        />;
+      case 'hr-shift-master-new':
+        return <CreateShiftMaster 
+          onSave={() => setCurrentPage('hr-shift-master')}
+          onCancel={() => setCurrentPage('hr-shift-master')}
+        />;
+      case 'hr-shift-master-edit':
+        return <CreateShiftMaster 
+          shiftData={{
+            name: '1 PM To 10 PM',
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd. : Tech Electric & Automation Pte Ltd',
+            shiftType: 'Night Shift'
+          }}
+          onSave={() => setCurrentPage('hr-shift-master-view')}
+          onCancel={() => setCurrentPage('hr-shift-master-view')}
+        />;
+      
+      // HR - Asset Issue to Employee
+      case 'hr-asset-issue-to-employee':
+        return <ViewAssetIssues 
+          onNewClick={() => setCurrentPage('hr-asset-issue-new')}
+          onViewClick={() => setCurrentPage('hr-asset-issue-view')}
+          onEditClick={() => setCurrentPage('hr-asset-issue-edit')}
+        />;
+      case 'hr-asset-issue-view':
+        return <ViewAssetIssueDetail 
+          onBack={() => setCurrentPage('hr-asset-issue-to-employee')}
+          onEdit={() => setCurrentPage('hr-asset-issue-edit')}
+        />;
+      case 'hr-asset-issue-new':
+        return <CreateAssetIssue 
+          onSave={() => setCurrentPage('hr-asset-issue-to-employee')}
+          onCancel={() => setCurrentPage('hr-asset-issue-to-employee')}
+        />;
+      case 'hr-asset-issue-edit':
+        return <CreateAssetIssue 
+          assetData={{
+            id: 1,
+            employee: '222267 Demo employee',
+            assetName: 'Laptop',
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd. : Tech Electric & Automation Pte Ltd'
+          }}
+          onSave={() => setCurrentPage('hr-asset-issue-view')}
+          onCancel={() => setCurrentPage('hr-asset-issue-view')}
+        />;
+      
+      // HR - Employee Loan Application
+      case 'hr-employee-loan-application':
+        return <ViewEmployeeLoanApplications 
+          onNewClick={() => setCurrentPage('hr-employee-loan-new')}
+          onViewClick={() => setCurrentPage('hr-employee-loan-view')}
+          onEditClick={() => setCurrentPage('hr-employee-loan-edit')}
+        />;
+      case 'hr-employee-loan-view':
+        return <ViewEmployeeLoanDetail 
+          onBack={() => setCurrentPage('hr-employee-loan-application')}
+          onEdit={() => setCurrentPage('hr-employee-loan-edit')}
+        />;
+      case 'hr-employee-loan-new':
+        return <CreateEmployeeLoan 
+          onSave={() => setCurrentPage('hr-employee-loan-application')}
+          onCancel={() => setCurrentPage('hr-employee-loan-application')}
+        />;
+      case 'hr-employee-loan-edit':
+        return <CreateEmployeeLoan 
+          loanData={{
+            id: 1,
+            employeeIdName: '222267 Demo employee',
+            loanAmount: '12,000.00',
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd. : Tech Electric & Automation Pte Ltd'
+          }}
+          onSave={() => setCurrentPage('hr-employee-loan-view')}
+          onCancel={() => setCurrentPage('hr-employee-loan-view')}
+        />;
+      
+      // HR - Career Progress Salary
+      case 'hr-career-progress-salary':
+        return <ViewCareerProgressions 
+          onNewClick={() => setCurrentPage('hr-career-progress-new')}
+          onViewClick={() => setCurrentPage('hr-career-progress-view')}
+          onEditClick={() => setCurrentPage('hr-career-progress-edit')}
+        />;
+      case 'hr-career-progress-view':
+        return <ViewCareerProgressionDetail 
+          onBack={() => setCurrentPage('hr-career-progress-salary')}
+          onEdit={() => setCurrentPage('hr-career-progress-edit')}
+        />;
+      case 'hr-career-progress-new':
+        return <CreateCareerProgression 
+          onSave={() => setCurrentPage('hr-career-progress-salary')}
+          onCancel={() => setCurrentPage('hr-career-progress-salary')}
+        />;
+      case 'hr-career-progress-edit':
+        return <CreateCareerProgression 
+          progressionData={{
+            id: 1,
+            employeeName: '222267 Demo employee',
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd. : Tech Electric & Automation Pte Ltd',
+            oldSalary: '5,000.00',
+            increment: '1,000.00'
+          }}
+          onSave={() => setCurrentPage('hr-career-progress-view')}
+          onCancel={() => setCurrentPage('hr-career-progress-view')}
+        />;
+      
+      // HR - Employee Exit Process
+      case 'hr-employee-exit-process':
+        return <ViewEmployeeExitProcesses 
+          onNewClick={() => setCurrentPage('hr-employee-exit-new')}
+          onViewClick={() => setCurrentPage('hr-employee-exit-view')}
+          onEditClick={() => setCurrentPage('hr-employee-exit-edit')}
+        />;
+      case 'hr-employee-exit-view':
+        return <ViewEmployeeExitDetail 
+          onBack={() => setCurrentPage('hr-employee-exit-process')}
+          onEdit={() => setCurrentPage('hr-employee-exit-edit')}
+        />;
+      case 'hr-employee-exit-new':
+        return <CreateEmployeeExit 
+          onSave={() => setCurrentPage('hr-employee-exit-process')}
+          onCancel={() => setCurrentPage('hr-employee-exit-process')}
+        />;
+      case 'hr-employee-exit-edit':
+        return <CreateEmployeeExit 
+          exitData={{
+            employee: '222267 Demo employee',
+            hireDate: '2018-09-28',
+            resignedDate: '2021-09-01',
+            exitType: 'Voluntary'
+          }}
+          onSave={() => setCurrentPage('hr-employee-exit-view')}
+          onCancel={() => setCurrentPage('hr-employee-exit-view')}
+        />;
+      
+      // HR - Leave Type
+      case 'hr-leave-type':
+        return <ViewLeaveTypes 
+          onNewClick={() => setCurrentPage('hr-leave-type-new')}
+          onViewClick={() => setCurrentPage('hr-leave-type-view')}
+          onEditClick={() => setCurrentPage('hr-leave-type-edit')}
+        />;
+      case 'hr-leave-type-view':
+        return <ViewLeaveTypeDetail 
+          onBack={() => setCurrentPage('hr-leave-type')}
+          onEdit={() => setCurrentPage('hr-leave-type-edit')}
+        />;
+      case 'hr-leave-type-new':
+        return <CreateLeaveType 
+          onSave={() => setCurrentPage('hr-leave-type')}
+          onCancel={() => setCurrentPage('hr-leave-type')}
+        />;
+      case 'hr-leave-type-edit':
+        return <CreateLeaveType 
+          leaveTypeData={{
+            leaveName: 'Annual Leave Executive',
+            id: 26,
+            entitlementPerYear: 14,
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.'
+          }}
+          onSave={() => setCurrentPage('hr-leave-type-view')}
+          onCancel={() => setCurrentPage('hr-leave-type-view')}
+        />;
+      
+      // HR - Employee Leave Application
+      case 'hr-employee-leave-application':
+        return <ViewEmployeeLeaveApplications 
+          onNewClick={() => setCurrentPage('hr-employee-leave-new')}
+          onViewClick={() => setCurrentPage('hr-employee-leave-view')}
+          onEditClick={() => setCurrentPage('hr-employee-leave-edit')}
+        />;
+      case 'hr-employee-leave-view':
+        return <ViewEmployeeLeaveDetail 
+          onBack={() => setCurrentPage('hr-employee-leave-application')}
+          onEdit={() => setCurrentPage('hr-employee-leave-edit')}
+        />;
+      case 'hr-employee-leave-new':
+        return <CreateEmployeeLeave 
+          onSave={() => setCurrentPage('hr-employee-leave-application')}
+          onCancel={() => setCurrentPage('hr-employee-leave-application')}
+        />;
+      case 'hr-employee-leave-edit':
+        return <CreateEmployeeLeave 
+          leaveData={{
+            id: 'LRC000023',
+            employee: 'MEP059 Muruganandam Kayalvizhi',
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
+            applyLeaveType: 'Annual Leave Executive'
+          }}
+          onSave={() => setCurrentPage('hr-employee-leave-view')}
+          onCancel={() => setCurrentPage('hr-employee-leave-view')}
+        />;
+      
+      // HR - Employee Leave Enrollment
+      case 'hr-employee-leave-enrollment':
+        return <ViewEmployeeLeaveEnrollments 
+          onNewClick={() => setCurrentPage('hr-employee-leave-enrollment-new')}
+          onViewClick={() => setCurrentPage('hr-employee-leave-enrollment-view')}
+          onEditClick={() => setCurrentPage('hr-employee-leave-enrollment-edit')}
+        />;
+      case 'hr-employee-leave-enrollment-view':
+        return <ViewEmployeeLeaveEnrollmentDetail 
+          onBack={() => setCurrentPage('hr-employee-leave-enrollment')}
+          onEdit={() => setCurrentPage('hr-employee-leave-enrollment-edit')}
+        />;
+      case 'hr-employee-leave-enrollment-new':
+        return <CreateEmployeeLeaveEnrollment 
+          onSave={() => setCurrentPage('hr-employee-leave-enrollment')}
+          onCancel={() => setCurrentPage('hr-employee-leave-enrollment')}
+        />;
+      case 'hr-employee-leave-enrollment-edit':
+        return <CreateEmployeeLeaveEnrollment 
+          enrollmentData={{
+            employeeName: 'TMO001 Al Amin',
+            leaveCalendar: 'TMO 2024',
+            year: 2024
+          }}
+          onSave={() => setCurrentPage('hr-employee-leave-enrollment-view')}
+          onCancel={() => setCurrentPage('hr-employee-leave-enrollment-view')}
+        />;
+      
+      // HR - Employee Leave Reinstatement
+      case 'hr-employee-leave-reinstatement':
+        return <ViewEmployeeLeaveReinstatements 
+          onNewClick={() => setCurrentPage('hr-employee-leave-reinstatement-new')}
+          onViewClick={() => setCurrentPage('hr-employee-leave-reinstatement-view')}
+          onEditClick={() => setCurrentPage('hr-employee-leave-reinstatement-edit')}
+        />;
+      case 'hr-employee-leave-reinstatement-new':
+        return <CreateEmployeeLeaveReinstatement 
+          onSave={() => setCurrentPage('hr-employee-leave-reinstatement')}
+          onCancel={() => setCurrentPage('hr-employee-leave-reinstatement')}
+        />;
+      case 'hr-employee-leave-reinstatement-edit':
+        return <CreateEmployeeLeaveReinstatement 
+          reinstatementData={{
+            employeeName: 'MEP002 Bhuiyan Manik',
+            leaveType: 'Annual Leave Executive'
+          }}
+          onSave={() => setCurrentPage('hr-employee-leave-reinstatement')}
+          onCancel={() => setCurrentPage('hr-employee-leave-reinstatement')}
+        />;
+      case 'production-mep-prefabrication':
+        return <div style={{ padding: '30px' }}><h1>MEP Prefabrication - Coming Soon</h1></div>;
+      case 'production-plant-module':
+        return <div style={{ padding: '30px' }}><h1>Plant Module - Coming Soon</h1></div>;
       case 'setup':
         return <div style={{ padding: '30px' }}><h1>Setup Module - Coming Soon</h1></div>;
       case 'setup-company':

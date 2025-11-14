@@ -9,7 +9,9 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const bankItemRef = useRef(null);
   const orderManagementItemRef = useRef(null);
   const customersItemRef = useRef(null);
+  const productionItemRef = useRef(null);
   const setupItemRef = useRef(null);
+  const hrItemRef = useRef(null);
   const [submenuTop, setSubmenuTop] = useState(100);
   const [purchasesSubmenuTop, setPurchasesSubmenuTop] = useState(100);
   const [payablesSubmenuTop, setPayablesSubmenuTop] = useState(100);
@@ -18,7 +20,9 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const [bankSubmenuTop, setBankSubmenuTop] = useState(100);
   const [orderManagementSubmenuTop, setOrderManagementSubmenuTop] = useState(100);
   const [customersSubmenuTop, setCustomersSubmenuTop] = useState(100);
+  const [productionSubmenuTop, setProductionSubmenuTop] = useState(100);
   const [setupSubmenuTop, setSetupSubmenuTop] = useState(100);
+  const [hrSubmenuTop, setHrSubmenuTop] = useState(100);
   const [nestedSubmenuTop, setNestedSubmenuTop] = useState({});
 
   const handleSalesHover = () => {
@@ -100,6 +104,13 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     }
   };
 
+  const handleProductionHover = () => {
+    if (productionItemRef.current) {
+      const rect = productionItemRef.current.getBoundingClientRect();
+      setProductionSubmenuTop(rect.top);
+    }
+  };
+
   const handleSetupHover = () => {
     if (setupItemRef.current) {
       const rect = setupItemRef.current.getBoundingClientRect();
@@ -119,6 +130,28 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       }
       
       setSetupSubmenuTop(topPosition);
+    }
+  };
+
+  const handleHrHover = () => {
+    if (hrItemRef.current) {
+      const rect = hrItemRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Calculate how much space we need (estimate based on number of items)
+      const estimatedSubmenuHeight = 150; // Approximate height for HR submenu (2 sub-modules)
+      const spaceBelow = viewportHeight - rect.top;
+      
+      // If submenu would extend beyond viewport, position it higher
+      let topPosition = rect.top;
+      if (spaceBelow < estimatedSubmenuHeight) {
+        // Position submenu so bottom aligns with viewport bottom with some padding
+        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
+        // But don't go above the top of viewport
+        topPosition = Math.max(20, topPosition);
+      }
+      
+      setHrSubmenuTop(topPosition);
     }
   };
 
@@ -525,6 +558,34 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { id: 'print-individual-statement', label: 'Print Individual Statement', hideArrow: true },
     { id: 'generate-price-lists', label: 'Generate Price Lists', hideArrow: true },
     { id: 'individual-price-list', label: 'Individual Price List', hideArrow: true },
+  ];
+
+  const hrSubItems = [
+    { 
+      id: 'hr-masters',
+      label: 'Masters',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'hr-employee-master', label: 'Employee Master' },
+        { id: 'hr-leave-pay-calendar', label: 'Leave Pay Calendar' },
+        { id: 'hr-shift-master', label: 'Shift Master' },
+        { id: 'hr-asset-issue-to-employee', label: 'Asset Issue to Employee' },
+        { id: 'hr-employee-loan-application', label: 'Employee Loan Application' },
+        { id: 'hr-career-progress-salary', label: 'Career Progress Salary' },
+        { id: 'hr-employee-exit-process', label: 'Employee Exit Process' }
+      ]
+    },
+    {
+      id: 'hr-leave',
+      label: 'Leave',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'hr-leave-type', label: 'Leave Type' },
+        { id: 'hr-employee-leave-application', label: 'Employee Leave Application' },
+        { id: 'hr-employee-leave-enrollment', label: 'Employee Leave Enrollment' },
+        { id: 'hr-employee-leave-reinstatement', label: 'Employee Leave Reinstatement' }
+      ]
+    }
   ];
 
   const setupSubItems = [
@@ -1029,6 +1090,80 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         >
           <i className="fas fa-money-bill-wave"></i>
           <span>Payroll</span>
+        </div>
+        
+        {/* HR Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleHrHover}>
+          <div
+            ref={hrItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-user-tie"></i>
+            <span>HR</span>
+          </div>
+          <div className="submenu" style={{ top: `${hrSubmenuTop}px` }}>
+            {hrSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `hr-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`hr-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={() => setCurrentPage(nestedItem.id)}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Production Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleProductionHover}>
+          <div
+            ref={productionItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-industry"></i>
+            <span>Production</span>
+          </div>
+          <div className="submenu" style={{ top: `${productionSubmenuTop}px` }}>
+            <div
+              className={`submenu-item ${currentPage === 'production-mep-prefabrication' ? 'active' : ''}`}
+              onClick={() => setCurrentPage('production-mep-prefabrication')}
+            >
+              MEP Prefabrication
+            </div>
+            <div
+              className={`submenu-item ${currentPage === 'production-plant-module' ? 'active' : ''}`}
+              onClick={() => setCurrentPage('production-plant-module')}
+            >
+              Plant Module
+            </div>
+          </div>
         </div>
         
         {/* Reports Menu */}
