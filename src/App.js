@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Sidebar from './components/Sidebar';
+import TopBar from './components/TopBar';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Quotation from './components/Quotation';
@@ -49,6 +50,7 @@ import ViewAllocationSchedules from './components/ViewAllocationSchedules';
 import ViewAllocationScheduleDetail from './components/ViewAllocationScheduleDetail';
 import CreateIntercompanyAllocationSchedule from './components/CreateIntercompanyAllocationSchedule';
 import SetupCompanyInformation from './components/SetupCompanyInformation';
+import EnableFeatures from './components/EnableFeatures';
 import SubsidiarySettingsManager from './components/SubsidiarySettingsManager';
 import SubsidiarySettingsDetail from './components/SubsidiarySettingsDetail';
 import ViewSubsidiaries from './components/ViewSubsidiaries';
@@ -645,7 +647,7 @@ function App() {
       case 'setup-company-information':
         return <SetupCompanyInformation setCurrentPage={setCurrentPage} />;
       case 'setup-enable-features':
-        return <div style={{ padding: '30px' }}><h1>Setup - Enable Features - Coming Soon</h1></div>;
+        return <EnableFeatures setCurrentPage={setCurrentPage} />;
       case 'setup-subsidiary-settings-manager':
         return <SubsidiarySettingsManager setCurrentPage={setCurrentPage} />;
       case 'setup-subsidiary-settings-detail':
@@ -830,6 +832,10 @@ function App() {
         setCollapsed={setCollapsed}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+      />
+      <TopBar 
+        collapsed={collapsed} 
+        setCollapsed={setCollapsed}
       />
       <div className="main-content">
         <div className="content-area">
