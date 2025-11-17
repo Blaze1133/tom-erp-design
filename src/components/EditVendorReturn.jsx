@@ -529,17 +529,128 @@ const EditVendorReturn = ({ setCurrentPage }) => {
             <button 
               onClick={() => setActiveTab('billing')}
               style={{ 
-                background: 'transparent', 
+                background: activeTab === 'billing' ? 'white' : 'transparent', 
                 border: 'none', 
                 padding: '12px 24px', 
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: 'white'
+                fontWeight: activeTab === 'billing' ? '600' : '500',
+                color: activeTab === 'billing' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
               }}
             >
               Billing
             </button>
+            <button 
+              onClick={() => setActiveTab('relationships')}
+              style={{ 
+                background: activeTab === 'relationships' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'relationships' ? '600' : '500',
+                color: activeTab === 'relationships' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
+              }}
+            >
+              Relationships
+            </button>
+            <button 
+              onClick={() => setActiveTab('communication')}
+              style={{ 
+                background: activeTab === 'communication' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'communication' ? '600' : '500',
+                color: activeTab === 'communication' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
+              }}
+            >
+              Communication
+            </button>
+            <button 
+              onClick={() => setActiveTab('relatedRecords')}
+              style={{ 
+                background: activeTab === 'relatedRecords' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'relatedRecords' ? '600' : '500',
+                color: activeTab === 'relatedRecords' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
+              }}
+            >
+              Related Records
+            </button>
+            <button 
+              onClick={() => setActiveTab('systemInfo')}
+              style={{ 
+                background: activeTab === 'systemInfo' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'systemInfo' ? '600' : '500',
+                color: activeTab === 'systemInfo' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
+              }}
+            >
+              System Information
+            </button>
+            <button 
+              onClick={() => setActiveTab('custom')}
+              style={{ 
+                background: activeTab === 'custom' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'custom' ? '600' : '500',
+                color: activeTab === 'custom' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
+              }}
+            >
+              Custom
+            </button>
+            <button 
+              onClick={() => setActiveTab('taxReporting')}
+              style={{ 
+                background: activeTab === 'taxReporting' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'taxReporting' ? '600' : '500',
+                color: activeTab === 'taxReporting' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
+              }}
+            >
+              Tax Reporting
+            </button>
+            <button 
+              onClick={() => setActiveTab('supplierReceived')}
+              style={{ 
+                background: activeTab === 'supplierReceived' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'supplierReceived' ? '600' : '500',
+                color: activeTab === 'supplierReceived' ? '#333' : 'white',
+                borderRadius: '8px 8px 0 0'
+              }}
+            >
+              Supplier Received Items
+            </button>
           </div>
+
+          {/* Expenses & Items Tab */}
+          {activeTab === 'expenses' && (
+            <div>
 
           <div style={{ 
             background: '#f8f9fa', 
@@ -763,6 +874,200 @@ const EditVendorReturn = ({ setCurrentPage }) => {
               Remove
             </button>
           </div>
+            </div>
+          )}
+
+          {/* Billing Tab */}
+          {activeTab === 'billing' && (
+            <div style={{ padding: '20px' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <div style={{ fontSize: '11px', color: '#666', fontWeight: '600', marginBottom: '0.5rem' }}>VENDOR</div>
+                <textarea 
+                  className="form-control"
+                  rows="3"
+                  placeholder="Vendor address..."
+                  style={{ fontSize: '13px' }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Relationships Tab */}
+          {activeTab === 'relationships' && (
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '600', marginBottom: '1rem' }}>Contacts</h3>
+              <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem', fontSize: '12px' }}>
+                <input type="text" placeholder="<Type then tab>" style={{ padding: '6px', border: '1px solid #ccc', borderRadius: '3px', width: '200px' }} />
+                <select style={{ padding: '6px', border: '1px solid #ccc', borderRadius: '3px', width: '150px' }}>
+                  <option>Default</option>
+                </select>
+                <select style={{ padding: '6px', border: '1px solid #ccc', borderRadius: '3px', width: '150px' }}>
+                  <option>Default</option>
+                </select>
+              </div>
+              <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>New Contact</button>
+                <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>Attach</button>
+                <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>Update Primary</button>
+                <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>Customize View</button>
+              </div>
+              <table style={{ width: '100%', fontSize: '11px', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>EDIT</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>NAME</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>COMPANY</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>JOB TITLE</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>PHONE</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>EMAIL</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>ROLE</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>REMOVE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colSpan="8" style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>No records to show.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Communication Tab */}
+          {activeTab === 'communication' && (
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '600', marginBottom: '1rem' }}>Messages</h3>
+              <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.25rem', fontSize: '11px' }}>
+                <button style={{ padding: '4px 8px', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '3px' }}>Activities</button>
+                <button style={{ padding: '4px 8px', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '3px' }}>Files</button>
+                <button style={{ padding: '4px 8px', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '3px' }}>User Notes</button>
+              </div>
+              <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>Email</button>
+                <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>Attach</button>
+                <button className="btn btn-primary" style={{ fontSize: '12px', padding: '6px 12px' }}>Refresh</button>
+              </div>
+              <table style={{ width: '100%', fontSize: '11px', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>DATE</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>AUTHOR</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>SUBJECT</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>TYPE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colSpan="4" style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>No records to show.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Related Records Tab */}
+          {activeTab === 'relatedRecords' && (
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '600', marginBottom: '1rem' }}>Fulfillments & Credits</h3>
+              <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px', marginBottom: '1rem' }}>Print</button>
+              <table style={{ width: '100%', fontSize: '11px', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>DATE</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>TYPE</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>NUMBER</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>STATUS</th>
+                    <th style={{ padding: '8px', textAlign: 'right' }}>AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colSpan="5" style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>No records to show.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* System Information Tab */}
+          {activeTab === 'systemInfo' && (
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '600', marginBottom: '1rem' }}>System Notes</h3>
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '11px', color: '#666', fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>VIEW</label>
+                <select style={{ padding: '6px', border: '1px solid #ccc', borderRadius: '3px', fontSize: '12px' }}>
+                  <option>Default</option>
+                </select>
+              </div>
+              <button className="btn btn-secondary" style={{ fontSize: '12px', padding: '6px 12px' }}>Customize View</button>
+            </div>
+          )}
+
+          {/* Custom Tab */}
+          {activeTab === 'custom' && (
+            <div style={{ padding: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <div>
+                  <label style={{ fontSize: '11px', color: '#666', fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>MATERIAL TYPE</label>
+                  <textarea className="form-control" rows="4" placeholder="Type text..." />
+                </div>
+                <div>
+                  <label style={{ fontSize: '11px', color: '#666', fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>TEST TRANSACTION FIELD</label>
+                  <input type="text" className="form-control" />
+                  <div style={{ marginTop: '1rem' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+                      <input type="checkbox" />
+                      DO RECORD CREATED
+                    </label>
+                  </div>
+                  <div style={{ marginTop: '1rem' }}>
+                    <label style={{ fontSize: '11px', color: '#666', fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>GST TYPE</label>
+                    <input type="text" className="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tax Reporting Tab */}
+          {activeTab === 'taxReporting' && (
+            <div style={{ padding: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <div>
+                  <label style={{ fontSize: '11px', color: '#666', fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>DELIVERY TERMS</label>
+                  <input type="text" className="form-control" />
+                </div>
+                <div>
+                  <label style={{ fontSize: '11px', color: '#666', fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>REGIME CODE OF SUPPLY</label>
+                  <input type="text" className="form-control" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Supplier Received Items Tab */}
+          {activeTab === 'supplierReceived' && (
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '600', marginBottom: '1rem' }}>Received Items</h3>
+              <table style={{ width: '100%', fontSize: '11px', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>ITEM</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>COUNT OF QUANTITY</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>MEMO</th>
+                    <th style={{ padding: '8px', textAlign: 'right' }}>AMOUNT</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>NAME</th>
+                    <th style={{ padding: '8px', textAlign: 'left' }}>DOCUMENT NUMBER</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colSpan="6" style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>No records to show.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         <div className="footer-actions">

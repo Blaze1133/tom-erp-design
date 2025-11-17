@@ -136,6 +136,9 @@ import ViewBills from './components/ViewBills';
 import ViewBillDetail from './components/ViewBillDetail';
 import PayBills from './components/PayBills';
 import ApproveVendorPayments from './components/ApproveVendorPayments';
+import ViewItems from './components/ViewItems';
+import CreateItem from './components/CreateItem';
+import ViewItemDetail from './components/ViewItemDetail';
 import ViewBillPaymentDetail from './components/ViewBillPaymentDetail';
 import EditBillPayment from './components/EditBillPayment';
 import PaySingleVendor from './components/PaySingleVendor';
@@ -454,6 +457,12 @@ function App() {
         return <PayBills setCurrentPage={setCurrentPage} />;
       case 'approve-vendor-payments':
         return <ApproveVendorPayments setCurrentPage={setCurrentPage} />;
+      case 'view-items':
+        return <ViewItems setCurrentPage={setCurrentPage} />;
+      case 'create-item':
+        return <CreateItem setCurrentPage={setCurrentPage} />;
+      case 'view-item-detail':
+        return <ViewItemDetail setCurrentPage={setCurrentPage} />;
       case 'view-bill-payment-detail':
         return <ViewBillPaymentDetail setCurrentPage={setCurrentPage} />;
       case 'edit-bill-payment':

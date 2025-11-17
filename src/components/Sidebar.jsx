@@ -350,6 +350,12 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const inventorySubItems = [
     { 
+      id: 'view-items',
+      label: 'Items',
+      hasSubmenu: false,
+      hideArrow: true
+    },
+    { 
       id: 'adjust-inventory',
       label: 'Adjust Inventory',
       hasSubmenu: true,
