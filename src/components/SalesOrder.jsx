@@ -14,13 +14,17 @@ const SalesOrder = () => {
       amount: 0.00,
       taxCode: 'GST_SG-9%',
       grossAmount: 0.00,
+      project: '',
       class: '',
+      department: '',
+      location: '',
       costEstimateType: 'Fixed',
       estimatedExtendedCost: 0.00
     },
   ]);
 
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [activeTab, setActiveTab] = useState('items');
 
   const [formData, setFormData] = useState({
     // Primary Information
@@ -34,6 +38,35 @@ const SalesOrder = () => {
     poNumber: '',
     memo: '',
     
+    // Shipping Information
+    shipDate: '',
+    shippingCarrier: '',
+    shippingMethod: '',
+    shipComplete: false,
+    shippingAddress: '',
+    shipTo: '',
+    
+    // Billing Information
+    terms: '',
+    billingSchedule: '',
+    refBankPrint: '',
+    paymentPeriod: '',
+    billingAddress: '',
+    billTo: '',
+    
+    // Accounting
+    accountingPeriod: '',
+    recognitionPeriod: '',
+    
+    // Relationships
+    partner: '',
+    leadSource: '',
+    
+    // Communication
+    emailPreference: 'Default',
+    printPreference: 'Default',
+    faxPreference: 'Default',
+    
     // Sales Information
     salesRep: '',
     opportunity: '',
@@ -41,9 +74,6 @@ const SalesOrder = () => {
     
     // Classification
     subsidiary: '',
-    class: '',
-    location: '',
-    department: '',
     forInvoiceGrouping: false,
     approvalStatus: 'Submit For Approval',
     contactPerson: '',
@@ -334,60 +364,6 @@ const SalesOrder = () => {
               </select>
             </div>
             <div className="form-group">
-              <label className="form-label">Class</label>
-              <select 
-                className="form-control"
-                value={formData.class}
-                onChange={(e) => handleInputChange('class', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Consumable Item</option>
-                <option>Course</option>
-                <option>Cutting Works</option>
-                <option>Electrical</option>
-                <option>Fabrication</option>
-                <option>Hydrotesting</option>
-                <option>Installation work</option>
-                <option>Manpower Supply</option>
-                <option>Material Supply</option>
-                <option>Module /Prefab</option>
-                <option>Piping</option>
-                <option>Project Works</option>
-                <option>Refurbishment works</option>
-                <option>Rental</option>
-                <option>Repair & Referable</option>
-                <option>Sale of Scrap Metal</option>
-                <option>Structure</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Location</label>
-              <select 
-                className="form-control"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Singapore Yard</option>
-                <option>Johor Facility</option>
-                <option>Batam Workshop</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Department</label>
-              <select 
-                className="form-control"
-                value={formData.department}
-                onChange={(e) => handleInputChange('department', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Sales</option>
-                <option>Engineering</option>
-                <option>Operations</option>
-                <option>MEP</option>
-              </select>
-            </div>
-            <div className="form-group">
               <label className="form-label">Approval Status</label>
               <select 
                 className="form-control"
@@ -448,8 +424,63 @@ const SalesOrder = () => {
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
-        {/* Items Table */}
-        <div className="form-section">
+        {/* Tabbed Interface */}
+        <div className="detail-tabs" style={{ marginTop: '2rem' }}>
+          <div className="tabs-header">
+            <button 
+              className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`}
+              onClick={() => setActiveTab('items')}
+            >
+              Items
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'shipping' ? 'active' : ''}`}
+              onClick={() => setActiveTab('shipping')}
+            >
+              Shipping
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'billing' ? 'active' : ''}`}
+              onClick={() => setActiveTab('billing')}
+            >
+              Billing
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'accounting' ? 'active' : ''}`}
+              onClick={() => setActiveTab('accounting')}
+            >
+              Accounting
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`}
+              onClick={() => setActiveTab('relationships')}
+            >
+              Relationships
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`}
+              onClick={() => setActiveTab('communication')}
+            >
+              Communication
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'system' ? 'active' : ''}`}
+              onClick={() => setActiveTab('system')}
+            >
+              System Information
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
+              onClick={() => setActiveTab('custom')}
+            >
+              Custom
+            </button>
+          </div>
+
+          <div className="tabs-content">
+            {/* Items Tab */}
+            {activeTab === 'items' && (
+              <div className="form-section">
           <h2 className="section-title">
             <i className="fas fa-boxes"></i>
             Items
@@ -458,18 +489,21 @@ const SalesOrder = () => {
             <table className="detail-items-table">
               <thead>
                 <tr>
-                  <th style={{width: '10%'}}>ITEM</th>
-                  <th style={{width: '7%'}}>QTY</th>
-                  <th style={{width: '6%'}}>UNITS</th>
-                  <th style={{width: '12%'}}>DESC</th>
-                  <th style={{width: '8%'}}>PRICE LEVEL</th>
-                  <th style={{width: '7%'}}>RATE</th>
-                  <th style={{width: '7%'}}>AMT</th>
-                  <th style={{width: '8%'}}>TAX CODE</th>
-                  <th style={{width: '8%'}}>GROSS AMT</th>
-                  <th style={{width: '9%'}}>CLASS</th>
-                  <th style={{width: '10%'}}>COST ESTIMATE TYPE</th>
-                  <th style={{width: '8%'}}>EST. EXTENDED COST</th>
+                  <th style={{width: '7%'}}>ITEM</th>
+                  <th style={{width: '5%'}}>QTY</th>
+                  <th style={{width: '5%'}}>UNITS</th>
+                  <th style={{width: '10%'}}>DESC</th>
+                  <th style={{width: '6%'}}>PRICE LEVEL</th>
+                  <th style={{width: '5%'}}>RATE</th>
+                  <th style={{width: '5%'}}>AMT</th>
+                  <th style={{width: '7%'}}>TAX CODE</th>
+                  <th style={{width: '7%'}}>GROSS AMT</th>
+                  <th style={{width: '7%'}}>PROJECT</th>
+                  <th style={{width: '7%'}}>CLASS</th>
+                  <th style={{width: '7%'}}>DEPARTMENT</th>
+                  <th style={{width: '7%'}}>LOCATION</th>
+                  <th style={{width: '8%'}}>COST ESTIMATE TYPE</th>
+                  <th style={{width: '7%'}}>EST. EXTENDED COST</th>
                 </tr>
               </thead>
               <tbody>
@@ -484,6 +518,7 @@ const SalesOrder = () => {
                     <td><input type="number" className="table-input" value={item.amount} onChange={(e) => updateItem(item.id, 'amount', parseFloat(e.target.value) || 0)} style={{width: '100%'}} /></td>
                     <td><input type="text" className="table-input" value={item.taxCode} onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)} style={{width: '100%'}} /></td>
                     <td><input type="number" className="table-input" value={item.grossAmount} onChange={(e) => updateItem(item.id, 'grossAmount', parseFloat(e.target.value) || 0)} style={{width: '100%'}} /></td>
+                    <td><input type="text" className="table-input" value={item.project} onChange={(e) => updateItem(item.id, 'project', e.target.value)} placeholder="Project" style={{width: '100%'}} /></td>
                     <td>
                       <select className="table-input" value={item.class} onChange={(e) => updateItem(item.id, 'class', e.target.value)} style={{width: '100%'}}>
                         <option value="">Select...</option>
@@ -504,6 +539,23 @@ const SalesOrder = () => {
                         <option>Repair & Referable</option>
                         <option>Sale of Scrap Metal</option>
                         <option>Structure</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="table-input" value={item.department} onChange={(e) => updateItem(item.id, 'department', e.target.value)} style={{width: '100%'}}>
+                        <option value="">Select...</option>
+                        <option>Sales</option>
+                        <option>Engineering</option>
+                        <option>Operations</option>
+                        <option>MEP</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select className="table-input" value={item.location} onChange={(e) => updateItem(item.id, 'location', e.target.value)} style={{width: '100%'}}>
+                        <option value="">Select...</option>
+                        <option>Singapore Yard</option>
+                        <option>Johor Facility</option>
+                        <option>Batam Workshop</option>
                       </select>
                     </td>
                     <td>
@@ -545,6 +597,435 @@ const SalesOrder = () => {
               </div>
             </div>
           )}
+              </div>
+            )}
+
+            {/* Shipping Tab */}
+            {activeTab === 'shipping' && (
+              <div className="form-section">
+                <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">SHIP DATE</label>
+                    <input 
+                      type="date" 
+                      className="form-control"
+                      value={formData.shipDate}
+                      onChange={(e) => handleInputChange('shipDate', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">SHIPPING CARRIER</label>
+                    <select 
+                      className="form-control"
+                      value={formData.shippingCarrier}
+                      onChange={(e) => handleInputChange('shippingCarrier', e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option>UPS</option>
+                      <option>More</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">SHIPPING METHOD</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.shippingMethod}
+                      onChange={(e) => handleInputChange('shippingMethod', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', paddingTop: '1.5rem' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={formData.shipComplete}
+                      onChange={(e) => handleInputChange('shipComplete', e.target.checked)}
+                      style={{ width: '18px', height: '18px' }}
+                    />
+                    <label style={{ fontWeight: '600', fontSize: '0.875rem', margin: 0 }}>SHIP COMPLETE</label>
+                  </div>
+                </div>
+
+                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+
+                <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Shipping Address</h4>
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
+                  <div className="form-group">
+                    <label className="form-label">SHIP TO <span className="required">*</span></label>
+                    <select 
+                      className="form-control"
+                      value={formData.shipTo}
+                      onChange={(e) => handleInputChange('shipTo', e.target.value)}
+                    >
+                      <option value="">- Custom -</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">SHIP TO</label>
+                    <textarea 
+                      className="form-control"
+                      rows="4"
+                      value={formData.shippingAddress}
+                      onChange={(e) => handleInputChange('shippingAddress', e.target.value)}
+                      placeholder="Enter shipping address"
+                    />
+                  </div>
+                  <div>
+                    <a href="#" style={{ color: '#4a90e2', fontSize: '0.875rem', textDecoration: 'none' }}>🗺 Map</a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Billing Tab */}
+            {activeTab === 'billing' && (
+              <div className="form-section">
+                <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">TERMS</label>
+                    <select 
+                      className="form-control"
+                      value={formData.terms}
+                      onChange={(e) => handleInputChange('terms', e.target.value)}
+                    >
+                      <option value=""></option>
+                      <option>1% 10 Net 30</option>
+                      <option>2% 10 Net 30</option>
+                      <option>COD</option>
+                      <option>Due on receipt</option>
+                      <option>Immediate</option>
+                      <option>Net 10</option>
+                      <option>Net 15</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">BILLING SCHEDULE</label>
+                    <select 
+                      className="form-control"
+                      value={formData.billingSchedule}
+                      onChange={(e) => handleInputChange('billingSchedule', e.target.value)}
+                    >
+                      <option value=""></option>
+                      <option>- New -</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">REF BANK PRINT</label>
+                    <select 
+                      className="form-control"
+                      value={formData.refBankPrint}
+                      onChange={(e) => handleInputChange('refBankPrint', e.target.value)}
+                    >
+                      <option value=""></option>
+                      <option>- New -</option>
+                      <option>Tech Electric & Automation Pte Ltd,(DBS)</option>
+                      <option>Tech Marine Offshore(s) DBS</option>
+                      <option>Tech Offshore Marine (DQ) -DBS</option>
+                      <option>Tech Offshore Marine (s)(DBS)</option>
+                      <option>TOM MEP OCBC</option>
+                    </select>
+                  </div>
+                </div>
+
+                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+
+                <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Billing Address</h4>
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
+                  <div className="form-group">
+                    <label className="form-label">BILL TO <span className="required">*</span></label>
+                    <select 
+                      className="form-control"
+                      value={formData.billTo}
+                      onChange={(e) => handleInputChange('billTo', e.target.value)}
+                    >
+                      <option value="">- Custom -</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">BILL TO</label>
+                    <textarea 
+                      className="form-control"
+                      rows="4"
+                      value={formData.billingAddress}
+                      onChange={(e) => handleInputChange('billingAddress', e.target.value)}
+                      placeholder="Enter billing address"
+                    />
+                  </div>
+                  <div>
+                    <a href="#" style={{ color: '#4a90e2', fontSize: '0.875rem', textDecoration: 'none' }}>🗺 Map</a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Accounting Tab */}
+            {activeTab === 'accounting' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Account Information</h3>
+                <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">CURRENCY <span className="required">*</span></label>
+                    <select 
+                      className="form-control"
+                      value={formData.currency || 'SGD'}
+                      onChange={(e) => handleInputChange('currency', e.target.value)}
+                    >
+                      <option>SGD</option>
+                      <option>USD</option>
+                      <option>EUR</option>
+                      <option>MYR</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">EXCHANGE RATE <span className="required">*</span></label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.exchangeRate || '1.00'}
+                      onChange={(e) => handleInputChange('exchangeRate', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">EST. EXTENDED COST</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value="0.00"
+                      readOnly
+                      style={{ backgroundColor: '#f5f5f5' }}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">EST. GROSS PROFIT</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value="0.00"
+                      readOnly
+                      style={{ backgroundColor: '#f5f5f5' }}
+                    />
+                  </div>
+                </div>
+
+                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Tax Information</h3>
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">TAX ID</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.taxId || ''}
+                      onChange={(e) => handleInputChange('taxId', e.target.value)}
+                      placeholder="Enter tax ID"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">EST. GROSS PROFIT PERCENT</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value=""
+                      readOnly
+                      style={{ backgroundColor: '#f5f5f5' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Relationships Tab */}
+            {activeTab === 'relationships' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Contacts</h3>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    Remove all
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    Clear All Lines
+                  </button>
+                </div>
+                <div className="items-table-wrapper">
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th style={{width: '25%'}}>CONTACT <span className="required">*</span></th>
+                        <th style={{width: '20%'}}>JOB TITLE</th>
+                        <th style={{width: '20%'}}>EMAIL</th>
+                        <th style={{width: '15%'}}>MAIN PHONE</th>
+                        <th style={{width: '15%'}}>SUBSIDIARY <span className="required">*</span></th>
+                        <th style={{width: '5%'}}>ROLE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="text" className="table-input" placeholder="Type to search" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-primary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Add
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    Insert
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Communication Tab */}
+            {activeTab === 'communication' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Messages <span className="required">*</span></h3>
+                
+                {/* Sub-tabs for Messages */}
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: '#fff', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>
+                      Events
+                    </button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>
+                      Tasks
+                    </button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>
+                      Phone Calls
+                    </button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>
+                      Files
+                    </button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', fontSize: '0.875rem', cursor: 'pointer' }}>
+                      User Notes
+                    </button>
+                  </div>
+                </div>
+
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                  <div>
+                    <div className="form-group">
+                      <label className="form-label">TO BE PRINTED</label>
+                      <input 
+                        type="checkbox" 
+                        style={{ width: '18px', height: '18px' }}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">TO BE EMAILED</label>
+                      <input 
+                        type="checkbox" 
+                        style={{ width: '18px', height: '18px' }}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">TO BE FAXED</label>
+                      <input 
+                        type="checkbox" 
+                        style={{ width: '18px', height: '18px' }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="form-group">
+                      <label className="form-label">SELECT MESSAGE</label>
+                      <select 
+                        className="form-control"
+                        value={formData.selectMessage || ''}
+                        onChange={(e) => handleInputChange('selectMessage', e.target.value)}
+                      >
+                        <option value=""></option>
+                        <option>All work is complete!</option>
+                        <option>It's been a pleasure working with you!</option>
+                        <option>Please remit to above address.</option>
+                        <option>Thank you for your business.</option>
+                        <option>We appreciate your prompt payment.</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">CUSTOMER MESSAGE</label>
+                      <textarea 
+                        className="form-control"
+                        rows="6"
+                        value={formData.customerMessage || ''}
+                        onChange={(e) => handleInputChange('customerMessage', e.target.value)}
+                        placeholder="Enter customer message"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* System Information Tab */}
+            {activeTab === 'system' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>System Information</h3>
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '500px' }}>
+                  <div className="form-group">
+                    <label className="form-label">REF CUSTOMER</label>
+                    <div style={{ position: 'relative' }}>
+                      <input 
+                        type="text" 
+                        className="form-control"
+                        value={formData.refCustomer || ''}
+                        onChange={(e) => handleInputChange('refCustomer', e.target.value)}
+                        placeholder="< Type then tab >"
+                      />
+                      <div style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', display: 'flex', gap: '0.25rem' }}>
+                        <button style={{ background: 'none', border: 'none', padding: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                          📋 List
+                        </button>
+                        <button style={{ background: 'none', border: 'none', padding: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                          🔍 Search
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Custom Tab */}
+            {activeTab === 'custom' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Custom Fields</h3>
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
+                  <div className="form-group">
+                    <label className="form-label">TEST TRANSACTION FIELD</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.testTransactionField || ''}
+                      onChange={(e) => handleInputChange('testTransactionField', e.target.value)}
+                      placeholder="Enter test transaction field"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">GST TYPE</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.gstType || ''}
+                      onChange={(e) => handleInputChange('gstType', e.target.value)}
+                      placeholder="Enter GST type"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />

@@ -4,6 +4,7 @@ import './Enquiries.css';
 
 const ItemReceipt = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [activeTab, setActiveTab] = useState('items');
   
   const [formData, setFormData] = useState({
     customForm: 'TOM Item Receipt',
@@ -18,6 +19,10 @@ const ItemReceipt = () => {
     countryOfOrigin: '',
     hsCode: '',
     exchangeRate: '1.00',
+    // Custom fields
+    refProjectNo: '',
+    refItemTransactionRecord: '',
+    projectAddress: '',
     items: [
       {
         id: 1,
@@ -243,19 +248,31 @@ const ItemReceipt = () => {
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
-        {/* Items & Expenses */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-boxes"></i>
-            Items
-          </h2>
-          
-          <button className="add-item-btn" onClick={handleAddItem}>
-            <i className="fas fa-plus"></i>
-            Add Item
-          </button>
-          {formData.items.length > 0 ? (
-            <div className="items-table-wrapper">
+        {/* Tabbed Interface */}
+        <div className="detail-tabs" style={{ marginTop: '2rem' }}>
+          <div className="tabs-header">
+            <button className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`} onClick={() => setActiveTab('items')}>Items & Expenses</button>
+            <button className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`} onClick={() => setActiveTab('relationships')}>Relationships</button>
+            <button className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`} onClick={() => setActiveTab('communication')}>Communication</button>
+            <button className={`tab-btn ${activeTab === 'system' ? 'active' : ''}`} onClick={() => setActiveTab('system')}>System Information</button>
+            <button className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`} onClick={() => setActiveTab('custom')}>Custom</button>
+          </div>
+
+          <div className="tabs-content">
+            {/* Items & Expenses Tab */}
+            {activeTab === 'items' && (
+              <div className="form-section">
+                <h2 className="section-title">
+                  <i className="fas fa-boxes"></i>
+                  Items
+                </h2>
+                
+                <button className="add-item-btn" onClick={handleAddItem}>
+                  <i className="fas fa-plus"></i>
+                  Add Item
+                </button>
+                {formData.items.length > 0 ? (
+                  <div className="items-table-wrapper">
               <table className="detail-items-table">
                 <thead>
                   <tr>
@@ -309,11 +326,192 @@ const ItemReceipt = () => {
                 </tbody>
               </table>
             </div>
-          ) : (
-            <div className="empty-items-message">
-              <p>No items added yet. Click "Add Item" to start adding items to this receipt.</p>
-            </div>
-          )}
+                ) : (
+                  <div className="empty-items-message">
+                    <p>No items added yet. Click "Add Item" to start adding items to this receipt.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Relationships Tab */}
+            {activeTab === 'relationships' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Contacts</h3>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove all</button>
+                </div>
+                <div className="items-table-wrapper">
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th style={{width: '25%'}}>CONTACT <span className="required">*</span></th>
+                        <th style={{width: '20%'}}>JOB TITLE</th>
+                        <th style={{width: '20%'}}>EMAIL</th>
+                        <th style={{width: '15%'}}>MAIN PHONE</th>
+                        <th style={{width: '15%'}}>SUBSIDIARY <span className="required">*</span></th>
+                        <th style={{width: '5%'}}>ROLE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="text" className="table-input" placeholder="Type to search" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-primary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}><i className="fas fa-check"></i> Add</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}><i className="fas fa-times"></i> Cancel</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Insert</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove</button>
+                </div>
+              </div>
+            )}
+
+            {/* Communication Tab */}
+            {activeTab === 'communication' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Messages</h3>
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: '#fff', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Events</button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Tasks</button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Phone Calls</button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Files</button>
+                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', fontSize: '0.875rem', cursor: 'pointer' }}>User Notes</button>
+                  </div>
+                </div>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove all</button>
+                </div>
+                <div className="items-table-wrapper">
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th style={{width: '20%'}}>TITLE <span className="required">*</span></th>
+                        <th style={{width: '15%'}}>LOCATION</th>
+                        <th style={{width: '15%'}}>DATE <span className="required">*</span></th>
+                        <th style={{width: '10%'}}>ALL DAY</th>
+                        <th style={{width: '15%'}}>START TIME</th>
+                        <th style={{width: '15%'}}>END TIME</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" defaultValue="17/11/2025" style={{width: '100%'}} /></td>
+                        <td><input type="checkbox" style={{ width: '18px', height: '18px' }} /></td>
+                        <td><input type="text" className="table-input" defaultValue="6:00 pm" style={{width: '100%'}} /></td>
+                        <td><input type="text" className="table-input" defaultValue="7:00 pm" style={{width: '100%'}} /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-primary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}><i className="fas fa-check"></i> Add</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}><i className="fas fa-times"></i> Cancel</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Insert</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove</button>
+                </div>
+              </div>
+            )}
+
+            {/* System Information Tab */}
+            {activeTab === 'system' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Active Workflows <span className="required">*</span></h3>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.875rem', fontWeight: '500', marginRight: '0.5rem' }}>VIEW</label>
+                  <select className="form-control" style={{ width: 'auto', fontSize: '0.875rem' }}>
+                    <option>Default</option>
+                  </select>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Customize View</button>
+                  <button className="btn btn-primary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Refresh</button>
+                </div>
+                <div className="items-table-wrapper">
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>WORKFLOW</th>
+                        <th>CURRENT STATE</th>
+                        <th>DATE ENTERED WORKFLOW</th>
+                        <th>DATE ENTERED STATE <span className="required">*</span></th>
+                        <th>OPTIONS</th>
+                        <th>STATUS</th>
+                        <th>CANCEL</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Purchase Order Approval</td>
+                        <td>Approved By CEO</td>
+                        <td>8/1/2022 4:49 pm</td>
+                        <td>8/1/2022 4:52 pm</td>
+                        <td></td>
+                        <td><span style={{ color: '#28a745', fontWeight: '500' }}>Active</span></td>
+                        <td><a href="#" style={{ color: '#4a90e2', textDecoration: 'none' }}>Cancel</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+                <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Workflow History <span className="required">*</span></h4>
+                <div style={{ padding: '1.5rem', background: '#f8f9fa', borderRadius: '8px', textAlign: 'center' }}>
+                  <p style={{ margin: 0, color: '#666', fontSize: '0.875rem' }}>No workflow history available</p>
+                </div>
+              </div>
+            )}
+
+            {/* Custom Tab */}
+            {activeTab === 'custom' && (
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Custom Fields</h3>
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '900px' }}>
+                  <div>
+                    <div className="form-group">
+                      <label className="form-label">REF PROJECT NO</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={formData.refProjectNo} 
+                        onChange={(e) => handleInputChange('refProjectNo', e.target.value)} 
+                        placeholder="<Type then tab>" 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">REF ITEM TRANSACTION RECORD</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={formData.refItemTransactionRecord} 
+                        onChange={(e) => handleInputChange('refItemTransactionRecord', e.target.value)} 
+                        placeholder="<Type then tab>" 
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="form-group">
+                      <label className="form-label">PROJECT ADDRESS</label>
+                      <textarea 
+                        className="form-control" 
+                        rows="6" 
+                        value={formData.projectAddress} 
+                        onChange={(e) => handleInputChange('projectAddress', e.target.value)} 
+                        placeholder="Enter project address"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="footer-actions">

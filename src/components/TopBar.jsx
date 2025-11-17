@@ -30,12 +30,11 @@ const TopBar = ({ collapsed, setCollapsed }) => {
             <i className="fas fa-search search-icon"></i>
             <input
               type="text"
-              placeholder="Search (AI & Menu)"
+              placeholder="Type to Search"
               value={aiSearch}
               onChange={(e) => setAiSearch(e.target.value)}
               className="search-input"
             />
-            <button className="search-go-btn">Go</button>
           </div>
         </div>
       </div>

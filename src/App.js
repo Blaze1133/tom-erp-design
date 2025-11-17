@@ -18,7 +18,11 @@ import InvoiceSalesOrders from './components/InvoiceSalesOrders';
 import InvoiceDetail from './components/InvoiceDetail';
 import CreateInvoice from './components/CreateInvoice';
 import ViewInvoices from './components/ViewInvoices';
+import EditInvoice from './components/EditInvoice';
+import ViewInvoiceDetail from './components/ViewInvoiceDetail';
 import EnterCashSales from './components/EnterCashSales';
+import ViewCashSales from './components/ViewCashSales';
+import EditCashSale from './components/EditCashSale';
 import EnterPurchaseOrders from './components/EnterPurchaseOrders';
 import ViewPurchaseOrders from './components/ViewPurchaseOrders';
 import ReceiveOrders from './components/ReceiveOrders';
@@ -131,6 +135,7 @@ import EnterBills from './components/EnterBills';
 import ViewBills from './components/ViewBills';
 import ViewBillDetail from './components/ViewBillDetail';
 import PayBills from './components/PayBills';
+import ApproveVendorPayments from './components/ApproveVendorPayments';
 import ViewBillPaymentDetail from './components/ViewBillPaymentDetail';
 import EditBillPayment from './components/EditBillPayment';
 import PaySingleVendor from './components/PaySingleVendor';
@@ -314,9 +319,17 @@ function App() {
       case 'create-invoices':
         return <CreateInvoice />;
       case 'view-invoices':
-        return <ViewInvoices />;
+        return <ViewInvoices setCurrentPage={setCurrentPage} />;
+      case 'edit-invoice':
+        return <EditInvoice setCurrentPage={setCurrentPage} />;
+      case 'view-invoice-detail':
+        return <ViewInvoiceDetail setCurrentPage={setCurrentPage} />;
       case 'enter-cash-sales':
-        return <EnterCashSales />;
+        return <EnterCashSales setCurrentPage={setCurrentPage} />;
+      case 'view-cash-sales':
+        return <ViewCashSales setCurrentPage={setCurrentPage} />;
+      case 'edit-cash-sale':
+        return <EditCashSale setCurrentPage={setCurrentPage} />;
       case 'enter-purchase-orders':
         return <EnterPurchaseOrders />;
       case 'view-purchase-orders':
@@ -439,6 +452,8 @@ function App() {
         return <ViewBillDetail setCurrentPage={setCurrentPage} />;
       case 'pay-bills':
         return <PayBills setCurrentPage={setCurrentPage} />;
+      case 'approve-vendor-payments':
+        return <ApproveVendorPayments setCurrentPage={setCurrentPage} />;
       case 'view-bill-payment-detail':
         return <ViewBillPaymentDetail setCurrentPage={setCurrentPage} />;
       case 'edit-bill-payment':

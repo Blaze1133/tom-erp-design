@@ -310,7 +310,7 @@ const OrderRequisitions = () => {
               </select>
             </div>
             <div className="form-group">
-              <label className="form-label">TYPE</label>
+              <label className="form-label">FILTER</label>
               <select 
                 className="form-control"
                 value={type}

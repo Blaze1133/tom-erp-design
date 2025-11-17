@@ -5,6 +5,7 @@ import './Enquiries.css';
 const BillPurchaseOrders = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [selectedVendor, setSelectedVendor] = useState('-- All --');
+  const [filterValue, setFilterValue] = useState('');
 
   const [purchaseOrders] = useState([
     {
@@ -185,6 +186,26 @@ const BillPurchaseOrders = ({ setCurrentPage }) => {
     showToast('All items unmarked', 'info');
   };
 
+  // Filter purchase orders based on selected filter
+  const filteredPurchaseOrders = purchaseOrders.filter(po => {
+    if (!filterValue) return true; // Show all if no filter selected
+    
+    switch(filterValue) {
+      case 'subsidiary':
+        return po.subsidiary.toLowerCase().includes('tech onshore');
+      case 'vendor':
+        return selectedVendor === '-- All --' || po.vendorName === selectedVendor;
+      case 'poNumber':
+        return po.poNumber.startsWith('POTOM');
+      case 'status':
+        return true; // Can be customized based on status field
+      case 'currency':
+        return po.currency === 'SGD';
+      default:
+        return true;
+    }
+  });
+
   return (
     <div className="enquiries-list">
       <div className="list-header">
@@ -213,6 +234,22 @@ const BillPurchaseOrders = ({ setCurrentPage }) => {
 
       <div style={{ padding: '20px', background: 'white', borderBottom: '1px solid #e0e0e0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: '0 0 auto' }}>
+            <label style={{ fontSize: '12px', fontWeight: '600', color: '#666', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>FILTER</label>
+            <select 
+              className="form-control"
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
+              style={{ width: '250px', fontSize: '13px' }}
+            >
+              <option value="">-- All --</option>
+              <option value="subsidiary">Subsidiary</option>
+              <option value="vendor">Vendor</option>
+              <option value="poNumber">PO Number</option>
+              <option value="status">Status</option>
+              <option value="currency">Currency</option>
+            </select>
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: '0 0 auto' }}>
             <label style={{ fontSize: '12px', fontWeight: '600', color: '#666', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>VENDOR <span style={{ color: '#e53e3e' }}>*</span></label>
             <select 
@@ -265,8 +302,9 @@ const BillPurchaseOrders = ({ setCurrentPage }) => {
             </tr>
           </thead>
           <tbody>
-            {purchaseOrders.map((po) => (
-              <tr key={po.id}>
+            {filteredPurchaseOrders.length > 0 ? (
+              filteredPurchaseOrders.map((po) => (
+                <tr key={po.id}>
                 <td>
                   <input type="checkbox" />
                 </td>
@@ -287,7 +325,14 @@ const BillPurchaseOrders = ({ setCurrentPage }) => {
                 <td className="amount" style={{ textAlign: 'right' }}>{po.orderTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                 <td>{po.currency}</td>
               </tr>
-            ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
+                  No purchase orders found matching the selected filter
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

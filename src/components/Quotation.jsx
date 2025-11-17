@@ -176,6 +176,7 @@ const Quotation = () => {
                 <option>Standard Quotation</option>
                 <option>TOM Service Quotation</option>
                 <option>TOM Supply Quotation</option>
+                <option>TOM DfMA Quotation</option>
               </select>
             </div>
             <div className="form-group">

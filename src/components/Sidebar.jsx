@@ -243,11 +243,18 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         { id: 'view-invoices', label: 'List' }
       ]
     },
-    { id: 'enter-cash-sales', label: 'Enter Cash Sales' },
+    { 
+      id: 'enter-cash-sales',
+      label: 'Enter Cash Sales',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-cash-sales', label: 'List' }
+      ]
+    },
   ];
 
   const purchasesSubItems = [
-    { 
+    {
       id: 'enter-purchase-orders',
       label: 'Enter Purchase Orders',
       hasSubmenu: true,
@@ -305,6 +312,12 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { 
       id: 'pay-bills',
       label: 'Pay Bills',
+      hasSubmenu: false,
+      hideArrow: true
+    },
+    { 
+      id: 'approve-vendor-payments',
+      label: 'Approve Vendor Payments',
       hasSubmenu: false,
       hideArrow: true
     },
@@ -380,7 +393,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const financialSubItems = [
     { 
-      id: 'chart-of-accounts',
+      id: 'view-chart-of-accounts',
       label: 'Chart of Accounts',
       hideArrow: true
     },
@@ -662,7 +675,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         { id: 'setup-accounting-list', label: 'Accounting List' },
         { id: 'setup-expense-categories', label: 'Expense Categories' },
         { id: 'setup-expense-report-policies', label: 'Expense Report Policies' },
-        { id: 'view-chart-of-accounts', label: 'Chart of Accounts' },
         { id: 'setup-manage-accounting-periods', label: 'Manage Accounting Periods' },
         { id: 'setup-accounting-preferences', label: 'Accounting Preferences' },
         { id: 'setup-invoicing-preferences', label: 'Invoicing Preferences' },

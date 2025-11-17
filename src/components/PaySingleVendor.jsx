@@ -4,6 +4,7 @@ import './Enquiries.css';
 
 const PaySingleVendor = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [activeTab, setActiveTab] = useState('apply');
 
   const [formData, setFormData] = useState({
     apAccount: '20010 Accounts Payable : Trade Creditors',
@@ -27,7 +28,14 @@ const PaySingleVendor = ({ setCurrentPage }) => {
     department: '',
     class: '',
     location: '',
-    approvalStatusSubmit: 'Submit For Approval'
+    approvalStatusSubmit: 'Submit For Approval',
+    // Payee Address tab
+    addressToSelect: '',
+    payTo: '',
+    // Relationships tab
+    contacts: [],
+    // Communication tab
+    events: []
   });
 
   const handleFormChange = (field, value) => {
@@ -396,13 +404,18 @@ const PaySingleVendor = ({ setCurrentPage }) => {
           </div>
         </div>
 
-        {/* Apply Section */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title">
-            <i className="fas fa-check-circle"></i>
-            Apply
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
+        {/* Tabbed Interface */}
+        <div className="detail-tabs" style={{ marginTop: '2rem' }}>
+          <div className="tabs-header">
+            <button className={`tab-btn ${activeTab === 'apply' ? 'active' : ''}`} onClick={() => setActiveTab('apply')}>Apply</button>
+            <button className={`tab-btn ${activeTab === 'payeeAddress' ? 'active' : ''}`} onClick={() => setActiveTab('payeeAddress')}>Payee Address</button>
+            <button className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`} onClick={() => setActiveTab('relationships')}>Relationships</button>
+            <button className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`} onClick={() => setActiveTab('communication')}>Communication</button>
+          </div>
+
+          {/* Apply Tab */}
+          {activeTab === 'apply' && (
+            <div className="tab-content">
 
           <div style={{ marginBottom: '15px' }}>
             <label style={{ fontSize: '13px', color: '#666', marginBottom: '8px', display: 'block' }}>SELECT ITEM</label>
@@ -447,6 +460,151 @@ const PaySingleVendor = ({ setCurrentPage }) => {
               </tbody>
             </table>
           </div>
+            </div>
+          )}
+
+          {/* Payee Address Tab */}
+          {activeTab === 'payeeAddress' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">ADDRESS TO SELECT</label>
+                    <select 
+                      className="form-control"
+                      value={formData.addressToSelect}
+                      onChange={(e) => handleFormChange('addressToSelect', e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option>Primary Address</option>
+                      <option>Billing Address</option>
+                      <option>Shipping Address</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">PAY TO</label>
+                    <textarea 
+                      className="form-control"
+                      value={formData.payTo}
+                      onChange={(e) => handleFormChange('payTo', e.target.value)}
+                      rows="4"
+                      placeholder="Enter address..."
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Relationships Tab */}
+          {activeTab === 'relationships' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                  <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
+                  Contacts
+                </h3>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Add
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Insert
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-trash"></i> Remove
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove all</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Clear All Lines</button>
+                </div>
+                <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
+                  <table className="items-table" style={{ width: '100%', fontSize: '0.75rem' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ padding: '8px 6px' }}>CONTACT #</th>
+                        <th style={{ padding: '8px 6px' }}>JOB TITLE</th>
+                        <th style={{ padding: '8px 6px' }}>EMAIL</th>
+                        <th style={{ padding: '8px 6px' }}>MAIN PHONE</th>
+                        <th style={{ padding: '8px 6px' }}>SUBSIDIARY #</th>
+                        <th style={{ padding: '8px 6px' }}>ROLE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '120px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '120px' }} /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Communication Tab */}
+          {activeTab === 'communication' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                  <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
+                  Events
+                </h3>
+                <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.25rem', fontSize: '0.75rem' }}>
+                  <button style={{ padding: '0.25rem 0.5rem', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '3px', cursor: 'pointer' }}>Tasks</button>
+                  <button style={{ padding: '0.25rem 0.5rem', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '3px', cursor: 'pointer' }}>Phone Calls</button>
+                  <button style={{ padding: '0.25rem 0.5rem', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '3px', cursor: 'pointer' }}>Files</button>
+                  <button style={{ padding: '0.25rem 0.5rem', background: '#f0f0f0', border: '1px solid #ccc', borderRadius: '3px', cursor: 'pointer' }}>User Notes</button>
+                </div>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Add
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Insert
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-trash"></i> Remove
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove all</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Clear All Lines</button>
+                </div>
+                <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
+                  <table className="items-table" style={{ width: '100%', fontSize: '0.75rem' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ padding: '8px 6px' }}>TITLE #</th>
+                        <th style={{ padding: '8px 6px' }}>LOCATION</th>
+                        <th style={{ padding: '8px 6px' }}>DATE #</th>
+                        <th style={{ padding: '8px 6px' }}>ALL DAY</th>
+                        <th style={{ padding: '8px 6px' }}>START TIME</th>
+                        <th style={{ padding: '8px 6px' }}>END TIME</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="date" className="table-input" value="2025-11-17" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px', textAlign: 'center' }}><input type="checkbox" /></td>
+                        <td style={{ padding: '4px' }}><input type="time" className="table-input" value="08:00" style={{ width: '100px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="time" className="table-input" value="09:00" style={{ width: '100px' }} /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="footer-actions">

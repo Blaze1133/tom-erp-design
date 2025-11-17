@@ -2,52 +2,78 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewSalesOrderDetail = ({ setCurrentPage }) => {
+const ViewInvoiceDetail = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('items');
 
-  const orderData = {
-    documentNumber: 'S2100067',
-    title: '20-0131 Gimi Ms Corporation : 20-0131-Gimi-Fabrication of Cargo Tank Vapour Line (Budgetary)-W',
-    statusBadge: 'PENDING BILLING',
-    orderNumber: 'S2100067',
-    endDate: '',
-    customerProject: '20-0131 Gimi Ms Corporation : 20-0131-Gimi-Fabrication of Cargo Tank Vapour Line (Budgetary)-W',
-    poNumber: '',
-    date: '26/11/2020',
-    memo: 'Project No : 20-0131',
-    startDate: '',
-    salesRep: '',
-    opportunity: '',
-    salesEffectiveDate: '26/11/2020',
+  const invoiceData = {
+    documentNumber: 'INV-2024-001',
+    title: 'Pacific Shipping Ltd : Marine Equipment Supply - Q1 2024',
+    statusBadge: 'PAID IN FULL',
+    customForm: 'TOM Service Invoice',
+    invoiceNumber: 'INV-2024-001',
+    postingPeriod: 'Jan 2024',
+    customerProject: 'Pacific Shipping Ltd : Marine Equipment Supply - Q1 2024',
+    dueDate: '14/02/2024',
+    date: '15/01/2024',
+    poNumber: 'PSL-PO-2024-001',
+    startDate: '01/01/2024',
+    memo: 'Project No: PSL-2024-001',
+    endDate: '31/03/2024',
+    contactPerson: 'John Smith',
+    salesRep: 'Sarah Chen',
+    salesEffectiveDate: '15/01/2024',
+    opportunity: 'Q1 Marine Project',
+    createdFrom: 'Sales Order #SO-2024-001',
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
-    class: 'Piping',
-    location: '',
+    class: 'Marine Engineering',
+    location: 'Singapore Yard',
     department: 'MEP',
+    countryOfOrigin: 'Singapore',
+    hsCode: '8901.10',
     forInvoiceGrouping: false,
-    approvalStatus: 'Submit For Approval',
-    contactPerson: '',
     items: [
       {
         id: 1,
-        item: 'Fabrication',
-        committed: 1,
-        fulfilled: 0,
-        invoiced: 0,
+        item: 'Marine Equipment',
         backOrdered: 0,
-        quantity: 1,
-        units: '',
-        description: 'Fabrication of Stainless Steel Piping of Cargo Tank Vapour Line',
-        priceLevel: 'Custom',
-        rate: 168000.00,
-        amount: 168000.00,
-        taxRate: '0.0%'
+        unbilled: 0,
+        quantity: 5,
+        units: 'Units',
+        description: 'High-grade marine equipment for offshore operations',
+        priceLevel: 'Standard',
+        rate: 8500.00,
+        amount: 42500.00,
+        taxCode: 'GST_SG-9%',
+        grossAmount: 46325.00,
+        class: 'Marine Engineering',
+        costEstimateType: 'Fixed',
+        estimatedExtendedCost: 35000.00
       }
     ],
-    subtotal: 168000.00,
-    discountItem: '',
-    taxTotal: 0.00,
-    total: 168000.00
+    subtotal: 42500.00,
+    taxTotal: 3825.00,
+    total: 46325.00,
+    
+    // Additional fields
+    shippingCarrier: 'UPS',
+    shippingAddress: 'Pacific Shipping Ltd\n123 Marina Bay\nSingapore 018956',
+    terms: 'Net 30',
+    billingAddress: 'Pacific Shipping Ltd\n123 Marina Bay\nSingapore 018956',
+    refBankPrint: 'TOM(S) DBS BANK SGD',
+    account: '10100 Accounts Receivable : Trade Debtors',
+    exchangeRate: '1.00',
+    currency: 'SGD',
+    toBePrinted: true,
+    toBeEmailed: true,
+    toBeFaxed: false,
+    selectMessage: 'Thank you for your business.',
+    customerMessage: 'Thank you for your business. Payment is due within 30 days.',
+    amountInWords: 'Forty Six Thousand Three Hundred Twenty Five and 00/100 CENT(S) ONLY',
+    refCustomer: '',
+    invoiceType: 'Invoice',
+    testTransactionField: '',
+    gstType: '0'
   };
 
   const showToast = (message, type = 'success') => {
@@ -56,13 +82,13 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
 
   const handleEdit = () => {
     if (setCurrentPage) {
-      setCurrentPage('edit-sales-order');
+      setCurrentPage('edit-invoice');
     }
   };
 
   const handleBack = () => {
     if (setCurrentPage) {
-      setCurrentPage('view-sales-orders');
+      setCurrentPage('view-invoices');
     }
   };
 
@@ -70,14 +96,14 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
     <div className="enquiry-detail">
       <div className="detail-header">
         <div className="detail-title">
-          <i className="fas fa-shopping-cart"></i>
+          <i className="fas fa-file-invoice"></i>
           <div>
-            <h1>Sales Order</h1>
+            <h1>Invoice</h1>
             <div className="detail-subtitle">
-              <span className="doc-number">{orderData.documentNumber}</span>
-              <span style={{ fontSize: '0.9rem' }}>{orderData.title}</span>
-              <span className="status-badge" style={{ background: '#ff9800', color: 'white', padding: '4px 12px', borderRadius: '4px' }}>
-                {orderData.statusBadge}
+              <span className="doc-number">{invoiceData.documentNumber}</span>
+              <span style={{ fontSize: '0.9rem' }}>{invoiceData.title}</span>
+              <span className="status-badge" style={{ background: '#4caf50', color: 'white', padding: '4px 12px', borderRadius: '4px' }}>
+                {invoiceData.statusBadge}
               </span>
             </div>
           </div>
@@ -105,16 +131,12 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
           Back
         </button>
         <button className="btn-toolbar">
-          <i className="fas fa-truck"></i>
-          Fulfill
+          <i className="fas fa-print"></i>
+          Print
         </button>
         <button className="btn-toolbar">
-          <i className="fas fa-file-invoice"></i>
-          Bill Remaining
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-times-circle"></i>
-          Close Order
+          <i className="fas fa-envelope"></i>
+          Email
         </button>
         <div className="toolbar-dropdown">
           <button className="btn-toolbar">
@@ -134,32 +156,32 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>ORDER #</label>
-                <div className="field-value">{orderData.orderNumber}</div>
+                <label>INVOICE #</label>
+                <div className="field-value">{invoiceData.invoiceNumber}</div>
               </div>
               <div className="detail-field">
-                <label>END DATE</label>
-                <div className="field-value">{orderData.endDate || '-'}</div>
+                <label>DUE DATE</label>
+                <div className="field-value">{invoiceData.dueDate}</div>
               </div>
               <div className="detail-field" style={{ gridColumn: '1 / -1' }}>
                 <label>CUSTOMER:PROJECT</label>
-                <div className="field-value">{orderData.customerProject}</div>
+                <div className="field-value">{invoiceData.customerProject}</div>
               </div>
               <div className="detail-field">
                 <label>PO #</label>
-                <div className="field-value">{orderData.poNumber || '-'}</div>
+                <div className="field-value">{invoiceData.poNumber}</div>
               </div>
               <div className="detail-field">
                 <label>DATE</label>
-                <div className="field-value">{orderData.date}</div>
+                <div className="field-value">{invoiceData.date}</div>
               </div>
               <div className="detail-field">
                 <label>MEMO</label>
-                <div className="field-value">{orderData.memo}</div>
+                <div className="field-value">{invoiceData.memo}</div>
               </div>
               <div className="detail-field">
                 <label>START DATE</label>
-                <div className="field-value">{orderData.startDate || '-'}</div>
+                <div className="field-value">{invoiceData.startDate}</div>
               </div>
             </div>
           </div>
@@ -175,15 +197,15 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
             <div className="detail-grid">
               <div className="detail-field">
                 <label>SALES REP</label>
-                <div className="field-value">{orderData.salesRep || '-'}</div>
+                <div className="field-value">{invoiceData.salesRep}</div>
               </div>
               <div className="detail-field">
                 <label>OPPORTUNITY</label>
-                <div className="field-value">{orderData.opportunity || '-'}</div>
+                <div className="field-value">{invoiceData.opportunity || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>SALES EFFECTIVE DATE</label>
-                <div className="field-value">{orderData.salesEffectiveDate}</div>
+                <div className="field-value">{invoiceData.salesEffectiveDate}</div>
               </div>
             </div>
           </div>
@@ -199,33 +221,19 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
             <div className="detail-grid">
               <div className="detail-field">
                 <label>SUBSIDIARY</label>
-                <div className="field-value">{orderData.subsidiary}</div>
+                <div className="field-value">{invoiceData.subsidiary}</div>
               </div>
               <div className="detail-field">
                 <label>CLASS</label>
-                <div className="field-value">{orderData.class}</div>
+                <div className="field-value">{invoiceData.class}</div>
               </div>
               <div className="detail-field">
                 <label>LOCATION</label>
-                <div className="field-value">{orderData.location || '-'}</div>
+                <div className="field-value">{invoiceData.location}</div>
               </div>
               <div className="detail-field">
                 <label>DEPARTMENT</label>
-                <div className="field-value">{orderData.department}</div>
-              </div>
-              <div className="detail-field">
-                <label>FOR INVOICE GROUPING</label>
-                <div className="field-value">
-                  <input type="checkbox" checked={orderData.forInvoiceGrouping} disabled />
-                </div>
-              </div>
-              <div className="detail-field">
-                <label>APPROVAL STATUS</label>
-                <div className="field-value">{orderData.approvalStatus}</div>
-              </div>
-              <div className="detail-field">
-                <label>CONTACT PERSON</label>
-                <div className="field-value">{orderData.contactPerson || '-'}</div>
+                <div className="field-value">{invoiceData.department}</div>
               </div>
             </div>
           </div>
@@ -247,49 +255,37 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
             {/* Items Tab */}
             {activeTab === 'items' && (
               <>
-                <div className="form-grid" style={{ marginBottom: '20px' }}>
-                  <div className="detail-field">
-                    <label>DISCOUNT ITEM</label>
-                    <div className="field-value">{orderData.discountItem || '-'}</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>RATE</label>
-                    <div className="field-value">-</div>
-                  </div>
-                </div>
                 <div className="items-table-wrapper">
                   <table className="detail-items-table">
                     <thead>
                       <tr>
                         <th>ITEM</th>
-                        <th>COMMITTED</th>
-                        <th>FULFILLED</th>
-                        <th>INVOICED</th>
                         <th>BACK ORDERED</th>
+                        <th>UNBILLED</th>
                         <th>QUANTITY</th>
                         <th>UNITS</th>
                         <th>DESCRIPTION</th>
                         <th>PRICE LEVEL</th>
                         <th>RATE</th>
                         <th>AMOUNT</th>
-                        <th>TAX RATE</th>
+                        <th>TAX CODE</th>
+                        <th>GROSS AMOUNT</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {orderData.items.map((item) => (
+                      {invoiceData.items.map((item) => (
                         <tr key={item.id}>
                           <td>{item.item}</td>
-                          <td>{item.committed}</td>
-                          <td>{item.fulfilled}</td>
-                          <td>{item.invoiced}</td>
                           <td>{item.backOrdered}</td>
+                          <td>{item.unbilled}</td>
                           <td>{item.quantity}</td>
-                          <td>{item.units || '-'}</td>
+                          <td>{item.units}</td>
                           <td>{item.description}</td>
                           <td>{item.priceLevel}</td>
                           <td>{item.rate.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                           <td>{item.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                          <td>{item.taxRate}</td>
+                          <td>{item.taxCode}</td>
+                          <td>{item.grossAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -303,20 +299,8 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
               <div>
                 <div className="detail-grid">
                   <div className="detail-field">
-                    <label>SHIP DATE</label>
-                    <div className="field-value">-</div>
-                  </div>
-                  <div className="detail-field">
                     <label>SHIPPING CARRIER</label>
-                    <div className="field-value">-</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>SHIPPING METHOD</label>
-                    <div className="field-value">-</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>SHIP COMPLETE</label>
-                    <div className="field-value"><input type="checkbox" disabled /></div>
+                    <div className="field-value">{invoiceData.shippingCarrier || '-'}</div>
                   </div>
                 </div>
                 <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
@@ -324,7 +308,7 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <div className="detail-grid">
                   <div className="detail-field">
                     <label>SHIP TO</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value" style={{ whiteSpace: 'pre-line' }}>{invoiceData.shippingAddress || '-'}</div>
                   </div>
                 </div>
               </div>
@@ -336,19 +320,11 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <div className="detail-grid">
                   <div className="detail-field">
                     <label>TERMS</label>
-                    <div className="field-value">-</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>BILLING SCHEDULE</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value">{invoiceData.terms || '-'}</div>
                   </div>
                   <div className="detail-field">
                     <label>REF BANK PRINT</label>
-                    <div className="field-value">-</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>PAYMENT PERIOD</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value">{invoiceData.refBankPrint || '-'}</div>
                   </div>
                 </div>
                 <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
@@ -356,7 +332,7 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <div className="detail-grid">
                   <div className="detail-field">
                     <label>BILL TO</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value" style={{ whiteSpace: 'pre-line' }}>{invoiceData.billingAddress || '-'}</div>
                   </div>
                 </div>
               </div>
@@ -368,32 +344,16 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Account Information</h4>
                 <div className="detail-grid">
                   <div className="detail-field">
-                    <label>CURRENCY</label>
-                    <div className="field-value">SGD</div>
+                    <label>ACCOUNT</label>
+                    <div className="field-value">{invoiceData.account}</div>
                   </div>
                   <div className="detail-field">
                     <label>EXCHANGE RATE</label>
-                    <div className="field-value">1.00</div>
+                    <div className="field-value">{invoiceData.exchangeRate}</div>
                   </div>
                   <div className="detail-field">
-                    <label>EST. EXTENDED COST</label>
-                    <div className="field-value">0.00</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>EST. GROSS PROFIT</label>
-                    <div className="field-value">0.00</div>
-                  </div>
-                </div>
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-                <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Tax Information</h4>
-                <div className="detail-grid">
-                  <div className="detail-field">
-                    <label>TAX ID</label>
-                    <div className="field-value">-</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>EST. GROSS PROFIT PERCENT</label>
-                    <div className="field-value">-</div>
+                    <label>CURRENCY</label>
+                    <div className="field-value">{invoiceData.currency}</div>
                   </div>
                 </div>
               </div>
@@ -432,23 +392,23 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <div className="detail-grid">
                   <div className="detail-field">
                     <label>TO BE PRINTED</label>
-                    <div className="field-value"><input type="checkbox" disabled /></div>
+                    <div className="field-value"><input type="checkbox" checked={invoiceData.toBePrinted} disabled /></div>
                   </div>
                   <div className="detail-field">
                     <label>TO BE EMAILED</label>
-                    <div className="field-value"><input type="checkbox" disabled /></div>
+                    <div className="field-value"><input type="checkbox" checked={invoiceData.toBeEmailed} disabled /></div>
                   </div>
                   <div className="detail-field">
                     <label>TO BE FAXED</label>
-                    <div className="field-value"><input type="checkbox" disabled /></div>
+                    <div className="field-value"><input type="checkbox" checked={invoiceData.toBeFaxed} disabled /></div>
                   </div>
                   <div className="detail-field">
                     <label>SELECT MESSAGE</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value">{invoiceData.selectMessage || '-'}</div>
                   </div>
                   <div className="detail-field" style={{ gridColumn: '1 / -1' }}>
                     <label>CUSTOMER MESSAGE</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value">{invoiceData.customerMessage || '-'}</div>
                   </div>
                 </div>
               </div>
@@ -460,8 +420,12 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>System Information</h4>
                 <div className="detail-grid">
                   <div className="detail-field">
-                    <label>REF CUSTOMER</label>
-                    <div className="field-value">-</div>
+                    <label>AMOUNT IN WORDS</label>
+                    <div className="field-value">{invoiceData.amountInWords}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>INVOICE TYPE</label>
+                    <div className="field-value">{invoiceData.invoiceType}</div>
                   </div>
                 </div>
               </div>
@@ -474,11 +438,11 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <div className="detail-grid">
                   <div className="detail-field">
                     <label>TEST TRANSACTION FIELD</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value">{invoiceData.testTransactionField || '-'}</div>
                   </div>
                   <div className="detail-field">
                     <label>GST TYPE</label>
-                    <div className="field-value">-</div>
+                    <div className="field-value">{invoiceData.gstType}</div>
                   </div>
                 </div>
               </div>
@@ -495,11 +459,11 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
             <div className="summary-grid">
               <div className="summary-card">
                 <div className="summary-title">SUBTOTAL</div>
-                <div className="summary-value">${orderData.subtotal.toFixed(2)}</div>
+                <div className="summary-value">${invoiceData.subtotal.toFixed(2)}</div>
               </div>
               <div className="summary-card">
                 <div className="summary-title">TAX AMOUNT</div>
-                <div className="summary-value">${orderData.taxTotal.toFixed(2)}</div>
+                <div className="summary-value">${invoiceData.taxTotal.toFixed(2)}</div>
               </div>
               <div className="summary-card">
                 <div className="summary-title">DISCOUNT</div>
@@ -507,7 +471,7 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
               </div>
               <div className="summary-card" style={{ background: '#f8f9fa' }}>
                 <div className="summary-title">TOTAL AMOUNT</div>
-                <div className="summary-value" style={{ color: '#4a90e2' }}>${orderData.total.toFixed(2)}</div>
+                <div className="summary-value" style={{ color: '#4a90e2' }}>${invoiceData.total.toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -535,4 +499,4 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
   );
 };
 
-export default ViewSalesOrderDetail;
+export default ViewInvoiceDetail;

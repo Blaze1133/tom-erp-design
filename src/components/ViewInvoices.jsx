@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewInvoices = () => {
+const ViewInvoices = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewFilter, setViewFilter] = useState('all');
 
@@ -144,11 +144,15 @@ const ViewInvoices = () => {
   };
 
   const handleEdit = (invoice) => {
-    showToast(`Editing invoice ${invoice.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('edit-invoice');
+    }
   };
 
   const handleView = (invoice) => {
-    showToast(`Viewing invoice ${invoice.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('view-invoice-detail');
+    }
   };
 
   return (

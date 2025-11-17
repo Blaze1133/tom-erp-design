@@ -4,6 +4,7 @@ import './Enquiries.css';
 
 const EnterBills = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [activeTab, setActiveTab] = useState('expenses');
 
   // Form state with dummy data
   const [formData, setFormData] = useState({
@@ -47,7 +48,23 @@ const EnterBills = ({ setCurrentPage }) => {
         billable: false
       }
     ],
-    items: []
+    items: [],
+    // Billing tab
+    terms: '',
+    incoterm: '',
+    vendorSelect: '- Custom -',
+    // Relationships tab
+    contacts: [],
+    // Communication tab
+    printingPreference: 'TO BE PRINTED',
+    events: [],
+    // Custom tab
+    materialType: '',
+    testTransactionField: '',
+    doRecordCreated: '',
+    gstType: '',
+    // Supplier Received Items tab
+    receivedItems: []
   });
 
   const showToast = (message, type = 'success') => {
@@ -179,7 +196,7 @@ const EnterBills = ({ setCurrentPage }) => {
             <i className="fas fa-info-circle"></i>
             Primary Information
           </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
           
           <div className="form-grid">
             <div className="form-group">
@@ -414,12 +431,12 @@ const EnterBills = ({ setCurrentPage }) => {
         </div>
 
         {/* Classification */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
+        <div className="form-section" style={{ marginTop: '2rem' }}>
           <h2 className="section-title">
             <i className="fas fa-tags"></i>
             Classification
           </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
           
           <div className="form-grid">
             <div className="form-group">
@@ -454,13 +471,20 @@ const EnterBills = ({ setCurrentPage }) => {
           </div>
         </div>
 
-        {/* Expenses and Items */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title">
-            <i className="fas fa-list"></i>
-            Expenses and Items
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
+        {/* Tabbed Interface */}
+        <div className="detail-tabs" style={{ marginTop: '2rem' }}>
+          <div className="tabs-header">
+            <button className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`} onClick={() => setActiveTab('expenses')}>Expenses & Items</button>
+            <button className={`tab-btn ${activeTab === 'billing' ? 'active' : ''}`} onClick={() => setActiveTab('billing')}>Billing</button>
+            <button className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`} onClick={() => setActiveTab('relationships')}>Relationships</button>
+            <button className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`} onClick={() => setActiveTab('communication')}>Communication</button>
+            <button className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`} onClick={() => setActiveTab('custom')}>Custom</button>
+            <button className={`tab-btn ${activeTab === 'supplier' ? 'active' : ''}`} onClick={() => setActiveTab('supplier')}>Supplier Received Items</button>
+          </div>
+
+          {/* Expenses & Items Tab */}
+          {activeTab === 'expenses' && (
+            <div className="tab-content">
 
           <div style={{ marginBottom: '15px' }}>
             <strong style={{ fontSize: '14px' }}>Expenses {formData.amount.toFixed(2)}</strong>
@@ -772,6 +796,278 @@ const EnterBills = ({ setCurrentPage }) => {
               </table>
             </div>
           )}
+            </div>
+          )}
+
+          {/* Billing Tab */}
+          {activeTab === 'billing' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Billing Information</h3>
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">TERMS</label>
+                    <select 
+                      className="form-control"
+                      value={formData.terms}
+                      onChange={(e) => handleFormChange('terms', e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option>Net 30</option>
+                      <option>Net 60</option>
+                      <option>Due on Receipt</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">INCOTERM</label>
+                    <select 
+                      className="form-control"
+                      value={formData.incoterm}
+                      onChange={(e) => handleFormChange('incoterm', e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option>FOB</option>
+                      <option>CIF</option>
+                      <option>EXW</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">VENDOR SELECT</label>
+                    <select 
+                      className="form-control"
+                      value={formData.vendorSelect}
+                      onChange={(e) => handleFormChange('vendorSelect', e.target.value)}
+                    >
+                      <option>- Custom -</option>
+                      <option>Vendor 1</option>
+                      <option>Vendor 2</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Relationships Tab */}
+          {activeTab === 'relationships' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                  <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
+                  Contacts (1)
+                </h3>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Add
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Insert
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-trash"></i> Remove
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove all</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Clear All Lines</button>
+                </div>
+                <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
+                  <table className="items-table" style={{ width: '100%', fontSize: '0.75rem' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ padding: '8px 6px' }}>CONTACT #</th>
+                        <th style={{ padding: '8px 6px' }}>JOB TITLE</th>
+                        <th style={{ padding: '8px 6px' }}>EMAIL</th>
+                        <th style={{ padding: '8px 6px' }}>MAIN PHONE</th>
+                        <th style={{ padding: '8px 6px' }}>SUBSIDIARY #</th>
+                        <th style={{ padding: '8px 6px' }}>ROLE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '1rem', color: '#999' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Communication Tab */}
+          {activeTab === 'communication' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                  <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
+                  Printing
+                </h3>
+                <div className="form-group" style={{ maxWidth: '400px' }}>
+                  <label className="form-label">TO BE PRINTED</label>
+                  <select 
+                    className="form-control"
+                    value={formData.printingPreference}
+                    onChange={(e) => handleFormChange('printingPreference', e.target.value)}
+                  >
+                    <option>TO BE PRINTED</option>
+                    <option>TO BE EMAILED</option>
+                    <option>TO BE FAXED</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-section" style={{ marginTop: '1rem' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                  <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
+                  Events (1)
+                </h3>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Add
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-times"></i> Cancel
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-plus"></i> Insert
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
+                    <i className="fas fa-trash"></i> Remove
+                  </button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove all</button>
+                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Clear All Lines</button>
+                </div>
+                <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
+                  <table className="items-table" style={{ width: '100%', fontSize: '0.75rem' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ padding: '8px 6px' }}>TITLE #</th>
+                        <th style={{ padding: '8px 6px' }}>LOCATION</th>
+                        <th style={{ padding: '8px 6px' }}>DATE #</th>
+                        <th style={{ padding: '8px 6px' }}>ALL DAY</th>
+                        <th style={{ padding: '8px 6px' }}>START TIME</th>
+                        <th style={{ padding: '8px 6px' }}>END TIME</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="text" className="table-input" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="date" className="table-input" value="2025-11-17" style={{ width: '150px' }} /></td>
+                        <td style={{ padding: '4px', textAlign: 'center' }}><input type="checkbox" /></td>
+                        <td style={{ padding: '4px' }}><input type="time" className="table-input" value="08:00" style={{ width: '100px' }} /></td>
+                        <td style={{ padding: '4px' }}><input type="time" className="table-input" value="09:00" style={{ width: '100px' }} /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Custom Tab */}
+          {activeTab === 'custom' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">MATERIAL TYPE</label>
+                    <textarea 
+                      className="form-control"
+                      value={formData.materialType}
+                      onChange={(e) => handleFormChange('materialType', e.target.value)}
+                      rows="3"
+                      placeholder="Type text and format it using the toolbar."
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">TEST TRANSACTION FIELD</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.testTransactionField}
+                      onChange={(e) => handleFormChange('testTransactionField', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">DO RECORD CREATED</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.doRecordCreated}
+                      onChange={(e) => handleFormChange('doRecordCreated', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">GST TYPE</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.gstType}
+                      onChange={(e) => handleFormChange('gstType', e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Supplier Received Items Tab */}
+          {activeTab === 'supplier' && (
+            <div className="tab-content">
+              <div className="form-section">
+                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                  <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
+                  Received Items (1)
+                </h3>
+                <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
+                  <table className="items-table" style={{ width: '100%', fontSize: '0.75rem' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ padding: '8px 6px' }}>ITEM</th>
+                        <th style={{ padding: '8px 6px' }}>COUNT OF QUANTITY</th>
+                        <th style={{ padding: '8px 6px' }}>MEMO</th>
+                        <th style={{ padding: '8px 6px' }}>SUM OF AMOUNT (FOREIGN CURRENCY)</th>
+                        <th style={{ padding: '8px 6px' }}>NAME</th>
+                        <th style={{ padding: '8px 6px' }}>DOCUMENT NUMBER</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '1rem', color: '#999' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Supporting Documents */}
+        <div className="form-section" style={{ marginTop: '2rem' }}>
+          <h2 className="section-title">
+            <i className="fas fa-paperclip"></i>
+            Supporting Documents
+          </h2>
+          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
+          
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <button className="btn btn-secondary">
+              <i className="fas fa-upload"></i> Upload File
+            </button>
+            <button className="btn btn-secondary">
+              <i className="fas fa-link"></i> Attach URL
+            </button>
+            <button className="btn btn-secondary">
+              <i className="fas fa-trash"></i> Delete
+            </button>
+          </div>
         </div>
 
         <div className="footer-actions">
