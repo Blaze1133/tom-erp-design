@@ -266,6 +266,9 @@ import ViewBiometricDataDetail from './components/ViewBiometricDataDetail';
 import CreateManualEntry from './components/CreateManualEntry';
 import ViewManualEntry from './components/ViewManualEntry';
 import ViewManualEntryDetail from './components/ViewManualEntryDetail';
+import ViewEmployeeDailyAttendanceList from './components/ViewEmployeeDailyAttendanceList';
+import ViewEmployeeDailyAttendanceDetail from './components/ViewEmployeeDailyAttendanceDetail';
+import EditEmployeeDailyAttendance from './components/EditEmployeeDailyAttendance';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -680,23 +683,34 @@ function App() {
         return <GeneratePriceLists setCurrentPage={setCurrentPage} />;
       case 'view-price-list-customer':
         return <ViewPriceListCustomer setCurrentPage={setCurrentPage} />;
-      case 'edit-price-list-customer':
-        return <EditPriceListCustomer setCurrentPage={setCurrentPage} />;
+      case 'view-manual-entry-detail':
+        return <ViewManualEntryDetail setCurrentPage={setCurrentPage} />;
+      
+      // Employee Daily Attendance List
+      case 'employee-daily-attendance-list':
+      case 'view-employee-daily-attendance-list':
+        return <ViewEmployeeDailyAttendanceList 
+          onViewClick={() => setCurrentPage('view-employee-daily-attendance-detail')}
+          onEditClick={() => setCurrentPage('edit-employee-daily-attendance')}
+          setCurrentPage={setCurrentPage} 
+        />;
+      case 'view-employee-daily-attendance-detail':
+        return <ViewEmployeeDailyAttendanceDetail 
+          onBack={() => setCurrentPage('view-employee-daily-attendance-list')}
+          onEdit={() => setCurrentPage('edit-employee-daily-attendance')}
+          setCurrentPage={setCurrentPage} 
+        />;
+      case 'edit-employee-daily-attendance':
+        return <EditEmployeeDailyAttendance 
+          onBack={() => setCurrentPage('view-employee-daily-attendance-list')}
+          onSave={() => setCurrentPage('view-employee-daily-attendance-list')}
+          setCurrentPage={setCurrentPage} 
+        />;
       
       // Individual Price List
       case 'individual-price-list':
         return <IndividualPriceList setCurrentPage={setCurrentPage} />;
       
-      case 'view-order-items':
-      case 'create-allocation-schedules':
-      case 'create-intercompany-allocation-schedules':
-      case 'create-allocation-batches':
-      case 'create-intercompany-adjustments':
-      case 'revalue-open-currency-balances':
-      case 'make-statistical-journal-entries':
-      case 'create-statistical-schedule':
-      case 'view-advanced-intercompany-journal-entries':
-      case 'view-budgets':
       case 'view-allocation-schedules':
       case 'view-intercompany-allocation-schedules':
       case 'view-allocation-batches':

@@ -4,12 +4,15 @@ import './Enquiries.css';
 
 const CreateManualEntry = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [formStep, setFormStep] = useState('entry'); // entry, preview
+  const [formStep, setFormStep] = useState('entry'); // entry, preview, upload
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [previewData, setPreviewData] = useState([]);
   
   // Common details
   const [commonDetails, setCommonDetails] = useState({
     project: '',
-    date: '',
+    dateIn: '',
+    dateOut: '',
     shiftType: ''
   });
 
@@ -104,8 +107,12 @@ const CreateManualEntry = () => {
       showToast('Please select a project', 'warning');
       return;
     }
-    if (!commonDetails.date) {
-      showToast('Please select a date', 'warning');
+    if (!commonDetails.dateIn) {
+      showToast('Please select a date in', 'warning');
+      return;
+    }
+    if (!commonDetails.dateOut) {
+      showToast('Please select a date out', 'warning');
       return;
     }
     if (!commonDetails.shiftType) {
@@ -114,6 +121,12 @@ const CreateManualEntry = () => {
     }
     if (selectedEmployees.length === 0) {
       showToast('Please select at least one employee', 'warning');
+      return;
+    }
+
+    // Validate date out >= date in
+    if (commonDetails.dateOut < commonDetails.dateIn) {
+      showToast('Date Out must be greater than or equal to Date In', 'error');
       return;
     }
 
@@ -132,7 +145,7 @@ const CreateManualEntry = () => {
     
     // Reset form
     setTimeout(() => {
-      setCommonDetails({ project: '', date: '', shiftType: '' });
+      setCommonDetails({ project: '', dateIn: '', dateOut: '', shiftType: '' });
       setSelectedEmployees([]);
       setFormStep('entry');
     }, 2000);
@@ -140,11 +153,62 @@ const CreateManualEntry = () => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      setCommonDetails({ project: '', date: '', shiftType: '' });
+      setCommonDetails({ project: '', dateIn: '', dateOut: '', shiftType: '' });
       setSelectedEmployees([]);
       setFormStep('entry');
       showToast('Entry cancelled', 'info');
     }
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
+      showToast('Please upload a valid Excel file (.xlsx or .xls)', 'error');
+      return;
+    }
+
+    setUploadedFile(file);
+    showToast('File uploaded successfully. Processing...', 'info');
+
+    // Simulate Excel parsing
+    setTimeout(() => {
+      const mockPreviewData = [
+        {
+          id: 1,
+          name: 'John Doe',
+          employeeId: 'EMP001',
+          finNo: 'F1234567A',
+          workPermitNo: 'WP123456',
+          companyName: 'Tech Onshore MEP Prefabricators Pte Ltd',
+          designation: 'Technician',
+          timeIn: '08:00',
+          timeOut: '18:00'
+        },
+        {
+          id: 2,
+          name: 'Sarah Lee',
+          employeeId: 'EMP003',
+          finNo: 'F3456789C',
+          workPermitNo: 'WP345678',
+          companyName: 'TOM Offshore Marine Engineering Pte Ltd',
+          designation: 'Engineer',
+          timeIn: '09:00',
+          timeOut: '17:00'
+        }
+      ];
+      
+      setPreviewData(mockPreviewData);
+      setFormStep('upload');
+      showToast(`Excel file processed. ${mockPreviewData.length} employee records found.`, 'success');
+    }, 1500);
+  };
+
+  const handleConfirmUpload = () => {
+    setSelectedEmployees(previewData);
+    setFormStep('entry');
+    showToast(`${previewData.length} employees imported from Excel file`, 'success');
   };
 
   const handleBackToEntry = () => {
@@ -242,11 +306,21 @@ const CreateManualEntry = () => {
                   </div>
 
                   <div className="form-group">
-                    <label>Date <span className="required">*</span></label>
+                    <label>Date In <span className="required">*</span></label>
                     <input
                       type="date"
-                      value={commonDetails.date}
-                      onChange={(e) => handleCommonDetailChange('date', e.target.value)}
+                      value={commonDetails.dateIn}
+                      onChange={(e) => handleCommonDetailChange('dateIn', e.target.value)}
+                      className="form-input"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Date Out <span className="required">*</span></label>
+                    <input
+                      type="date"
+                      value={commonDetails.dateOut}
+                      onChange={(e) => handleCommonDetailChange('dateOut', e.target.value)}
                       className="form-input"
                     />
                   </div>
@@ -309,6 +383,30 @@ const CreateManualEntry = () => {
                 <h2 className="section-title">Select Employees</h2>
                 <p className="section-subtitle">{selectedEmployees.length} employee(s) selected</p>
               </div>
+
+              {/* Excel Upload Option */}
+              <div style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '4px', border: '1px solid #dee2e6' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 600 }}>Import from Excel</h4>
+                    <p style={{ margin: '5px 0 0 0', fontSize: '0.8rem', color: '#666' }}>Upload an Excel file with employee data and time information</p>
+                  </div>
+                  <div>
+                    <input
+                      type="file"
+                      accept=".xlsx,.xls"
+                      onChange={handleFileUpload}
+                      style={{ display: 'none' }}
+                      id="manual-excel-upload"
+                    />
+                    <label htmlFor="manual-excel-upload" className="btn btn-success" style={{ cursor: 'pointer', fontSize: '0.85rem', padding: '8px 16px' }}>
+                      <i className="fas fa-upload"></i>
+                      Upload Excel
+                    </label>
+                  </div>
+                </div>
+              </div>
+
                 <div className="form-group" style={{ marginBottom: '15px' }}>
                   <input
                     type="text"
@@ -393,6 +491,60 @@ const CreateManualEntry = () => {
           </>
         )}
 
+        {/* Upload Preview Step */}
+        {formStep === 'upload' && (
+          <div>
+            <div className="form-section">
+              <h2 className="section-title">Excel File Preview</h2>
+              <p className="section-subtitle">
+                Preview of {previewData.length} employees from uploaded file: {uploadedFile?.name}
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+              <button className="btn btn-primary" onClick={handleConfirmUpload}>
+                <i className="fas fa-check"></i>
+                Import Employees
+              </button>
+              <button className="btn btn-secondary" onClick={() => setFormStep('entry')}>
+                <i className="fas fa-arrow-left"></i>
+                Back to Entry
+              </button>
+            </div>
+
+            <div style={{ marginTop: '20px' }}>
+              <table className="enquiries-table">
+                <thead>
+                  <tr>
+                    <th>EMPLOYEE NAME</th>
+                    <th>EMPLOYEE ID</th>
+                    <th>FIN NO</th>
+                    <th>WORK PERMIT NO</th>
+                    <th>COMPANY NAME</th>
+                    <th>DESIGNATION</th>
+                    <th>TIME IN</th>
+                    <th>TIME OUT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {previewData.map((employee) => (
+                    <tr key={employee.id}>
+                      <td>{employee.name}</td>
+                      <td>{employee.employeeId}</td>
+                      <td>{employee.finNo}</td>
+                      <td>{employee.workPermitNo}</td>
+                      <td>{employee.companyName}</td>
+                      <td>{employee.designation}</td>
+                      <td>{employee.timeIn}</td>
+                      <td>{employee.timeOut}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* Preview Step */}
         {formStep === 'preview' && (
           <div>
@@ -412,7 +564,8 @@ const CreateManualEntry = () => {
                   <strong>Common Details:</strong>
                   <div style={{ marginTop: '10px' }}>
                     <p><strong>Project:</strong> {commonDetails.project}</p>
-                    <p><strong>Date:</strong> {commonDetails.date}</p>
+                    <p><strong>Date In:</strong> {commonDetails.dateIn}</p>
+                    <p><strong>Date Out:</strong> {commonDetails.dateOut}</p>
                     <p><strong>Shift Type:</strong> {commonDetails.shiftType}</p>
                   </div>
                 </div>
@@ -429,7 +582,8 @@ const CreateManualEntry = () => {
                     <th>WORK PERMIT NO</th>
                     <th>COMPANY NAME</th>
                     <th>PROJECT</th>
-                    <th>DATE</th>
+                    <th>DATE IN</th>
+                    <th>DATE OUT</th>
                     <th>TIME IN</th>
                     <th>TIME OUT</th>
                     <th>SHIFT TYPE</th>
@@ -444,7 +598,8 @@ const CreateManualEntry = () => {
                       <td>{employee.workPermitNo}</td>
                       <td>{employee.companyName}</td>
                       <td>{commonDetails.project}</td>
-                      <td>{commonDetails.date}</td>
+                      <td>{commonDetails.dateIn}</td>
+                      <td>{commonDetails.dateOut}</td>
                       <td>{employee.timeIn}</td>
                       <td>{employee.timeOut}</td>
                       <td>{commonDetails.shiftType}</td>

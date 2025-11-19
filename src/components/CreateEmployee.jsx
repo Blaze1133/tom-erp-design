@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import EmployeeHRSubTabsEdit from './EmployeeHRSubTabsEdit';
+import EmployeePayrollTabEdit from './EmployeePayrollTabEdit';
+import EmployeeLeaveSwipeTabEdit from './EmployeeLeaveSwipeTabEdit';
+import EmployeeAccessTabEdit from './EmployeeAccessTabEdit';
+import EmployeeSystemInfoTabEdit from './EmployeeSystemInfoTabEdit';
+import EmployeeWorkInjuryTabEdit from './EmployeeWorkInjuryTabEdit';
+import EmployeeExitProcessTabEdit from './EmployeeExitProcessTabEdit';
 import './Enquiries.css';
 
 const CreateEmployee = ({ employeeData, onSave, onCancel }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('contact');
+  const [hrSubTab, setHrSubTab] = useState('basicInfo');
   const [formData, setFormData] = useState(employeeData || {
     customForm: 'HR Employee Form-SINGAPORE',
     employeeId: '',
@@ -232,11 +240,8 @@ const CreateEmployee = ({ employeeData, onSave, onCancel }) => {
             <button className={`tab-btn ${activeTab === 'humanResources' ? 'active' : ''}`} onClick={() => setActiveTab('humanResources')}>Human Resources</button>
             <button className={`tab-btn ${activeTab === 'payroll' ? 'active' : ''}`} onClick={() => setActiveTab('payroll')}>Payroll</button>
             <button className={`tab-btn ${activeTab === 'leaveSwipe' ? 'active' : ''}`} onClick={() => setActiveTab('leaveSwipe')}>Leave/Swipe</button>
-            <button className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`} onClick={() => setActiveTab('communication')}>Communication</button>
             <button className={`tab-btn ${activeTab === 'access' ? 'active' : ''}`} onClick={() => setActiveTab('access')}>Access</button>
             <button className={`tab-btn ${activeTab === 'systemInfo' ? 'active' : ''}`} onClick={() => setActiveTab('systemInfo')}>System Information</button>
-            <button className={`tab-btn ${activeTab === 'relatedRecords' ? 'active' : ''}`} onClick={() => setActiveTab('relatedRecords')}>Related Records</button>
-            <button className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`} onClick={() => setActiveTab('custom')}>Custom</button>
             <button className={`tab-btn ${activeTab === 'workInjury' ? 'active' : ''}`} onClick={() => setActiveTab('workInjury')}>Work Injury and Insurance</button>
             <button className={`tab-btn ${activeTab === 'employeeExit' ? 'active' : ''}`} onClick={() => setActiveTab('employeeExit')}>Employee Exit Process</button>
           </div>
@@ -305,7 +310,28 @@ const CreateEmployee = ({ employeeData, onSave, onCancel }) => {
                 </div>
               </div>
             )}
-            {activeTab !== 'contact' && (
+            {activeTab === 'humanResources' && (
+              <EmployeeHRSubTabsEdit hrSubTab={hrSubTab} setHrSubTab={setHrSubTab} />
+            )}
+            {activeTab === 'payroll' && (
+              <EmployeePayrollTabEdit />
+            )}
+            {activeTab === 'leaveSwipe' && (
+              <EmployeeLeaveSwipeTabEdit />
+            )}
+            {activeTab === 'access' && (
+              <EmployeeAccessTabEdit />
+            )}
+            {activeTab === 'systemInfo' && (
+              <EmployeeSystemInfoTabEdit />
+            )}
+            {activeTab === 'workInjury' && (
+              <EmployeeWorkInjuryTabEdit />
+            )}
+            {activeTab === 'employeeExit' && (
+              <EmployeeExitProcessTabEdit />
+            )}
+            {activeTab !== 'contact' && activeTab !== 'humanResources' && activeTab !== 'payroll' && activeTab !== 'leaveSwipe' && activeTab !== 'access' && activeTab !== 'systemInfo' && activeTab !== 'workInjury' && activeTab !== 'employeeExit' && (
               <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
                 <p>Content for {activeTab} tab</p>
               </div>

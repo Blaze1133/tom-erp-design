@@ -5,7 +5,7 @@ import './Enquiries.css';
 const ViewYardData = ({ onNewClick, onViewClick, onEditClick }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewFilter, setViewFilter] = useState('all');
-  const [searchText, setSearchText] = useState('');
+  const [searchText] = useState('');
   const [filters, setFilters] = useState({
     dateFrom: '',
     dateTo: '',
@@ -97,25 +97,8 @@ const ViewYardData = ({ onNewClick, onViewClick, onEditClick }) => {
     }
   ]);
 
-  const projects = [
-    'All',
-    '20-0052 Fortis Construction Pte. Ltd',
-    '21-0089 Marina Bay Project',
-    '22-0134 Sentosa Development'
-  ];
-
-  const statuses = ['All', 'Posted', 'Not Posted'];
-  const shiftTypes = ['All', 'Day', 'Night'];
-
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
-  };
-
-  const handleFilterChange = (field, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [field]: value
-    }));
   };
 
   const handleView = (record) => {
@@ -127,20 +110,6 @@ const ViewYardData = ({ onNewClick, onViewClick, onEditClick }) => {
   const handleEdit = (record) => {
     if (onEditClick) {
       onEditClick(record);
-    }
-  };
-
-  const handleDelete = (record) => {
-    if (window.confirm(`Are you sure you want to delete the record for ${record.employeeName}?`)) {
-      showToast('Record deleted successfully', 'success');
-    }
-  };
-
-  const handlePost = (record) => {
-    if (record.status === 'Posted') {
-      showToast('Record is already posted', 'info');
-    } else {
-      showToast(`Record for ${record.employeeName} posted successfully`, 'success');
     }
   };
 

@@ -28,10 +28,6 @@ const ViewYardDataDetail = ({ onBack, onEdit }) => {
     lastModifiedDate: '2025-04-01 07:30:00'
   };
 
-  const showToast = (message, type = 'success') => {
-    setToast({ show: true, message, type });
-  };
-
   const handleEdit = () => {
     if (onEdit) {
       onEdit();
@@ -41,23 +37,6 @@ const ViewYardDataDetail = ({ onBack, onEdit }) => {
   const handleBack = () => {
     if (onBack) {
       onBack();
-    }
-  };
-
-  const handlePost = () => {
-    if (yardData.status === 'Posted') {
-      showToast('Record is already posted', 'info');
-    } else {
-      showToast('Record posted successfully', 'success');
-    }
-  };
-
-  const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this record?')) {
-      showToast('Record deleted successfully', 'success');
-      setTimeout(() => {
-        if (onBack) onBack();
-      }, 1500);
     }
   };
 

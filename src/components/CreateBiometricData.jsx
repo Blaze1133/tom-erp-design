@@ -4,11 +4,16 @@ import './Enquiries.css';
 
 const CreateBiometricData = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [syncStep, setSyncStep] = useState('sync'); // sync, validate, adjust, preview
+  const [syncStep, setSyncStep] = useState('sync'); // sync, validate, adjust, preview, upload
   const [biometricData, setBiometricData] = useState([]);
   const [selectedRecords, setSelectedRecords] = useState([]);
   const [bulkProject, setBulkProject] = useState('');
   const [bulkShift, setBulkShift] = useState('');
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [previewData, setPreviewData] = useState([]);
+  const [schedulerEnabled, setSchedulerEnabled] = useState(true);
+  const [lastSyncTime, setLastSyncTime] = useState('2025-11-19 08:00:00');
+  const [nextSyncTime, setNextSyncTime] = useState('2025-11-19 20:00:00');
 
   const projects = [
     '20-0052 Fortis Construction Pte. Ltd',
@@ -196,15 +201,121 @@ const CreateBiometricData = () => {
     setSyncStep('preview');
   };
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
+      showToast('Please upload a valid Excel file (.xlsx or .xls)', 'error');
+      return;
+    }
+
+    setUploadedFile(file);
+    showToast('File uploaded successfully. Processing...', 'info');
+
+    // Simulate Excel parsing
+    setTimeout(() => {
+      const mockPreviewData = [
+        {
+          id: 1,
+          employeeName: 'John Doe',
+          employeeId: 'EMP001',
+          companyName: 'Tech Onshore MEP Prefabricators Pte Ltd',
+          workPermitNo: 'WP123456',
+          finNo: 'F1234567A',
+          dateIn: '2025-04-05',
+          dateOut: '2025-04-05',
+          timeIn: '08:00',
+          timeOut: '18:00',
+          deviceInTime: '07:58:23',
+          deviceOutTime: '18:02:15',
+          project: '',
+          shiftType: '',
+          remarks: '',
+          status: 'Not Posted',
+          validated: true
+        },
+        {
+          id: 2,
+          employeeName: 'Sarah Lee',
+          employeeId: 'EMP003',
+          companyName: 'TOM Offshore Marine Engineering Pte Ltd',
+          workPermitNo: 'WP345678',
+          finNo: 'F3456789C',
+          dateIn: '2025-04-05',
+          dateOut: '2025-04-05',
+          timeIn: '20:00',
+          timeOut: '06:00',
+          deviceInTime: '19:55:10',
+          deviceOutTime: '06:05:30',
+          project: '',
+          shiftType: '',
+          remarks: '',
+          status: 'Not Posted',
+          validated: true
+        }
+      ];
+      
+      setPreviewData(mockPreviewData);
+      setSyncStep('upload');
+      showToast(`Excel file processed. ${mockPreviewData.length} records found.`, 'success');
+    }, 1500);
+  };
+
+  const handleConfirmUpload = () => {
+    setBiometricData(previewData);
+    setSyncStep('validate');
+    showToast(`${previewData.length} records imported from Excel file`, 'success');
+  };
+
+  const handleSchedulerToggle = () => {
+    setSchedulerEnabled(!schedulerEnabled);
+    if (!schedulerEnabled) {
+      showToast('Automatic biometric sync enabled. Next sync at 8:00 AM and 8:00 PM daily.', 'success');
+      // Update next sync time
+      const now = new Date();
+      const nextSync = new Date();
+      if (now.getHours() < 8) {
+        nextSync.setHours(8, 0, 0, 0);
+      } else if (now.getHours() < 20) {
+        nextSync.setHours(20, 0, 0, 0);
+      } else {
+        nextSync.setDate(nextSync.getDate() + 1);
+        nextSync.setHours(8, 0, 0, 0);
+      }
+      setNextSyncTime(nextSync.toLocaleString());
+    } else {
+      showToast('Automatic biometric sync disabled.', 'info');
+    }
+  };
+
+  const simulateScheduledSync = () => {
+    showToast('Scheduled sync initiated...', 'info');
+    setTimeout(() => {
+      const now = new Date();
+      setLastSyncTime(now.toLocaleString());
+      
+      // Calculate next sync time (12 hours later)
+      const nextSync = new Date(now.getTime() + 12 * 60 * 60 * 1000);
+      setNextSyncTime(nextSync.toLocaleString());
+      
+      showToast('Scheduled sync completed. New records available for processing.', 'success');
+    }, 2000);
+  };
+
   const handleSubmit = () => {
     const validRecords = biometricData.filter(r => r.validated && r.project && r.shiftType);
-    showToast(`Successfully imported ${validRecords.length} biometric records`, 'success');
+    showToast('Submitting to Employee Daily Attendance...', 'info');
     
-    // Reset form
     setTimeout(() => {
+      showToast(`Successfully submitted ${validRecords.length} records to Employee Daily Attendance system`, 'success');
+      
+      // Reset form
       setBiometricData([]);
-      setSelectedRecords([]);
       setSyncStep('sync');
+      setSelectedRecords([]);
+      setUploadedFile(null);
+      setPreviewData([]);
     }, 2000);
   };
 
@@ -288,9 +399,48 @@ const CreateBiometricData = () => {
         {/* Sync Step */}
         {syncStep === 'sync' && (
           <div>
+            {/* Scheduler Status */}
+            <div className="info-box" style={{ background: schedulerEnabled ? '#d4edda' : '#fff3cd', border: `1px solid ${schedulerEnabled ? '#c3e6cb' : '#ffeaa7'}`, marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <i className={`fas ${schedulerEnabled ? 'fa-clock' : 'fa-pause-circle'}`} style={{ marginRight: '10px', color: schedulerEnabled ? '#155724' : '#856404' }}></i>
+                  <div>
+                    <strong>Automatic Sync Scheduler: {schedulerEnabled ? 'ENABLED' : 'DISABLED'}</strong>
+                    {schedulerEnabled && (
+                      <div style={{ fontSize: '0.85rem', marginTop: '5px', color: '#155724' }}>
+                        <div>Last Sync: {lastSyncTime}</div>
+                        <div>Next Sync: {nextSyncTime}</div>
+                        <div>Schedule: Daily at 8:00 AM and 8:00 PM</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button 
+                    className={`btn ${schedulerEnabled ? 'btn-warning' : 'btn-success'}`}
+                    onClick={handleSchedulerToggle}
+                    style={{ fontSize: '0.85rem', padding: '8px 16px' }}
+                  >
+                    <i className={`fas ${schedulerEnabled ? 'fa-pause' : 'fa-play'}`}></i>
+                    {schedulerEnabled ? 'Disable' : 'Enable'} Scheduler
+                  </button>
+                  {schedulerEnabled && (
+                    <button 
+                      className="btn btn-info"
+                      onClick={simulateScheduledSync}
+                      style={{ fontSize: '0.85rem', padding: '8px 16px' }}
+                    >
+                      <i className="fas fa-sync"></i>
+                      Test Sync Now
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="form-section">
-              <h2 className="section-title">Pull Data from Biometric System</h2>
-              <p className="section-subtitle">Connect to biometric device/server via API</p>
+              <h2 className="section-title">Manual Data Sync</h2>
+              <p className="section-subtitle">Manually connect to biometric device/server via API</p>
             </div>
             <div className="upload-zone">
               <i className="fas fa-fingerprint" style={{ fontSize: '64px', color: '#2196F3', marginBottom: '20px', display: 'block' }}></i>
@@ -317,6 +467,114 @@ const CreateBiometricData = () => {
                   </ul>
                 </div>
               </div>
+            </div>
+
+            {/* OR Divider */}
+            <div style={{ display: 'flex', alignItems: 'center', margin: '40px 0', color: '#666' }}>
+              <div style={{ flex: 1, height: '1px', background: '#ddd' }}></div>
+              <span style={{ padding: '0 20px', fontWeight: 600 }}>OR</span>
+              <div style={{ flex: 1, height: '1px', background: '#ddd' }}></div>
+            </div>
+
+            {/* Excel Upload Section */}
+            <div className="form-section">
+              <h2 className="section-title">Upload Excel File</h2>
+              <p className="section-subtitle">Import attendance data from Excel spreadsheet</p>
+            </div>
+            <div className="upload-zone">
+              <i className="fas fa-file-excel" style={{ fontSize: '64px', color: '#28a745', marginBottom: '20px', display: 'block' }}></i>
+              <h3>Excel File Import</h3>
+              <p style={{ marginBottom: '30px', color: '#666' }}>
+                Upload an Excel file (.xlsx or .xls) containing attendance records
+              </p>
+              <input
+                type="file"
+                accept=".xlsx,.xls"
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+                id="excel-upload"
+              />
+              <label htmlFor="excel-upload" className="btn btn-success" style={{ fontSize: '16px', padding: '12px 30px', cursor: 'pointer' }}>
+                <i className="fas fa-upload"></i>
+                Choose Excel File
+              </label>
+            </div>
+            
+            <div className="info-box info">
+              <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                <i className="fas fa-info-circle" style={{ marginRight: '15px', marginTop: '3px' }}></i>
+                <div>
+                  <strong>Excel file requirements:</strong>
+                  <ul style={{ marginTop: '10px', paddingLeft: '20px' }}>
+                    <li>File format: .xlsx or .xls</li>
+                    <li>Required columns: Employee ID, Employee Name, Date In, Date Out, Time In, Time Out</li>
+                    <li>Optional columns: Project, Shift Type, Remarks</li>
+                    <li>First row should contain column headers</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Upload Preview Step */}
+        {syncStep === 'upload' && (
+          <div>
+            <div className="form-section">
+              <h2 className="section-title">Excel File Preview</h2>
+              <p className="section-subtitle">
+                Preview of {previewData.length} records from uploaded file: {uploadedFile?.name}
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+              <button className="btn btn-primary" onClick={handleConfirmUpload}>
+                <i className="fas fa-check"></i>
+                Confirm Import
+              </button>
+              <button className="btn btn-secondary" onClick={() => setSyncStep('sync')}>
+                <i className="fas fa-arrow-left"></i>
+                Back to Upload
+              </button>
+            </div>
+
+            <div style={{ marginTop: '20px' }}>
+              <table className="enquiries-table">
+                <thead>
+                  <tr>
+                    <th>EMPLOYEE NAME</th>
+                    <th>EMPLOYEE ID</th>
+                    <th>FIN NO</th>
+                    <th>DATE IN</th>
+                    <th>DATE OUT</th>
+                    <th>TIME IN</th>
+                    <th>TIME OUT</th>
+                    <th>DEVICE IN TIME</th>
+                    <th>DEVICE OUT TIME</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {previewData.map((record) => (
+                    <tr key={record.id}>
+                      <td>{record.employeeName}</td>
+                      <td>{record.employeeId}</td>
+                      <td>{record.finNo}</td>
+                      <td>{record.dateIn}</td>
+                      <td>{record.dateOut}</td>
+                      <td>{record.timeIn}</td>
+                      <td>{record.timeOut}</td>
+                      <td>{record.deviceInTime}</td>
+                      <td>{record.deviceOutTime}</td>
+                      <td>
+                        <span className={`status-badge ${record.validated ? 'success' : 'error'}`}>
+                          {record.validated ? 'Valid' : 'Invalid'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
@@ -535,6 +793,32 @@ const CreateBiometricData = () => {
               <span>
                 {biometricData.filter(r => r.validated && r.project && r.shiftType).length} records ready for submission
               </span>
+            </div>
+
+            {/* Important Note */}
+            <div className="info-box info" style={{ marginTop: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                <i className="fas fa-info-circle" style={{ marginRight: '15px', marginTop: '3px' }}></i>
+                <div>
+                  <strong>Important:</strong>
+                  <p style={{ margin: '5px 0 0 0' }}>
+                    These records will be submitted to the <strong>Employee Daily Attendance</strong> system. 
+                    Once submitted, they will be available for payroll processing and attendance reporting.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ marginTop: '20px', marginBottom: '20px', display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
+              <button className="btn btn-secondary" onClick={() => setSyncStep('adjust')}>
+                <i className="fas fa-arrow-left"></i>
+                Back to Adjust
+              </button>
+              <button className="btn btn-success" onClick={handleSubmit} style={{ fontSize: '16px', padding: '12px 30px' }}>
+                <i className="fas fa-paper-plane"></i>
+                Submit to Employee Daily Attendance
+              </button>
             </div>
 
             <div style={{ marginTop: '20px' }}>

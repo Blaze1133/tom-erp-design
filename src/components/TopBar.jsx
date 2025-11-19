@@ -79,7 +79,7 @@ const TopBar = ({ collapsed, setCollapsed }) => {
                 ))}
               </div>
               <div className="dropdown-footer">
-                <a href="#" className="view-all-link">View all notifications</a>
+                <button type="button" className="view-all-link">View all notifications</button>
               </div>
             </div>
           )}
@@ -118,7 +118,7 @@ const TopBar = ({ collapsed, setCollapsed }) => {
                 ))}
               </div>
               <div className="dropdown-footer">
-                <a href="#" className="view-all-link">View all activity</a>
+                <button type="button" className="view-all-link">View all activity</button>
               </div>
             </div>
           )}
@@ -151,23 +151,23 @@ const TopBar = ({ collapsed, setCollapsed }) => {
                 </div>
               </div>
               <div className="dropdown-content">
-                <a href="#" className="dropdown-item">
+                <button type="button" className="dropdown-item">
                   <i className="fas fa-user"></i>
                   <span>My Profile</span>
-                </a>
-                <a href="#" className="dropdown-item">
+                </button>
+                <button type="button" className="dropdown-item">
                   <i className="fas fa-cog"></i>
                   <span>Settings</span>
-                </a>
-                <a href="#" className="dropdown-item">
+                </button>
+                <button type="button" className="dropdown-item">
                   <i className="fas fa-question-circle"></i>
                   <span>Help & Support</span>
-                </a>
+                </button>
                 <div className="dropdown-divider"></div>
-                <a href="#" className="dropdown-item logout">
+                <button type="button" className="dropdown-item logout">
                   <i className="fas fa-sign-out-alt"></i>
                   <span>Logout</span>
-                </a>
+                </button>
               </div>
             </div>
           )}

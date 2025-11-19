@@ -12,8 +12,10 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const payrollItemRef = useRef(null);
   const productionItemRef = useRef(null);
   const setupItemRef = useRef(null);
+  const mastersItemRef = useRef(null);
   const hrItemRef = useRef(null);
   const [submenuTop, setSubmenuTop] = useState(100);
+  const [mastersSubmenuTop, setMastersSubmenuTop] = useState(100);
   const [purchasesSubmenuTop, setPurchasesSubmenuTop] = useState(100);
   const [payablesSubmenuTop, setPayablesSubmenuTop] = useState(100);
   const [inventorySubmenuTop, setInventorySubmenuTop] = useState(100);
@@ -176,6 +178,28 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       }
       
       setHrSubmenuTop(topPosition);
+    }
+  };
+
+  const handleMastersHover = () => {
+    if (mastersItemRef.current) {
+      const rect = mastersItemRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Calculate how much space we need (estimate based on number of items)
+      const estimatedSubmenuHeight = 150; // Approximate height for Masters submenu (3 items)
+      const spaceBelow = viewportHeight - rect.top;
+      
+      // If submenu would extend beyond viewport, position it higher
+      let topPosition = rect.top;
+      if (spaceBelow < estimatedSubmenuHeight) {
+        // Position submenu so bottom aligns with viewport bottom with some padding
+        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
+        // But don't go above the top of viewport
+        topPosition = Math.max(20, topPosition);
+      }
+      
+      setMastersSubmenuTop(topPosition);
     }
   };
 
@@ -627,6 +651,14 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       submenu: [
         { id: 'view-manual-entry', label: 'List' }
       ]
+    },
+    {
+      id: 'employee-daily-attendance-list',
+      label: 'Employee Daily Attendance List',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-employee-daily-attendance-list', label: 'List' }
+      ]
     }
   ];
 
@@ -722,6 +754,33 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'setup-document-number-series', label: 'Document Number Series' }
+      ]
+    }
+  ];
+
+  const mastersSubItems = [
+    { 
+      id: 'customer-masters',
+      label: 'Customer Masters',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-customer-masters', label: 'List' }
+      ]
+    },
+    { 
+      id: 'project-masters',
+      label: 'Project Masters',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-project-masters', label: 'List' }
+      ]
+    },
+    { 
+      id: 'vendor-masters',
+      label: 'Vendor Masters',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-vendor-masters', label: 'List' }
       ]
     }
   ];
@@ -1275,6 +1334,55 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           </div>
         </div>
         
+        {/* Masters Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleMastersHover}>
+          <div
+            ref={mastersItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-database"></i>
+            <span>Masters</span>
+          </div>
+          <div className="submenu" style={{ top: `${mastersSubmenuTop}px` }}>
+            {mastersSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `masters-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`masters-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={() => setCurrentPage(nestedItem.id)}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    <i className="fas fa-chevron-right"></i>
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Reports Menu */}
         <div
           className={`nav-item ${currentPage === 'reports' ? 'active' : ''}`}

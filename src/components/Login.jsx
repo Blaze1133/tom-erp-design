@@ -75,12 +75,12 @@ const Login = ({ onLogin }) => {
             </div>
             
             <div className="auth-links">
-              <a href="#" className="auth-link">
+              <button type="button" className="auth-link">
                 <i className="fas fa-key"></i> Forgot password?
-              </a>
-              <a href="#" className="auth-link">
+              </button>
+              <button type="button" className="auth-link">
                 <i className="fas fa-question-circle"></i> Need help?
-              </a>
+              </button>
             </div>
           </form>
         </div>

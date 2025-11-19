@@ -29,10 +29,6 @@ const ViewBiometricDataDetail = ({ onBack, onEdit }) => {
     lastModifiedDate: '2025-04-05 09:15:00'
   };
 
-  const showToast = (message, type = 'success') => {
-    setToast({ show: true, message, type });
-  };
-
   const handleEdit = () => {
     if (onEdit) onEdit();
   };
