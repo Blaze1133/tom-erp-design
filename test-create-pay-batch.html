@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Pay Batch - Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .title h1 {
+            margin: 0;
+            color: #333;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background-color: #4a90e2;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+            display: block;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .system-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
+        .status-badge {
+            color: #17a2b8;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 12px;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .required {
+            color: #dc3545;
+        }
+        .employee-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">
+                <i>💰</i>
+                <h1>Pay Batch - New</h1>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary">Save</button>
+                <button class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-secondary">List</button>
+                <button class="btn btn-secondary">Search</button>
+                <button class="btn btn-secondary">Customize</button>
+                <button class="btn btn-secondary">More</button>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div>
+                <div class="form-group">
+                    <label class="form-label">YEAR</label>
+                    <input type="text" class="form-control" value="2025">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PAYMENT METHOD <span class="required">*</span></label>
+                    <select class="form-control">
+                        <option>Regular Payment</option>
+                        <option>Additional Payment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">SUBSIDIARY <span class="required">*</span></label>
+                    <select class="form-control">
+                        <option>Tech Onshore MEP Prefabricators Pte Ltd</option>
+                        <option>Tech Marine Offshore (S) Pte Ltd</option>
+                        <option>TOM Offshore Marine Engineering Pte Ltd</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">WORK CALENDAR <span class="required">*</span></label>
+                    <select class="form-control">
+                        <option>2022 TEA</option>
+                        <option>TEA 2023</option>
+                        <option>TEA 2024</option>
+                        <option>TEA 2025</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">MONTH <span class="required">*</span></label>
+                    <select class="form-control">
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PAY GROUP <span class="required">*</span></label>
+                    <select class="form-control">
+                        <option>EP & Local (TEA)</option>
+                        <option>Hourly (TEA)</option>
+                        <option>NVT GROUP</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Middle Column -->
+            <div>
+                <div class="form-group">
+                    <label class="form-label">PERIOD START DATE</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PERIOD END DATE</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">TOTAL PAY DAYS</label>
+                    <input type="number" class="form-control">
+                </div>
+
+                <h3 style="color: #4a90e2; margin: 2rem 0 1rem 0;">Batch Summary</h3>
+                <div class="system-box">
+                    <div class="success">PayBatch Status - To Be Generated</div>
+                    <div class="form-group">
+                        <label class="form-label">PAYEE EMPLOYEE COUNT</label>
+                        <input type="number" class="form-control" value="0" readonly style="background-color: #e9ecef;">
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <label>
+                            <input type="checkbox"> SHOW SALARY ON ESS
+                        </label>
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <label>
+                            <input type="checkbox"> OT PAYMENT
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - System -->
+            <div>
+                <h3 style="color: #4a90e2; margin-bottom: 1rem;">System</h3>
+                <div class="system-box">
+                    <div style="color: #6c757d; font-weight: bold; margin-bottom: 1rem; font-size: 12px;">
+                        STATUS
+                    </div>
+                    <div class="status-badge">To Be Generated</div>
+                    
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox"> ATTENDANCE SAVE</label>
+                        <label><input type="checkbox"> VERIFIED</label>
+                        <label><input type="checkbox"> ADDED VARIABLE</label>
+                        <label><input type="checkbox"> AD-HOC</label>
+                        <label><input type="checkbox"> RUN</label>
+                        <label><input type="checkbox"> COMMIT</label>
+                        <label><input type="checkbox"> ACCOUNT POSTING</label>
+                        <label><input type="checkbox"> PAY SLIP EMAIL</label>
+                        <label><input type="checkbox"> LOADER CHECK</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 2rem 0;">
+
+        <!-- Employee Section -->
+        <div>
+            <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+                <button class="btn btn-success">Add</button>
+                <button class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-secondary">Insert</button>
+                <button class="btn btn-secondary">Remove</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">EMPLOYEE</label>
+                    <select class="form-control">
+                        <option>- Type then tab -</option>
+                        <option>TEA001 John Doe</option>
+                        <option>TEA002 Jane Smith</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">DATE OF BIRTH</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">RESIDENTIAL STATUS</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+
+            <div class="employee-section">
+                <p>No employees added yet. Click "Add" to start adding employees to this pay batch.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+            <div class="success">✅ CreatePayBatch component created successfully!</div>
+            <p>Features implemented:</p>
+            <ul>
+                <li>✅ 3-column layout matching the uploaded design</li>
+                <li>✅ All required form fields with proper validation</li>
+                <li>✅ System status checkboxes in compact grid layout</li>
+                <li>✅ Employee management section with Add/Remove functionality</li>
+                <li>✅ Functional Save/Cancel with navigation callbacks</li>
+                <li>✅ Auto-generated Pay Batch ID on save</li>
+                <li>✅ Integrated into App.js routing system</li>
+                <li>✅ Toast notifications for user feedback</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

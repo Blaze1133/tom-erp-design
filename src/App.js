@@ -269,6 +269,49 @@ import ViewManualEntryDetail from './components/ViewManualEntryDetail';
 import ViewEmployeeDailyAttendanceList from './components/ViewEmployeeDailyAttendanceList';
 import ViewEmployeeDailyAttendanceDetail from './components/ViewEmployeeDailyAttendanceDetail';
 import EditEmployeeDailyAttendance from './components/EditEmployeeDailyAttendance';
+import ViewPayComponents from './components/ViewPayComponents';
+import CreatePayComponent from './components/CreatePayComponent';
+import ViewPayComponentDetail from './components/ViewPayComponentDetail';
+import ViewPayBatches from './components/ViewPayBatches';
+import ViewPayBatchDetail from './components/ViewPayBatchDetail';
+import EditPayBatch from './components/EditPayBatch';
+import CreatePayBatch from './components/CreatePayBatch';
+import ViewPayeeEmployees from './components/ViewPayeeEmployees';
+import ViewPayeeEmployeeDetail from './components/ViewPayeeEmployeeDetail';
+import EditPayeeEmployee from './components/EditPayeeEmployee';
+import CreatePayeeEmployee from './components/CreatePayeeEmployee';
+import ViewCpfAppliedAgeGroups from './components/ViewCpfAppliedAgeGroups';
+import ViewCpfAppliedAgeGroupDetail from './components/ViewCpfAppliedAgeGroupDetail';
+import CreateCpfAppliedAgeGroup from './components/CreateCpfAppliedAgeGroup';
+import EditAppliedCpfTable from './components/EditAppliedCpfTable';
+import ViewCommunityContributionFunds from './components/ViewCommunityContributionFunds';
+import ViewCommunityContributionFundDetail from './components/ViewCommunityContributionFundDetail';
+import CreateCommunityContributionFund from './components/CreateCommunityContributionFund';
+import EditCommunityContributionFund from './components/EditCommunityContributionFund';
+import ViewSdlMasters from './components/ViewSdlMasters';
+import ViewSdlMasterDetail from './components/ViewSdlMasterDetail';
+import CreateSdlMaster from './components/CreateSdlMaster';
+import EditSdlMaster from './components/EditSdlMaster';
+import ViewLoanRepaymentProcesses from './components/ViewLoanRepaymentProcesses';
+import ViewLoanRepaymentProcessDetail from './components/ViewLoanRepaymentProcessDetail';
+import CreateLoanRepaymentProcess from './components/CreateLoanRepaymentProcess';
+import EditLoanRepaymentProcess from './components/EditLoanRepaymentProcess';
+import ViewFwlQualifications from './components/ViewFwlQualifications';
+import ViewFwlQualificationDetail from './components/ViewFwlQualificationDetail';
+import CreateFwlQualification from './components/CreateFwlQualification';
+import EditFwlQualification from './components/EditFwlQualification';
+import ViewIR8AYears from './components/ViewIR8AYears';
+import ViewIR8AYearDetail from './components/ViewIR8AYearDetail';
+import CreateIR8AYear from './components/CreateIR8AYear';
+import ViewEmployeePFs from './components/ViewEmployeePFs';
+import ViewEmployeePFDetail from './components/ViewEmployeePFDetail';
+import CreateEmployeePF from './components/CreateEmployeePF';
+import ViewPayGroups from './components/ViewPayGroups';
+import ViewPayGroupDetail from './components/ViewPayGroupDetail';
+import CreatePayGroup from './components/CreatePayGroup';
+import ViewRetroactivePayments from './components/ViewRetroactivePayments';
+import ViewRetroactivePaymentDetail from './components/ViewRetroactivePaymentDetail';
+import CreateRetroactivePayment from './components/CreateRetroactivePayment';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1256,6 +1299,308 @@ function App() {
       
       case 'reports':
         return <div style={{ padding: '30px' }}><h1>Reports Module - Coming Soon</h1></div>;
+      
+      // Payroll - Pay Component
+      case 'payroll-pay-component':
+        return <ViewPayComponents 
+          onNewClick={() => setCurrentPage('payroll-pay-component-new')}
+          onViewClick={() => setCurrentPage('payroll-pay-component-view')}
+          onEditClick={() => setCurrentPage('payroll-pay-component-edit')}
+        />;
+      case 'payroll-pay-component-view':
+        return <ViewPayComponentDetail 
+          onBackClick={() => setCurrentPage('payroll-pay-component')}
+          onEditClick={() => setCurrentPage('payroll-pay-component-edit')}
+        />;
+      case 'payroll-pay-component-new':
+        return <CreatePayComponent 
+          onSave={() => setCurrentPage('payroll-pay-component')}
+          onCancel={() => setCurrentPage('payroll-pay-component')}
+        />;
+      case 'payroll-pay-component-edit':
+        return <CreatePayComponent 
+          payComponentData={{
+            id: 162,
+            payComponentName: 'Absent Deduction',
+            payType: 'Deduction'
+          }}
+          onSave={() => setCurrentPage('payroll-pay-component')}
+          onCancel={() => setCurrentPage('payroll-pay-component')}
+        />;
+      
+      // Payroll - Pay Batch
+      case 'payroll-pay-batch':
+        return <ViewPayBatches 
+          onNewClick={() => setCurrentPage('payroll-pay-batch-new')}
+          onViewClick={() => setCurrentPage('payroll-pay-batch-view')}
+          onEditClick={() => setCurrentPage('payroll-pay-batch-edit')}
+        />;
+      case 'payroll-pay-batch-view':
+        return <ViewPayBatchDetail 
+          onBackClick={() => setCurrentPage('payroll-pay-batch')}
+          onEditClick={() => setCurrentPage('payroll-pay-batch-edit')}
+        />;
+      case 'payroll-pay-batch-new':
+        return <CreatePayBatch 
+          onSave={() => setCurrentPage('payroll-pay-batch')}
+          onCancel={() => setCurrentPage('payroll-pay-batch')}
+        />;
+      case 'payroll-pay-batch-edit':
+        return <EditPayBatch />;
+      
+      // Payroll - Payee Employee
+      case 'payroll-payee-employee':
+        return <ViewPayeeEmployees 
+          onNewClick={() => setCurrentPage('payroll-payee-employee-new')}
+          onViewClick={() => setCurrentPage('payroll-payee-employee-view')}
+          onEditClick={() => setCurrentPage('payroll-payee-employee-edit')}
+        />;
+      case 'payroll-payee-employee-view':
+        return <ViewPayeeEmployeeDetail 
+          onBack={() => setCurrentPage('payroll-payee-employee')}
+          onEdit={() => setCurrentPage('payroll-payee-employee-edit')}
+        />;
+      case 'payroll-payee-employee-new':
+        return <CreatePayeeEmployee 
+          onSave={() => setCurrentPage('payroll-payee-employee')}
+          onCancel={() => setCurrentPage('payroll-payee-employee')}
+        />;
+      case 'payroll-payee-employee-edit':
+        return <EditPayeeEmployee 
+          onSave={() => setCurrentPage('payroll-payee-employee')}
+          onCancel={() => setCurrentPage('payroll-payee-employee')}
+        />;
+
+      // CPF Applied Age Group Routes
+      case 'payroll-cpf-applied-age-group':
+        return <ViewCpfAppliedAgeGroups 
+          onNewClick={() => setCurrentPage('payroll-cpf-applied-age-group-new')}
+          onViewClick={() => setCurrentPage('payroll-cpf-applied-age-group-view')}
+          onEditClick={() => setCurrentPage('payroll-cpf-applied-age-group-view')}
+        />;
+      case 'payroll-cpf-applied-age-group-view':
+        return <ViewCpfAppliedAgeGroupDetail 
+          onBack={() => setCurrentPage('payroll-cpf-applied-age-group')}
+          onEdit={(row) => setCurrentPage('payroll-cpf-applied-age-group-edit-table')}
+        />;
+      case 'payroll-cpf-applied-age-group-new':
+        return <CreateCpfAppliedAgeGroup 
+          onSave={() => setCurrentPage('payroll-cpf-applied-age-group')}
+          onCancel={() => setCurrentPage('payroll-cpf-applied-age-group')}
+        />;
+      case 'payroll-cpf-applied-age-group-edit-table':
+        return <EditAppliedCpfTable 
+          onSave={() => setCurrentPage('payroll-cpf-applied-age-group-view')}
+          onCancel={() => setCurrentPage('payroll-cpf-applied-age-group-view')}
+        />;
+
+      // Community Contribution Fund Routes
+      case 'payroll-community-contribution-fund':
+        return <ViewCommunityContributionFunds 
+          onNewClick={() => setCurrentPage('payroll-community-contribution-fund-new')}
+          onViewClick={() => setCurrentPage('payroll-community-contribution-fund-view')}
+          onEditClick={() => setCurrentPage('payroll-community-contribution-fund-edit')}
+        />;
+      case 'payroll-community-contribution-fund-view':
+        return <ViewCommunityContributionFundDetail 
+          onBack={() => setCurrentPage('payroll-community-contribution-fund')}
+          onEdit={() => setCurrentPage('payroll-community-contribution-fund-edit')}
+        />;
+      case 'payroll-community-contribution-fund-new':
+        return <CreateCommunityContributionFund 
+          onSave={() => setCurrentPage('payroll-community-contribution-fund')}
+          onCancel={() => setCurrentPage('payroll-community-contribution-fund')}
+        />;
+      case 'payroll-community-contribution-fund-edit':
+        return <EditCommunityContributionFund 
+          onSave={() => setCurrentPage('payroll-community-contribution-fund-view')}
+          onCancel={() => setCurrentPage('payroll-community-contribution-fund-view')}
+        />;
+
+      // SDL Master Routes
+      case 'payroll-sdl-master':
+        return <ViewSdlMasters 
+          onNewClick={() => setCurrentPage('payroll-sdl-master-new')}
+          onViewClick={() => setCurrentPage('payroll-sdl-master-view')}
+          onEditClick={() => setCurrentPage('payroll-sdl-master-edit')}
+        />;
+      case 'payroll-sdl-master-view':
+        return <ViewSdlMasterDetail 
+          onBack={() => setCurrentPage('payroll-sdl-master')}
+          onEdit={() => setCurrentPage('payroll-sdl-master-edit')}
+        />;
+      case 'payroll-sdl-master-new':
+        return <CreateSdlMaster 
+          onSave={() => setCurrentPage('payroll-sdl-master')}
+          onCancel={() => setCurrentPage('payroll-sdl-master')}
+        />;
+      case 'payroll-sdl-master-edit':
+        return <EditSdlMaster 
+          onSave={() => setCurrentPage('payroll-sdl-master-view')}
+          onCancel={() => setCurrentPage('payroll-sdl-master-view')}
+        />;
+
+      // Loan Repayment Process Routes
+      case 'payroll-loan-repayment-process':
+        return <ViewLoanRepaymentProcesses 
+          onNewClick={() => setCurrentPage('payroll-loan-repayment-process-new')}
+          onViewClick={() => setCurrentPage('payroll-loan-repayment-process-view')}
+          onEditClick={() => setCurrentPage('payroll-loan-repayment-process-edit')}
+        />;
+      case 'payroll-loan-repayment-process-view':
+        return <ViewLoanRepaymentProcessDetail 
+          onBack={() => setCurrentPage('payroll-loan-repayment-process')}
+          onEdit={() => setCurrentPage('payroll-loan-repayment-process-edit')}
+        />;
+      case 'payroll-loan-repayment-process-new':
+        return <CreateLoanRepaymentProcess 
+          onSave={() => setCurrentPage('payroll-loan-repayment-process')}
+          onCancel={() => setCurrentPage('payroll-loan-repayment-process')}
+        />;
+      case 'payroll-loan-repayment-process-edit':
+        return <EditLoanRepaymentProcess 
+          onSave={() => setCurrentPage('payroll-loan-repayment-process-view')}
+          onCancel={() => setCurrentPage('payroll-loan-repayment-process-view')}
+        />;
+
+      // FWL Qualification Routes (HR)
+      case 'hr-fwl-qualification':
+        return <ViewFwlQualifications 
+          onNewClick={() => setCurrentPage('hr-fwl-qualification-new')}
+          onViewClick={() => setCurrentPage('hr-fwl-qualification-view')}
+          onEditClick={() => setCurrentPage('hr-fwl-qualification-edit')}
+        />;
+      case 'hr-fwl-qualification-view':
+        return <ViewFwlQualificationDetail 
+          onBack={() => setCurrentPage('hr-fwl-qualification')}
+          onEdit={() => setCurrentPage('hr-fwl-qualification-edit')}
+        />;
+      case 'hr-fwl-qualification-new':
+        return <CreateFwlQualification 
+          onSave={() => setCurrentPage('hr-fwl-qualification')}
+          onCancel={() => setCurrentPage('hr-fwl-qualification')}
+        />;
+      case 'hr-fwl-qualification-edit':
+        return <EditFwlQualification 
+          onSave={() => setCurrentPage('hr-fwl-qualification-view')}
+          onCancel={() => setCurrentPage('hr-fwl-qualification-view')}
+        />;
+
+      // FWL Qualification Routes (Payroll)
+      case 'payroll-fwl-qualification':
+        return <ViewFwlQualifications 
+          onNewClick={() => setCurrentPage('payroll-fwl-qualification-new')}
+          onViewClick={() => setCurrentPage('payroll-fwl-qualification-view')}
+          onEditClick={() => setCurrentPage('payroll-fwl-qualification-edit')}
+        />;
+      case 'payroll-fwl-qualification-view':
+        return <ViewFwlQualificationDetail 
+          onBack={() => setCurrentPage('payroll-fwl-qualification')}
+          onEdit={() => setCurrentPage('payroll-fwl-qualification-edit')}
+        />;
+      case 'payroll-fwl-qualification-new':
+        return <CreateFwlQualification 
+          onSave={() => setCurrentPage('payroll-fwl-qualification')}
+          onCancel={() => setCurrentPage('payroll-fwl-qualification')}
+        />;
+      case 'payroll-fwl-qualification-edit':
+        return <EditFwlQualification 
+          onSave={() => setCurrentPage('payroll-fwl-qualification-view')}
+          onCancel={() => setCurrentPage('payroll-fwl-qualification-view')}
+        />;
+
+      // IR8A Year Routes (Payroll)
+      case 'payroll-ir8a-year':
+        return <ViewIR8AYears 
+          onNewClick={() => setCurrentPage('payroll-ir8a-year-new')}
+          onViewClick={() => setCurrentPage('payroll-ir8a-year-view')}
+          onEditClick={() => setCurrentPage('payroll-ir8a-year-edit')}
+        />;
+      case 'payroll-ir8a-year-view':
+        return <ViewIR8AYearDetail 
+          onBack={() => setCurrentPage('payroll-ir8a-year')}
+          onEdit={() => setCurrentPage('payroll-ir8a-year-edit')}
+        />;
+      case 'payroll-ir8a-year-new':
+        return <CreateIR8AYear 
+          onSave={() => setCurrentPage('payroll-ir8a-year')}
+          onCancel={() => setCurrentPage('payroll-ir8a-year')}
+        />;
+      case 'payroll-ir8a-year-edit':
+        return <CreateIR8AYear 
+          onSave={() => setCurrentPage('payroll-ir8a-year-view')}
+          onCancel={() => setCurrentPage('payroll-ir8a-year-view')}
+        />;
+
+      // Employee PF Routes (Payroll)
+      case 'payroll-employee-pf':
+        return <ViewEmployeePFs 
+          onNewClick={() => setCurrentPage('payroll-employee-pf-new')}
+          onViewClick={() => setCurrentPage('payroll-employee-pf-view')}
+          onEditClick={() => setCurrentPage('payroll-employee-pf-edit')}
+        />;
+      case 'payroll-employee-pf-view':
+        return <ViewEmployeePFDetail 
+          onBack={() => setCurrentPage('payroll-employee-pf')}
+          onEdit={() => setCurrentPage('payroll-employee-pf-edit')}
+        />;
+      case 'payroll-employee-pf-new':
+        return <CreateEmployeePF 
+          onSave={() => setCurrentPage('payroll-employee-pf')}
+          onCancel={() => setCurrentPage('payroll-employee-pf')}
+        />;
+      case 'payroll-employee-pf-edit':
+        return <CreateEmployeePF 
+          onSave={() => setCurrentPage('payroll-employee-pf-view')}
+          onCancel={() => setCurrentPage('payroll-employee-pf-view')}
+        />;
+
+      // Pay Group Routes (Payroll)
+      case 'payroll-pay-group':
+        return <ViewPayGroups 
+          onNewClick={() => setCurrentPage('payroll-pay-group-new')}
+          onViewClick={() => setCurrentPage('payroll-pay-group-view')}
+          onEditClick={() => setCurrentPage('payroll-pay-group-edit')}
+        />;
+      case 'payroll-pay-group-view':
+        return <ViewPayGroupDetail 
+          onBack={() => setCurrentPage('payroll-pay-group')}
+          onEdit={() => setCurrentPage('payroll-pay-group-edit')}
+        />;
+      case 'payroll-pay-group-new':
+        return <CreatePayGroup 
+          onSave={() => setCurrentPage('payroll-pay-group')}
+          onCancel={() => setCurrentPage('payroll-pay-group')}
+        />;
+      case 'payroll-pay-group-edit':
+        return <CreatePayGroup 
+          onSave={() => setCurrentPage('payroll-pay-group-view')}
+          onCancel={() => setCurrentPage('payroll-pay-group-view')}
+        />;
+
+      // Retroactive Payment Routes (Payroll)
+      case 'payroll-retroactive-payment':
+        return <ViewRetroactivePayments 
+          onNewClick={() => setCurrentPage('payroll-retroactive-payment-new')}
+          onViewClick={() => setCurrentPage('payroll-retroactive-payment-view')}
+          onEditClick={() => setCurrentPage('payroll-retroactive-payment-edit')}
+        />;
+      case 'payroll-retroactive-payment-view':
+        return <ViewRetroactivePaymentDetail 
+          onBack={() => setCurrentPage('payroll-retroactive-payment')}
+          onEdit={() => setCurrentPage('payroll-retroactive-payment-edit')}
+        />;
+      case 'payroll-retroactive-payment-new':
+        return <CreateRetroactivePayment 
+          onSave={() => setCurrentPage('payroll-retroactive-payment')}
+          onCancel={() => setCurrentPage('payroll-retroactive-payment')}
+        />;
+      case 'payroll-retroactive-payment-edit':
+        return <CreateRetroactivePayment 
+          onSave={() => setCurrentPage('payroll-retroactive-payment-view')}
+          onCancel={() => setCurrentPage('payroll-retroactive-payment-view')}
+        />;
+      
       default:
         return <Dashboard />;
     }

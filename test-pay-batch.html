@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Batch Edit - Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .title h1 {
+            margin: 0;
+            color: #333;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background-color: #4a90e2;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-control {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .status-badge {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">
+                <i>💰</i>
+                <h1>Pay Batch Edit - PBATCH00255</h1>
+            </div>
+            <div class="actions">
+                <button class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-primary">Save</button>
+                <button class="btn btn-secondary">Email Payslip</button>
+                <button class="btn btn-secondary">Actions</button>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">
+                <i>ℹ️</i>
+                Pay Batch Information
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">ID</label>
+                    <input type="text" class="form-control" value="PBATCH00255" disabled>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">YEAR *</label>
+                    <input type="text" class="form-control" value="2022">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PAYMENT METHOD *</label>
+                    <select class="form-control">
+                        <option>Regular Payment</option>
+                        <option>Additional Payment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">SUBSIDIARY *</label>
+                    <select class="form-control">
+                        <option>Tech Onshore MEP Prefabricators Pte Ltd</option>
+                        <option>Tech Marine Offshore (S) Pte Ltd</option>
+                        <option>TOM Offshore Marine Engineering Pte Ltd</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">
+                <i>⚙️</i>
+                System Status
+            </div>
+            <div class="status-badge">
+                Pay Batch Posted
+            </div>
+            <br><br>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" checked> ATTENDANCE SAVE
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" checked> VERIFIED
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" checked> RUN
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" checked> COMMIT
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-title">
+                <i>👥</i>
+                Employee Summary
+            </div>
+            <p class="success">✅ Pay Batch component created successfully!</p>
+            <p>The EditPayBatch component has been created with:</p>
+            <ul>
+                <li>✅ Proper styling following TOM delivery order patterns</li>
+                <li>✅ All dropdown options from global rules implemented</li>
+                <li>✅ System status checkboxes and fields</li>
+                <li>✅ Employee summary table with sample data</li>
+                <li>✅ Integrated into App.js routing system</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

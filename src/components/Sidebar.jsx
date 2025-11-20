@@ -629,35 +629,55 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const payrollSubItems = [
     { 
-      id: 'create-yard-data',
-      label: 'Yard Data Preparation',
+      id: 'payroll-setup',
+      label: 'Payroll Setup',
       hasSubmenu: true,
       submenu: [
-        { id: 'view-yard-data', label: 'List' }
+        { id: 'payroll-pay-component', label: 'Pay Component' },
+        { id: 'payroll-pay-group', label: 'Pay Group' },
+        { id: 'payroll-employee-pf', label: 'Employee PF' },
+        { id: 'payroll-fwl-qualification', label: 'FWL Qualification' }
       ]
     },
-    {
-      id: 'create-biometric-data',
-      label: 'Biometric Data Preparation',
+    { 
+      id: 'payroll-processing',
+      label: 'Payroll Processing',
       hasSubmenu: true,
       submenu: [
-        { id: 'view-biometric-data', label: 'List' }
+        { id: 'payroll-pay-batch', label: 'Pay Batch' },
+        { id: 'payroll-payee-employee', label: 'Payee Employee' },
+        { id: 'payroll-retroactive-payment', label: 'Retroactive Payment' }
       ]
     },
-    {
-      id: 'create-manual-entry',
-      label: 'Manual Entry',
+    { 
+      id: 'payroll-statutory',
+      label: 'Statutory & Compliance',
       hasSubmenu: true,
       submenu: [
-        { id: 'view-manual-entry', label: 'List' }
+        { id: 'payroll-cpf-applied-age-group', label: 'CPF Applied Age Group' },
+        { id: 'payroll-community-contribution-fund', label: 'Community Contribution Fund' },
+        { id: 'payroll-sdl-master', label: 'SDL Master' },
+        { id: 'payroll-ir8a-year', label: 'IR8A Year' }
       ]
     },
-    {
-      id: 'employee-daily-attendance-list',
-      label: 'Employee Daily Attendance List',
+    { 
+      id: 'payroll-data-prep',
+      label: 'Data Preparation',
       hasSubmenu: true,
       submenu: [
-        { id: 'view-employee-daily-attendance-list', label: 'List' }
+        { id: 'create-yard-data-new', label: 'New Yard Data' },
+        { id: 'create-yard-data-view', label: 'View Yard Data' },
+        { id: 'view-biometric-data', label: 'Biometric Data' },
+        { id: 'create-manual-entry', label: 'Manual Entry' },
+        { id: 'employee-daily-attendance-list', label: 'Employee Daily Attendance List' }
+      ]
+    },
+    { 
+      id: 'payroll-others',
+      label: 'Others',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'payroll-loan-repayment-process', label: 'Loan Repayment Process' }
       ]
     }
   ];
@@ -669,7 +689,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'hr-employee-master', label: 'Employee Master' },
-        { id: 'hr-leave-pay-calendar', label: 'Leave Pay Calendar' },
+        { id: 'hr-employee-profile', label: 'Employee Profile' },
+        { id: 'hr-fwl-qualification', label: 'FWL Qualification' },
         { id: 'hr-shift-master', label: 'Shift Master' },
         { id: 'hr-asset-issue-to-employee', label: 'Asset Issue to Employee' },
         { id: 'hr-employee-loan-application', label: 'Employee Loan Application' },
