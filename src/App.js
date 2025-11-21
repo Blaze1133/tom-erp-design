@@ -1678,6 +1678,7 @@ function App() {
       <TopBar 
         collapsed={collapsed} 
         setCollapsed={setCollapsed}
+        setCurrentPage={setCurrentPage}
       />
       <div className="main-content">
         <div className="content-area">
