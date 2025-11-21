@@ -312,6 +312,12 @@ import CreatePayGroup from './components/CreatePayGroup';
 import ViewRetroactivePayments from './components/ViewRetroactivePayments';
 import ViewRetroactivePaymentDetail from './components/ViewRetroactivePaymentDetail';
 import CreateRetroactivePayment from './components/CreateRetroactivePayment';
+import ViewCustomers from './components/ViewCustomers';
+import ViewCustomerDetail from './components/ViewCustomerDetail';
+import CreateCustomer from './components/CreateCustomer';
+import ViewVendors from './components/ViewVendors';
+import ViewVendorDetail from './components/ViewVendorDetail';
+import CreateVendor from './components/CreateVendor';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1599,6 +1605,56 @@ function App() {
         return <CreateRetroactivePayment 
           onSave={() => setCurrentPage('payroll-retroactive-payment-view')}
           onCancel={() => setCurrentPage('payroll-retroactive-payment-view')}
+        />;
+
+      // Masters - Customer Masters
+      case 'view-customer-masters':
+        return <ViewCustomers 
+          onNewClick={() => setCurrentPage('create-customer-master')}
+          onViewClick={() => setCurrentPage('view-customer-master-detail')}
+          onEditClick={() => setCurrentPage('edit-customer-master')}
+        />;
+      case 'view-customer-master-detail':
+        return <ViewCustomerDetail 
+          onBack={() => setCurrentPage('view-customer-masters')}
+          onEdit={() => setCurrentPage('edit-customer-master')}
+        />;
+      case 'create-customer-master':
+        return <CreateCustomer 
+          isEdit={false}
+          onSave={() => setCurrentPage('view-customer-masters')}
+          onCancel={() => setCurrentPage('view-customer-masters')}
+        />;
+      case 'edit-customer-master':
+        return <CreateCustomer 
+          isEdit={true}
+          onSave={() => setCurrentPage('view-customer-master-detail')}
+          onCancel={() => setCurrentPage('view-customer-master-detail')}
+        />;
+
+      // Masters - Vendor Masters
+      case 'view-vendor-masters':
+        return <ViewVendors 
+          onNewClick={() => setCurrentPage('create-vendor-master')}
+          onViewClick={() => setCurrentPage('view-vendor-master-detail')}
+          onEditClick={() => setCurrentPage('edit-vendor-master')}
+        />;
+      case 'view-vendor-master-detail':
+        return <ViewVendorDetail 
+          onBack={() => setCurrentPage('view-vendor-masters')}
+          onEdit={() => setCurrentPage('edit-vendor-master')}
+        />;
+      case 'create-vendor-master':
+        return <CreateVendor 
+          isEdit={false}
+          onSave={() => setCurrentPage('view-vendor-masters')}
+          onCancel={() => setCurrentPage('view-vendor-masters')}
+        />;
+      case 'edit-vendor-master':
+        return <CreateVendor 
+          isEdit={true}
+          onSave={() => setCurrentPage('view-vendor-master-detail')}
+          onCancel={() => setCurrentPage('view-vendor-master-detail')}
         />;
       
       default:

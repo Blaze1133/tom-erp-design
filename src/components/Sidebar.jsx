@@ -665,10 +665,9 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       label: 'Data Preparation',
       hasSubmenu: true,
       submenu: [
-        { id: 'create-yard-data-new', label: 'New Yard Data' },
-        { id: 'create-yard-data-view', label: 'View Yard Data' },
+        { id: 'view-yard-data', label: 'Yard Data' },
         { id: 'view-biometric-data', label: 'Biometric Data' },
-        { id: 'create-manual-entry', label: 'Manual Entry' },
+        { id: 'view-manual-entry', label: 'Manual Entry' },
         { id: 'employee-daily-attendance-list', label: 'Employee Daily Attendance List' }
       ]
     },
@@ -780,30 +779,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   ];
 
   const mastersSubItems = [
-    { 
-      id: 'customer-masters',
-      label: 'Customer Masters',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-customer-masters', label: 'List' }
-      ]
-    },
-    { 
-      id: 'project-masters',
-      label: 'Project Masters',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-project-masters', label: 'List' }
-      ]
-    },
-    { 
-      id: 'vendor-masters',
-      label: 'Vendor Masters',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-vendor-masters', label: 'List' }
-      ]
-    }
+    { id: 'view-customer-masters', label: 'Customer Masters', hideArrow: true },
+    { id: 'view-vendor-masters', label: 'Vendor Masters', hideArrow: true }
   ];
 
   const menuItems = [

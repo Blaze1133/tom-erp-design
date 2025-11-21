@@ -6,6 +6,8 @@ const DocumentNumberSeriesList = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewFilter, setViewFilter] = useState('Default');
   const [showInactives, setShowInactives] = useState(false);
+  const [quickSort, setQuickSort] = useState('Default');
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   const [series] = useState([
     { 
@@ -44,105 +46,182 @@ const DocumentNumberSeriesList = ({ setCurrentPage }) => {
 
   return (
     <div className="enquiries-list">
+      {/* Header */}
       <div className="list-header">
         <div className="list-title">
-          <i className="fas fa-file-alt"></i>
+          <i className="fas fa-list-ol" style={{ color: '#4a90e2', marginRight: '0.75rem' }}></i>
           <h1>Document Number Series List</h1>
         </div>
         <div className="list-actions">
-          <button className="btn btn-secondary">List</button>
-          <button className="btn btn-secondary">Search</button>
-          <button className="btn btn-secondary">Audit Trail</button>
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Audit Trail</button>
         </div>
       </div>
 
-      <div className="list-controls">
-        <div className="view-filter">
-          <label>VIEW</label>
-          <select 
-            className="form-control"
-            value={viewFilter}
-            onChange={(e) => setViewFilter(e.target.value)}
+      {/* Controls Section */}
+      <div className="list-controls" style={{ padding: '1rem', backgroundColor: '#f8f9fa', borderBottom: '1px solid #dee2e6' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div className="view-filter" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <label style={{ fontWeight: '500', fontSize: '0.875rem', color: '#495057' }}>VIEW</label>
+            <select 
+              className="form-control"
+              value={viewFilter}
+              onChange={(e) => setViewFilter(e.target.value)}
+              style={{ width: '150px' }}
+            >
+              <option>Default</option>
+              <option>All</option>
+              <option>Active Only</option>
+            </select>
+            <button className="btn btn-outline-primary" style={{ fontSize: '0.875rem' }}>
+              Customize View
+            </button>
+          </div>
+          <div style={{ marginLeft: 'auto' }}>
+            <button className="btn btn-danger" onClick={handleNew} style={{ fontWeight: '500' }}>
+              New Document Number Series
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Filters Section */}
+      <div className="list-filters" style={{ padding: '0.75rem 1rem', backgroundColor: '#ffffff', borderBottom: '1px solid #dee2e6' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <button 
+            className="filter-toggle"
+            onClick={() => setFiltersExpanded(!filtersExpanded)}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem',
+              padding: '0.375rem 0.75rem',
+              border: '1px solid #ced4da',
+              backgroundColor: '#f8f9fa',
+              borderRadius: '0.25rem',
+              fontSize: '0.875rem',
+              fontWeight: '500'
+            }}
           >
-            <option>Default</option>
-            <option>All</option>
-          </select>
-          <button className="btn btn-secondary">Customize View</button>
-        </div>
-        <div className="list-actions">
-          <button className="btn btn-primary" onClick={handleNew}>
-            New Document Number Series
+            <i className="fas fa-filter" style={{ color: '#6c757d' }}></i>
+            FILTERS
           </button>
-        </div>
-      </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button className="btn-icon" title="Export to Word">
+              <i className="fas fa-file-word" style={{ color: '#2b579a' }}></i>
+            </button>
+            <button className="btn-icon" title="Export to Excel">
+              <i className="fas fa-file-excel" style={{ color: '#217346' }}></i>
+            </button>
+            <button className="btn-icon" title="Export to PDF">
+              <i className="fas fa-file-pdf" style={{ color: '#d32f2f' }}></i>
+            </button>
+            <button className="btn-icon" title="Print">
+              <i className="fas fa-print" style={{ color: '#6c757d' }}></i>
+            </button>
+          </div>
 
-      <div className="list-filters">
-        <button className="filter-toggle">
-          <i className="fas fa-filter"></i>
-          FILTERS
-        </button>
-        <div className="filter-actions">
-          <button className="btn-icon">
-            <i className="fas fa-file"></i>
-          </button>
-          <button className="btn-icon">
-            <i className="fas fa-file-excel" style={{ color: '#28a745' }}></i>
-          </button>
-          <button className="btn-icon">
-            <i className="fas fa-file-pdf" style={{ color: '#dc3545' }}></i>
-          </button>
-          <button className="btn-icon">
-            <i className="fas fa-print"></i>
-          </button>
-          <label className="checkbox-label">
+          <label className="checkbox-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
             <input
               type="checkbox"
               checked={showInactives}
               onChange={(e) => setShowInactives(e.target.checked)}
             />
-            <span>SHOW INACTIVES</span>
+            <span style={{ fontWeight: '500', color: '#495057' }}>SHOW INACTIVES</span>
           </label>
-          <div style={{ marginLeft: 'auto' }}>
-            <button className="btn btn-secondary" style={{ marginRight: '0.5rem' }}>EDIT</button>
-            <button className="btn-icon">
-              <i className="fas fa-times"></i>
-            </button>
+
+          <button className="btn btn-outline-secondary" style={{ fontSize: '0.875rem' }}>
+            EDIT
+          </button>
+
+          <button className="btn-icon" title="Clear">
+            <i className="fas fa-times" style={{ color: '#dc3545' }}></i>
+          </button>
+
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#495057' }}>QUICK SORT</label>
+              <select 
+                className="form-control" 
+                value={quickSort}
+                onChange={(e) => setQuickSort(e.target.value)}
+                style={{ width: '120px', fontSize: '0.875rem' }}
+              >
+                <option>Default</option>
+                <option>ID</option>
+                <option>Subsidiary</option>
+                <option>Prefix</option>
+              </select>
+            </div>
+            <span className="total-count" style={{ fontSize: '0.875rem', fontWeight: '600', color: '#495057' }}>
+              TOTAL: {series.length}
+            </span>
           </div>
-          <label style={{ fontSize: '0.875rem', color: '#666' }}>QUICK SORT</label>
-          <select className="form-control" style={{ width: '150px' }}>
-            <option>Default</option>
-          </select>
-          <span className="total-count">TOTAL: {series.length}</span>
         </div>
       </div>
 
-      <div className="enquiries-table-container">
-        <table className="enquiries-table">
+      {/* Table */}
+      <div className="enquiries-table-container" style={{ margin: '0', border: 'none' }}>
+        <table className="enquiries-table" style={{ marginBottom: '0' }}>
           <thead>
-            <tr>
-              <th style={{ width: '10%' }}>EDIT | VIEW</th>
-              <th style={{ width: '5%' }}>ID ▲</th>
-              <th style={{ width: '40%' }}>SUBSIDIARY</th>
-              <th style={{ width: '15%' }}>PREFIX</th>
-              <th style={{ width: '10%' }}>RUNNING NUMBER</th>
-              <th style={{ width: '10%' }}>LENGTH</th>
-              <th style={{ width: '10%' }}>EXTERNAL ID</th>
+            <tr style={{ backgroundColor: '#f8f9fa' }}>
+              <th style={{ width: '12%', padding: '0.75rem', fontWeight: '600', fontSize: '0.875rem', color: '#495057', borderBottom: '2px solid #dee2e6' }}>
+                EDIT | VIEW
+              </th>
+              <th style={{ width: '8%', padding: '0.75rem', fontWeight: '600', fontSize: '0.875rem', color: '#495057', borderBottom: '2px solid #dee2e6' }}>
+                ID <i className="fas fa-sort-up" style={{ marginLeft: '0.25rem', fontSize: '0.75rem' }}></i>
+              </th>
+              <th style={{ width: '45%', padding: '0.75rem', fontWeight: '600', fontSize: '0.875rem', color: '#495057', borderBottom: '2px solid #dee2e6' }}>
+                SUBSIDIARY
+              </th>
+              <th style={{ width: '12%', padding: '0.75rem', fontWeight: '600', fontSize: '0.875rem', color: '#495057', borderBottom: '2px solid #dee2e6' }}>
+                PREFIX
+              </th>
+              <th style={{ width: '13%', padding: '0.75rem', fontWeight: '600', fontSize: '0.875rem', color: '#495057', borderBottom: '2px solid #dee2e6' }}>
+                RUNNING NUMBER
+              </th>
+              <th style={{ width: '10%', padding: '0.75rem', fontWeight: '600', fontSize: '0.875rem', color: '#495057', borderBottom: '2px solid #dee2e6' }}>
+                LENGTH
+              </th>
+              <th style={{ width: '10%', padding: '0.75rem', fontWeight: '600', fontSize: '0.875rem', color: '#495057', borderBottom: '2px solid #dee2e6' }}>
+                EXTERNAL ID
+              </th>
             </tr>
           </thead>
           <tbody>
-            {series.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <button className="link-button" onClick={() => handleEdit(item.id)}>Edit</button>
-                  {' | '}
-                  <button className="link-button" onClick={() => handleView(item.id)}>View</button>
+            {series.map((item, index) => (
+              <tr 
+                key={item.id} 
+                style={{ 
+                  backgroundColor: index % 2 === 0 ? '#ffffff' : '#f8f9fa',
+                  borderBottom: '1px solid #dee2e6'
+                }}
+              >
+                <td style={{ padding: '0.75rem', fontSize: '0.875rem' }}>
+                  <button 
+                    className="view-link"
+                    onClick={() => handleEdit(item.id)}
+                    style={{ color: '#007bff', textDecoration: 'none', border: 'none', background: 'none', cursor: 'pointer' }}
+                  >
+                    Edit
+                  </button>
+                  <span style={{ margin: '0 0.25rem', color: '#6c757d' }}>|</span>
+                  <button 
+                    className="view-link"
+                    onClick={() => handleView(item.id)}
+                    style={{ color: '#007bff', textDecoration: 'none', border: 'none', background: 'none', cursor: 'pointer' }}
+                  >
+                    View
+                  </button>
                 </td>
-                <td>{item.id}</td>
-                <td>{item.subsidiary}</td>
-                <td>{item.prefix}</td>
-                <td>{item.runningNumber}</td>
-                <td>{item.length}</td>
-                <td>{item.externalId}</td>
+                <td style={{ padding: '0.75rem', fontSize: '0.875rem', fontWeight: '500' }}>{item.id}</td>
+                <td style={{ padding: '0.75rem', fontSize: '0.875rem' }}>{item.subsidiary}</td>
+                <td style={{ padding: '0.75rem', fontSize: '0.875rem', fontWeight: '500' }}>{item.prefix}</td>
+                <td style={{ padding: '0.75rem', fontSize: '0.875rem', textAlign: 'center' }}>{item.runningNumber}</td>
+                <td style={{ padding: '0.75rem', fontSize: '0.875rem', textAlign: 'center' }}>{item.length}</td>
+                <td style={{ padding: '0.75rem', fontSize: '0.875rem' }}>{item.externalId || '-'}</td>
               </tr>
             ))}
           </tbody>

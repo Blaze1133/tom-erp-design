@@ -96,42 +96,64 @@ const CreateEnquiries = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-file-alt" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Create Enquiry</h1>
-        </div>
-        <div className="page-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Close Transaction
-          </button>
-            <button className="btn btn-secondary" onClick={handleSaveEnquiry}>
-              <i className="fas fa-save"></i>
-              Save Draft
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-exchange-alt"></i>
-              Convert to Order
-            </button>
-            <button className="btn btn-primary" onClick={handleSaveEnquiry}>
-              <i className="fas fa-check"></i>
-              Submit
-            </button>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-file-alt"></i>
+          <div>
+            <h1>Enquiry</h1>
+            <div className="detail-subtitle">
+              <span>New Enquiry</span>
+            </div>
           </div>
         </div>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
+        </div>
+      </div>
 
-        <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-copy"></i>
+          Copy
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-print"></i>
+          Print
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-exchange-alt"></i>
+          Convert to Order
+        </button>
+        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
+          <button className="btn-toolbar">
+            <i className="fas fa-cog"></i>
+            Actions
+            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
+          </button>
+        </div>
+      </div>
+
+        <div className="detail-content">
           {/* Primary Information */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-info-circle"></i>
-              Primary Information
-            </h2>
-            <div className="form-grid">
-                <div className="form-group">
-                  <label className="form-label required">Custom Form</label>
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Primary Information</h3>
+            </div>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>CUSTOM FORM *</label>
                   <select 
                     className="form-control"
                     value={formData.customForm}
@@ -141,8 +163,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>Standard Enquiry</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label required">Company</label>
+                <div className="detail-field">
+                  <label>COMPANY *</label>
                   <select
                     className="form-control"
                     value={formData.company}
@@ -161,8 +183,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option value="1005">1005 TECH OFFSHORE MARINE (SV) PTE LTD</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label required">Probability</label>
+                <div className="detail-field">
+                  <label>PROBABILITY *</label>
                   <input 
                     type="text" 
                     className="form-control"
@@ -170,8 +192,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     onChange={(e) => handleFormChange('probability', e.target.value)}
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Opportunity #</label>
+                <div className="detail-field">
+                  <label>OPPORTUNITY #</label>
                   <input 
                     type="text" 
                     className="form-control"
@@ -179,8 +201,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     disabled
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Sales Rep</label>
+                <div className="detail-field">
+                  <label>SALES REP</label>
                   <select 
                     className="form-control"
                     value={formData.salesRep}
@@ -191,8 +213,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>TSV025 Sasapu Venkateshwara Rao</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label required">Expected Close</label>
+                <div className="detail-field">
+                  <label>EXPECTED CLOSE *</label>
                   <input 
                     type="date" 
                     className="form-control"
@@ -200,8 +222,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     onChange={(e) => handleFormChange('expectedClose', e.target.value)}
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Title</label>
+                <div className="detail-field">
+                  <label>TITLE</label>
                   <input 
                     type="text" 
                     className="form-control"
@@ -209,8 +231,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     onChange={(e) => handleFormChange('title', e.target.value)}
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label required">Status</label>
+                <div className="detail-field">
+                  <label>STATUS *</label>
                   <select 
                     className="form-control"
                     value={formData.status}
@@ -223,8 +245,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>Closed Lost</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Win/Loss Reason</label>
+                <div className="detail-field">
+                  <label>WIN/LOSS REASON</label>
                   <select 
                     className="form-control"
                     value={formData.winLossReason}
@@ -236,27 +258,29 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>Delivery Time</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Details</label>
+                <div className="detail-field">
+                  <label>DETAILS</label>
                   <textarea 
                     className="form-control"
                     rows="3"
                   />
                 </div>
               </div>
+            </div>
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
           {/* Forecasting */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-chart-line"></i>
-              Forecasting
-            </h2>
-            <div className="form-grid">
-                <div className="form-group">
-                  <label className="form-label required">Projected Total</label>
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Forecasting</h3>
+            </div>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>PROJECTED TOTAL *</label>
                   <input 
                     type="number" 
                     className="form-control"
@@ -264,8 +288,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     onChange={(e) => handleFormChange('projectedTotal', parseFloat(e.target.value) || 0)}
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Forecast Type</label>
+                <div className="detail-field">
+                  <label>FORECAST TYPE</label>
                   <select 
                     className="form-control"
                     value={formData.forecastType}
@@ -277,8 +301,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>Worst Case</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Weighted Total</label>
+                <div className="detail-field">
+                  <label>WEIGHTED TOTAL</label>
                   <input 
                     type="number" 
                     className="form-control"
@@ -286,8 +310,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     disabled
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Range</label>
+                <div className="detail-field">
+                  <label>RANGE</label>
                   <input 
                     type="text" 
                     className="form-control"
@@ -296,19 +320,21 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                   />
                 </div>
               </div>
+            </div>
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
           {/* Classification */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-tags"></i>
-              Classification
-            </h2>
-            <div className="form-grid">
-                <div className="form-group">
-                  <label className="form-label required">Subsidiary</label>
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Classification</h3>
+            </div>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>SUBSIDIARY *</label>
                   <select 
                     className="form-control"
                     value={formData.subsidiary}
@@ -323,8 +349,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd - "TOM" (ROC 199507962E)</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Class</label>
+                <div className="detail-field">
+                  <label>CLASS</label>
                   <select 
                     className="form-control"
                     value={formData.class}
@@ -350,8 +376,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>Structure</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Location</label>
+                <div className="detail-field">
+                  <label>LOCATION</label>
                   <select 
                     className="form-control"
                     value={formData.location}
@@ -360,8 +386,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option value="">Select...</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label required">Department</label>
+                <div className="detail-field">
+                  <label>DEPARTMENT *</label>
                   <select 
                     className="form-control"
                     value={formData.department}
@@ -372,8 +398,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>Engineering</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Tax Total</label>
+                <div className="detail-field">
+                  <label>TAX TOTAL</label>
                   <input 
                     type="number" 
                     className="form-control"
@@ -381,8 +407,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     disabled
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Contact Person</label>
+                <div className="detail-field">
+                  <label>CONTACT PERSON</label>
                   <select 
                     className="form-control"
                     value={formData.contactPerson}
@@ -391,8 +417,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option value="">Select...</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Last Sales Activity</label>
+                <div className="detail-field">
+                  <label>LAST SALES ACTIVITY</label>
                   <input 
                     type="text" 
                     className="form-control"
@@ -400,8 +426,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     disabled
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Country of Origin</label>
+                <div className="detail-field">
+                  <label>COUNTRY OF ORIGIN</label>
                   <input 
                     type="text" 
                     className="form-control"
@@ -410,8 +436,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     placeholder="Enter country of origin"
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">HS Code</label>
+                <div className="detail-field">
+                  <label>HS CODE</label>
                   <input 
                     type="text" 
                     className="form-control"
@@ -421,19 +447,21 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                   />
                 </div>
               </div>
+            </div>
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
           {/* Items Section */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-boxes"></i>
-              Items
-            </h2>
-              <div className="currency-info">
-                <div className="currency-field">
-                  <label className="form-label required">Currency</label>
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Items</h3>
+            </div>
+            <div className="section-body">
+              <div className="detail-grid" style={{ marginBottom: '1.5rem' }}>
+                <div className="detail-field">
+                  <label>CURRENCY *</label>
                   <select 
                     className="form-control"
                     value={formData.currency}
@@ -446,8 +474,8 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                     <option>INR</option>
                   </select>
                 </div>
-                <div className="exchange-rate-field">
-                  <label className="form-label required">Exchange Rate</label>
+                <div className="detail-field">
+                  <label>EXCHANGE RATE *</label>
                   <input 
                     type="number" 
                     className="form-control"
@@ -457,43 +485,117 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                   />
                 </div>
               </div>
-            <button className="add-item-btn" onClick={handleAddItem}>
-              <i className="fas fa-plus"></i>
-              Add Item
-            </button>
-              {formData.items.length > 0 ? (
-                <div className="items-table-wrapper">
-                  <table className="detail-items-table">
+              
+              {formData.items.length > 0 && (
+                <div className="items-table-wrapper" style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+                  <table className="detail-items-table" style={{ minWidth: '1800px' }}>
                     <thead>
                       <tr>
-                        <th style={{width: '8%'}}>ITEM</th>
-                        <th style={{width: '7%'}}>QTY</th>
-                        <th style={{width: '6%'}}>UNITS</th>
-                        <th style={{width: '12%'}}>DESC</th>
-                        <th style={{width: '8%'}}>PRICE LEVEL</th>
-                        <th style={{width: '7%'}}>RATE</th>
-                        <th style={{width: '7%'}}>AMT</th>
-                        <th style={{width: '8%'}}>TAX CODE</th>
-                        <th style={{width: '8%'}}>GROSS AMT</th>
-                        <th style={{width: '9%'}}>CLASS</th>
-                        <th style={{width: '10%'}}>COST ESTIMATE TYPE</th>
-                        <th style={{width: '10%'}}>EST. EXTENDED COST</th>
+                        <th style={{ minWidth: '150px' }}>ITEM</th>
+                        <th style={{ minWidth: '80px' }}>QTY</th>
+                        <th style={{ minWidth: '100px' }}>UNITS</th>
+                        <th style={{ minWidth: '300px' }}>DESC</th>
+                        <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                        <th style={{ minWidth: '100px' }}>RATE</th>
+                        <th style={{ minWidth: '100px' }}>AMT</th>
+                        <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                        <th style={{ minWidth: '120px' }}>GROSS AMT</th>
+                        <th style={{ minWidth: '150px' }}>CLASS</th>
+                        <th style={{ minWidth: '150px' }}>COST EST. TYPE</th>
+                        <th style={{ minWidth: '150px' }}>EST. EXT. COST</th>
                       </tr>
                     </thead>
                     <tbody>
                       {formData.items.map((item) => (
                         <tr key={item.id}>
-                          <td><input type="text" className="table-input" defaultValue={item.item} style={{width: '100%'}} /></td>
-                          <td><input type="number" className="table-input" defaultValue={item.quantity} style={{width: '100%'}} /></td>
-                          <td><input type="text" className="table-input" defaultValue={item.units} style={{width: '100%'}} /></td>
-                          <td><input type="text" className="table-input" defaultValue={item.description} style={{width: '100%'}} /></td>
-                          <td><input type="text" className="table-input" defaultValue={item.priceLevel} style={{width: '100%'}} /></td>
-                          <td><input type="number" className="table-input" defaultValue={item.rate} style={{width: '100%'}} /></td>
-                          <td><input type="number" className="table-input" defaultValue={item.amount} style={{width: '100%'}} /></td>
-                          <td><input type="text" className="table-input" defaultValue={item.taxCode} style={{width: '100%'}} /></td>
-                          <td><input type="number" className="table-input" defaultValue={item.grossAmount} style={{width: '100%'}} /></td>
                           <td>
-                            <select className="table-input" defaultValue={item.class} style={{width: '100%'}}>
+                            <input 
+                              type="text" 
+                              className="form-control" 
+                              defaultValue={item.item} 
+                              style={{ minWidth: '140px', height: '40px' }} 
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control" 
+                              defaultValue={item.quantity} 
+                              style={{ minWidth: '70px', height: '40px' }} 
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control" 
+                              defaultValue={item.units} 
+                              style={{ minWidth: '90px', height: '40px' }} 
+                            />
+                          </td>
+                          <td>
+                            <textarea 
+                              className="form-control" 
+                              defaultValue={item.description} 
+                              style={{ minWidth: '290px', height: '40px', resize: 'vertical' }}
+                              rows="2"
+                            />
+                          </td>
+                          <td>
+                            <select 
+                              className="form-control" 
+                              defaultValue={item.priceLevel} 
+                              style={{ minWidth: '110px', height: '40px' }}
+                            >
+                              <option>Custom</option>
+                              <option>Base Price</option>
+                              <option>Wholesale</option>
+                              <option>Retail</option>
+                            </select>
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control" 
+                              defaultValue={item.rate} 
+                              style={{ minWidth: '90px', height: '40px' }} 
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control" 
+                              defaultValue={item.amount} 
+                              style={{ minWidth: '90px', height: '40px' }} 
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <select 
+                              className="form-control" 
+                              defaultValue={item.taxCode} 
+                              style={{ minWidth: '110px', height: '40px' }}
+                            >
+                              <option>GST_SG-9%</option>
+                              <option>GST_SG-0%</option>
+                              <option>Exempt</option>
+                            </select>
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control" 
+                              defaultValue={item.grossAmount} 
+                              style={{ minWidth: '110px', height: '40px' }} 
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <select 
+                              className="form-control" 
+                              defaultValue={item.class} 
+                              style={{ minWidth: '140px', height: '40px' }}
+                            >
                               <option value="">Select...</option>
                               <option>Consumable Item</option>
                               <option>Course</option>
@@ -515,81 +617,89 @@ const CreateEnquiries = ({ setCurrentPage }) => {
                             </select>
                           </td>
                           <td>
-                            <select className="table-input" defaultValue={item.costEstimateType} style={{width: '100%'}}>
+                            <select 
+                              className="form-control" 
+                              defaultValue={item.costEstimateType} 
+                              style={{ minWidth: '140px', height: '40px' }}
+                            >
                               <option>Fixed</option>
                               <option>Variable</option>
                               <option>Estimated</option>
                             </select>
                           </td>
-                          <td><input type="number" className="table-input" defaultValue={item.estimatedExtendedCost} style={{width: '100%'}} /></td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control" 
+                              defaultValue={item.estimatedExtendedCost} 
+                              style={{ minWidth: '140px', height: '40px' }} 
+                              step="0.01"
+                            />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-              ) : (
-                <div className="empty-items-message">
-                  <p>No items added yet. Click "Add Item" to start adding items to this enquiry.</p>
+              )}
+              
+              <div style={{ marginBottom: '1.5rem' }}>
+                <button className="btn btn-primary" onClick={handleAddItem}>
+                  <i className="fas fa-plus"></i>
+                  Add Item
+                </button>
+              </div>
+
+              {formData.items.length > 0 && (
+                <div className="summary-grid">
+                  <div className="summary-card">
+                    <div className="summary-title">SUBTOTAL</div>
+                    <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
+                  </div>
+                  <div className="summary-card">
+                    <div className="summary-title">TAX AMOUNT</div>
+                    <div className="summary-value">${calculateTaxAmount().toFixed(2)}</div>
+                  </div>
+                  <div className="summary-card">
+                    <div className="summary-title">DISCOUNT</div>
+                    <div className="summary-value">$0.00</div>
+                  </div>
+                  <div className="summary-card" style={{ background: '#f8f9fa' }}>
+                    <div className="summary-title">TOTAL AMOUNT</div>
+                    <div className="summary-value" style={{ color: '#4a90e2' }}>${calculateTotal().toFixed(2)}</div>
+                  </div>
                 </div>
               )}
-
-          {/* Summary Grid */}
-          {formData.items.length > 0 && (
-            <div className="summary-grid">
-              <div className="summary-card">
-                <div className="summary-title">SUBTOTAL</div>
-                <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
-              </div>
-              <div className="summary-card">
-                <div className="summary-title">TAX AMOUNT</div>
-                <div className="summary-value">${calculateTaxAmount().toFixed(2)}</div>
-              </div>
-              <div className="summary-card">
-                <div className="summary-title">DISCOUNT</div>
-                <div className="summary-value">$0.00</div>
-              </div>
-              <div className="summary-card" style={{ background: 'var(--gray-ultralight)' }}>
-                <div className="summary-title">TOTAL AMOUNT</div>
-                <div className="summary-value" style={{ color: 'var(--red-primary)' }}>${calculateTotal().toFixed(2)}</div>
-              </div>
             </div>
-          )}
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
           {/* Terms & Conditions */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-file-contract"></i>
-              Terms & Conditions
-            </h2>
-            <textarea 
-              className="form-control"
-              rows="3"
-              placeholder="1. Payment due within 30 days of invoice date.&#10;2. Prices valid for 30 days from quotation date.&#10;3. Delivery within 2 weeks after order confirmation."
-            />
-            
-            <div className="footer-actions">
-              <button className="btn btn-tertiary" onClick={handleCancel}>
-                <i className="fas fa-times"></i>
-                Close Transaction
-              </button>
-              <div>
-                <button className="btn btn-secondary" onClick={handleSaveEnquiry}>
-                  <i className="fas fa-save"></i>
-                  Save Draft
-                </button>
-                <button className="btn btn-secondary">
-                  <i className="fas fa-exchange-alt"></i>
-                  Convert to Order
-                </button>
-                <button className="btn btn-primary" onClick={handleSaveEnquiry}>
-                  <i className="fas fa-check"></i>
-                  Submit
-                </button>
-              </div>
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Terms & Conditions</h3>
             </div>
+            <div className="section-body">
+              <textarea 
+                className="form-control"
+                rows="3"
+                placeholder="1. Payment due within 30 days of invoice date.&#10;2. Prices valid for 30 days from quotation date.&#10;3. Delivery within 2 weeks after order confirmation."
+              />
+            </div>
+          </div>
+
+          {/* Footer Actions */}
+          <div className="detail-footer-actions">
+            <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
+              <i className="fas fa-save"></i>
+              Save
+            </button>
+            <button className="btn-toolbar" onClick={handleCancel}>
+              <i className="fas fa-times"></i>
+              Cancel
+            </button>
           </div>
         </div>
 
