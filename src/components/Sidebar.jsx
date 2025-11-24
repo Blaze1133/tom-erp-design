@@ -293,6 +293,14 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         { id: 'view-cash-sales', label: 'List' }
       ]
     },
+    { 
+      id: 'create-project',
+      label: 'Project',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-projects', label: 'List' }
+      ]
+    },
   ];
 
   const purchasesSubItems = [
@@ -765,7 +773,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       submenu: [
         { id: 'setup-customer-status-list', label: 'Customer Status List' },
         { id: 'setup-crm-lists', label: 'CRM Lists' },
-        { id: 'setup-crm-preferences', label: 'CRM Preferences' }
+        { id: 'setup-crm-preferences', label: 'CRM Preferences' },
+        { id: 'setup-crm-enquiry', label: 'CRM Enquiry' }
       ]
     },
     {

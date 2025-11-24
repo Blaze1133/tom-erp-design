@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const CreateEnquiries = ({ setCurrentPage }) => {
+const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   // Form state
@@ -101,9 +101,9 @@ const CreateEnquiries = ({ setCurrentPage }) => {
         <div className="detail-title">
           <i className="fas fa-file-alt"></i>
           <div>
-            <h1>Enquiry</h1>
+            <h1>{headerTitle}</h1>
             <div className="detail-subtitle">
-              <span>New Enquiry</span>
+              <span>New {headerTitle}</span>
             </div>
           </div>
         </div>

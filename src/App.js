@@ -128,6 +128,9 @@ import ViewStatisticalJournalEntries from './components/ViewStatisticalJournalEn
 import ViewStatisticalJournalEntryDetail from './components/ViewStatisticalJournalEntryDetail';
 import ViewEnquiryDetail from './components/ViewEnquiryDetail';
 import EditEnquiry from './components/EditEnquiry';
+import ViewProjects from './components/ViewProjects';
+import ViewProjectDetail from './components/ViewProjectDetail';
+import CreateProject from './components/CreateProject';
 import BillPurchaseOrders from './components/BillPurchaseOrders';
 import ViewBillPurchaseOrderDetail from './components/ViewBillPurchaseOrderDetail';
 import EditBillPurchaseOrder from './components/EditBillPurchaseOrder';
@@ -514,6 +517,14 @@ function App() {
         return <ViewEnquiryDetail setCurrentPage={setCurrentPage} />;
       case 'edit-enquiry':
         return <EditEnquiry setCurrentPage={setCurrentPage} />;
+      case 'create-project':
+        return <CreateProject setCurrentPage={setCurrentPage} />;
+      case 'view-projects':
+        return <ViewProjects setCurrentPage={setCurrentPage} />;
+      case 'view-project-detail':
+        return <ViewProjectDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-project':
+        return <CreateProject setCurrentPage={setCurrentPage} />;
       case 'bill-purchase-orders':
         return <BillPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'view-bill-purchase-order-detail':
@@ -1291,6 +1302,8 @@ function App() {
         />;
       case 'setup-crm-preferences':
         return <CRMPreferences setCurrentPage={setCurrentPage} />;
+      case 'setup-crm-enquiry':
+        return <CreateEnquiries setCurrentPage={setCurrentPage} headerTitle="CRM Enquiry" />;
       case 'setup-crm':
         return <div style={{ padding: '30px' }}><h1>Setup - CRM - Coming Soon</h1></div>;
       case 'setup-manage-users':
