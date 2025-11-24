@@ -331,6 +331,12 @@ import ViewContractorDetail from './components/ViewContractorDetail';
 import CreateContractor from './components/CreateContractor';
 import UploadDrawings from './components/UploadDrawings';
 import ProjectDocuments from './components/ProjectDocuments';
+import ScanQRCode from './components/ScanQRCode';
+import DashboardModule from './components/DashboardModule';
+import FrameFabrication from './components/FrameFabrication';
+import TestingAlignment from './components/TestingAlignment';
+import FabricationQAQC from './components/FabricationQAQC';
+import Packaging from './components/Packaging';
 import MEServicesWorkflow from './components/MEServicesWorkflow';
 import ModuleWiseTimeTracking from './components/ModuleWiseTimeTracking';
 
@@ -1140,6 +1146,18 @@ function App() {
         return <UploadDrawings />;
       case 'production-project-documents':
         return <ProjectDocuments />;
+      case 'scan-qr-code':
+        return <ScanQRCode setCurrentPage={setCurrentPage} />;
+      case 'dashboard-module':
+        return <DashboardModule setCurrentPage={setCurrentPage} />;
+      case 'frame-fabrication':
+        return <FrameFabrication setCurrentPage={setCurrentPage} />;
+      case 'testing-alignment':
+        return <TestingAlignment setCurrentPage={setCurrentPage} />;
+      case 'fabrication-qa-qc':
+        return <FabricationQAQC setCurrentPage={setCurrentPage} />;
+      case 'packaging':
+        return <Packaging setCurrentPage={setCurrentPage} />;
       case 'production-me-services':
         return <MEServicesWorkflow />;
       case 'production-time-tracking':

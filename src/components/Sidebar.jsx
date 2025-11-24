@@ -802,6 +802,12 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   ];
 
   const productionSubItems = [
+    { id: 'scan-qr-code', label: 'Scan QR Code', hideArrow: true },
+    { id: 'dashboard-module', label: 'Module Dashboard', hideArrow: true },
+    { id: 'frame-fabrication', label: 'Frame Fabrication', hideArrow: true },
+    { id: 'testing-alignment', label: 'Testing & Alignment', hideArrow: true },
+    { id: 'fabrication-qa-qc', label: 'Fabrication QA & QC', hideArrow: true },
+    { id: 'packaging', label: 'Packaging', hideArrow: true },
     { 
       id: 'production-master-tables',
       label: 'Master Tables',
