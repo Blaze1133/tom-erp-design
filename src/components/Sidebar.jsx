@@ -276,6 +276,14 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         { id: 'view-sales-orders', label: 'List' }
       ]
     },
+    { 
+      id: 'create-project',
+      label: 'Project',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-projects', label: 'List' }
+      ]
+    },
     { id: 'invoice-sales-orders', label: 'Invoice Sales Orders' },
     { 
       id: 'create-invoices',
@@ -291,14 +299,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'view-cash-sales', label: 'List' }
-      ]
-    },
-    { 
-      id: 'create-project',
-      label: 'Project',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-projects', label: 'List' }
       ]
     },
   ];
