@@ -319,6 +319,21 @@ import ViewVendors from './components/ViewVendors';
 import ViewVendorDetail from './components/ViewVendorDetail';
 import CreateVendor from './components/CreateVendor';
 
+// Production Module Components
+import ViewProjectMasters from './components/ViewProjectMasters';
+import ViewProjectMasterDetail from './components/ViewProjectMasterDetail';
+import CreateProjectMaster from './components/CreateProjectMaster';
+import ViewSiteLocations from './components/ViewSiteLocations';
+import ViewSiteLocationDetail from './components/ViewSiteLocationDetail';
+import CreateSiteLocation from './components/CreateSiteLocation';
+import ViewContractors from './components/ViewContractors';
+import ViewContractorDetail from './components/ViewContractorDetail';
+import CreateContractor from './components/CreateContractor';
+import UploadDrawings from './components/UploadDrawings';
+import ProjectDocuments from './components/ProjectDocuments';
+import MEServicesWorkflow from './components/MEServicesWorkflow';
+import ModuleWiseTimeTracking from './components/ModuleWiseTimeTracking';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -1081,10 +1096,54 @@ function App() {
           onSave={() => setCurrentPage('hr-employee-leave-reinstatement')}
           onCancel={() => setCurrentPage('hr-employee-leave-reinstatement')}
         />;
-      case 'production-mep-prefabrication':
-        return <div style={{ padding: '30px' }}><h1>MEP Prefabrication - Coming Soon</h1></div>;
-      case 'production-plant-module':
-        return <div style={{ padding: '30px' }}><h1>Plant Module - Coming Soon</h1></div>;
+      // Production Module Cases
+      case 'production-project-masters':
+        return <ViewProjectMasters 
+          onNewClick={() => setCurrentPage('create-project-master')}
+          onViewClick={() => setCurrentPage('view-project-master-detail')}
+          onEditClick={() => setCurrentPage('create-project-master')}
+        />;
+      case 'create-project-master':
+        return <CreateProjectMaster />;
+      case 'view-project-master-detail':
+        return <ViewProjectMasterDetail 
+          onBack={() => setCurrentPage('production-project-masters')}
+          onEdit={() => setCurrentPage('create-project-master')}
+        />;
+      case 'production-site-locations':
+        return <ViewSiteLocations 
+          onNewClick={() => setCurrentPage('create-site-location')}
+          onViewClick={() => setCurrentPage('view-site-location-detail')}
+          onEditClick={() => setCurrentPage('create-site-location')}
+        />;
+      case 'create-site-location':
+        return <CreateSiteLocation />;
+      case 'view-site-location-detail':
+        return <ViewSiteLocationDetail 
+          onBack={() => setCurrentPage('production-site-locations')}
+          onEdit={() => setCurrentPage('create-site-location')}
+        />;
+      case 'production-contractors':
+        return <ViewContractors 
+          onNewClick={() => setCurrentPage('create-contractor')}
+          onViewClick={() => setCurrentPage('view-contractor-detail')}
+          onEditClick={() => setCurrentPage('create-contractor')}
+        />;
+      case 'create-contractor':
+        return <CreateContractor />;
+      case 'view-contractor-detail':
+        return <ViewContractorDetail 
+          onBack={() => setCurrentPage('production-contractors')}
+          onEdit={() => setCurrentPage('create-contractor')}
+        />;
+      case 'production-upload-drawings':
+        return <UploadDrawings />;
+      case 'production-project-documents':
+        return <ProjectDocuments />;
+      case 'production-me-services':
+        return <MEServicesWorkflow />;
+      case 'production-time-tracking':
+        return <ModuleWiseTimeTracking />;
       case 'setup':
         return <div style={{ padding: '30px' }}><h1>Setup Module - Coming Soon</h1></div>;
       case 'setup-company':

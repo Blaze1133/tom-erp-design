@@ -19,6 +19,13 @@ const Quotation = () => {
   ]);
 
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  
+  // Customer search states
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState('');
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [isHoveringCustomer, setIsHoveringCustomer] = useState(false);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
 
   const [formData, setFormData] = useState({
     // Primary Information
@@ -51,6 +58,25 @@ const Quotation = () => {
     countryOfOrigin: '',
     hsCode: '',
   });
+
+  // Customer data array
+  const allCustomers = [
+    'Keppel Offshore & Marine Ltd',
+    'Sembcorp Marine Ltd',
+    'Jurong Shipyard Pte Ltd',
+    'ST Engineering Marine Ltd',
+    'Damen Shipyards Singapore',
+    'Seatrium Limited',
+    'Penguin International Limited',
+    'Marco Polo Marine Ltd',
+    'Vallianz Holdings Limited',
+    'ASL Marine Holdings Ltd',
+    'Cosco Shipping Heavy Industry',
+    'Yantai CIMC Raffles Offshore',
+    'Drydocks World Singapore',
+    'PaxOcean Engineering Pte Ltd',
+    'Vard Holdings Limited'
+  ];
 
   const calculateAmount = (item) => {
     return item.quantity * item.rate;
@@ -131,6 +157,25 @@ const Quotation = () => {
     }
   };
 
+  // Customer search functionality
+  const handleCustomerSearch = (searchTerm) => {
+    setCustomerSearch(searchTerm);
+    if (searchTerm.trim() === '') {
+      setFilteredCustomers(allCustomers);
+    } else {
+      const filtered = allCustomers.filter(customer =>
+        customer.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredCustomers(filtered);
+    }
+  };
+
+  const handleSaveNewCustomer = (newCustomerData) => {
+    showToast('Customer added successfully!', 'success');
+    setShowAddCustomer(false);
+    handleInputChange('customerProject', newCustomerData.name);
+  };
+
   return (
     <div className="sales-quotation">
       <div className="page-header">
@@ -189,18 +234,147 @@ const Quotation = () => {
                 placeholder="Auto generated"
               />
             </div>
-            <div className="form-group">
+            <div className="form-group" style={{ position: 'relative' }}>
               <label className="form-label required">Customer Project</label>
-              <select 
-                className="form-control"
-                value={formData.customerProject}
-                onChange={(e) => handleInputChange('customerProject', e.target.value)}
+              <div 
+                style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+                onMouseEnter={() => setIsHoveringCustomer(true)}
+                onMouseLeave={() => setIsHoveringCustomer(false)}
               >
-                <option value="">Select Project</option>
-                <option value="project1">Marine Construction Project</option>
-                <option value="project2">Offshore Platform Build</option>
-                <option value="project3">Ship Repair Works</option>
-              </select>
+                <div style={{ position: 'relative', flex: 1 }}>
+                  <input 
+                    type="text"
+                    className="form-control"
+                    value={formData.customerProject}
+                    onChange={(e) => handleInputChange('customerProject', e.target.value)}
+                    onFocus={() => {
+                      setShowCustomerDropdown(true);
+                      setFilteredCustomers(allCustomers);
+                    }}
+                    placeholder="<Type then tab>"
+                  />
+                  <button 
+                    type="button"
+                    style={{ 
+                      position: 'absolute', 
+                      right: '8px', 
+                      top: '50%', 
+                      transform: 'translateY(-50%)', 
+                      background: 'none', 
+                      border: 'none', 
+                      cursor: 'pointer',
+                      color: '#666',
+                      fontSize: '14px'
+                    }}
+                    onClick={() => {
+                      setShowCustomerDropdown(!showCustomerDropdown);
+                      if (!showCustomerDropdown) {
+                        setFilteredCustomers(allCustomers);
+                      }
+                    }}
+                  >
+                    <i className="fas fa-chevron-down"></i>
+                  </button>
+                  {showCustomerDropdown && (
+                    <>
+                      <div 
+                        style={{ 
+                          position: 'fixed', 
+                          top: 0, 
+                          left: 0, 
+                          right: 0, 
+                          bottom: 0, 
+                          zIndex: 999 
+                        }}
+                        onClick={() => setShowCustomerDropdown(false)}
+                      />
+                      <div style={{ 
+                        position: 'absolute', 
+                        top: '100%', 
+                        left: 0, 
+                        right: 0, 
+                        background: '#fff', 
+                        border: '1px solid #ddd', 
+                        borderRadius: '4px', 
+                        marginTop: '4px', 
+                        zIndex: 1000,
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                        maxHeight: '300px',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}>
+                        <div style={{ padding: '12px', borderBottom: '1px solid #e0e0e0', background: '#f8f9fa' }}>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <i className="fas fa-search" style={{ color: '#666', fontSize: '14px' }}></i>
+                            <input 
+                              type="text"
+                              placeholder="Search customers..."
+                              value={customerSearch}
+                              onChange={(e) => handleCustomerSearch(e.target.value)}
+                              style={{ 
+                                flex: 1, 
+                                padding: '6px 10px', 
+                                border: '1px solid #ddd', 
+                                borderRadius: '4px',
+                                fontSize: '13px'
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div style={{ 
+                          flex: 1, 
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredCustomers.length > 0 ? filteredCustomers : allCustomers).map((customer, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => {
+                                handleInputChange('customerProject', customer);
+                                setShowCustomerDropdown(false);
+                                setCustomerSearch('');
+                              }}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer',
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f0f0f0',
+                                transition: 'background 0.2s'
+                              }}
+                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                            >
+                              {customer}
+                            </div>
+                          ))}
+                          {filteredCustomers.length === 0 && customerSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No customers found
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+                {isHoveringCustomer && (
+                  <button 
+                    type="button"
+                    className="btn btn-secondary" 
+                    style={{ 
+                      padding: '8px 16px',
+                      fontSize: '14px',
+                      minWidth: 'auto',
+                      transition: 'opacity 0.2s'
+                    }}
+                    onClick={() => setShowAddCustomer(true)}
+                    title="Add new customer"
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
+                )}
+              </div>
             </div>
             <div className="form-group">
               <label className="form-label required">Title</label>
@@ -685,6 +859,125 @@ const Quotation = () => {
         show={toast.show} 
         onClose={() => setToast({ ...toast, show: false })} 
       />
+
+      {/* Add Customer Modal */}
+      {showAddCustomer && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            padding: '2rem',
+            minWidth: '500px',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ margin: 0, color: 'var(--dark-gray)' }}>
+                <i className="fas fa-user-plus" style={{ marginRight: '0.5rem', color: 'var(--blue-accent)' }}></i>
+                Add New Customer
+              </h2>
+              <button 
+                onClick={() => setShowAddCustomer(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: 'var(--gray-medium)'
+                }}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <div className="form-grid">
+              <div className="form-group">
+                <label className="form-label required">Customer Name</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  placeholder="Enter customer name"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Company Type</label>
+                <select className="form-control">
+                  <option value="Company">Company</option>
+                  <option value="Individual">Individual</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Email</label>
+                <input 
+                  type="email" 
+                  className="form-control"
+                  placeholder="Enter email address"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Phone</label>
+                <input 
+                  type="tel" 
+                  className="form-control"
+                  placeholder="Enter phone number"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Primary Subsidiary</label>
+                <select className="form-control">
+                  <option value="">Select Subsidiary</option>
+                  <option value="TOM S">Tech Offshore Marine (S) Pte Ltd</option>
+                  <option value="DQ">Tech Offshore Marine (DQ) Pte Ltd</option>
+                  <option value="TEA">Tech Electric & Automation Pte Ltd</option>
+                  <option value="TMO">Tech Marine Offshore (S) Pte Ltd</option>
+                  <option value="SV">Tech Offshore Marine (SV) Pte Ltd</option>
+                  <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Category</label>
+                <select className="form-control">
+                  <option value="">Select Category</option>
+                  <option value="Direct Owner">Direct Owner</option>
+                  <option value="Oil & Gas">Oil & Gas</option>
+                  <option value="Shipyard">Shipyard</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '2rem' }}>
+              <button 
+                className="btn btn-tertiary"
+                onClick={() => setShowAddCustomer(false)}
+              >
+                <i className="fas fa-times"></i>
+                Cancel
+              </button>
+              <button 
+                className="btn btn-primary"
+                onClick={() => handleSaveNewCustomer({ name: 'New Customer' })}
+              >
+                <i className="fas fa-save"></i>
+                Save Customer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

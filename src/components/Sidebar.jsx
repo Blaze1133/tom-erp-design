@@ -11,6 +11,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const customersItemRef = useRef(null);
   const payrollItemRef = useRef(null);
   const productionItemRef = useRef(null);
+  const masterTablesItemRef = useRef(null);
+  const drawingsDocumentsItemRef = useRef(null);
   const setupItemRef = useRef(null);
   const mastersItemRef = useRef(null);
   const hrItemRef = useRef(null);
@@ -25,6 +27,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const [customersSubmenuTop, setCustomersSubmenuTop] = useState(100);
   const [payrollSubmenuTop, setPayrollSubmenuTop] = useState(100);
   const [productionSubmenuTop, setProductionSubmenuTop] = useState(100);
+  const [masterTablesSubmenuTop, setMasterTablesSubmenuTop] = useState(100);
+  const [drawingsDocumentsSubmenuTop, setDrawingsDocumentsSubmenuTop] = useState(100);
   const [setupSubmenuTop, setSetupSubmenuTop] = useState(100);
   const [hrSubmenuTop, setHrSubmenuTop] = useState(100);
   const [nestedSubmenuTop, setNestedSubmenuTop] = useState({});
@@ -112,6 +116,20 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     if (productionItemRef.current) {
       const rect = productionItemRef.current.getBoundingClientRect();
       setProductionSubmenuTop(rect.top);
+    }
+  };
+
+  const handleMasterTablesHover = () => {
+    if (masterTablesItemRef.current) {
+      const rect = masterTablesItemRef.current.getBoundingClientRect();
+      setMasterTablesSubmenuTop(rect.top);
+    }
+  };
+
+  const handleDrawingsDocumentsHover = () => {
+    if (drawingsDocumentsItemRef.current) {
+      const rect = drawingsDocumentsItemRef.current.getBoundingClientRect();
+      setDrawingsDocumentsSubmenuTop(rect.top);
     }
   };
 
@@ -783,6 +801,30 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { id: 'view-vendor-masters', label: 'Vendor Masters', hideArrow: true }
   ];
 
+  const productionSubItems = [
+    { 
+      id: 'production-master-tables',
+      label: 'Master Tables',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'production-project-masters', label: 'Project Masters' },
+        { id: 'production-site-locations', label: 'Site Locations' },
+        { id: 'production-contractors', label: 'Contractors' }
+      ]
+    },
+    { 
+      id: 'production-drawings-documents',
+      label: 'Drawings & Documents',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'production-upload-drawings', label: 'Upload Drawings' },
+        { id: 'production-project-documents', label: 'Project Documents' }
+      ]
+    },
+    { id: 'production-me-services', label: 'M&E Services', hideArrow: true },
+    { id: 'production-time-tracking', label: 'Module Wise Time Tracking', hideArrow: true }
+  ];
+
   const menuItems = [
     { id: 'dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
   ];
@@ -1317,20 +1359,45 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <span>Production</span>
           </div>
           <div className="submenu" style={{ top: `${productionSubmenuTop}px` }}>
-            <div
-              className={`submenu-item ${currentPage === 'production-mep-prefabrication' ? 'active' : ''}`}
-              onClick={() => setCurrentPage('production-mep-prefabrication')}
-            >
-              MEP Prefabrication
-            </div>
-            <div
-              className={`submenu-item ${currentPage === 'production-plant-module' ? 'active' : ''}`}
-              onClick={() => setCurrentPage('production-plant-module')}
-            >
-              Plant Module
-            </div>
+            {productionSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `production-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={() => setCurrentPage(nestedItem.id)}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
+        
         
         {/* Masters Menu with Submenu */}
         <div className="nav-item-parent" onMouseEnter={handleMastersHover}>

@@ -916,15 +916,15 @@ textarea.form-control {
 /* Toast Notification */
 .toast {
     position: fixed;
-    top: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(-100px);
+    top: 5rem;
+    right: 1.5rem;
+    transform: translateX(100px);
     background: var(--dark-gray);
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 2000;
+    z-index: 10001;
     opacity: 0;
     transition: all 0.4s ease;
     display: flex;
@@ -934,7 +934,7 @@ textarea.form-control {
 }
 
 .toast.show {
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(0);
     opacity: 1;
 }
 
