@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
+const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick, importedData = [] }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
@@ -27,7 +27,8 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
       modified: 'vineeth_tom',
       modifiedTime: '27-Oct-2023 11:25:40',
       addedBy: 'vineeth_tom',
-      addedTime: '27-Oct-2023 11:25:40'
+      addedTime: '27-Oct-2023 11:25:40',
+      subModuleNo: 'L4-ADM-DFMA-039'
     },
     {
       id: 2,
@@ -45,7 +46,8 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
       modified: 'vineeth_tom',
       modifiedTime: '27-Oct-2023 11:25:40',
       addedBy: 'vineeth_tom',
-      addedTime: '27-Oct-2023 11:25:40'
+      addedTime: '27-Oct-2023 11:25:40',
+      subModuleNo: 'L4-ADM-DFMA-039'
     },
     {
       id: 3,
@@ -63,7 +65,8 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
       modified: 'vineeth_tom',
       modifiedTime: '27-Oct-2023 11:25:40',
       addedBy: 'vineeth_tom',
-      addedTime: '27-Oct-2023 11:25:40'
+      addedTime: '27-Oct-2023 11:25:40',
+      subModuleNo: 'L4-ADM-DFMA-039'
     },
     {
       id: 4,
@@ -81,7 +84,8 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
       modified: 'vineeth_tom',
       modifiedTime: '27-Oct-2023 11:25:40',
       addedBy: 'vineeth_tom',
-      addedTime: '27-Oct-2023 11:25:40'
+      addedTime: '27-Oct-2023 11:25:40',
+      subModuleNo: 'L4-ADM-DFMA-039'
     },
     {
       id: 5,
@@ -99,7 +103,8 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
       modified: 'vineeth_tom',
       modifiedTime: '27-Oct-2023 11:25:40',
       addedBy: 'vineeth_tom',
-      addedTime: '27-Oct-2023 11:25:40'
+      addedTime: '27-Oct-2023 11:25:40',
+      subModuleNo: 'L4-ADM-DFMA-039'
     }
   ]);
 
@@ -125,12 +130,16 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
     }
   };
 
-  const filteredServices = meServices.filter(service => {
+  // Combine sample data with imported data
+  const allServices = [...meServices, ...importedData];
+
+  const filteredServices = allServices.filter(service => {
     const matchesSearch = 
       service.moduleNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
       service.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       service.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.contra.toLowerCase().includes(searchTerm.toLowerCase());
+      service.contra.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.subModuleNo.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesProject = !selectedProject || service.projectName === selectedProject;
     const matchesBatch = !selectedBatch || service.batch === selectedBatch;
@@ -139,10 +148,10 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
     return matchesSearch && matchesProject && matchesBatch && matchesService;
   });
 
-  // Get unique values for filters
-  const uniqueProjects = [...new Set(meServices.map(s => s.projectName))];
-  const uniqueBatches = [...new Set(meServices.map(s => s.batch))];
-  const uniqueServices = [...new Set(meServices.map(s => s.service))];
+  // Get unique values for filters from all services
+  const uniqueProjects = [...new Set(allServices.map(s => s.projectName))];
+  const uniqueBatches = [...new Set(allServices.map(s => s.batch))];
+  const uniqueServices = [...new Set(allServices.map(s => s.service))];
 
   return (
     <div className="enquiries-list">
@@ -258,22 +267,23 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
         <table className="enquiries-table">
           <thead>
             <tr>
-              <th style={{ width: '8%' }}>EDIT | VIEW</th>
-              <th style={{ width: '10%' }}>Module_No <i className="fas fa-sort"></i></th>
-              <th style={{ width: '5%' }}>Batch</th>
-              <th style={{ width: '12%' }}>Project Name</th>
-              <th style={{ width: '8%' }}>Service</th>
-              <th style={{ width: '8%' }}>Contra</th>
-              <th style={{ width: '8%' }}>Size</th>
-              <th style={{ width: '10%' }}>Completion_S</th>
-              <th style={{ width: '8%' }}>Reason_P</th>
-              <th style={{ width: '6%' }}>Complete</th>
-              <th style={{ width: '8%' }}>Weightage</th>
-              <th style={{ width: '5%' }}>Image</th>
-              <th style={{ width: '8%' }}>Modified</th>
-              <th style={{ width: '10%' }}>Modified Time</th>
-              <th style={{ width: '8%' }}>Added By</th>
-              <th style={{ width: '10%' }}>Added Time</th>
+              <th style={{ width: '7%' }}>EDIT | VIEW</th>
+              <th style={{ width: '9%' }}>Module_No <i className="fas fa-sort"></i></th>
+              <th style={{ width: '4%' }}>Batch</th>
+              <th style={{ width: '11%' }}>Project Name</th>
+              <th style={{ width: '7%' }}>Service</th>
+              <th style={{ width: '7%' }}>Contra</th>
+              <th style={{ width: '7%' }}>Size</th>
+              <th style={{ width: '9%' }}>Completion_S</th>
+              <th style={{ width: '7%' }}>Reason_P</th>
+              <th style={{ width: '5%' }}>Complete</th>
+              <th style={{ width: '7%' }}>Weightage</th>
+              <th style={{ width: '4%' }}>Image</th>
+              <th style={{ width: '7%' }}>Modified</th>
+              <th style={{ width: '9%' }}>Modified Time</th>
+              <th style={{ width: '7%' }}>Added By</th>
+              <th style={{ width: '9%' }}>Added Time</th>
+              <th style={{ width: '10%' }}>Sub Module No <i className="fas fa-sort"></i></th>
             </tr>
           </thead>
           <tbody>
@@ -313,6 +323,7 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
                 <td>{service.modifiedTime}</td>
                 <td>{service.addedBy}</td>
                 <td>{service.addedTime}</td>
+                <td className="doc-number">{service.subModuleNo}</td>
               </tr>
             ))}
           </tbody>
@@ -334,7 +345,7 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
         alignItems: 'center',
         gap: '10px'
       }}>
-        <span>Showing {filteredServices.length} of {meServices.length}</span>
+        <span>Showing {filteredServices.length} of {allServices.length}</span>
         <div style={{
           width: '100px',
           height: '4px',
@@ -343,7 +354,7 @@ const ViewMEServices = ({ onUploadClick, onViewClick, onEditClick }) => {
           overflow: 'hidden'
         }}>
           <div style={{
-            width: `${(filteredServices.length / meServices.length) * 100}%`,
+            width: `${(filteredServices.length / allServices.length) * 100}%`,
             height: '100%',
             background: '#4a90e2',
             borderRadius: '2px'

@@ -342,6 +342,8 @@ import FabricationQAQC from './components/FabricationQAQC';
 import Packaging from './components/Packaging';
 import MEServicesWorkflow from './components/MEServicesWorkflow';
 import ModuleWiseTimeTracking from './components/ModuleWiseTimeTracking';
+import ProductionDelivery from './components/ProductionDelivery';
+import StatusAllModules from './components/StatusAllModules';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1161,6 +1163,8 @@ function App() {
         return <ScanQRCode setCurrentPage={setCurrentPage} />;
       case 'dashboard-module':
         return <DashboardModule setCurrentPage={setCurrentPage} />;
+      case 'status-all-modules':
+        return <StatusAllModules setCurrentPage={setCurrentPage} />;
       case 'frame-fabrication':
         return <FrameFabrication setCurrentPage={setCurrentPage} />;
       case 'testing-alignment':
@@ -1169,6 +1173,8 @@ function App() {
         return <FabricationQAQC setCurrentPage={setCurrentPage} />;
       case 'packaging':
         return <Packaging setCurrentPage={setCurrentPage} />;
+      case 'production-delivery':
+        return <ProductionDelivery />;
       case 'production-me-services':
         return <MEServicesWorkflow />;
       case 'production-time-tracking':

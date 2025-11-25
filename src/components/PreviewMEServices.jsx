@@ -4,8 +4,8 @@ import './Enquiries.css';
 
 const PreviewMEServices = ({ data, fileName, onImport, onCancel, onSettings }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectedRows, setSelectedRows] = useState(data.map(item => item.id)); // Auto-select all rows
+  const [selectAll, setSelectAll] = useState(true); // Set to true by default
   const [isImporting, setIsImporting] = useState(false);
 
   const showToast = (message, type = 'success') => {
@@ -37,19 +37,17 @@ const PreviewMEServices = ({ data, fileName, onImport, onCancel, onSettings }) =
 
     setIsImporting(true);
     
-    // Simulate import process
-    setTimeout(() => {
-      setIsImporting(false);
-      showToast(`Processing complete! ${selectedRows.length} records ready for import.`, 'success');
+    // Call onImport immediately - no delay needed
+    if (onImport) {
+      const selectedData = data.filter(item => selectedRows.includes(item.id));
       
-      // Small delay before calling onImport to show the processing complete message
-      setTimeout(() => {
-        if (onImport) {
-          const selectedData = data.filter(item => selectedRows.includes(item.id));
-          onImport(selectedData);
-        }
-      }, 1000);
-    }, 2000);
+      // Pass callback to reset importing state
+      onImport(selectedData, () => {
+        setIsImporting(false);
+      });
+    } else {
+      setIsImporting(false);
+    }
   };
 
   const handleSettings = () => {

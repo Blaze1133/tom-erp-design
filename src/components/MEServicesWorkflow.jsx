@@ -25,10 +25,58 @@ const MEServicesWorkflow = () => {
     setCurrentStep('preview');
   };
 
-  const handleImport = (selectedData) => {
-    // Add the imported data to the main list
-    setImportedData(prev => [...prev, ...selectedData]);
+  const handleImport = (selectedData, onImportComplete) => {
+    // Map the imported data to match the ViewMEServices structure
+    const mappedData = selectedData.map((item, index) => ({
+      id: Date.now() + index, // Generate unique ID
+      moduleNo: item.moduleNo,
+      batch: item.batch,
+      projectName: item.projectName,
+      service: item.serviceType, // Map serviceType to service
+      contra: item.contractors, // Map contractors to contra
+      size: item.size,
+      completionS: 'Not Completed', // Default status
+      reasonP: 'N/A', // Default reason
+      complete: '',
+      weightage: item.weightage,
+      image: '',
+      modified: 'system',
+      modifiedTime: new Date().toLocaleString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).replace(',', ''),
+      addedBy: 'system',
+      addedTime: new Date().toLocaleString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).replace(',', ''),
+      subModuleNo: item.subModuleNo
+    }));
+
+    // Add the mapped data to the main list
+    setImportedData(prev => [...prev, ...mappedData]);
+    
+    // Call completion callback if provided
+    if (onImportComplete) {
+      onImportComplete();
+    }
+    
+    // Show success message and redirect to main screen
     showToast(`Successfully imported ${selectedData.length} M&E service records! Data has been added to the main list.`, 'success');
+    
+    // Reset preview data and go back to list
+    setPreviewData([]);
+    setFileName('');
     setCurrentStep('list');
   };
 
@@ -53,45 +101,53 @@ const MEServicesWorkflow = () => {
     console.log('Edit service:', service);
   };
 
-  switch (currentStep) {
-    case 'upload':
-      return (
-        <UploadMEServices
-          onPreview={handlePreview}
-          onCancel={handleCancel}
-        />
-      );
-    
-    case 'preview':
-      return (
-        <PreviewMEServices
-          data={previewData}
-          fileName={fileName}
-          onImport={handleImport}
-          onCancel={handleCancel}
-          onSettings={handleSettings}
-        />
-      );
-    
-    case 'list':
-    default:
-      return (
-        <>
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 'upload':
+        return (
+          <UploadMEServices
+            onPreview={handlePreview}
+            onCancel={handleCancel}
+          />
+        );
+      
+      case 'preview':
+        return (
+          <PreviewMEServices
+            data={previewData}
+            fileName={fileName}
+            onImport={handleImport}
+            onCancel={handleCancel}
+            onSettings={handleSettings}
+          />
+        );
+      
+      case 'list':
+      default:
+        return (
           <ViewMEServices
             onUploadClick={handleUploadClick}
             onViewClick={handleViewService}
             onEditClick={handleEditService}
             importedData={importedData}
           />
-          <Toast 
-            message={toast.message} 
-            type={toast.type} 
-            show={toast.show} 
-            onClose={() => setToast({ ...toast, show: false })} 
-          />
-        </>
-      );
-  }
+        );
+    }
+  };
+
+  return (
+    <>
+      {renderCurrentStep()}
+      
+      
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        show={toast.show} 
+        onClose={() => setToast({ ...toast, show: false })} 
+      />
+    </>
+  );
 };
 
 export default MEServicesWorkflow;

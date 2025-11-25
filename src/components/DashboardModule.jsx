@@ -56,6 +56,7 @@ const DashboardModule = ({ setCurrentPage }) => {
     const testingAlignmentStatus = localStorage.getItem('testingAlignmentStatus');
     const fabricationQAQCStatus = localStorage.getItem('fabricationQAQCStatus');
     const packagingStatus = localStorage.getItem('packagingStatus');
+    const deliveryStatus = localStorage.getItem('deliveryStatus');
     
     setModuleData(prev => ({
       ...prev,
@@ -70,6 +71,9 @@ const DashboardModule = ({ setCurrentPage }) => {
           return { ...step, status: 'Completed', progress: '100%' };
         }
         if (step.name === 'Packaging' && packagingStatus === 'Completed') {
+          return { ...step, status: 'Completed', progress: '100%' };
+        }
+        if (step.name === 'Delivery' && deliveryStatus === 'Completed') {
           return { ...step, status: 'Completed', progress: '100%' };
         }
         return step;
@@ -92,18 +96,33 @@ const DashboardModule = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="enquiries-list">
-      <div className="list-header">
-        <div className="list-title">
-          <i className="fas fa-tachometer-alt"></i>
-          <h1>Dashboard - Module</h1>
+    <>
+      <style>
+        {`
+          .status-not-completed {
+            background-color: #ffcdd2 !important;
+            color: #d32f2f !important;
+            border: 1px solid #f44336 !important;
+          }
+          .status-completed {
+            background-color: #d4edda !important;
+            color: #155724 !important;
+            border: 1px solid #c3e6cb !important;
+          }
+        `}
+      </style>
+      <div className="enquiries-list">
+        <div className="list-header">
+          <div className="list-title">
+            <i className="fas fa-tachometer-alt"></i>
+            <h1>Dashboard - Module</h1>
+          </div>
+          <div className="list-actions">
+            <button className="btn-view-option">Overview</button>
+            <button className="btn-view-option">Details</button>
+            <button className="btn-view-option">Reports</button>
+          </div>
         </div>
-        <div className="list-actions">
-          <button className="btn-view-option">Overview</button>
-          <button className="btn-view-option">Details</button>
-          <button className="btn-view-option">Reports</button>
-        </div>
-      </div>
 
       <div className="quotation-container">
         {/* Module Header */}
@@ -349,16 +368,16 @@ const DashboardModule = ({ setCurrentPage }) => {
                   textAlign: 'center',
                   marginRight: '2rem'
                 }}>
-                  <span style={{
-                    display: 'inline-block',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '20px',
-                    fontSize: '0.9rem',
-                    fontWeight: '600',
-                    backgroundColor: step.status.includes('Completed') ? '#d4edda' : '#ffebee',
-                    color: step.status.includes('Completed') ? '#155724' : '#c62828',
-                    border: `1px solid ${step.status.includes('Completed') ? '#c3e6cb' : '#ef5350'}`
-                  }}>
+                  <span 
+                    className={step.status.includes('Completed') ? 'status-completed' : 'status-not-completed'}
+                    style={{
+                      display: 'inline-block',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '20px',
+                      fontSize: '0.9rem',
+                      fontWeight: '600'
+                    }}
+                  >
                     {step.status}
                   </span>
                 </div>
@@ -380,6 +399,8 @@ const DashboardModule = ({ setCurrentPage }) => {
                         setCurrentPage('fabrication-qa-qc');
                       } else if (step.name === 'Packaging') {
                         setCurrentPage('packaging');
+                      } else if (step.name === 'Delivery') {
+                        setCurrentPage('production-delivery');
                       } else {
                         // For other steps, show a placeholder message
                         alert(`Update form for ${step.name} is coming soon!`);
@@ -430,6 +451,7 @@ const DashboardModule = ({ setCurrentPage }) => {
 
       </div>
     </div>
+    </>
   );
 };
 
