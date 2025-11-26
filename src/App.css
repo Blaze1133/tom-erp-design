@@ -235,7 +235,7 @@ textarea.form-control {
     position: fixed;
     left: var(--sidebar-width);
     width: 320px;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 120px);
     overflow-y: auto;
     overflow-x: hidden;
     background: #3a4150;
@@ -246,6 +246,8 @@ textarea.form-control {
     margin-left: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     min-height: 100px;
+    top: auto;
+    bottom: auto;
 }
 
 .sidebar.collapsed ~ * .submenu,
@@ -255,21 +257,21 @@ textarea.form-control {
 
 /* Submenu scrollbar styling */
 .submenu::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 .submenu::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
+    background: transparent;
+    border-radius: 2px;
 }
 
 .submenu::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
 }
 
 .submenu::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.4);
 }
 
 @keyframes slideInRight {
@@ -318,10 +320,12 @@ textarea.form-control {
 /* Nested Submenu Styles */
 .submenu-item-wrapper {
     position: relative;
+    width: 100%;
 }
 
 .submenu-item.has-nested {
     position: relative;
+    padding-right: 3rem !important;
 }
 
 .nested-arrow {
@@ -1008,6 +1012,13 @@ textarea.form-control {
 .dashboard {
     padding: 1.5rem;
     max-width: 1400px;
+}
+
+.dashboard h1 {
+    font-size: 1.5rem;
+    color: var(--dark-gray);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
 }
 
 .dashboard-header {

@@ -56,24 +56,22 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Dashboard</h1>
-        
-        {showAlert && (
-          <div className="alert">
-            <div className="alert-icon">
-              <i className="fas fa-exclamation-circle" style={{ fontSize: '24px' }}></i>
-            </div>
-            <div className="alert-content">
-              <div className="alert-title">Attention Required</div>
-              <div className="alert-message">3 pending approvals need your review</div>
-            </div>
-            <button className="alert-close" onClick={() => setShowAlert(false)}>
-              <i className="fas fa-times" style={{ fontSize: '20px' }}></i>
-            </button>
+      <h1>Dashboard</h1>
+      
+      {showAlert && (
+        <div className="alert">
+          <div className="alert-icon">
+            <i className="fas fa-exclamation-circle" style={{ fontSize: '24px' }}></i>
           </div>
-        )}
-      </div>
+          <div className="alert-content">
+            <div className="alert-title">Attention Required</div>
+            <div className="alert-message">3 pending approvals need your review</div>
+          </div>
+          <button className="alert-close" onClick={() => setShowAlert(false)}>
+            <i className="fas fa-times" style={{ fontSize: '20px' }}></i>
+          </button>
+        </div>
+      )}
 
       <div className="stats-grid">
         {stats.map((stat, index) => (

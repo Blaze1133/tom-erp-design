@@ -344,6 +344,14 @@ import MEServicesWorkflow from './components/MEServicesWorkflow';
 import ModuleWiseTimeTracking from './components/ModuleWiseTimeTracking';
 import ProductionDelivery from './components/ProductionDelivery';
 import StatusAllModules from './components/StatusAllModules';
+import WorkshopDashboardWrapper from './components/WorkshopDashboardWrapper';
+import Anchoring from './components/Anchoring';
+import Hoisting from './components/Hoisting';
+import Positioning from './components/Positioning';
+import MEHookup from './components/MEHookup';
+import Installation from './components/Installation';
+import FinalQAQC from './components/FinalQAQC';
+import ProductionDashboardOverall from './components/ProductionDashboardOverall';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1175,10 +1183,26 @@ function App() {
         return <Packaging setCurrentPage={setCurrentPage} />;
       case 'production-delivery':
         return <ProductionDelivery />;
+      case 'anchoring':
+        return <Anchoring setCurrentPage={setCurrentPage} />;
+      case 'hoisting':
+        return <Hoisting setCurrentPage={setCurrentPage} />;
+      case 'positioning':
+        return <Positioning setCurrentPage={setCurrentPage} />;
+      case 'me-hookup':
+        return <MEHookup setCurrentPage={setCurrentPage} />;
+      case 'installation':
+        return <Installation setCurrentPage={setCurrentPage} />;
+      case 'final-qa-qc':
+        return <FinalQAQC setCurrentPage={setCurrentPage} />;
       case 'production-me-services':
         return <MEServicesWorkflow />;
       case 'production-time-tracking':
         return <ModuleWiseTimeTracking />;
+      case 'production-workshop-dashboard':
+        return <WorkshopDashboardWrapper />;
+      case 'production-dashboard-overall':
+        return <ProductionDashboardOverall />;
       case 'setup':
         return <div style={{ padding: '30px' }}><h1>Setup Module - Coming Soon</h1></div>;
       case 'setup-company':
@@ -1777,9 +1801,7 @@ function App() {
         setCurrentPage={setCurrentPage}
       />
       <div className="main-content">
-        <div className="content-area">
-          {renderPage()}
-        </div>
+        {renderPage()}
       </div>
     </div>
   );

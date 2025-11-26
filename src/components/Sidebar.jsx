@@ -115,7 +115,18 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const handleProductionHover = () => {
     if (productionItemRef.current) {
       const rect = productionItemRef.current.getBoundingClientRect();
-      setProductionSubmenuTop(rect.top);
+      let topPosition = rect.top;
+      
+      // Calculate submenu height (approximate based on number of items)
+      const submenuHeight = 700; // Approximate height for production submenu with many items
+      const viewportHeight = window.innerHeight;
+      
+      // If submenu would overflow bottom, adjust position
+      if (topPosition + submenuHeight > viewportHeight) {
+        topPosition = Math.max(20, viewportHeight - submenuHeight - 20);
+      }
+      
+      setProductionSubmenuTop(topPosition);
     }
   };
 
@@ -812,13 +823,28 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const productionSubItems = [
     { id: 'scan-qr-code', label: 'Scan QR Code', hideArrow: true },
-    { id: 'dashboard-module', label: 'Module Dashboard', hideArrow: true },
+    { 
+      id: 'production-dashboard',
+      label: 'Dashboard',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'production-dashboard-overall', label: 'Overall Dashboard' },
+        { id: 'dashboard-module', label: 'Module Dashboard' },
+        { id: 'production-workshop-dashboard', label: 'Workshop Dashboard' }
+      ]
+    },
     { id: 'status-all-modules', label: 'Status All Modules', hideArrow: true },
     { id: 'frame-fabrication', label: 'Frame Fabrication', hideArrow: true },
     { id: 'testing-alignment', label: 'Testing & Alignment', hideArrow: true },
     { id: 'fabrication-qa-qc', label: 'Fabrication QA & QC', hideArrow: true },
     { id: 'packaging', label: 'Packaging', hideArrow: true },
     { id: 'production-delivery', label: 'Delivery', hideArrow: true },
+    { id: 'anchoring', label: 'Anchoring', hideArrow: true },
+    { id: 'hoisting', label: 'Hoisting', hideArrow: true },
+    { id: 'positioning', label: 'Positioning', hideArrow: true },
+    { id: 'me-hookup', label: 'M&E Hookup', hideArrow: true },
+    { id: 'installation', label: 'Installation', hideArrow: true },
+    { id: 'final-qa-qc', label: 'Final QA/QC', hideArrow: true },
     { 
       id: 'production-master-tables',
       label: 'Master Tables',

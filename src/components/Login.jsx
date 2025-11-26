@@ -5,11 +5,18 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simple login - just call onLogin to proceed to dashboard
-    onLogin();
+    setError('');
+    
+    // Validate credentials
+    if (email === 'admin@gmail.com' && password === 'Tom@123') {
+      onLogin();
+    } else {
+      setError('Invalid email or password. Please try again.');
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -35,6 +42,24 @@ const Login = ({ onLogin }) => {
           </div>
           
           <form className="auth-form" onSubmit={handleSubmit}>
+            {error && (
+              <div style={{
+                backgroundColor: '#fee',
+                color: '#c33',
+                padding: '0.75rem 1rem',
+                borderRadius: '6px',
+                marginBottom: '1rem',
+                fontSize: '0.875rem',
+                border: '1px solid #fcc',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <i className="fas fa-exclamation-circle"></i>
+                {error}
+              </div>
+            )}
+            
             <div className="form-group">
               <label htmlFor="email" className="form-label">Email Address</label>
               <input 
@@ -84,6 +109,18 @@ const Login = ({ onLogin }) => {
             </div>
           </form>
         </div>
+      </div>
+      
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
+        left: '0',
+        right: '0',
+        textAlign: 'center',
+        fontSize: '0.875rem',
+        color: '#ffffff'
+      }}>
+        © 2025 All Rights Reserved @ Infocom IT Solutions Pte Ltd
       </div>
     </div>
   );

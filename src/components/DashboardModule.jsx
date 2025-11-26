@@ -43,7 +43,37 @@ const DashboardModule = ({ setCurrentPage }) => {
       },
       {
         id: 7,
-        name: 'QA/QC Documents',
+        name: 'Anchoring',
+        status: 'Not Completed',
+        progress: '0%'
+      },
+      {
+        id: 8,
+        name: 'Hoisting',
+        status: 'Not Completed',
+        progress: '0%'
+      },
+      {
+        id: 9,
+        name: 'Positioning',
+        status: 'Not Completed',
+        progress: '0%'
+      },
+      {
+        id: 10,
+        name: 'M&E Hookup',
+        status: 'Not Completed',
+        progress: '0%'
+      },
+      {
+        id: 11,
+        name: 'Installation',
+        status: 'Not Completed',
+        progress: '0%'
+      },
+      {
+        id: 12,
+        name: 'Final QA QC',
         status: 'Not Completed',
         progress: '0%'
       }
@@ -57,6 +87,12 @@ const DashboardModule = ({ setCurrentPage }) => {
     const fabricationQAQCStatus = localStorage.getItem('fabricationQAQCStatus');
     const packagingStatus = localStorage.getItem('packagingStatus');
     const deliveryStatus = localStorage.getItem('deliveryStatus');
+    const anchoringStatus = localStorage.getItem('anchoringStatus');
+    const hoistingStatus = localStorage.getItem('hoistingStatus');
+    const positioningStatus = localStorage.getItem('positioningStatus');
+    const meHookupStatus = localStorage.getItem('meHookupStatus');
+    const installationStatus = localStorage.getItem('installationStatus');
+    const finalQAQCStatus = localStorage.getItem('finalQAQCStatus');
     
     setModuleData(prev => ({
       ...prev,
@@ -74,6 +110,24 @@ const DashboardModule = ({ setCurrentPage }) => {
           return { ...step, status: 'Completed', progress: '100%' };
         }
         if (step.name === 'Delivery' && deliveryStatus === 'Completed') {
+          return { ...step, status: 'Completed', progress: '100%' };
+        }
+        if (step.name === 'Anchoring' && anchoringStatus === 'Completed') {
+          return { ...step, status: 'Completed', progress: '100%' };
+        }
+        if (step.name === 'Hoisting' && hoistingStatus === 'Completed') {
+          return { ...step, status: 'Completed', progress: '100%' };
+        }
+        if (step.name === 'Positioning' && positioningStatus === 'Completed') {
+          return { ...step, status: 'Completed', progress: '100%' };
+        }
+        if (step.name === 'M&E Hookup' && meHookupStatus === 'Completed') {
+          return { ...step, status: 'Completed', progress: '100%' };
+        }
+        if (step.name === 'Installation' && installationStatus === 'Completed') {
+          return { ...step, status: 'Completed', progress: '100%' };
+        }
+        if (step.name === 'Final QA QC' && finalQAQCStatus === 'Completed') {
           return { ...step, status: 'Completed', progress: '100%' };
         }
         return step;
@@ -369,13 +423,15 @@ const DashboardModule = ({ setCurrentPage }) => {
                   marginRight: '2rem'
                 }}>
                   <span 
-                    className={step.status.includes('Completed') ? 'status-completed' : 'status-not-completed'}
                     style={{
                       display: 'inline-block',
                       padding: '0.5rem 1rem',
                       borderRadius: '20px',
                       fontSize: '0.9rem',
-                      fontWeight: '600'
+                      fontWeight: '600',
+                      backgroundColor: step.status === 'Completed' ? '#d4edda' : '#ffcdd2',
+                      color: step.status === 'Completed' ? '#155724' : '#d32f2f',
+                      border: step.status === 'Completed' ? '1px solid #c3e6cb' : '1px solid #f44336'
                     }}
                   >
                     {step.status}
@@ -401,6 +457,18 @@ const DashboardModule = ({ setCurrentPage }) => {
                         setCurrentPage('packaging');
                       } else if (step.name === 'Delivery') {
                         setCurrentPage('production-delivery');
+                      } else if (step.name === 'Anchoring') {
+                        setCurrentPage('anchoring');
+                      } else if (step.name === 'Hoisting') {
+                        setCurrentPage('hoisting');
+                      } else if (step.name === 'Positioning') {
+                        setCurrentPage('positioning');
+                      } else if (step.name === 'M&E Hookup') {
+                        setCurrentPage('me-hookup');
+                      } else if (step.name === 'Installation') {
+                        setCurrentPage('installation');
+                      } else if (step.name === 'Final QA QC') {
+                        setCurrentPage('final-qa-qc');
                       } else {
                         // For other steps, show a placeholder message
                         alert(`Update form for ${step.name} is coming soon!`);
