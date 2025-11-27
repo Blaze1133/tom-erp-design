@@ -590,8 +590,536 @@ const CreateCustomer = ({ isEdit = false, onSave, onCancel }) => {
               </div>
             )}
 
+            {activeTab === 'communication' && (
+              <div>
+                <div style={{ marginBottom: '2rem' }}>
+                  <h4 style={{ marginBottom: '1rem' }}>Messages</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <h4>Activities</h4>
+                    <h4>Files</h4>
+                    <h4>User_Notes</h4>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                      <label>VIEW</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>Default</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <button className="btn btn-primary">Email</button>
+                    <button className="btn btn-secondary">Attach</button>
+                    <button className="btn btn-secondary">Letter</button>
+                    <button className="btn btn-secondary">PDF</button>
+                    <button className="btn btn-secondary">Fax</button>
+                    <button className="btn btn-secondary">Refresh</button>
+                    <button className="btn btn-secondary">View History</button>
+                    <button className="btn btn-secondary">Customize View</button>
+                  </div>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>DATE</th>
+                        <th>AUTHOR</th>
+                        <th>MEMO/RECIPIENT</th>
+                        <th>SUBJECT</th>
+                        <th>TYPE</th>
+                        <th>FILES</th>
+                        <th>ATTACHMENTS</th>
+                        <th>INTERNAL ONLY</th>
+                        <th>REMOVE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'address' && (
+              <div>
+                <table className="detail-items-table">
+                  <thead>
+                    <tr>
+                      <th>DEFAULT SHIPPING</th>
+                      <th>DEFAULT BILLING</th>
+                      <th>RESIDENTIAL ADDRESS</th>
+                      <th>LABEL</th>
+                      <th>ADDRESS</th>
+                      <th>EDIT</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {addresses.map(addr => (
+                      <tr key={addr.id}>
+                        <td>{addr.defaultShipping ? 'Yes' : ''}</td>
+                        <td>{addr.defaultBilling ? 'Yes' : ''}</td>
+                        <td>{addr.residential ? 'Yes' : ''}</td>
+                        <td>{addr.label}</td>
+                        <td>{addr.address}</td>
+                        <td><button className="view-link">Edit</button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {activeTab === 'sales' && (
+              <div>
+                <div style={{ marginBottom: '2rem' }}>
+                  <h4>TERRITORY</h4>
+                </div>
+                <div style={{ marginBottom: '2rem' }}>
+                  <h4>Opportunities</h4>
+                  <h4>Transactions</h4>
+                  <h4>Items Purchased</h4>
+                  <h4>Upsell</h4>
+                  <h4>Projects</h4>
+                  <h4>Qualification</h4>
+                </div>
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <label>VIEW</label>
+                    <select className="form-control" style={{ width: '200px' }}>
+                      <option>Opportunity Default</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label>STATUS</label>
+                    <select className="form-control" style={{ width: '200px' }}>
+                      <option>- All -</option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                  <button className="btn btn-primary">New Enquiry</button>
+                  <button className="btn btn-secondary">Customize View</button>
+                </div>
+                <table className="detail-items-table">
+                  <thead>
+                    <tr>
+                      <th>EDIT</th>
+                      <th>DATE</th>
+                      <th>TITLE</th>
+                      <th>DOCUMENT NUMBER</th>
+                      <th>CUSTOMER</th>
+                      <th>ENQUIRY STATUS</th>
+                      <th>EXPECTED CLOSE</th>
+                      <th>PROJECTED TOTAL</th>
+                      <th>PROBABILITY</th>
+                      <th>FORECAST TYPE</th>
+                      <th>APPROVAL STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colSpan="11" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                        No records to show.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {activeTab === 'marketing' && (
+              <div>
+                <div className={`detail-section`}>
+                  <div className="section-header">
+                    <i className="fas fa-chevron-down"></i>
+                    <h3>Lead Information</h3>
+                  </div>
+                  <div className="section-body">
+                    <div className="detail-grid">
+                      <div className="detail-field">
+                        <label>LEAD SOURCE</label>
+                        <select className="form-control">
+                          <option></option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '2rem' }}>
+                  <h4 style={{ marginBottom: '1rem' }}>Online Forms</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                      <label>FORM</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>DATE SENT</label>
+                      <input type="date" className="form-control" style={{ width: '200px' }} />
+                    </div>
+                    <div>
+                      <label>CONTACT</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>LEAD SOURCE</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>CAMPAIGN EVENT</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                  </div>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>FORM</th>
+                        <th>DATE SENT</th>
+                        <th>CONTACT</th>
+                        <th>LEAD SOURCE</th>
+                        <th>CAMPAIGN EVENT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'financial' && (
+              <div>
+                <div className={`detail-section`}>
+                  <div className="section-header">
+                    <i className="fas fa-chevron-down"></i>
+                    <h3>Account Information</h3>
+                  </div>
+                  <div className="section-body">
+                    <div className="detail-grid">
+                      <div className="detail-field">
+                        <label>ACCOUNT</label>
+                        <select className="form-control">
+                          <option></option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>END DATE</label>
+                        <input type="date" className="form-control" />
+                      </div>
+                      <div className="detail-field">
+                        <label>PRIMARY CURRENCY</label>
+                        <select className="form-control">
+                          <option>SGD</option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>DEFAULT RECEIVABLES ACCOUNT</label>
+                        <select className="form-control">
+                          <option>Use System Preference</option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>REMINDER DAYS</label>
+                        <input type="number" className="form-control" />
+                      </div>
+                      <div className="detail-field">
+                        <label>TERMS</label>
+                        <select className="form-control">
+                          <option></option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>START DATE</label>
+                        <input type="date" className="form-control" />
+                      </div>
+                      <div className="detail-field">
+                        <label>PRICE LEVEL</label>
+                        <select className="form-control">
+                          <option></option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT LIMIT</label>
+                        <input type="text" className="form-control" placeholder="HOLD AUTO" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`detail-section`}>
+                  <div className="section-header">
+                    <i className="fas fa-chevron-down"></i>
+                    <h3>Tax Information</h3>
+                  </div>
+                  <div className="section-body">
+                    <div className="detail-grid">
+                      <div className="detail-field">
+                        <label>TAX REG. NUMBER</label>
+                        <input type="text" className="form-control" />
+                      </div>
+                      <div className="detail-field">
+                        <label>TAX ROUNDING METHOD</label>
+                        <select className="form-control">
+                          <option>Round Off</option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>RESALE NUMBER</label>
+                        <input type="text" className="form-control" />
+                      </div>
+                      <div className="detail-field">
+                        <label>TAX ROUNDING PRECISION</label>
+                        <select className="form-control">
+                          <option>0.01 and Below</option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>TAX ITEM</label>
+                        <select className="form-control">
+                          <option></option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`detail-section`}>
+                  <div className="section-header">
+                    <i className="fas fa-chevron-down"></i>
+                    <h3>Balance Information</h3>
+                  </div>
+                  <div className="section-body">
+                    <div className="detail-grid">
+                      <div className="detail-field">
+                        <label>BALANCE</label>
+                        <input type="text" className="form-control" value="0.00" readOnly />
+                      </div>
+                      <div className="detail-field">
+                        <label>OVERDUE BALANCE</label>
+                        <input type="text" className="form-control" value="0.00" readOnly />
+                      </div>
+                      <div className="detail-field">
+                        <label>DAYS OVERDUE</label>
+                        <input type="text" className="form-control" readOnly />
+                      </div>
+                      <div className="detail-field">
+                        <label>UNBILLED BALANCE</label>
+                        <input type="text" className="form-control" value="0.00" readOnly />
+                      </div>
+                      <div className="detail-field">
+                        <label>UNBILLED ORDERS</label>
+                        <input type="text" className="form-control" value="0.00" readOnly />
+                      </div>
+                      <div className="detail-field">
+                        <label>DEPOSIT BALANCE</label>
+                        <input type="text" className="form-control" value="0.00" readOnly />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '2rem' }}>
+                  <h4>Currencies</h4>
+                  <h4>Credit Cards</h4>
+                  <h4>Group Pricing</h4>
+                  <h4>Item Pricing</h4>
+                  <h4>Time Tracking</h4>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>CURRENCY</th>
+                        <th>BALANCE</th>
+                        <th>DEPOSIT BALANCE</th>
+                        <th>OVERDUE BALANCE</th>
+                        <th>UNBILLED ORDERS</th>
+                        <th>FORMAT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>SGD</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>0.00</td>
+                        <td>Symbol: S$ Symbol Placement: Before Number</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'preferences' && (
+              <div>
+                <div className="detail-grid">
+                  <div className="detail-field">
+                    <label>NUMBER FORMAT</label>
+                    <select className="form-control">
+                      <option></option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>SHIP COMPLETE</label>
+                    <select className="form-control">
+                      <option></option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>NEGATIVE NUMBER FORMAT</label>
+                    <select className="form-control">
+                      <option></option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>SHIPPING CARRIER</label>
+                    <select className="form-control">
+                      <option>More</option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>EMAIL PREFERENCE</label>
+                    <select className="form-control">
+                      <option>Default</option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>SHIPPING METHOD</label>
+                    <select className="form-control">
+                      <option></option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>PRINT ON CHECK AS</label>
+                    <input type="text" className="form-control" />
+                  </div>
+                  <div className="detail-field">
+                    <label>ALCOHOL RECIPIENT TYPE</label>
+                    <select className="form-control">
+                      <option>Consumer</option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{ marginTop: '2rem' }}>
+                  <h4>SEND TRANSACTIONS VIA EMAIL</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                    <label className="checkbox-label">
+                      <input type="checkbox" />
+                      <span>EMAIL</span>
+                    </label>
+                    <label className="checkbox-label">
+                      <input type="checkbox" />
+                      <span>PRINT</span>
+                    </label>
+                    <label className="checkbox-label">
+                      <input type="checkbox" />
+                      <span>FAX</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'system-info' && (
+              <div>
+                <div className="detail-grid">
+                  <div className="detail-field">
+                    <label>DATE CREATED</label>
+                    <input type="text" className="form-control" value={new Date().toLocaleString()} readOnly />
+                  </div>
+                  <div className="detail-field">
+                    <label>INACTIVE</label>
+                    <input type="checkbox" />
+                  </div>
+                </div>
+                <div style={{ marginTop: '2rem' }}>
+                  <h4>System Notes</h4>
+                  <h4>Active Workflows</h4>
+                  <h4>Workflow History</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                      <label>VIEW</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>Default</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>FIELD</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button className="btn btn-secondary">Customize View</button>
+                  <table className="detail-items-table" style={{ marginTop: '1rem' }}>
+                    <thead>
+                      <tr>
+                        <th>DATE</th>
+                        <th>SET BY</th>
+                        <th>CONTEXT</th>
+                        <th>TYPE</th>
+                        <th>FIELD</th>
+                        <th>OLD VALUE</th>
+                        <th>NEW VALUE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'subsidiaries' && (
+              <div>
+                <table className="detail-items-table">
+                  <thead>
+                    <tr>
+                      <th>SUBSIDIARY</th>
+                      <th>PRIMARY</th>
+                      <th>INACTIVE</th>
+                      <th>BALANCE</th>
+                      <th>UNBILLED ORDERS</th>
+                      <th>DEPOSIT BALANCE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{formData.primarySubsidiary}</td>
+                      <td>Yes</td>
+                      <td></td>
+                      <td>0.00 (SGD)</td>
+                      <td>0.00 (SGD)</td>
+                      <td>0.00 (SGD)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
             {/* Other tabs with placeholder content */}
-            {['communication', 'address', 'sales', 'marketing', 'financial', 'preferences', 'system-info', 'custom', 'access', 'subsidiaries'].includes(activeTab) && (
+            {['custom', 'access'].includes(activeTab) && (
               <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
                 <p>Content for {activeTab} tab will be displayed here.</p>
               </div>

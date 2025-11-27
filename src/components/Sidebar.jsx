@@ -133,15 +133,19 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const handleProductionHover = () => {
     if (productionItemRef.current) {
       const rect = productionItemRef.current.getBoundingClientRect();
-      let topPosition = rect.top;
-      
-      // Calculate submenu height (approximate based on number of items)
-      const submenuHeight = 700; // Approximate height for production submenu with many items
       const viewportHeight = window.innerHeight;
       
-      // If submenu would overflow bottom, adjust position
-      if (topPosition + submenuHeight > viewportHeight) {
-        topPosition = Math.max(20, viewportHeight - submenuHeight - 20);
+      // Calculate submenu height (approximate based on number of items)
+      const estimatedSubmenuHeight = 550; // Approximate height for production submenu
+      const spaceBelow = viewportHeight - rect.top;
+      
+      // If submenu would extend beyond viewport, position it higher
+      let topPosition = rect.top;
+      if (spaceBelow < estimatedSubmenuHeight) {
+        // Position submenu so bottom aligns with viewport bottom with some padding
+        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
+        // But don't go above the top of viewport
+        topPosition = Math.max(20, topPosition);
       }
       
       setProductionSubmenuTop(topPosition);
@@ -288,43 +292,27 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const projectManagementSubItems = [
     { 
-      id: 'pm-projects',
-      label: 'Projects',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-pm-projects', label: 'View Projects' },
-        { id: 'create-pm-project', label: 'New Project' }
-      ]
+      id: 'view-project-masters',
+      label: 'Project Masters',
+      hideArrow: true
     },
     { 
-      id: 'pm-tasks',
+      id: 'view-tasks',
       label: 'Tasks',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-pm-tasks', label: 'View Tasks' },
-        { id: 'create-pm-task', label: 'New Task' }
-      ]
+      hideArrow: true
     },
     { 
-      id: 'pm-milestones',
+      id: 'view-milestones',
       label: 'Milestones',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-pm-milestones', label: 'View Milestones' },
-        { id: 'create-pm-milestone', label: 'New Milestone' }
-      ]
+      hideArrow: true
     },
     { 
-      id: 'pm-resources',
+      id: 'view-resources',
       label: 'Resources',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-pm-resources', label: 'View Resources' },
-        { id: 'allocate-pm-resource', label: 'Allocate Resource' }
-      ]
+      hideArrow: true
     },
-    { id: 'pm-gantt-chart', label: 'Gantt Chart', hideArrow: true },
-    { id: 'pm-reports', label: 'Reports & Analytics', hideArrow: true }
+    { id: 'gantt-chart', label: 'Gantt Chart', hideArrow: true },
+    { id: 'project-reports-analytics', label: 'Reports & Analytics', hideArrow: true }
   ];
 
   const salesSubItems = [

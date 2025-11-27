@@ -346,6 +346,59 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
               </div>
             )}
 
+            {activeTab === 'communication' && (
+              <div>
+                <div style={{ marginBottom: '2rem' }}>
+                  <h4 style={{ marginBottom: '1rem' }}>Messages</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <h4>Activities</h4>
+                    <h4>Files</h4>
+                    <h4>User_Notes</h4>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                      <label>VIEW</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>Default</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <button className="btn btn-primary">Email</button>
+                    <button className="btn btn-secondary">Attach</button>
+                    <button className="btn btn-secondary">Letter</button>
+                    <button className="btn btn-secondary">PDF</button>
+                    <button className="btn btn-secondary">Fax</button>
+                    <button className="btn btn-secondary">Refresh</button>
+                    <button className="btn btn-secondary">View History</button>
+                    <button className="btn btn-secondary">Customize View</button>
+                  </div>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>DATE</th>
+                        <th>AUTHOR</th>
+                        <th>MEMO/RECIPIENT</th>
+                        <th>SUBJECT</th>
+                        <th>TYPE</th>
+                        <th>FILES</th>
+                        <th>ATTACHMENTS</th>
+                        <th>INTERNAL ONLY</th>
+                        <th>REMOVE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'address' && (
               <div>
                 <table className="detail-items-table">
@@ -686,8 +739,135 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
               </div>
             )}
 
+            {activeTab === 'marketing' && (
+              <div>
+                <div className={`detail-section`}>
+                  <div className="section-header">
+                    <i className="fas fa-chevron-down"></i>
+                    <h3>Lead Information</h3>
+                  </div>
+                  <div className="section-body">
+                    <div className="detail-grid">
+                      <div className="detail-field">
+                        <label>LEAD SOURCE</label>
+                        <div className="field-value">-</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '2rem' }}>
+                  <h4 style={{ marginBottom: '1rem' }}>Online Forms</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                    <div>
+                      <label>FORM</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>DATE SENT</label>
+                      <input type="date" className="form-control" style={{ width: '200px' }} />
+                    </div>
+                    <div>
+                      <label>CONTACT</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>LEAD SOURCE</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>CAMPAIGN EVENT</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>&lt;Type then tab&gt;</option>
+                      </select>
+                    </div>
+                  </div>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>FORM</th>
+                        <th>DATE SENT</th>
+                        <th>CONTACT</th>
+                        <th>LEAD SOURCE</th>
+                        <th>CAMPAIGN EVENT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'preferences' && (
+              <div>
+                <div className="detail-grid">
+                  <div className="detail-field">
+                    <label>NUMBER FORMAT</label>
+                    <div className="field-value">-</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>SHIP COMPLETE</label>
+                    <div className="field-value">-</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>NEGATIVE NUMBER FORMAT</label>
+                    <div className="field-value">-</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>SHIPPING CARRIER</label>
+                    <div className="field-value">More</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>EMAIL PREFERENCE</label>
+                    <div className="field-value">Default</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>SHIPPING METHOD</label>
+                    <div className="field-value">-</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>PRINT ON CHECK AS</label>
+                    <div className="field-value">-</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>ALCOHOL RECIPIENT TYPE</label>
+                    <div className="field-value">Consumer</div>
+                  </div>
+                </div>
+                <div style={{ marginTop: '2rem' }}>
+                  <h4>SEND TRANSACTIONS VIA EMAIL</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                    <label className="checkbox-label">
+                      <input type="checkbox" />
+                      <span>EMAIL</span>
+                    </label>
+                    <label className="checkbox-label">
+                      <input type="checkbox" />
+                      <span>PRINT</span>
+                    </label>
+                    <label className="checkbox-label">
+                      <input type="checkbox" />
+                      <span>FAX</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Other tabs with placeholder content */}
-            {['communication', 'marketing', 'preferences', 'custom', 'access'].includes(activeTab) && (
+            {['custom', 'access'].includes(activeTab) && (
               <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
                 <p>Content for {activeTab} tab will be displayed here.</p>
               </div>

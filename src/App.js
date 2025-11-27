@@ -329,6 +329,15 @@ import CreateBankMaster from './components/CreateBankMaster';
 import ViewProjectMasters from './components/ViewProjectMasters';
 import ViewProjectMasterDetail from './components/ViewProjectMasterDetail';
 import CreateProjectMaster from './components/CreateProjectMaster';
+import ViewTasks from './components/ViewTasks';
+import ViewTaskDetail from './components/ViewTaskDetail';
+import CreateTask from './components/CreateTask';
+import ViewMilestones from './components/ViewMilestones';
+import CreateMilestone from './components/CreateMilestone';
+import ViewResources from './components/ViewResources';
+import CreateResource from './components/CreateResource';
+import GanttChart from './components/GanttChart';
+import ProjectReportsAnalytics from './components/ProjectReportsAnalytics';
 import ViewSiteLocations from './components/ViewSiteLocations';
 import ViewSiteLocationDetail from './components/ViewSiteLocationDetail';
 import CreateSiteLocation from './components/CreateSiteLocation';
@@ -547,6 +556,100 @@ function App() {
         return <ViewProjectDetail setCurrentPage={setCurrentPage} />;
       case 'edit-project':
         return <CreateProject setCurrentPage={setCurrentPage} />;
+      
+      // Project Masters (Project Management Module)
+      case 'view-project-masters':
+        return <ViewProjectMasters 
+          onNewClick={() => setCurrentPage('create-project-master')} 
+          onViewClick={() => setCurrentPage('view-project-master-detail')}
+          onEditClick={() => setCurrentPage('edit-project-master')}
+        />;
+      case 'create-project-master':
+        return <CreateProjectMaster 
+          onSave={() => setCurrentPage('view-project-masters')}
+          onCancel={() => setCurrentPage('view-project-masters')}
+        />;
+      case 'view-project-master-detail':
+        return <ViewProjectMasterDetail 
+          onBack={() => setCurrentPage('view-project-masters')} 
+          onEdit={() => setCurrentPage('edit-project-master')}
+        />;
+      case 'edit-project-master':
+        return <CreateProjectMaster 
+          isEdit={true}
+          onSave={() => setCurrentPage('view-project-masters')}
+          onCancel={() => setCurrentPage('view-project-master-detail')}
+        />;
+      
+      // Tasks (Project Management Module)
+      case 'view-tasks':
+        return <ViewTasks 
+          onNewClick={() => setCurrentPage('create-task')} 
+          onViewClick={() => setCurrentPage('view-task-detail')}
+          onEditClick={() => setCurrentPage('edit-task')}
+        />;
+      case 'create-task':
+        return <CreateTask 
+          onSave={() => setCurrentPage('view-tasks')}
+          onCancel={() => setCurrentPage('view-tasks')}
+        />;
+      case 'view-task-detail':
+        return <ViewTaskDetail 
+          onBack={() => setCurrentPage('view-tasks')} 
+          onEdit={() => setCurrentPage('edit-task')}
+        />;
+      case 'edit-task':
+        return <CreateTask 
+          isEdit={true}
+          onSave={() => setCurrentPage('view-tasks')}
+          onCancel={() => setCurrentPage('view-task-detail')}
+        />;
+      
+      // Milestones (Project Management Module)
+      case 'view-milestones':
+        return <ViewMilestones 
+          onNewClick={() => setCurrentPage('create-milestone')} 
+          onViewClick={() => setCurrentPage('view-milestone-detail')}
+          onEditClick={() => setCurrentPage('edit-milestone')}
+        />;
+      case 'create-milestone':
+        return <CreateMilestone 
+          onSave={() => setCurrentPage('view-milestones')}
+          onCancel={() => setCurrentPage('view-milestones')}
+        />;
+      case 'edit-milestone':
+        return <CreateMilestone 
+          isEdit={true}
+          onSave={() => setCurrentPage('view-milestones')}
+          onCancel={() => setCurrentPage('view-milestones')}
+        />;
+      
+      // Resources (Project Management Module)
+      case 'view-resources':
+        return <ViewResources 
+          onNewClick={() => setCurrentPage('create-resource')} 
+          onViewClick={() => setCurrentPage('view-resource-detail')}
+          onEditClick={() => setCurrentPage('edit-resource')}
+        />;
+      case 'create-resource':
+        return <CreateResource 
+          onSave={() => setCurrentPage('view-resources')}
+          onCancel={() => setCurrentPage('view-resources')}
+        />;
+      case 'edit-resource':
+        return <CreateResource 
+          isEdit={true}
+          onSave={() => setCurrentPage('view-resources')}
+          onCancel={() => setCurrentPage('view-resources')}
+        />;
+      
+      // Gantt Chart (Project Management Module)
+      case 'gantt-chart':
+        return <GanttChart />;
+      
+      // Reports & Analytics (Project Management Module)
+      case 'project-reports-analytics':
+        return <ProjectReportsAnalytics />;
       case 'bill-purchase-orders':
         return <BillPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'view-bill-purchase-order-detail':
