@@ -321,6 +321,9 @@ import CreateCustomer from './components/CreateCustomer';
 import ViewVendors from './components/ViewVendors';
 import ViewVendorDetail from './components/ViewVendorDetail';
 import CreateVendor from './components/CreateVendor';
+import ViewBankMasters from './components/ViewBankMasters';
+import ViewBankMasterDetail from './components/ViewBankMasterDetail';
+import CreateBankMaster from './components/CreateBankMaster';
 
 // Production Module Components
 import ViewProjectMasters from './components/ViewProjectMasters';
@@ -616,6 +619,21 @@ function App() {
         return <ViewTransferOrderDetail setCurrentPage={setCurrentPage} />;
       case 'edit-transfer-order':
         return <EditTransferOrder setCurrentPage={setCurrentPage} />;
+      case 'bank-master':
+        return <CreateBankMaster onBack={() => setCurrentPage('view-bank-masters')} />;
+      case 'view-bank-masters':
+        return <ViewBankMasters 
+          onNewClick={() => setCurrentPage('bank-master')} 
+          onViewClick={() => setCurrentPage('view-bank-master-detail')}
+          onEditClick={() => setCurrentPage('edit-bank-master')}
+        />;
+      case 'view-bank-master-detail':
+        return <ViewBankMasterDetail 
+          onBack={() => setCurrentPage('view-bank-masters')} 
+          onEdit={() => setCurrentPage('edit-bank-master')}
+        />;
+      case 'edit-bank-master':
+        return <CreateBankMaster onBack={() => setCurrentPage('view-bank-masters')} />;
       case 'write-checks':
         return <WriteChecks setCurrentPage={setCurrentPage} />;
       case 'view-checks':
@@ -1198,6 +1216,8 @@ function App() {
       case 'production-me-services':
         return <MEServicesWorkflow />;
       case 'production-time-tracking':
+        return <ModuleWiseTimeTracking />;
+      case 'module-wise-time-tracking':
         return <ModuleWiseTimeTracking />;
       case 'production-workshop-dashboard':
         return <WorkshopDashboardWrapper />;
@@ -1802,6 +1822,17 @@ function App() {
       />
       <div className="main-content">
         {renderPage()}
+        <div style={{
+          marginTop: '3rem',
+          paddingTop: '1.5rem',
+          paddingBottom: '1rem',
+          borderTop: '1px solid #e5e7eb',
+          textAlign: 'center',
+          fontSize: '0.875rem',
+          color: '#6b7280'
+        }}>
+          © 2025 All Rights Reserved @ Infocom IT Solutions Pte Ltd
+        </div>
       </div>
     </div>
   );

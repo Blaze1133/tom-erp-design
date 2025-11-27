@@ -532,6 +532,14 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const bankSubItems = [
     { 
+      id: 'bank-master',
+      label: 'Bank Master',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-bank-masters', label: 'List' }
+      ]
+    },
+    { 
       id: 'write-checks',
       label: 'Write Checks',
       hasSubmenu: true,
@@ -834,17 +842,25 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       ]
     },
     { id: 'status-all-modules', label: 'Status All Modules', hideArrow: true },
-    { id: 'frame-fabrication', label: 'Frame Fabrication', hideArrow: true },
-    { id: 'testing-alignment', label: 'Testing & Alignment', hideArrow: true },
-    { id: 'fabrication-qa-qc', label: 'Fabrication QA & QC', hideArrow: true },
-    { id: 'packaging', label: 'Packaging', hideArrow: true },
-    { id: 'production-delivery', label: 'Delivery', hideArrow: true },
-    { id: 'anchoring', label: 'Anchoring', hideArrow: true },
-    { id: 'hoisting', label: 'Hoisting', hideArrow: true },
-    { id: 'positioning', label: 'Positioning', hideArrow: true },
-    { id: 'me-hookup', label: 'M&E Hookup', hideArrow: true },
-    { id: 'installation', label: 'Installation', hideArrow: true },
-    { id: 'final-qa-qc', label: 'Final QA/QC', hideArrow: true },
+    { 
+      id: 'production-stages',
+      label: 'Production Stages',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'frame-fabrication', label: 'Fabrication' },
+        { id: 'production-me-services', label: 'M&E Assembly' },
+        { id: 'testing-alignment', label: 'Testing & Alignment' },
+        { id: 'fabrication-qa-qc', label: 'Fabrication QA & QC' },
+        { id: 'packaging', label: 'Packaging' },
+        { id: 'production-delivery', label: 'Delivery' },
+        { id: 'anchoring', label: 'Anchoring' },
+        { id: 'hoisting', label: 'Hoisting' },
+        { id: 'positioning', label: 'Positioning' },
+        { id: 'me-hookup', label: 'M&E Hookup' },
+        { id: 'installation', label: 'Installation' },
+        { id: 'final-qa-qc', label: 'Final QA QC' }
+      ]
+    },
     { 
       id: 'production-master-tables',
       label: 'Master Tables',
@@ -864,7 +880,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         { id: 'production-project-documents', label: 'Project Documents' }
       ]
     },
-    { id: 'production-me-services', label: 'M&E Services', hideArrow: true },
     { id: 'production-time-tracking', label: 'Module Wise Time Tracking', hideArrow: true }
   ];
 

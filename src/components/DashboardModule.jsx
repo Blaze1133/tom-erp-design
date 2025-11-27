@@ -449,6 +449,8 @@ const DashboardModule = ({ setCurrentPage }) => {
                     onClick={() => {
                       if (step.name === 'Fabrication') {
                         setCurrentPage('frame-fabrication');
+                      } else if (step.name === 'M&E Assembly') {
+                        setCurrentPage('production-me-services');
                       } else if (step.name === 'Testing & Alignment') {
                         setCurrentPage('testing-alignment');
                       } else if (step.name === 'Fabrication QA & QC') {
