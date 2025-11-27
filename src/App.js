@@ -356,6 +356,15 @@ import Installation from './components/Installation';
 import FinalQAQC from './components/FinalQAQC';
 import ProductionDashboardOverall from './components/ProductionDashboardOverall';
 
+// CRM Module Components
+import ViewLeads from './components/ViewLeads';
+import CreateLead from './components/CreateLead';
+import ViewOpportunities from './components/ViewOpportunities';
+import CreateOpportunity from './components/CreateOpportunity';
+import ViewCRMQuotations from './components/ViewCRMQuotations';
+import CreateCRMQuotation from './components/CreateCRMQuotation';
+import ViewCRMProjects from './components/ViewCRMProjects';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -634,6 +643,39 @@ function App() {
         />;
       case 'edit-bank-master':
         return <CreateBankMaster onBack={() => setCurrentPage('view-bank-masters')} />;
+      
+      // CRM Module Cases
+      case 'view-leads':
+        return <ViewLeads 
+          onNewClick={() => setCurrentPage('create-lead')} 
+          onViewClick={() => setCurrentPage('view-lead-detail')}
+          onEditClick={() => setCurrentPage('edit-lead')}
+        />;
+      case 'create-lead':
+        return <CreateLead onBack={() => setCurrentPage('view-leads')} />;
+      case 'view-opportunities':
+        return <ViewOpportunities 
+          onNewClick={() => setCurrentPage('create-opportunity')} 
+          onViewClick={() => setCurrentPage('view-opportunity-detail')}
+          onEditClick={() => setCurrentPage('edit-opportunity')}
+        />;
+      case 'create-opportunity':
+        return <CreateOpportunity onBack={() => setCurrentPage('view-opportunities')} />;
+      case 'view-crm-quotations':
+        return <ViewCRMQuotations 
+          onNewClick={() => setCurrentPage('create-crm-quotation')} 
+          onViewClick={() => setCurrentPage('view-crm-quotation-detail')}
+          onEditClick={() => setCurrentPage('edit-crm-quotation')}
+        />;
+      case 'create-crm-quotation':
+        return <CreateCRMQuotation onBack={() => setCurrentPage('view-crm-quotations')} />;
+      case 'view-crm-projects':
+        return <ViewCRMProjects 
+          onNewClick={() => setCurrentPage('create-crm-project')} 
+          onViewClick={() => setCurrentPage('view-crm-project-detail')}
+          onEditClick={() => setCurrentPage('edit-crm-project')}
+        />;
+      
       case 'write-checks':
         return <WriteChecks setCurrentPage={setCurrentPage} />;
       case 'view-checks':

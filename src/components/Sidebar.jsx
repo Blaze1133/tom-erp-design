@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 
 const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const salesItemRef = useRef(null);
+  const crmItemRef = useRef(null);
+  const projectManagementItemRef = useRef(null);
   const purchasesItemRef = useRef(null);
   const payablesItemRef = useRef(null);
   const inventoryItemRef = useRef(null);
@@ -17,6 +19,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const mastersItemRef = useRef(null);
   const hrItemRef = useRef(null);
   const [submenuTop, setSubmenuTop] = useState(100);
+  const [crmSubmenuTop, setCrmSubmenuTop] = useState(100);
+  const [projectManagementSubmenuTop, setProjectManagementSubmenuTop] = useState(100);
   const [mastersSubmenuTop, setMastersSubmenuTop] = useState(100);
   const [purchasesSubmenuTop, setPurchasesSubmenuTop] = useState(100);
   const [payablesSubmenuTop, setPayablesSubmenuTop] = useState(100);
@@ -37,6 +41,20 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     if (salesItemRef.current) {
       const rect = salesItemRef.current.getBoundingClientRect();
       setSubmenuTop(rect.top);
+    }
+  };
+
+  const handleCrmHover = () => {
+    if (crmItemRef.current) {
+      const rect = crmItemRef.current.getBoundingClientRect();
+      setCrmSubmenuTop(rect.top);
+    }
+  };
+
+  const handleProjectManagementHover = () => {
+    if (projectManagementItemRef.current) {
+      const rect = projectManagementItemRef.current.getBoundingClientRect();
+      setProjectManagementSubmenuTop(rect.top);
     }
   };
 
@@ -216,7 +234,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       const viewportHeight = window.innerHeight;
       
       // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 150; // Approximate height for Masters submenu (3 items)
+      const estimatedSubmenuHeight = 350; // Approximate height for Masters submenu (7 items)
       const spaceBelow = viewportHeight - rect.top;
       
       // If submenu would extend beyond viewport, position it higher
@@ -261,6 +279,53 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       [itemId]: rect.top
     }));
   };
+
+  const crmSubItems = [
+    { id: 'view-leads', label: 'Lead Management', hideArrow: true },
+    { id: 'view-opportunities', label: 'Opportunity Management', hideArrow: true },
+    { id: 'view-crm-quotations', label: 'Quotation Management', hideArrow: true }
+  ];
+
+  const projectManagementSubItems = [
+    { 
+      id: 'pm-projects',
+      label: 'Projects',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-pm-projects', label: 'View Projects' },
+        { id: 'create-pm-project', label: 'New Project' }
+      ]
+    },
+    { 
+      id: 'pm-tasks',
+      label: 'Tasks',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-pm-tasks', label: 'View Tasks' },
+        { id: 'create-pm-task', label: 'New Task' }
+      ]
+    },
+    { 
+      id: 'pm-milestones',
+      label: 'Milestones',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-pm-milestones', label: 'View Milestones' },
+        { id: 'create-pm-milestone', label: 'New Milestone' }
+      ]
+    },
+    { 
+      id: 'pm-resources',
+      label: 'Resources',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-pm-resources', label: 'View Resources' },
+        { id: 'allocate-pm-resource', label: 'Allocate Resource' }
+      ]
+    },
+    { id: 'pm-gantt-chart', label: 'Gantt Chart', hideArrow: true },
+    { id: 'pm-reports', label: 'Reports & Analytics', hideArrow: true }
+  ];
 
   const salesSubItems = [
     { 
@@ -532,14 +597,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const bankSubItems = [
     { 
-      id: 'bank-master',
-      label: 'Bank Master',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-bank-masters', label: 'List' }
-      ]
-    },
-    { 
       id: 'write-checks',
       label: 'Write Checks',
       hasSubmenu: true,
@@ -763,11 +820,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       submenu: [
         { id: 'setup-company-information', label: 'Company Information' },
         { id: 'setup-enable-features', label: 'Enable Features' },
-        { id: 'setup-subsidiary-settings-manager', label: 'Subsidiary Settings Manager' },
-        { id: 'setup-subsidiaries', label: 'Subsidiaries' },
-        { id: 'setup-department', label: 'Department' },
-        { id: 'setup-location', label: 'Location' },
-        { id: 'setup-classes', label: 'Classes' }
+        { id: 'setup-subsidiary-settings-manager', label: 'Subsidiary Settings Manager' }
       ]
     },
     {
@@ -826,7 +879,12 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const mastersSubItems = [
     { id: 'view-customer-masters', label: 'Customer Masters', hideArrow: true },
-    { id: 'view-vendor-masters', label: 'Vendor Masters', hideArrow: true }
+    { id: 'view-vendor-masters', label: 'Vendor Masters', hideArrow: true },
+    { id: 'view-bank-masters', label: 'Bank Masters', hideArrow: true },
+    { id: 'setup-subsidiaries', label: 'Subsidiary', hideArrow: true },
+    { id: 'setup-department', label: 'Department', hideArrow: true },
+    { id: 'setup-location', label: 'Location', hideArrow: true },
+    { id: 'setup-classes', label: 'Classes', hideArrow: true }
   ];
 
   const productionSubItems = [
@@ -914,6 +972,58 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           </div>
         ))}
         
+        {/* CRM Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleCrmHover}>
+          <div
+            ref={crmItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-users"></i>
+            <span>CRM</span>
+          </div>
+          <div className="submenu" style={{ top: `${crmSubmenuTop}px` }}>
+            {crmSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `crm-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`crm-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentPage(nestedItem.id);
+                          }}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Sales Menu with Submenu */}
         <div className="nav-item-parent" onMouseEnter={handleSalesHover}>
           <div
@@ -958,6 +1068,58 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                     onClick={() => setCurrentPage(subItem.id)}
                   >
                     <i className="fas fa-chevron-right"></i>
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Project Management Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleProjectManagementHover}>
+          <div
+            ref={projectManagementItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-tasks"></i>
+            <span>Project Management</span>
+          </div>
+          <div className="submenu" style={{ top: `${projectManagementSubmenuTop}px` }}>
+            {projectManagementSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `pm-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`pm-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentPage(nestedItem.id);
+                          }}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
                     <span>{subItem.label}</span>
                   </div>
                 )}
