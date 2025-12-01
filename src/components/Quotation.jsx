@@ -2,21 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 
 const Quotation = () => {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      item: 'Steel Beams (Grade A)',
-      quantity: 10,
-      units: 'Pieces',
-      description: '',
-      priceLevel: 'Standard',
-      rate: 120.00,
-      taxCode: 'GST 10%',
-      class: '',
-      costEstimateType: 'Fixed',
-      estimatedExtendedCost: 0.00
-    },
-  ]);
+  const [items, setItems] = useState([]);
 
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   
@@ -26,6 +12,11 @@ const Quotation = () => {
   const [showAddCustomer, setShowAddCustomer] = useState(false);
   const [isHoveringCustomer, setIsHoveringCustomer] = useState(false);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+
+  // Row actions states
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
   const [formData, setFormData] = useState({
     // Primary Information
@@ -112,7 +103,9 @@ const Quotation = () => {
       description: '',
       priceLevel: 'Standard',
       rate: 0,
+      amount: 0,
       taxCode: 'GST 10%',
+      grossAmount: 0,
       class: '',
       costEstimateType: 'Fixed',
       estimatedExtendedCost: 0.00
@@ -130,6 +123,79 @@ const Quotation = () => {
       item.id === id ? { ...item, [field]: value } : item
     ));
   };
+
+  const handleInsertAbove = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 1,
+      units: 'Pieces',
+      description: '',
+      priceLevel: 'Standard',
+      rate: 0,
+      amount: 0,
+      taxCode: 'GST 10%',
+      grossAmount: 0,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0.00
+    };
+    const newItems = [...items.slice(0, index), newItem, ...items.slice(index)];
+    setItems(newItems);
+  };
+
+  const handleInsertBelow = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 1,
+      units: 'Pieces',
+      description: '',
+      priceLevel: 'Standard',
+      rate: 0,
+      amount: 0,
+      taxCode: 'GST 10%',
+      grossAmount: 0,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0.00
+    };
+    const newItems = [...items.slice(0, index + 1), newItem, ...items.slice(index + 1)];
+    setItems(newItems);
+  };
+
+  const handleDeleteRow = (index) => {
+    if (window.confirm('Are you sure you want to delete this row?')) {
+      setItems(items.filter((_, i) => i !== index));
+      showToast('Row deleted successfully', 'success');
+    }
+  };
+
+  const handleMenuToggle = (index, event) => {
+    event.stopPropagation();
+    if (activeMenu === index) {
+      setActiveMenu(null);
+    } else {
+      const button = event.currentTarget;
+      const rect = button.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 5,
+        left: rect.left + (rect.width / 2) - 80
+      });
+      setActiveMenu(index);
+    }
+  };
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveMenu(null);
+    };
+    if (activeMenu !== null) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeMenu]);
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -644,23 +710,73 @@ const Quotation = () => {
             <table className="detail-items-table">
               <thead>
                 <tr>
-                  <th style={{width: '10%'}}>Item</th>
-                  <th style={{width: '7%'}}>Qty</th>
-                  <th style={{width: '6%'}}>Units</th>
-                  <th style={{width: '12%'}}>Desc</th>
-                  <th style={{width: '8%'}}>Price Level</th>
-                  <th style={{width: '7%'}}>Rate</th>
-                  <th style={{width: '7%'}}>Amt</th>
-                  <th style={{width: '8%'}}>Tax Code</th>
-                  <th style={{width: '8%'}}>Gross Amt</th>
-                  <th style={{width: '9%'}}>Class</th>
-                  <th style={{width: '10%'}}>Cost Estimate Type</th>
-                  <th style={{width: '8%'}}>Est. Extended Cost</th>
+                  <th style={{minWidth: '60px', textAlign: 'center'}}>Actions</th>
+                  <th style={{minWidth: '200px'}}>Item</th>
+                  <th style={{minWidth: '100px'}}>Qty</th>
+                  <th style={{minWidth: '120px'}}>Units</th>
+                  <th style={{minWidth: '250px'}}>Desc</th>
+                  <th style={{minWidth: '150px'}}>Price Level</th>
+                  <th style={{minWidth: '120px'}}>Rate</th>
+                  <th style={{minWidth: '120px'}}>Amt</th>
+                  <th style={{minWidth: '150px'}}>Tax Code</th>
+                  <th style={{minWidth: '120px'}}>Gross Amt</th>
+                  <th style={{minWidth: '180px'}}>Class</th>
+                  <th style={{minWidth: '180px'}}>Cost Estimate Type</th>
+                  <th style={{minWidth: '180px'}}>Est. Extended Cost</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map((item) => (
-                  <tr key={item.id}>
+                {items.map((item, index) => (
+                  <tr 
+                    key={item.id}
+                    className="table-row-with-actions"
+                    onMouseEnter={() => setHoveredRow(index)}
+                    onMouseLeave={() => setHoveredRow(null)}
+                  >
+                    <td style={{ textAlign: 'center', position: 'relative' }}>
+                      {hoveredRow === index && (
+                        <button 
+                          className="row-actions-btn" 
+                          title="Row Actions"
+                          onClick={(e) => handleMenuToggle(index, e)}
+                        >
+                          <i className="fas fa-ellipsis-v"></i>
+                        </button>
+                      )}
+                      {activeMenu === index && (
+                        <div 
+                          className="row-actions-menu" 
+                          style={{ 
+                            top: `${menuPosition.top}px`, 
+                            left: `${menuPosition.left}px`,
+                            display: 'block'
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <button onClick={() => {
+                            handleInsertAbove(index);
+                            setActiveMenu(null);
+                          }}>
+                            <i className="fas fa-arrow-up"></i>
+                            Insert Above
+                          </button>
+                          <button onClick={() => {
+                            handleInsertBelow(index);
+                            setActiveMenu(null);
+                          }}>
+                            <i className="fas fa-arrow-down"></i>
+                            Insert Below
+                          </button>
+                          <button onClick={() => {
+                            handleDeleteRow(index);
+                            setActiveMenu(null);
+                          }} className="delete-action">
+                            <i className="fas fa-trash"></i>
+                            Delete Row
+                          </button>
+                        </div>
+                      )}
+                    </td>
                     <td>
                       <select 
                         className="table-input"
@@ -728,12 +844,19 @@ const Quotation = () => {
                         onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
                         step="0.01"
                         min="0"
-                        readOnly
-                        style={{width: '100%', backgroundColor: '#f0f0f0'}}
+                        style={{width: '100%'}}
                       />
                     </td>
                     <td>
-                      <strong>${calculateAmount(item).toFixed(2)}</strong>
+                      <input 
+                        type="number" 
+                        className="table-input"
+                        value={calculateAmount(item)}
+                        onChange={(e) => updateItem(item.id, 'amount', parseFloat(e.target.value) || 0)}
+                        step="0.01"
+                        min="0"
+                        style={{width: '100%'}}
+                      />
                     </td>
                     <td>
                       <select 
@@ -748,7 +871,15 @@ const Quotation = () => {
                       </select>
                     </td>
                     <td>
-                      <strong>${calculateGrossAmount(item).toFixed(2)}</strong>
+                      <input 
+                        type="number" 
+                        className="table-input"
+                        value={calculateGrossAmount(item)}
+                        onChange={(e) => updateItem(item.id, 'grossAmount', parseFloat(e.target.value) || 0)}
+                        step="0.01"
+                        min="0"
+                        style={{width: '100%'}}
+                      />
                     </td>
                     <td>
                       <select 

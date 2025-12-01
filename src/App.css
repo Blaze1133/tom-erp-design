@@ -59,10 +59,35 @@ textarea.form-control {
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    direction: rtl;
 }
 
 .sidebar.collapsed {
     width: var(--sidebar-collapsed);
+}
+
+/* Reset direction for sidebar content */
+.sidebar > * {
+    direction: ltr;
+}
+
+/* Sidebar scrollbar styling - on LEFT side */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .sidebar.collapsed .logo-img {
@@ -246,6 +271,12 @@ textarea.form-control {
     margin-left: 0;
     border: none;
     border-left: 1px solid rgba(255, 255, 255, 0.1);
+    direction: rtl;
+}
+
+/* Reset direction for submenu content */
+.submenu > * {
+    direction: ltr;
 }
 
 .sidebar.collapsed ~ * .submenu,
@@ -253,31 +284,23 @@ textarea.form-control {
     left: var(--sidebar-collapsed);
 }
 
-/* Submenu scrollbar styling - on LEFT side */
-.submenu {
-    direction: rtl;
-}
-
-.submenu > * {
-    direction: ltr;
-}
-
+/* Submenu scrollbar styling - on RIGHT side for better UX */
 .submenu::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .submenu::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 0;
 }
 
 .submenu::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
 }
 
 .submenu::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 @keyframes slideInRight {
@@ -359,37 +382,35 @@ textarea.form-control {
     max-height: calc(100vh - var(--nested-submenu-top, 0px) - 20px);
     overflow-y: auto;
     overflow-x: hidden;
+    direction: rtl;
+}
+
+/* Reset direction for nested submenu content */
+.nested-submenu > * {
+    direction: ltr;
 }
 
 .sidebar.collapsed .nested-submenu {
     left: calc(var(--sidebar-collapsed) + 280px);
 }
 
-/* Nested submenu scrollbar styling - on LEFT side */
-.nested-submenu {
-    direction: rtl;
-}
-
-.nested-submenu > * {
-    direction: ltr;
-}
-
+/* Nested submenu scrollbar styling - on RIGHT side for better UX */
 .nested-submenu::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .nested-submenu::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 0;
 }
 
 .nested-submenu::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
 }
 
 .nested-submenu::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .submenu-item-wrapper {

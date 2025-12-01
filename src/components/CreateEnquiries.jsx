@@ -33,6 +33,36 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
     items: []
   });
 
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
+  const handleMenuToggle = (index, event) => {
+    event.stopPropagation();
+    if (activeMenu === index) {
+      setActiveMenu(null);
+    } else {
+      const button = event.currentTarget;
+      const rect = button.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 5,
+        left: rect.left + (rect.width / 2) - 80
+      });
+      setActiveMenu(index);
+    }
+  };
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveMenu(null);
+    };
+    if (activeMenu !== null) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeMenu]);
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
@@ -76,6 +106,60 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
       ...prev,
       items: [...prev.items, newItem]
     }));
+  };
+
+  const handleInsertAbove = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      priceLevel: 'Custom',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: 'GST_SG-9%',
+      grossAmount: 0.00,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0.00
+    };
+    setFormData(prev => ({
+      ...prev,
+      items: [...prev.items.slice(0, index), newItem, ...prev.items.slice(index)]
+    }));
+  };
+
+  const handleInsertBelow = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      priceLevel: 'Custom',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: 'GST_SG-9%',
+      grossAmount: 0.00,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0.00
+    };
+    setFormData(prev => ({
+      ...prev,
+      items: [...prev.items.slice(0, index + 1), newItem, ...prev.items.slice(index + 1)]
+    }));
+  };
+
+  const handleDeleteRow = (index) => {
+    if (window.confirm('Are you sure you want to delete this row?')) {
+      setFormData(prev => ({
+        ...prev,
+        items: prev.items.filter((_, i) => i !== index)
+      }));
+      showToast('Row deleted successfully', 'success');
+    }
   };
 
   // Calculation functions
@@ -488,9 +572,10 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
               
               {formData.items.length > 0 && (
                 <div className="items-table-wrapper" style={{ overflowX: 'auto', marginBottom: '1rem' }}>
-                  <table className="detail-items-table" style={{ minWidth: '1800px' }}>
+                  <table className="detail-items-table" style={{ minWidth: '1900px' }}>
                     <thead>
                       <tr>
+                        <th style={{ minWidth: '60px', textAlign: 'center' }}>ACTIONS</th>
                         <th style={{ minWidth: '150px' }}>ITEM</th>
                         <th style={{ minWidth: '80px' }}>QTY</th>
                         <th style={{ minWidth: '100px' }}>UNITS</th>
@@ -506,14 +591,63 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {formData.items.map((item) => (
-                        <tr key={item.id}>
+                      {formData.items.map((item, index) => (
+                        <tr 
+                          key={item.id} 
+                          className="table-row-with-actions"
+                          onMouseEnter={() => setHoveredRow(index)}
+                          onMouseLeave={() => setHoveredRow(null)}
+                        >
+                          <td style={{ textAlign: 'center', position: 'relative' }}>
+                            {hoveredRow === index && (
+                              <button 
+                                className="row-actions-btn" 
+                                title="Row Actions"
+                                onClick={(e) => handleMenuToggle(index, e)}
+                              >
+                                <i className="fas fa-ellipsis-v"></i>
+                              </button>
+                            )}
+                            {activeMenu === index && (
+                              <div 
+                                className="row-actions-menu" 
+                                style={{ 
+                                  top: `${menuPosition.top}px`, 
+                                  left: `${menuPosition.left}px`,
+                                  display: 'block'
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button onClick={() => {
+                                  handleInsertAbove(index);
+                                  setActiveMenu(null);
+                                }}>
+                                  <i className="fas fa-arrow-up"></i>
+                                  Insert Above
+                                </button>
+                                <button onClick={() => {
+                                  handleInsertBelow(index);
+                                  setActiveMenu(null);
+                                }}>
+                                  <i className="fas fa-arrow-down"></i>
+                                  Insert Below
+                                </button>
+                                <button onClick={() => {
+                                  handleDeleteRow(index);
+                                  setActiveMenu(null);
+                                }} className="delete-action">
+                                  <i className="fas fa-trash"></i>
+                                  Delete Row
+                                </button>
+                              </div>
+                            )}
+                          </td>
                           <td>
                             <input 
                               type="text" 
                               className="form-control" 
                               defaultValue={item.item} 
-                              style={{ minWidth: '140px', height: '40px' }} 
+                              style={{ minWidth: '200px', height: '40px' }} 
                             />
                           </td>
                           <td>
@@ -521,7 +655,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               type="number" 
                               className="form-control" 
                               defaultValue={item.quantity} 
-                              style={{ minWidth: '70px', height: '40px' }} 
+                              style={{ minWidth: '100px', height: '40px' }} 
                             />
                           </td>
                           <td>
@@ -529,7 +663,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               type="text" 
                               className="form-control" 
                               defaultValue={item.units} 
-                              style={{ minWidth: '90px', height: '40px' }} 
+                              style={{ minWidth: '120px', height: '40px' }} 
                             />
                           </td>
                           <td>
@@ -557,7 +691,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               type="number" 
                               className="form-control" 
                               defaultValue={item.rate} 
-                              style={{ minWidth: '90px', height: '40px' }} 
+                              style={{ minWidth: '120px', height: '40px' }} 
                               step="0.01"
                             />
                           </td>
@@ -566,7 +700,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               type="number" 
                               className="form-control" 
                               defaultValue={item.amount} 
-                              style={{ minWidth: '90px', height: '40px' }} 
+                              style={{ minWidth: '120px', height: '40px' }} 
                               step="0.01"
                             />
                           </td>
@@ -594,7 +728,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                             <select 
                               className="form-control" 
                               defaultValue={item.class} 
-                              style={{ minWidth: '140px', height: '40px' }}
+                              style={{ minWidth: '180px', height: '40px' }}
                             >
                               <option value="">Select...</option>
                               <option>Consumable Item</option>
@@ -620,11 +754,10 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                             <select 
                               className="form-control" 
                               defaultValue={item.costEstimateType} 
-                              style={{ minWidth: '140px', height: '40px' }}
+                              style={{ minWidth: '180px', height: '40px' }}
                             >
                               <option>Fixed</option>
                               <option>Variable</option>
-                              <option>Estimated</option>
                             </select>
                           </td>
                           <td>
@@ -632,7 +765,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               type="number" 
                               className="form-control" 
                               defaultValue={item.estimatedExtendedCost} 
-                              style={{ minWidth: '140px', height: '40px' }} 
+                              style={{ minWidth: '180px', height: '40px' }} 
                               step="0.01"
                             />
                           </td>

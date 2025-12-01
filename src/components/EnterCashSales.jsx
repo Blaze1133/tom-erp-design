@@ -5,6 +5,11 @@ import './Enquiries.css';
 const EnterCashSales = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('items');
+
+  // Row actions states
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   
   const [formData, setFormData] = useState({
     customForm: 'TOM Cash Sale',
@@ -89,7 +94,7 @@ const EnterCashSales = () => {
 
   const handleAddItem = () => {
     const newItem = {
-      id: formData.items.length + 1,
+      id: Date.now(),
       item: '',
       quantity: 0,
       units: 'Pcs',
@@ -108,6 +113,86 @@ const EnterCashSales = () => {
       items: [...prev.items, newItem]
     }));
   };
+
+  const handleInsertAbove = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      priceLevel: 'Custom',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: 'GST_SG-9%',
+      grossAmount: 0.00,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0.00
+    };
+    setFormData(prev => ({
+      ...prev,
+      items: [...prev.items.slice(0, index), newItem, ...prev.items.slice(index)]
+    }));
+  };
+
+  const handleInsertBelow = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      priceLevel: 'Custom',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: 'GST_SG-9%',
+      grossAmount: 0.00,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0.00
+    };
+    setFormData(prev => ({
+      ...prev,
+      items: [...prev.items.slice(0, index + 1), newItem, ...prev.items.slice(index + 1)]
+    }));
+  };
+
+  const handleDeleteRow = (index) => {
+    if (window.confirm('Are you sure you want to delete this row?')) {
+      setFormData(prev => ({
+        ...prev,
+        items: prev.items.filter((_, i) => i !== index)
+      }));
+      showToast('Row deleted successfully', 'success');
+    }
+  };
+
+  const handleMenuToggle = (index, event) => {
+    event.stopPropagation();
+    if (activeMenu === index) {
+      setActiveMenu(null);
+    } else {
+      const button = event.currentTarget;
+      const rect = button.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 5,
+        left: rect.left + (rect.width / 2) - 80
+      });
+      setActiveMenu(index);
+    }
+  };
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveMenu(null);
+    };
+    if (activeMenu !== null) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeMenu]);
 
   // Calculation functions
   const calculateSubtotal = () => {
@@ -442,23 +527,73 @@ const EnterCashSales = () => {
               <table className="detail-items-table">
                 <thead>
                   <tr>
-                    <th style={{width: '8%'}}>ITEM</th>
-                    <th style={{width: '7%'}}>QTY</th>
-                    <th style={{width: '6%'}}>UNITS</th>
-                    <th style={{width: '12%'}}>DESC</th>
-                    <th style={{width: '8%'}}>PRICE LEVEL</th>
-                    <th style={{width: '7%'}}>RATE</th>
-                    <th style={{width: '7%'}}>AMT</th>
-                    <th style={{width: '8%'}}>TAX CODE</th>
-                    <th style={{width: '8%'}}>GROSS AMT</th>
-                    <th style={{width: '9%'}}>CLASS</th>
-                    <th style={{width: '10%'}}>COST ESTIMATE TYPE</th>
-                    <th style={{width: '10%'}}>EST. EXTENDED COST</th>
+                    <th style={{minWidth: '60px', textAlign: 'center'}}>ACTIONS</th>
+                    <th style={{minWidth: '200px'}}>ITEM</th>
+                    <th style={{minWidth: '100px'}}>QTY</th>
+                    <th style={{minWidth: '120px'}}>UNITS</th>
+                    <th style={{minWidth: '250px'}}>DESC</th>
+                    <th style={{minWidth: '150px'}}>PRICE LEVEL</th>
+                    <th style={{minWidth: '120px'}}>RATE</th>
+                    <th style={{minWidth: '120px'}}>AMT</th>
+                    <th style={{minWidth: '150px'}}>TAX CODE</th>
+                    <th style={{minWidth: '120px'}}>GROSS AMT</th>
+                    <th style={{minWidth: '180px'}}>CLASS</th>
+                    <th style={{minWidth: '180px'}}>COST ESTIMATE TYPE</th>
+                    <th style={{minWidth: '180px'}}>EST. EXTENDED COST</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {formData.items.map((item) => (
-                    <tr key={item.id}>
+                  {formData.items.map((item, index) => (
+                    <tr 
+                      key={item.id}
+                      className="table-row-with-actions"
+                      onMouseEnter={() => setHoveredRow(index)}
+                      onMouseLeave={() => setHoveredRow(null)}
+                    >
+                      <td style={{ textAlign: 'center', position: 'relative' }}>
+                        {hoveredRow === index && (
+                          <button 
+                            className="row-actions-btn" 
+                            title="Row Actions"
+                            onClick={(e) => handleMenuToggle(index, e)}
+                          >
+                            <i className="fas fa-ellipsis-v"></i>
+                          </button>
+                        )}
+                        {activeMenu === index && (
+                          <div 
+                            className="row-actions-menu" 
+                            style={{ 
+                              top: `${menuPosition.top}px`, 
+                              left: `${menuPosition.left}px`,
+                              display: 'block'
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <button onClick={() => {
+                              handleInsertAbove(index);
+                              setActiveMenu(null);
+                            }}>
+                              <i className="fas fa-arrow-up"></i>
+                              Insert Above
+                            </button>
+                            <button onClick={() => {
+                              handleInsertBelow(index);
+                              setActiveMenu(null);
+                            }}>
+                              <i className="fas fa-arrow-down"></i>
+                              Insert Below
+                            </button>
+                            <button onClick={() => {
+                              handleDeleteRow(index);
+                              setActiveMenu(null);
+                            }} className="delete-action">
+                              <i className="fas fa-trash"></i>
+                              Delete Row
+                            </button>
+                          </div>
+                        )}
+                      </td>
                       <td><input type="text" className="table-input" defaultValue={item.item} style={{width: '100%'}} /></td>
                       <td><input type="number" className="table-input" defaultValue={item.quantity} style={{width: '100%'}} /></td>
                       <td><input type="text" className="table-input" defaultValue={item.units} style={{width: '100%'}} /></td>
