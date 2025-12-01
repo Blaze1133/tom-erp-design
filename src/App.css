@@ -234,20 +234,18 @@ textarea.form-control {
     display: none !important;
     position: fixed;
     left: var(--sidebar-width);
-    width: 320px;
-    max-height: calc(100vh - 120px);
+    width: 280px;
+    max-height: calc(100vh - var(--submenu-top, 0px) - 20px);
     overflow-y: auto;
     overflow-x: hidden;
     background: #3a4150;
-    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
     padding: 0.5rem 0;
     z-index: 9999;
-    border-radius: 8px;
+    border-radius: 0;
     margin-left: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    min-height: 100px;
-    top: auto;
-    bottom: auto;
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar.collapsed ~ * .submenu,
@@ -255,23 +253,31 @@ textarea.form-control {
     left: var(--sidebar-collapsed);
 }
 
-/* Submenu scrollbar styling */
+/* Submenu scrollbar styling - on LEFT side */
+.submenu {
+    direction: rtl;
+}
+
+.submenu > * {
+    direction: ltr;
+}
+
 .submenu::-webkit-scrollbar {
-    width: 4px;
+    width: 8px;
 }
 
 .submenu::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0;
 }
 
 .submenu::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
 }
 
 .submenu::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.7);
 }
 
 @keyframes slideInRight {
@@ -288,16 +294,18 @@ textarea.form-control {
 .submenu-item {
     display: flex;
     align-items: center;
-    gap: 0;
-    padding: 0.85rem 1.5rem;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
     color: rgba(255,255,255,0.85);
     text-decoration: none;
     transition: all 0.2s ease;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     border-left: 3px solid transparent;
     position: relative;
-    min-height: 40px;
+    min-height: 44px;
+    border-radius: 0;
+    line-height: 1.4;
 }
 
 .submenu-item:hover {
@@ -338,42 +346,50 @@ textarea.form-control {
 .nested-submenu {
     display: none;
     position: fixed;
-    left: calc(var(--sidebar-width) + 320px);
+    left: calc(var(--sidebar-width) + 280px);
     background: #2a3240;
-    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
     padding: 0.5rem 0;
     z-index: 10000;
-    border-radius: 8px;
-    min-width: 200px;
-    max-width: 300px;
+    border-radius: 0;
+    width: 280px;
     margin-left: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    max-height: calc(100vh - 100px);
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: calc(100vh - var(--nested-submenu-top, 0px) - 20px);
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .sidebar.collapsed .nested-submenu {
-    left: calc(var(--sidebar-collapsed) + 320px);
+    left: calc(var(--sidebar-collapsed) + 280px);
 }
 
-/* Nested submenu scrollbar styling */
+/* Nested submenu scrollbar styling - on LEFT side */
+.nested-submenu {
+    direction: rtl;
+}
+
+.nested-submenu > * {
+    direction: ltr;
+}
+
 .nested-submenu::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .nested-submenu::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0;
 }
 
 .nested-submenu::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
 }
 
 .nested-submenu::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.7);
 }
 
 .submenu-item-wrapper {
@@ -389,7 +405,7 @@ textarea.form-control {
 .submenu-item-wrapper::after {
     content: '';
     position: fixed;
-    left: calc(var(--sidebar-width) + 320px);
+    left: calc(var(--sidebar-width) + 280px);
     top: 0;
     bottom: 0;
     width: 10px;
@@ -399,7 +415,7 @@ textarea.form-control {
 }
 
 .sidebar.collapsed .submenu-item-wrapper::after {
-    left: calc(var(--sidebar-collapsed) + 320px);
+    left: calc(var(--sidebar-collapsed) + 280px);
 }
 
 .submenu-item-wrapper:hover::after {
@@ -407,18 +423,20 @@ textarea.form-control {
 }
 
 .nested-submenu-item {
-    padding: 0.85rem 1.5rem;
+    padding: 0.875rem 1.25rem;
     color: rgba(255,255,255,0.85);
     cursor: pointer;
-    font-size: 0.875rem;
     transition: all 0.2s ease;
+    font-size: 0.9rem;
     border-left: 3px solid transparent;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-height: 40px;
     display: flex;
     align-items: center;
+    border-radius: 0;
+    line-height: 1.4;
+    min-height: 44px;
 }
 
 .nested-submenu-item:hover {
@@ -1244,7 +1262,7 @@ textarea.form-control {
     }
     
     .nested-submenu {
-        left: calc(var(--sidebar-collapsed) + 320px);
+        left: calc(var(--sidebar-collapsed) + 280px);
     }
     
     .nav-item-parent::before {
@@ -1252,7 +1270,7 @@ textarea.form-control {
     }
     
     .submenu-item-wrapper::after {
-        left: calc(var(--sidebar-collapsed) + 320px);
+        left: calc(var(--sidebar-collapsed) + 280px);
     }
     
     .action-buttons {
@@ -1285,8 +1303,7 @@ textarea.form-control {
     
     .nested-submenu {
         left: calc(var(--sidebar-collapsed) + 280px);
-        min-width: 150px;
-        max-width: 250px;
+        width: 280px;
     }
     
     .submenu-item-wrapper::after {

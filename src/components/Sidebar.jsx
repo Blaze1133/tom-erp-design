@@ -82,22 +82,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const handleBankHover = () => {
     if (bankItemRef.current) {
       const rect = bankItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 350; // Approximate height for Bank submenu
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setBankSubmenuTop(topPosition);
+      setBankSubmenuTop(rect.top);
     }
   };
 
@@ -111,44 +96,14 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const handleCustomersHover = () => {
     if (customersItemRef.current) {
       const rect = customersItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 600; // Approximate height for Customers submenu (14 items)
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setCustomersSubmenuTop(topPosition);
+      setCustomersSubmenuTop(rect.top);
     }
   };
 
   const handleProductionHover = () => {
     if (productionItemRef.current) {
       const rect = productionItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate submenu height (approximate based on number of items)
-      const estimatedSubmenuHeight = 550; // Approximate height for production submenu
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setProductionSubmenuTop(topPosition);
+      setProductionSubmenuTop(rect.top);
     }
   };
 
@@ -169,110 +124,35 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const handleSetupHover = () => {
     if (setupItemRef.current) {
       const rect = setupItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 300; // Approximate height for Setup submenu (6 items)
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setSetupSubmenuTop(topPosition);
+      setSetupSubmenuTop(rect.top);
     }
   };
 
   const handlePayrollHover = () => {
     if (payrollItemRef.current) {
       const rect = payrollItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 250; // Approximate height for Payroll submenu (3 sub-modules)
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setPayrollSubmenuTop(topPosition);
+      setPayrollSubmenuTop(rect.top);
     }
   };
 
   const handleHrHover = () => {
     if (hrItemRef.current) {
       const rect = hrItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 150; // Approximate height for HR submenu (2 sub-modules)
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setHrSubmenuTop(topPosition);
+      setHrSubmenuTop(rect.top);
     }
   };
 
   const handleMastersHover = () => {
     if (mastersItemRef.current) {
       const rect = mastersItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 350; // Approximate height for Masters submenu (7 items)
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setMastersSubmenuTop(topPosition);
+      setMastersSubmenuTop(rect.top);
     }
   };
 
   const handleFinancialHover = () => {
     if (financialItemRef.current) {
       const rect = financialItemRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much space we need (estimate based on number of items)
-      const estimatedSubmenuHeight = 450; // Approximate height for Financial submenu
-      const spaceBelow = viewportHeight - rect.top;
-      
-      // If submenu would extend beyond viewport, position it higher
-      let topPosition = rect.top;
-      if (spaceBelow < estimatedSubmenuHeight) {
-        // Position submenu so bottom aligns with viewport bottom with some padding
-        topPosition = viewportHeight - estimatedSubmenuHeight - 20;
-        // But don't go above the top of viewport
-        topPosition = Math.max(20, topPosition);
-      }
-      
-      setFinancialSubmenuTop(topPosition);
+      setFinancialSubmenuTop(rect.top);
     }
   };
 
@@ -969,7 +849,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-users"></i>
             <span>CRM</span>
           </div>
-          <div className="submenu" style={{ top: `${crmSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${crmSubmenuTop}px`, '--submenu-top': `${crmSubmenuTop}px` }}>
             {crmSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -983,7 +863,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`crm-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`crm-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`crm-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1021,7 +901,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-shopping-cart"></i>
             <span>Sales</span>
           </div>
-          <div className="submenu" style={{ top: `${submenuTop}px` }}>
+          <div className="submenu" style={{ top: `${submenuTop}px`, '--submenu-top': `${submenuTop}px` }}>
             {salesSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1035,7 +915,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[subItem.id] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[subItem.id] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[subItem.id] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1073,7 +953,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-tasks"></i>
             <span>Project Management</span>
           </div>
-          <div className="submenu" style={{ top: `${projectManagementSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${projectManagementSubmenuTop}px`, '--submenu-top': `${projectManagementSubmenuTop}px` }}>
             {projectManagementSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1087,7 +967,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`pm-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`pm-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`pm-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1125,7 +1005,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-box"></i>
             <span>Purchases</span>
           </div>
-          <div className="submenu" style={{ top: `${purchasesSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${purchasesSubmenuTop}px`, '--submenu-top': `${purchasesSubmenuTop}px` }}>
             {purchasesSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1139,7 +1019,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`purchases-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`purchases-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`purchases-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1174,7 +1054,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-file-invoice-dollar"></i>
             <span>Payables</span>
           </div>
-          <div className="submenu" style={{ top: `${payablesSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${payablesSubmenuTop}px`, '--submenu-top': `${payablesSubmenuTop}px` }}>
             {payablesSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1188,7 +1068,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`payables-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`payables-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`payables-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1223,7 +1103,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-boxes"></i>
             <span>Inventory</span>
           </div>
-          <div className="submenu" style={{ top: `${inventorySubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${inventorySubmenuTop}px`, '--submenu-top': `${inventorySubmenuTop}px` }}>
             {inventorySubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1237,7 +1117,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`inventory-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`inventory-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`inventory-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1272,7 +1152,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-dollar-sign"></i>
             <span>Financial</span>
           </div>
-          <div className="submenu" style={{ top: `${financialSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${financialSubmenuTop}px`, '--submenu-top': `${financialSubmenuTop}px` }}>
             {financialSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1286,7 +1166,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`financial-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`financial-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`financial-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1321,7 +1201,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-university"></i>
             <span>Bank</span>
           </div>
-          <div className="submenu" style={{ top: `${bankSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${bankSubmenuTop}px`, '--submenu-top': `${bankSubmenuTop}px` }}>
             {bankSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1335,7 +1215,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`bank-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`bank-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`bank-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1370,7 +1250,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-clipboard-list"></i>
             <span>Order Management</span>
           </div>
-          <div className="submenu" style={{ top: `${orderManagementSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${orderManagementSubmenuTop}px`, '--submenu-top': `${orderManagementSubmenuTop}px` }}>
             {orderManagementSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1384,7 +1264,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`order-management-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`order-management-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`order-management-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1419,7 +1299,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-users"></i>
             <span>Customers</span>
           </div>
-          <div className="submenu" style={{ top: `${customersSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${customersSubmenuTop}px`, '--submenu-top': `${customersSubmenuTop}px` }}>
             {customersSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1433,7 +1313,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`customers-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`customers-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`customers-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1468,7 +1348,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-money-bill-wave"></i>
             <span>Payroll</span>
           </div>
-          <div className="submenu" style={{ top: `${payrollSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${payrollSubmenuTop}px`, '--submenu-top': `${payrollSubmenuTop}px` }}>
             {payrollSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1482,7 +1362,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`payroll-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`payroll-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`payroll-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1517,7 +1397,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-user-tie"></i>
             <span>HR</span>
           </div>
-          <div className="submenu" style={{ top: `${hrSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${hrSubmenuTop}px`, '--submenu-top': `${hrSubmenuTop}px` }}>
             {hrSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1531,7 +1411,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`hr-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`hr-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`hr-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1566,7 +1446,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-industry"></i>
             <span>Production</span>
           </div>
-          <div className="submenu" style={{ top: `${productionSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${productionSubmenuTop}px`, '--submenu-top': `${productionSubmenuTop}px` }}>
             {productionSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1580,7 +1460,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1616,7 +1496,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-database"></i>
             <span>Masters</span>
           </div>
-          <div className="submenu" style={{ top: `${mastersSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${mastersSubmenuTop}px`, '--submenu-top': `${mastersSubmenuTop}px` }}>
             {mastersSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1630,7 +1510,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`masters-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`masters-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`masters-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
@@ -1674,7 +1554,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
             <i className="fas fa-cog"></i>
             <span>Setup</span>
           </div>
-          <div className="submenu" style={{ top: `${setupSubmenuTop}px` }}>
+          <div className="submenu" style={{ top: `${setupSubmenuTop}px`, '--submenu-top': `${setupSubmenuTop}px` }}>
             {setupSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
@@ -1688,7 +1568,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`setup-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`setup-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`setup-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
