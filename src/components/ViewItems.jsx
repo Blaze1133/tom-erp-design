@@ -5,6 +5,7 @@ import './Enquiries.css';
 const ViewItems = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [view, setView] = useState('Basic');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const items = [
     { id: 1, name: '10FEEN', displayName: '', subtype: 'For Purchase', description: '', basePrice: '', taxSchedule: 'Tax 7%', box: '', row: '' },
@@ -53,17 +54,30 @@ const ViewItems = ({ setCurrentPage }) => {
       </div>
 
       <div className="list-controls">
-        <div className="view-filter">
-          <label>VIEW</label>
-          <select 
-            value={view}
-            onChange={(e) => setView(e.target.value)}
-            className="form-control"
-            style={{ width: '200px' }}
-          >
-            <option>Basic</option>
-            <option>Detailed</option>
-          </select>
+        <div className="view-filter" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div>
+            <label>VIEW</label>
+            <select 
+              value={view}
+              onChange={(e) => setView(e.target.value)}
+              className="form-control"
+              style={{ width: '200px' }}
+            >
+              <option>Basic</option>
+              <option>Detailed</option>
+            </select>
+          </div>
+          <div>
+            <label>SEARCH</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search items..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ width: '250px' }}
+            />
+          </div>
         </div>
         <div className="list-actions">
           <button className="btn btn-primary" onClick={handleNewItem}>
@@ -97,7 +111,13 @@ const ViewItems = ({ setCurrentPage }) => {
             </select>
           </div>
           <div className="list-total">
-            TOTAL: {items.length}
+            TOTAL: {items.filter(item => 
+              item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.subtype.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.taxSchedule.toLowerCase().includes(searchTerm.toLowerCase())
+            ).length}
           </div>
         </div>
       </div>
@@ -118,7 +138,15 @@ const ViewItems = ({ setCurrentPage }) => {
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
+            {items
+              .filter(item => 
+                item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.subtype.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.taxSchedule.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((item) => (
               <tr key={item.id}>
                 <td>
                   <button 

@@ -172,13 +172,15 @@ const EnterVendorReturnAuthorizations = () => {
             </div>
             <div className="form-group">
               <label className="form-label">Tax</label>
-              <input 
-                type="text" 
+              <select 
                 className="form-control"
                 value={formData.tax}
                 onChange={(e) => handleInputChange('tax', e.target.value)}
-                placeholder="Enter tax"
-              />
+              >
+                <option value="">Select Tax Rate</option>
+                <option value="9.0%">9.0%</option>
+                <option value="Zero Rated">Zero Rated</option>
+              </select>
             </div>
             <div className="form-group" style={{ position: 'relative' }}>
               <label className="form-label required">Vendor</label>

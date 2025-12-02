@@ -98,16 +98,16 @@ const CreateCRMQuotation = ({ onBack }) => {
     }
   };
 
-  const handleConvertToProject = () => {
+  const handleConvertToSalesEnquiry = () => {
     if (!formData.opportunityName || !formData.companyName || !formData.contactPerson || !formData.email || !formData.subsidiary || !formData.totalAmount) {
-      showToast('Please fill in all required fields before converting to project', 'error');
+      showToast('Please fill in all required fields before converting to sales enquiry', 'error');
       return;
     }
     if (formData.status !== 'Accepted') {
-      showToast('Only accepted quotations can be converted to projects', 'warning');
+      showToast('Only accepted quotations can be converted to sales enquiry', 'warning');
       return;
     }
-    showToast('Quotation converted to project successfully!', 'success');
+    showToast('Quotation converted to sales enquiry successfully!', 'success');
     setTimeout(() => {
       if (onBack) onBack();
     }, 2000);
@@ -473,7 +473,7 @@ const CreateCRMQuotation = ({ onBack }) => {
           </div>
         </div>
 
-        {/* Convert to Project Section */}
+        {/* Convert to Sales Enquiry Section */}
         <div style={{ 
           marginTop: '2rem', 
           padding: '1.5rem', 
@@ -485,16 +485,16 @@ const CreateCRMQuotation = ({ onBack }) => {
         }}>
           <div>
             <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '16px', fontWeight: '600' }}>
-              <i className="fas fa-project-diagram" style={{ marginRight: '8px', color: '#17a2b8' }}></i>
-              Ready to Create Project?
+              <i className="fas fa-file-alt" style={{ marginRight: '8px', color: '#17a2b8' }}></i>
+              Ready to Create Sales Enquiry?
             </h3>
             <p style={{ margin: 0, fontSize: '14px', color: '#6c757d' }}>
-              Convert this accepted quotation to a project to begin execution and tracking.
+              Convert this accepted quotation to a sales enquiry to begin the sales process.
             </p>
           </div>
           <button 
             className="btn btn-primary" 
-            onClick={handleConvertToProject}
+            onClick={handleConvertToSalesEnquiry}
             style={{ 
               padding: '12px 24px',
               fontSize: '15px',
@@ -503,7 +503,7 @@ const CreateCRMQuotation = ({ onBack }) => {
             }}
           >
             <i className="fas fa-arrow-right" style={{ marginRight: '8px' }}></i>
-            Convert to Project
+            Convert to Sales Enquiry
           </button>
         </div>
       </div>

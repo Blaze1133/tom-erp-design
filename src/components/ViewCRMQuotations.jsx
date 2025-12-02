@@ -156,8 +156,8 @@ const ViewCRMQuotations = ({ onNewClick, onViewClick, onEditClick }) => {
     setShowToast(true);
   };
 
-  const handleConvertToProject = (quoteId) => {
-    setToastMessage('Quotation converted to project successfully!');
+  const handleConvertToSalesEnquiry = (quoteId) => {
+    setToastMessage('Quotation converted to sales enquiry successfully!');
     setToastType('success');
     setShowToast(true);
   };

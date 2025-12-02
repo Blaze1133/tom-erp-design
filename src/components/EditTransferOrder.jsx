@@ -146,8 +146,31 @@ const EditTransferOrder = ({ setCurrentPage }) => {
     setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
   };
 
+  const calculateSubtotal = () => {
+    return items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+  };
+
+  const calculateTaxAmount = () => {
+    const subtotal = calculateSubtotal();
+    // Assuming 9% tax rate (you can modify this as needed)
+    return subtotal * 0.09;
+  };
+
+  const calculateDiscount = () => {
+    // You can implement discount logic here
+    // For now, returning 0 but can be modified based on business rules
+    return 0;
+  };
+
   const calculateTotal = () => {
-    return items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0).toFixed(2);
+    const subtotal = calculateSubtotal();
+    const tax = calculateTaxAmount();
+    const discount = calculateDiscount();
+    return subtotal + tax - discount;
+  };
+
+  const formatCurrency = (amount) => {
+    return `$${amount.toFixed(2)}`;
   };
 
   return (
@@ -650,16 +673,79 @@ const EditTransferOrder = ({ setCurrentPage }) => {
                 background: '#f8f9fa',
                 borderRadius: '4px'
               }}>
-                <div style={{ minWidth: '200px' }}>
-                  <div style={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    color: '#333'
-                  }}>
-                    <span>TOTAL:</span>
-                    <span>{calculateTotal()}</span>
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '40px',
+                  minWidth: '600px',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ 
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#666',
+                      marginBottom: '4px'
+                    }}>
+                      SUBTOTAL
+                    </div>
+                    <div style={{ 
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      color: '#333'
+                    }}>
+                      {formatCurrency(calculateSubtotal())}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ 
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#666',
+                      marginBottom: '4px'
+                    }}>
+                      TAX AMOUNT
+                    </div>
+                    <div style={{ 
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      color: '#333'
+                    }}>
+                      {formatCurrency(calculateTaxAmount())}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ 
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#666',
+                      marginBottom: '4px'
+                    }}>
+                      DISCOUNT
+                    </div>
+                    <div style={{ 
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      color: '#333'
+                    }}>
+                      {formatCurrency(calculateDiscount())}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ 
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#666',
+                      marginBottom: '4px'
+                    }}>
+                      TOTAL AMOUNT
+                    </div>
+                    <div style={{ 
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      color: '#d32f2f'
+                    }}>
+                      {formatCurrency(calculateTotal())}
+                    </div>
                   </div>
                 </div>
               </div>

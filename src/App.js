@@ -374,6 +374,29 @@ import ViewCRMQuotations from './components/ViewCRMQuotations';
 import CreateCRMQuotation from './components/CreateCRMQuotation';
 import ViewCRMProjects from './components/ViewCRMProjects';
 
+// Reports Module Components
+import FinancialReports from './components/FinancialReports';
+import IncomeStatement from './components/IncomeStatement';
+import IncomeStatementDetail from './components/IncomeStatementDetail';
+import BalanceSheet from './components/BalanceSheet';
+import BalanceSheetDetail from './components/BalanceSheetDetail';
+import CashFlowStatement from './components/CashFlowStatement';
+import CashFlowStatementDetail from './components/CashFlowStatementDetail';
+import GeneralLedger from './components/GeneralLedger';
+import GeneralLedgerDetail from './components/GeneralLedgerDetail';
+import TrialBalance from './components/TrialBalance';
+import TrialBalanceDetail from './components/TrialBalanceDetail';
+import TransactionDetail from './components/TransactionDetail';
+import TransactionDetailExpanded from './components/TransactionDetailExpanded';
+import RealizedExchangeGainsLosses from './components/RealizedExchangeGainsLosses';
+import RealizedExchangeGainsLossesDetail from './components/RealizedExchangeGainsLossesDetail';
+import UnrealizedExchangeGainsLosses from './components/UnrealizedExchangeGainsLosses';
+import CTABalanceAudit from './components/CTABalanceAudit';
+import ViewPayBatchPostingJournals from './components/ViewPayBatchPostingJournals';
+import ViewPayBatchPostingJournalDetail from './components/ViewPayBatchPostingJournalDetail';
+import CreatePayBatchPostingJournal from './components/CreatePayBatchPostingJournal';
+import InventoryProfitability from './components/InventoryProfitability';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -1588,8 +1611,109 @@ function App() {
           onEdit={() => setCurrentPage('create-manual-entry')}
         />;
       
-      case 'reports':
-        return <div style={{ padding: '30px' }}><h1>Reports Module - Coming Soon</h1></div>;
+      // Reports Module
+      case 'financial-reports':
+        return <FinancialReports 
+          onIncomeStatementClick={() => setCurrentPage('income-statement')}
+          onBalanceSheetClick={() => setCurrentPage('balance-sheet')}
+          onCashFlowStatementClick={() => setCurrentPage('cash-flow-statement')}
+          onGeneralLedgerClick={() => setCurrentPage('general-ledger')}
+          onTrialBalanceClick={() => setCurrentPage('trial-balance')}
+          onTransactionDetailClick={() => setCurrentPage('transaction-detail')}
+        />;
+      case 'income-statement':
+        return <IncomeStatement 
+          onViewDetailClick={() => setCurrentPage('income-statement-detail')}
+        />;
+      case 'income-statement-detail':
+        return <IncomeStatementDetail 
+          onBackClick={() => setCurrentPage('income-statement')}
+        />;
+      case 'balance-sheet':
+        return <BalanceSheet 
+          onViewDetailClick={() => setCurrentPage('balance-sheet-detail')}
+        />;
+      case 'balance-sheet-detail':
+        return <BalanceSheetDetail 
+          onBackClick={() => setCurrentPage('balance-sheet')}
+        />;
+      case 'cash-flow-statement':
+        return <CashFlowStatement 
+          onViewDetailClick={() => setCurrentPage('cash-flow-statement-detail')}
+        />;
+      case 'cash-flow-statement-detail':
+        return <CashFlowStatementDetail 
+          onBackClick={() => setCurrentPage('cash-flow-statement')}
+        />;
+      case 'general-ledger':
+        return <GeneralLedger 
+          onViewDetailClick={() => setCurrentPage('general-ledger-detail')}
+        />;
+      case 'general-ledger-detail':
+        return <GeneralLedgerDetail 
+          onBackClick={() => setCurrentPage('general-ledger')}
+        />;
+      case 'trial-balance':
+        return <TrialBalance 
+          onViewDetailClick={() => setCurrentPage('trial-balance-detail')}
+        />;
+      case 'trial-balance-detail':
+        return <TrialBalanceDetail 
+          onBackClick={() => setCurrentPage('trial-balance')}
+        />;
+      case 'transaction-detail':
+        return <TransactionDetail 
+          onViewDetailClick={() => setCurrentPage('transaction-detail-expanded')}
+        />;
+      case 'transaction-detail-expanded':
+        return <TransactionDetailExpanded 
+          onBackClick={() => setCurrentPage('transaction-detail')}
+        />;
+      case 'realized-exchange-gains-losses':
+        return <RealizedExchangeGainsLosses 
+          onViewDetailClick={() => setCurrentPage('realized-exchange-gains-losses-detail')}
+        />;
+      case 'realized-exchange-gains-losses-detail':
+        return <RealizedExchangeGainsLossesDetail 
+          onBackClick={() => setCurrentPage('realized-exchange-gains-losses')}
+        />;
+      case 'unrealized-exchange-gains-losses':
+        return <UnrealizedExchangeGainsLosses 
+          onViewDetailClick={() => setCurrentPage('unrealized-exchange-gains-losses-detail')}
+        />;
+      case 'cta-balance-audit':
+        return <CTABalanceAudit 
+          onViewDetailClick={() => setCurrentPage('cta-balance-audit-detail')}
+        />;
+      case 'inventory-profitability':
+        return <InventoryProfitability />;
+      case 'pay-batch-posting-journals':
+        return <ViewPayBatchPostingJournals 
+          onNewClick={() => setCurrentPage('pay-batch-posting-journal-new')}
+          onViewClick={(id) => setCurrentPage('pay-batch-posting-journal-view')}
+          onEditClick={(id) => setCurrentPage('pay-batch-posting-journal-edit')}
+        />;
+      case 'pay-batch-posting-journal-new':
+        return <CreatePayBatchPostingJournal 
+          onBack={() => setCurrentPage('pay-batch-posting-journals')}
+          onSave={() => {
+            setCurrentPage('pay-batch-posting-journals');
+          }}
+        />;
+      case 'pay-batch-posting-journal-edit':
+        return <CreatePayBatchPostingJournal 
+          journalId="34"
+          onBack={() => setCurrentPage('pay-batch-posting-journals')}
+          onSave={() => {
+            setCurrentPage('pay-batch-posting-journals');
+          }}
+        />;
+      case 'pay-batch-posting-journal-view':
+        return <ViewPayBatchPostingJournalDetail 
+          journalId="34"
+          onBack={() => setCurrentPage('pay-batch-posting-journals')}
+          onEdit={(id) => setCurrentPage('pay-batch-posting-journal-edit')}
+        />;
       
       // Payroll - Pay Component
       case 'payroll-pay-component':

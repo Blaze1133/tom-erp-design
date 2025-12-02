@@ -527,7 +527,7 @@ const CreateInvoice = () => {
               <table className="detail-items-table">
                 <thead>
                   <tr>
-                    <th style={{minWidth: '60px', textAlign: 'center'}}>ACTIONS</th>
+                    <th style={{ width: '30px' }}></th>
                     <th style={{minWidth: '200px'}}>ITEM</th>
                     <th style={{minWidth: '100px'}}>QTY</th>
                     <th style={{minWidth: '120px'}}>UNITS</th>

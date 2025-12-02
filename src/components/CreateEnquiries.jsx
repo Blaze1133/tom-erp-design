@@ -575,7 +575,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                   <table className="detail-items-table" style={{ minWidth: '1900px' }}>
                     <thead>
                       <tr>
-                        <th style={{ minWidth: '60px', textAlign: 'center' }}>ACTIONS</th>
+                        <th style={{ width: '30px' }}></th>
                         <th style={{ minWidth: '150px' }}>ITEM</th>
                         <th style={{ minWidth: '80px' }}>QTY</th>
                         <th style={{ minWidth: '100px' }}>UNITS</th>

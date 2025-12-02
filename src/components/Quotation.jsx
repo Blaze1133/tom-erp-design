@@ -710,7 +710,7 @@ const Quotation = () => {
             <table className="detail-items-table">
               <thead>
                 <tr>
-                  <th style={{minWidth: '60px', textAlign: 'center'}}>Actions</th>
+                  <th style={{ width: '30px' }}></th>
                   <th style={{minWidth: '200px'}}>Item</th>
                   <th style={{minWidth: '100px'}}>Qty</th>
                   <th style={{minWidth: '120px'}}>Units</th>

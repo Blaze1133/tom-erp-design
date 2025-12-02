@@ -110,7 +110,54 @@ const TopBar = ({ collapsed, setCollapsed, setCurrentPage }) => {
     { name: 'View Purchase Orders', icon: 'fas fa-file-contract', category: 'Purchasing', route: 'view-purchase-orders' },
     { name: 'View Sales Orders', icon: 'fas fa-shopping-bag', category: 'Sales', route: 'view-sales-orders' },
     { name: 'View Vendors', icon: 'fas fa-store-alt', category: 'Vendors', route: 'view-vendors' },
-    { name: 'Write Checks', icon: 'fas fa-check', category: 'Payments', route: 'write-checks' }
+    { name: 'Write Checks', icon: 'fas fa-check', category: 'Payments', route: 'write-checks' },
+    
+    // CRM Module
+    { name: 'View Leads', icon: 'fas fa-user-plus', category: 'CRM', route: 'view-leads' },
+    { name: 'Create Lead', icon: 'fas fa-user-plus', category: 'CRM', route: 'create-lead' },
+    { name: 'View Opportunities', icon: 'fas fa-bullseye', category: 'CRM', route: 'view-opportunities' },
+    { name: 'Create Opportunity', icon: 'fas fa-bullseye', category: 'CRM', route: 'create-opportunity' },
+    { name: 'View CRM Quotations', icon: 'fas fa-file-alt', category: 'CRM', route: 'view-crm-quotations' },
+    { name: 'Create CRM Quotation', icon: 'fas fa-file-alt', category: 'CRM', route: 'create-crm-quotation' },
+    { name: 'View CRM Projects', icon: 'fas fa-project-diagram', category: 'CRM', route: 'view-crm-projects' },
+    
+    // Masters Module
+    { name: 'Customer Masters', icon: 'fas fa-users', category: 'Masters', route: 'view-customer-masters' },
+    { name: 'Vendor Masters', icon: 'fas fa-store', category: 'Masters', route: 'view-vendor-masters' },
+    { name: 'Bank Masters', icon: 'fas fa-university', category: 'Masters', route: 'view-bank-masters' },
+    { name: 'View Subsidiaries', icon: 'fas fa-sitemap', category: 'Masters', route: 'setup-subsidiaries' },
+    { name: 'View Departments', icon: 'fas fa-building', category: 'Masters', route: 'setup-department' },
+    { name: 'View Locations', icon: 'fas fa-map-marker-alt', category: 'Masters', route: 'setup-location' },
+    { name: 'View Classes', icon: 'fas fa-layer-group', category: 'Masters', route: 'setup-classes' },
+    
+    // Purchase Requisitions
+    { name: 'View Purchase Requisitions', icon: 'fas fa-file-alt', category: 'Purchasing', route: 'view-purchase-requisition' },
+    
+    // Custom Delivery Orders
+    { name: 'View Custom Delivery Orders', icon: 'fas fa-truck', category: 'Delivery', route: 'view-tom-custom-delivery-order' },
+    
+    // Journal Entries
+    { name: 'View Journal Entries', icon: 'fas fa-book', category: 'Accounting', route: 'view-journal-entries' },
+    { name: 'Make Advanced Intercompany Journal', icon: 'fas fa-exchange-alt', category: 'Accounting', route: 'make-advanced-intercompany-journal-entries' },
+    { name: 'View Advanced Intercompany Journals', icon: 'fas fa-exchange-alt', category: 'Accounting', route: 'view-advanced-intercompany-journal-entries' },
+    
+    // Budgets
+    { name: 'Set Up Budgets', icon: 'fas fa-calculator', category: 'Accounting', route: 'set-up-budgets' },
+    { name: 'View Budgets', icon: 'fas fa-calculator', category: 'Accounting', route: 'view-budgets' },
+    
+    // Allocation Schedules
+    { name: 'View Allocation Schedules', icon: 'fas fa-calendar-alt', category: 'Allocation', route: 'view-allocation-schedules' },
+    { name: 'View Intercompany Allocation Schedules', icon: 'fas fa-exchange-alt', category: 'Allocation', route: 'view-intercompany-allocation-schedules' },
+    
+    // Currency Revaluations
+    { name: 'Revalue Open Currency Balances', icon: 'fas fa-dollar-sign', category: 'Finance', route: 'revalue-open-currency-balances' },
+    { name: 'View Currency Revaluations', icon: 'fas fa-dollar-sign', category: 'Finance', route: 'view-currency-revaluations' },
+    
+    // Cash Sales
+    { name: 'View Cash Sales', icon: 'fas fa-cash-register', category: 'Sales', route: 'view-cash-sales' },
+    
+    // Transfer Orders
+    { name: 'View Transfer Orders', icon: 'fas fa-exchange-alt', category: 'Inventory', route: 'view-transfer-orders' }
   ];
 
   // Search functionality

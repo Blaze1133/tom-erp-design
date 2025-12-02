@@ -17,11 +17,13 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const drawingsDocumentsItemRef = useRef(null);
   const setupItemRef = useRef(null);
   const mastersItemRef = useRef(null);
+  const reportsItemRef = useRef(null);
   const hrItemRef = useRef(null);
   const [submenuTop, setSubmenuTop] = useState(100);
   const [crmSubmenuTop, setCrmSubmenuTop] = useState(100);
   const [projectManagementSubmenuTop, setProjectManagementSubmenuTop] = useState(100);
   const [mastersSubmenuTop, setMastersSubmenuTop] = useState(100);
+  const [reportsSubmenuTop, setReportsSubmenuTop] = useState(100);
   const [purchasesSubmenuTop, setPurchasesSubmenuTop] = useState(100);
   const [payablesSubmenuTop, setPayablesSubmenuTop] = useState(100);
   const [inventorySubmenuTop, setInventorySubmenuTop] = useState(100);
@@ -146,6 +148,13 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     if (mastersItemRef.current) {
       const rect = mastersItemRef.current.getBoundingClientRect();
       setMastersSubmenuTop(rect.top);
+    }
+  };
+
+  const handleReportsHover = () => {
+    if (reportsItemRef.current) {
+      const rect = reportsItemRef.current.getBoundingClientRect();
+      setReportsSubmenuTop(rect.top);
     }
   };
 
@@ -753,6 +762,44 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { id: 'setup-department', label: 'Department', hideArrow: true },
     { id: 'setup-location', label: 'Location', hideArrow: true },
     { id: 'setup-classes', label: 'Classes', hideArrow: true }
+  ];
+
+  const reportsSubItems = [
+    { 
+      id: 'financial-reports',
+      label: 'Financial',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'income-statement', label: 'Income Statement' },
+        { id: 'balance-sheet', label: 'Balance Sheet' },
+        { id: 'cash-flow-statement', label: 'Cash Flow Statement' },
+        { id: 'general-ledger', label: 'General Ledger' },
+        { id: 'trial-balance', label: 'Trial Balance' },
+        { id: 'transaction-detail', label: 'Transaction Detail' },
+        { id: 'realized-exchange-gains-losses', label: 'Realized Exchange Rate Gains and Losses' },
+        { id: 'unrealized-exchange-gains-losses', label: 'Unrealized Exchange Rate Gains and Losses' },
+        { id: 'cta-balance-audit', label: 'CTA Balance Audit' },
+        { id: 'pay-batch-posting-journals', label: 'Pay-batch Posting Journals' }
+      ]
+    },
+    { 
+      id: 'inventory-reports',
+      label: 'Inventory',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'inventory-profitability', label: 'Inventory Profitability' },
+        { id: 'inventory-summary', label: 'Inventory Summary' },
+        { id: 'inventory-valuation', label: 'Inventory Valuation' },
+        { id: 'stock-movement', label: 'Stock Movement Report' },
+        { id: 'low-stock-report', label: 'Low Stock Report' },
+        { id: 'inventory-aging', label: 'Inventory Aging Report' },
+        { id: 'abc-analysis', label: 'ABC Analysis' },
+        { id: 'inventory-turnover', label: 'Inventory Turnover Report' },
+        { id: 'dead-stock-report', label: 'Dead Stock Report' },
+        { id: 'inventory-reconciliation', label: 'Inventory Reconciliation' },
+        { id: 'warehouse-summary', label: 'Warehouse Summary' }
+      ]
+    }
   ];
 
   const productionSubItems = [
@@ -1536,13 +1583,56 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           </div>
         </div>
 
-        {/* Reports Menu */}
-        <div
-          className={`nav-item ${currentPage === 'reports' ? 'active' : ''}`}
-          onClick={() => setCurrentPage('reports')}
-        >
-          <i className="fas fa-chart-bar"></i>
-          <span>Reports</span>
+        {/* Reports Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleReportsHover}>
+          <div
+            ref={reportsItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-chart-bar"></i>
+            <span>Reports</span>
+          </div>
+          <div className="submenu" style={{ top: `${reportsSubmenuTop}px`, '--submenu-top': `${reportsSubmenuTop}px` }}>
+            {reportsSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `reports-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`reports-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`reports-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentPage(nestedItem.id);
+                          }}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
         
         {/* Setup Menu with Submenu */}
