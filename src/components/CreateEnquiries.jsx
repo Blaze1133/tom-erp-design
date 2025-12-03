@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
@@ -36,6 +36,111 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  
+  // Sales Rep searchable dropdown state
+  const [salesRepSearch, setSalesRepSearch] = useState('');
+  const [salesRepDropdownOpen, setSalesRepDropdownOpen] = useState(false);
+  const salesRepDropdownRef = useRef(null);
+  
+  // Company searchable dropdown state
+  const [companySearch, setCompanySearch] = useState('');
+  const [companyDropdownOpen, setCompanyDropdownOpen] = useState(false);
+  const [companyFieldHovered, setCompanyFieldHovered] = useState(false);
+  const [showAddCompanyModal, setShowAddCompanyModal] = useState(false);
+  const companyDropdownRef = useRef(null);
+
+  // Company options
+  const companyOptions = [
+    { id: '100-102', name: '100 Baroid Surface Solutions, Halliburton Energy Services Inc' },
+    { id: '1000', name: '1000 TEAM LEAD CONSTRUCTION PTE LTD' },
+    { id: 'TOM22-00656', name: 'TOM22-00656 TEAM LEAD CONSTRUCTION PTE LTD : 25-00003-TLC-Nursing Home @ Hougang Ave 1' },
+    { id: '1001', name: '1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD' },
+    { id: 'TOM22-00733', name: 'TOM22-00733 TECH ONSHORE MEP-PREFABRICATORS PTE LTD : 25-00010-TOM-Riser Concept' },
+    { id: 'TOM22-00741', name: 'TOM22-00741 TECH ONSHORE MEP-PREFABRICATORS PTE LTD : 25-00015-TOM-TOM Innovation' },
+    { id: '1002', name: '1002 TECH MARINE OFFSHORE (S) PTE LTD' },
+    { id: '1003', name: '1003 TECH ELECTRIC AUTOMATION PTE LTD' },
+    { id: '1004', name: '1004 TECH OFFSHORE MARINE (DO) PTE LTD' },
+    { id: '1005', name: '1005 TECH OFFSHORE MARINE (SV) PTE LTD' }
+  ];
+
+  // Sales Rep options
+  const salesRepOptions = [
+    { id: 'TD0059', name: 'TD0059 Kumarasamy Madhavan Subash' },
+    { id: 'TSV025', name: 'TSV025 Sasapu Venkateshwara Rao' },
+    { id: 'MEP01', name: 'MEP01 001 JEGANATHAN SUNDARAVELU' },
+    { id: 'TOM01', name: 'TOM01 John Smith' },
+    { id: 'TOM02', name: 'TOM02 Jane Doe' },
+    { id: 'TOM03', name: 'TOM03 Mike Johnson' },
+    { id: 'TOM04', name: 'TOM04 Sarah Wilson' },
+    { id: 'TOM05', name: 'TOM05 David Brown' }
+  ];
+
+  // Filter company options based on search
+  const filteredCompanies = companyOptions.filter(company =>
+    company.name.toLowerCase().includes(companySearch.toLowerCase())
+  );
+
+  // Filter sales rep options based on search
+  const filteredSalesReps = salesRepOptions.filter(rep =>
+    rep.name.toLowerCase().includes(salesRepSearch.toLowerCase())
+  );
+
+  // Handle company selection
+  const handleCompanySelect = (company) => {
+    handleFormChange('company', company.name);
+    setCompanySearch(company.name);
+    setCompanyDropdownOpen(false);
+  };
+
+  // Handle company search input
+  const handleCompanySearchChange = (e) => {
+    setCompanySearch(e.target.value);
+    setCompanyDropdownOpen(true);
+    // Clear the form value if user is typing
+    if (e.target.value !== formData.company) {
+      handleFormChange('company', '');
+    }
+  };
+
+  // Handle add new company
+  const handleAddNewCompany = () => {
+    setShowAddCompanyModal(true);
+    setCompanyDropdownOpen(false);
+  };
+
+  // Handle sales rep selection
+  const handleSalesRepSelect = (rep) => {
+    handleFormChange('salesRep', rep.name);
+    setSalesRepSearch(rep.name);
+    setSalesRepDropdownOpen(false);
+  };
+
+  // Handle sales rep search input
+  const handleSalesRepSearchChange = (e) => {
+    setSalesRepSearch(e.target.value);
+    setSalesRepDropdownOpen(true);
+    // Clear the form value if user is typing
+    if (e.target.value !== formData.salesRep) {
+      handleFormChange('salesRep', '');
+    }
+  };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (salesRepDropdownRef.current && !salesRepDropdownRef.current.contains(event.target)) {
+        setSalesRepDropdownOpen(false);
+      }
+      if (companyDropdownRef.current && !companyDropdownRef.current.contains(event.target)) {
+        setCompanyDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleMenuToggle = (index, event) => {
     event.stopPropagation();
@@ -249,23 +354,61 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                 </div>
                 <div className="detail-field">
                   <label>COMPANY *</label>
-                  <select
-                    className="form-control"
-                    value={formData.company}
-                    onChange={(e) => handleFormChange('company', e.target.value)}
+                  <div 
+                    className="field-with-external-add" 
+                    onMouseEnter={() => setCompanyFieldHovered(true)}
+                    onMouseLeave={() => setCompanyFieldHovered(false)}
                   >
-                    <option value="">Select...</option>
-                    <option value="100 - 102">100 Baroid Surface Solutions, Halliburton Energy Services Inc</option>
-                    <option value="1000">1000 TEAM LEAD CONSTRUCTION PTE LTD</option>
-                    <option value="TOM22-00656">TOM22-00656 TEAM LEAD CONSTRUCTION PTE LTD : 25-00003-TLC-Nursing Home @ Hougang Ave 1</option>
-                    <option value="1001">1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD</option>
-                    <option value="TOM22-00733">TOM22-00733 TECH ONSHORE MEP-PREFABRICATORS PTE LTD : 25-00010-TOM-Riser Concept</option>
-                    <option value="TOM22-00741">TOM22-00741 TECH ONSHORE MEP-PREFABRICATORS PTE LTD : 25-00015-TOM-TOM Innovation</option>
-                    <option value="1002">1002 TECH MARINE OFFSHORE (S) PTE LTD</option>
-                    <option value="1003">1003 TECH ELECTRIC AUTOMATION PTE LTD</option>
-                    <option value="1004">1004 TECH OFFSHORE MARINE (DO) PTE LTD</option>
-                    <option value="1005">1005 TECH OFFSHORE MARINE (SV) PTE LTD</option>
-                  </select>
+                    <div className="searchable-dropdown-with-add" ref={companyDropdownRef}>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="<Type then tab>"
+                        value={companySearch}
+                        onChange={handleCompanySearchChange}
+                        onFocus={() => setCompanyDropdownOpen(true)}
+                      />
+                      {companyDropdownOpen && (
+                        <div className="dropdown-options">
+                          {filteredCompanies.length > 0 ? (
+                            filteredCompanies.map((company) => (
+                              <div
+                                key={company.id}
+                                className="dropdown-option"
+                                onClick={() => handleCompanySelect(company)}
+                              >
+                                {company.name}
+                              </div>
+                            ))
+                          ) : companySearch && filteredCompanies.length === 0 ? (
+                            <div className="dropdown-option no-results">
+                              No companies found
+                            </div>
+                          ) : (
+                            companyOptions.slice(0, 10).map((company) => (
+                              <div
+                                key={company.id}
+                                className="dropdown-option"
+                                onClick={() => handleCompanySelect(company)}
+                              >
+                                {company.name}
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {companyFieldHovered && (
+                      <button 
+                        type="button"
+                        className="external-add-button"
+                        onClick={handleAddNewCompany}
+                        title="Add new company"
+                      >
+                        <i className="fas fa-plus"></i>
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <div className="detail-field">
                   <label>PROBABILITY *</label>
@@ -287,15 +430,35 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                 </div>
                 <div className="detail-field">
                   <label>SALES REP</label>
-                  <select 
-                    className="form-control"
-                    value={formData.salesRep}
-                    onChange={(e) => handleFormChange('salesRep', e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                    <option>TD0059 Kumarasamy Madhavan Subash</option>
-                    <option>TSV025 Sasapu Venkateshwara Rao</option>
-                  </select>
+                  <div className="searchable-dropdown" ref={salesRepDropdownRef}>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search sales rep..."
+                      value={salesRepSearch}
+                      onChange={handleSalesRepSearchChange}
+                      onFocus={() => setSalesRepDropdownOpen(true)}
+                    />
+                    {salesRepDropdownOpen && (
+                      <div className="dropdown-options">
+                        {filteredSalesReps.length > 0 ? (
+                          filteredSalesReps.map((rep) => (
+                            <div
+                              key={rep.id}
+                              className="dropdown-option"
+                              onClick={() => handleSalesRepSelect(rep)}
+                            >
+                              {rep.name}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="dropdown-option no-results">
+                            No sales reps found
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="detail-field">
                   <label>EXPECTED CLOSE *</label>
@@ -835,6 +998,222 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
             </button>
           </div>
         </div>
+
+      {/* Add Company Modal */}
+      {showAddCompanyModal && (
+        <div className="modal-overlay" onClick={() => setShowAddCompanyModal(false)}>
+          <div className="modal-content sales-quotation" onClick={(e) => e.stopPropagation()}>
+            <div className="page-header">
+              <div className="page-title">
+                <i className="fas fa-building" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+                <h1>Prospect</h1>
+              </div>
+              <div className="page-actions">
+                <button className="btn btn-primary" onClick={() => {
+                  if (companySearch.trim()) {
+                    handleFormChange('company', companySearch);
+                    setShowAddCompanyModal(false);
+                    showToast('New company added successfully!', 'success');
+                  }
+                }}>
+                  <i className="fas fa-save"></i>
+                  Save
+                </button>
+                <button className="btn btn-secondary" onClick={() => setShowAddCompanyModal(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+
+            <div className="quotation-container">
+              {/* Primary Information */}
+              <div className="form-section">
+                <h2 className="section-title">
+                  <i className="fas fa-info-circle"></i>
+                  Primary Information
+                </h2>
+                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">CUSTOMER ID <span className="required">*</span></label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <input 
+                        type="text" 
+                        className="form-control"
+                        placeholder="To Be Generated"
+                        disabled
+                        style={{ flex: 1 }}
+                      />
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
+                        <input type="checkbox" defaultChecked />
+                        AUTO
+                      </label>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">TYPE</label>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input type="radio" name="companyType" value="company" defaultChecked />
+                        COMPANY
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input type="radio" name="companyType" value="individual" />
+                        INDIVIDUAL
+                      </label>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">COMPANY NAME <span className="required">*</span></label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      placeholder="Enter company name"
+                      value={companySearch}
+                      onChange={(e) => setCompanySearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">PARENT COMPANY</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      placeholder="<Type then tab>"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">SALES REP</label>
+                    <select className="form-control">
+                      <option value="">Select...</option>
+                      {salesRepOptions.map(rep => (
+                        <option key={rep.id} value={rep.name}>{rep.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">WEB ADDRESS</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      placeholder="Enter web address"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">CATEGORY</label>
+                    <select className="form-control">
+                      <option value="">Select...</option>
+                      <option>Customer</option>
+                      <option>Vendor</option>
+                      <option>Partner</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">DEFAULT ORDER PRIORITY</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      placeholder="Enter priority"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Email | Phone | Address */}
+              <div className="form-section">
+                <h2 className="section-title">
+                  <i className="fas fa-envelope"></i>
+                  Email | Phone | Address
+                </h2>
+                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">EMAIL</label>
+                    <input 
+                      type="email" 
+                      className="form-control"
+                      placeholder="Enter email address"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">PHONE</label>
+                    <input 
+                      type="tel" 
+                      className="form-control"
+                      placeholder="Enter phone number"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">ALT. PHONE</label>
+                    <input 
+                      type="tel" 
+                      className="form-control"
+                      placeholder="Enter alternate phone"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">FAX</label>
+                    <input 
+                      type="tel" 
+                      className="form-control"
+                      placeholder="Enter fax number"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Classification */}
+              <div className="form-section">
+                <h2 className="section-title">
+                  <i className="fas fa-tags"></i>
+                  Classification
+                </h2>
+                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">PRIMARY SUBSIDIARY <span className="required">*</span></label>
+                    <select className="form-control">
+                      <option value="">Select...</option>
+                      <option>Tech Onshore MEP Prefabricators Pte Ltd.</option>
+                      <option>Tech Marine Offshore (S) Pte Ltd</option>
+                      <option>Tech Electric Automation Pte Ltd</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">DEFAULT DISCOUNT</label>
+                    <select className="form-control">
+                      <option value="">Select...</option>
+                      <option>5%</option>
+                      <option>10%</option>
+                      <option>15%</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input type="checkbox" />
+                        TRANSACTIONS NEED APPROVAL
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input type="checkbox" />
+                        STOP SENDING SMS
+                      </label>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">LAST SALES ACTIVITY</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      disabled
+                    />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
 
       <Toast 
         message={toast.message} 

@@ -260,7 +260,7 @@ textarea.form-control {
     position: fixed;
     left: var(--sidebar-width);
     width: 280px;
-    max-height: calc(100vh - var(--submenu-top, 0px) - 20px);
+    max-height: 70vh;
     overflow-y: auto;
     overflow-x: hidden;
     background: #3a4150;
@@ -379,7 +379,7 @@ textarea.form-control {
     margin-left: 0;
     border: none;
     border-left: 1px solid rgba(255, 255, 255, 0.1);
-    max-height: calc(100vh - var(--nested-submenu-top, 0px) - 20px);
+    max-height: 200px;
     overflow-y: auto;
     overflow-x: hidden;
     direction: rtl;
@@ -440,6 +440,27 @@ textarea.form-control {
 }
 
 .submenu-item-wrapper:hover::after {
+    display: block;
+}
+
+/* Additional vertical bridge to cover gaps when nested submenu is above/below parent */
+.submenu-item-wrapper::before {
+    content: '';
+    position: fixed;
+    left: calc(var(--sidebar-width) + 280px);
+    width: 10px;
+    height: 100vh;
+    top: 0;
+    display: none;
+    z-index: 9998;
+    pointer-events: auto;
+}
+
+.sidebar.collapsed .submenu-item-wrapper::before {
+    left: calc(var(--sidebar-collapsed) + 280px);
+}
+
+.submenu-item-wrapper:hover::before {
     display: block;
 }
 
@@ -1328,6 +1349,10 @@ textarea.form-control {
     }
     
     .submenu-item-wrapper::after {
+        left: calc(var(--sidebar-collapsed) + 280px);
+    }
+    
+    .submenu-item-wrapper::before {
         left: calc(var(--sidebar-collapsed) + 280px);
     }
     

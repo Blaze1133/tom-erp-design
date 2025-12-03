@@ -6,6 +6,13 @@ const EnterCashSales = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('items');
 
+  // Customer project dropdown states
+  const [customerProjectHovered, setCustomerProjectHovered] = useState(false);
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState('');
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  
   // Row actions states
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
@@ -70,6 +77,68 @@ const EnterCashSales = () => {
     testTransactionField: '',
     gstType: ''
   });
+
+  // Customer options for dropdown
+  const customerOptions = [
+    '612 Raise Pte Ltd',
+    'ABC Corporation',
+    'XYZ Industries',
+    'Tech Marine Solutions',
+    'Pacific Shipping Ltd',
+    'Oceanic Engineering Pte Ltd',
+    'Marine Construction Co'
+  ];
+
+  // Customer project handlers
+  const handleCustomerSelect = (customer) => {
+    handleInputChange('customerProject', customer);
+    setShowCustomerDropdown(false);
+    setCustomerSearch('');
+  };
+
+  const handleCustomerSearchChange = (e) => {
+    const value = e.target.value;
+    setCustomerSearch(value);
+    handleInputChange('customerProject', value);
+    
+    if (value) {
+      const filtered = customerOptions.filter(customer =>
+        customer.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredCustomers(filtered);
+    } else {
+      setFilteredCustomers(customerOptions);
+    }
+    setShowCustomerDropdown(true);
+  };
+
+  const handleAddNewCustomer = () => {
+    setShowAddCustomer(true);
+    setShowCustomerDropdown(false);
+  };
+
+  const handleSaveNewCustomer = (customerData) => {
+    // Add the new customer to the options list
+    customerOptions.push(customerData.companyName);
+    // Set it as selected
+    handleInputChange('customerProject', customerData.companyName);
+    setShowAddCustomer(false);
+    showToast('New customer added successfully!', 'success');
+  };
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveMenu(null);
+      if (showCustomerDropdown && !customerProjectHovered) {
+        setShowCustomerDropdown(false);
+      }
+    };
+    if (activeMenu !== null || showCustomerDropdown) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeMenu, showCustomerDropdown, customerProjectHovered]);
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -287,16 +356,59 @@ const EnterCashSales = () => {
             </div>
             <div className="form-group">
               <label className="form-label required">Customer:Project</label>
-              <select 
-                className="form-control"
-                value={formData.customerProject}
-                onChange={(e) => handleInputChange('customerProject', e.target.value)}
+              <div 
+                className="field-with-external-add" 
+                onMouseEnter={() => setCustomerProjectHovered(true)}
+                onMouseLeave={() => setCustomerProjectHovered(false)}
               >
-                <option value="">{'<Type then tab>'}</option>
-                <option>Pacific Shipping Ltd : Marine Equipment Supply</option>
-                <option>Oceanic Engineering Pte Ltd : Offshore Platform</option>
-                <option>Marine Construction Co : Fabrication Services</option>
-              </select>
+                <div className="searchable-dropdown-with-add">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="<Type then tab>"
+                    value={formData.customerProject}
+                    onChange={handleCustomerSearchChange}
+                    onFocus={() => {
+                      setShowCustomerDropdown(true);
+                      setFilteredCustomers(customerOptions);
+                    }}
+                  />
+                  {showCustomerDropdown && (
+                    <>
+                      <div 
+                        className="dropdown-overlay"
+                        onClick={() => setShowCustomerDropdown(false)}
+                      />
+                      <div className="dropdown-options">
+                        {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, index) => (
+                          <div
+                            key={index}
+                            className="dropdown-option"
+                            onClick={() => handleCustomerSelect(customer)}
+                          >
+                            {customer}
+                          </div>
+                        ))}
+                        {customerSearch && !customerOptions.some(c => c.toLowerCase() === customerSearch.toLowerCase()) && (
+                          <div className="dropdown-option no-results">
+                            No customers found
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+                {customerProjectHovered && (
+                  <button 
+                    type="button"
+                    className="external-add-button"
+                    onClick={handleAddNewCustomer}
+                    title="Add new customer"
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
+                )}
+              </div>
             </div>
             <div className="form-group">
               <label className="form-label">Check #</label>

@@ -6,6 +6,13 @@ const CreateInvoice = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('items');
 
+  // Customer project dropdown states
+  const [customerProjectHovered, setCustomerProjectHovered] = useState(false);
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState('');
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  
   // Row actions states
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
@@ -70,6 +77,54 @@ const CreateInvoice = () => {
     gstType: '0'
   });
 
+  // Customer options for dropdown
+  const customerOptions = [
+    '612 Raise Pte Ltd',
+    'ABC Corporation',
+    'XYZ Industries',
+    'Tech Marine Solutions',
+    'Pacific Shipping Ltd',
+    'Oceanic Engineering Pte Ltd',
+    'Marine Construction Co'
+  ];
+
+  // Customer project handlers
+  const handleCustomerSelect = (customer) => {
+    handleInputChange('customerProject', customer);
+    setShowCustomerDropdown(false);
+    setCustomerSearch('');
+  };
+
+  const handleCustomerSearchChange = (e) => {
+    const value = e.target.value;
+    setCustomerSearch(value);
+    handleInputChange('customerProject', value);
+    
+    if (value) {
+      const filtered = customerOptions.filter(customer =>
+        customer.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredCustomers(filtered);
+    } else {
+      setFilteredCustomers(customerOptions);
+    }
+    setShowCustomerDropdown(true);
+  };
+
+  const handleAddNewCustomer = () => {
+    setShowAddCustomer(true);
+    setShowCustomerDropdown(false);
+  };
+
+  const handleSaveNewCustomer = (customerData) => {
+    // Add the new customer to the options list
+    customerOptions.push(customerData.companyName);
+    // Set it as selected
+    handleInputChange('customerProject', customerData.companyName);
+    setShowAddCustomer(false);
+    showToast('New customer added successfully!', 'success');
+  };
+
   // Calculation functions
   const calculateSubtotal = () => {
     return formData.items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
@@ -97,6 +152,20 @@ const CreateInvoice = () => {
       [field]: value
     }));
   };
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveMenu(null);
+      if (showCustomerDropdown && !customerProjectHovered) {
+        setShowCustomerDropdown(false);
+      }
+    };
+    if (activeMenu !== null || showCustomerDropdown) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeMenu, showCustomerDropdown, customerProjectHovered]);
 
   const handleSave = () => {
     showToast('Invoice saved successfully!', 'success');
@@ -288,16 +357,59 @@ const CreateInvoice = () => {
             </div>
             <div className="form-group">
               <label className="form-label required">Customer:Project</label>
-              <select 
-                className="form-control"
-                value={formData.customerProject}
-                onChange={(e) => handleInputChange('customerProject', e.target.value)}
+              <div 
+                className="field-with-external-add" 
+                onMouseEnter={() => setCustomerProjectHovered(true)}
+                onMouseLeave={() => setCustomerProjectHovered(false)}
               >
-                <option value="">{'<Type then tab>'}</option>
-                <option>Pacific Shipping Ltd : Marine Equipment Supply</option>
-                <option>Oceanic Engineering Pte Ltd : Offshore Platform</option>
-                <option>Marine Construction Co : Fabrication Services</option>
-              </select>
+                <div className="searchable-dropdown-with-add">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="<Type then tab>"
+                    value={formData.customerProject}
+                    onChange={handleCustomerSearchChange}
+                    onFocus={() => {
+                      setShowCustomerDropdown(true);
+                      setFilteredCustomers(customerOptions);
+                    }}
+                  />
+                  {showCustomerDropdown && (
+                    <>
+                      <div 
+                        className="dropdown-overlay"
+                        onClick={() => setShowCustomerDropdown(false)}
+                      />
+                      <div className="dropdown-options">
+                        {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, index) => (
+                          <div
+                            key={index}
+                            className="dropdown-option"
+                            onClick={() => handleCustomerSelect(customer)}
+                          >
+                            {customer}
+                          </div>
+                        ))}
+                        {customerSearch && !customerOptions.some(c => c.toLowerCase() === customerSearch.toLowerCase()) && (
+                          <div className="dropdown-option no-results">
+                            No customers found
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+                {customerProjectHovered && (
+                  <button 
+                    type="button"
+                    className="external-add-button"
+                    onClick={handleAddNewCustomer}
+                    title="Add new customer"
+                  >
+                    <i className="fas fa-plus"></i>
+                  </button>
+                )}
+              </div>
             </div>
             <div className="form-group">
               <label className="form-label">PO #</label>
@@ -497,7 +609,7 @@ const CreateInvoice = () => {
         </div>
 
         {/* Tabbed Interface */}
-        <div className="detail-tabs" style={{ marginTop: '2rem' }}>
+        <div className="detail-tabs">
           <div className="tabs-header">
             <button className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`} onClick={() => setActiveTab('items')}>Items</button>
             <button className={`tab-btn ${activeTab === 'shipping' ? 'active' : ''}`} onClick={() => setActiveTab('shipping')}>Shipping</button>
@@ -962,6 +1074,33 @@ const CreateInvoice = () => {
         </div>
       </div>
 
+      {/* Add Customer Modal */}
+      {showAddCustomer && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>
+                <i className="fas fa-user-plus"></i>
+                Add New Customer
+              </h2>
+              <button 
+                className="modal-close"
+                onClick={() => setShowAddCustomer(false)}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <AddCustomerForm 
+                onSave={handleSaveNewCustomer}
+                onCancel={() => setShowAddCustomer(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
       <Toast 
         message={toast.message} 
         type={toast.type} 
@@ -969,6 +1108,296 @@ const CreateInvoice = () => {
         onClose={() => setToast({ ...toast, show: false })} 
       />
     </div>
+  );
+};
+
+// Add Customer Form Component
+const AddCustomerForm = ({ onSave, onCancel }) => {
+  const [customerData, setCustomerData] = useState({
+    customerId: 'To Be Generated',
+    type: 'COMPANY',
+    companyName: '',
+    parentCompany: '',
+    salesRep: '',
+    webAddress: '',
+    category: '',
+    defaultOrderPriority: '',
+    email: '',
+    phone: '',
+    altPhone: '',
+    fax: '',
+    primarySubsidiary: '',
+    transactionsNeedApproval: false,
+    stopSendingSms: false,
+    defaultDiscount: '',
+    lastSalesActivity: ''
+  });
+
+  const handleInputChange = (field, value) => {
+    setCustomerData({ ...customerData, [field]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!customerData.companyName.trim()) {
+      alert('Company Name is required');
+      return;
+    }
+    onSave(customerData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="add-customer-form">
+      {/* Primary Information Section */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Primary Information</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>CUSTOMER ID <span className="required">*</span></label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.customerId}
+                disabled
+              />
+              <div className="form-checkbox">
+                <input type="checkbox" id="auto-invoice" defaultChecked />
+                <label htmlFor="auto-invoice">AUTO</label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>TYPE</label>
+              <div className="radio-group">
+                <label>
+                  <input 
+                    type="radio" 
+                    name="type-invoice" 
+                    value="COMPANY"
+                    checked={customerData.type === 'COMPANY'}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                  />
+                  COMPANY
+                </label>
+                <label>
+                  <input 
+                    type="radio" 
+                    name="type-invoice" 
+                    value="INDIVIDUAL"
+                    checked={customerData.type === 'INDIVIDUAL'}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                  />
+                  INDIVIDUAL
+                </label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>COMPANY NAME <span className="required">*</span></label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.companyName}
+                onChange={(e) => handleInputChange('companyName', e.target.value)}
+                placeholder="Enter company name"
+              />
+            </div>
+            <div className="form-group">
+              <label>PARENT COMPANY</label>
+              <select 
+                className="form-control"
+                value={customerData.parentCompany}
+                onChange={(e) => handleInputChange('parentCompany', e.target.value)}
+              >
+                <option>&lt;Type then tab&gt;</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>SALES REP</label>
+              <select 
+                className="form-control"
+                value={customerData.salesRep}
+                onChange={(e) => handleInputChange('salesRep', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>John Doe</option>
+                <option>Jane Smith</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>WEB ADDRESS</label>
+              <input 
+                type="url" 
+                className="form-control"
+                value={customerData.webAddress}
+                onChange={(e) => handleInputChange('webAddress', e.target.value)}
+                placeholder="https://"
+              />
+            </div>
+            <div className="form-group">
+              <label>CATEGORY</label>
+              <select 
+                className="form-control"
+                value={customerData.category}
+                onChange={(e) => handleInputChange('category', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>Premium</option>
+                <option>Standard</option>
+                <option>Basic</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>DEFAULT ORDER PRIORITY</label>
+              <select 
+                className="form-control"
+                value={customerData.defaultOrderPriority}
+                onChange={(e) => handleInputChange('defaultOrderPriority', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Email | Phone | Address Section */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Email | Phone | Address</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>EMAIL</label>
+              <input 
+                type="email" 
+                className="form-control"
+                value={customerData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder="Enter email address"
+              />
+            </div>
+            <div className="form-group">
+              <label>PHONE</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                placeholder="Enter phone number"
+              />
+            </div>
+            <div className="form-group">
+              <label>ALT. PHONE</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.altPhone}
+                onChange={(e) => handleInputChange('altPhone', e.target.value)}
+                placeholder="Enter alternate phone"
+              />
+            </div>
+            <div className="form-group">
+              <label>FAX</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.fax}
+                onChange={(e) => handleInputChange('fax', e.target.value)}
+                placeholder="Enter fax number"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Classification Section */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Classification</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>PRIMARY SUBSIDIARY <span className="required">*</span></label>
+              <select 
+                className="form-control"
+                value={customerData.primarySubsidiary}
+                onChange={(e) => handleInputChange('primarySubsidiary', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>Tech Onshore MEP Prefabricators Pte Ltd</option>
+                <option>Tech Marine Offshore (S) Pte Ltd</option>
+                <option>TOM Offshore Marine Engineering Pte Ltd</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <div className="form-checkbox">
+                <input 
+                  type="checkbox" 
+                  id="transactionsApproval-invoice"
+                  checked={customerData.transactionsNeedApproval}
+                  onChange={(e) => handleInputChange('transactionsNeedApproval', e.target.checked)}
+                />
+                <label htmlFor="transactionsApproval-invoice">TRANSACTIONS NEED APPROVAL</label>
+              </div>
+            </div>
+            <div className="form-group">
+              <div className="form-checkbox">
+                <input 
+                  type="checkbox" 
+                  id="stopSms-invoice"
+                  checked={customerData.stopSendingSms}
+                  onChange={(e) => handleInputChange('stopSendingSms', e.target.checked)}
+                />
+                <label htmlFor="stopSms-invoice">STOP SENDING SMS</label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>DEFAULT DISCOUNT</label>
+              <select 
+                className="form-control"
+                value={customerData.defaultDiscount}
+                onChange={(e) => handleInputChange('defaultDiscount', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>5%</option>
+                <option>10%</option>
+                <option>15%</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>LAST SALES ACTIVITY</label>
+              <input 
+                type="date" 
+                className="form-control"
+                value={customerData.lastSalesActivity}
+                onChange={(e) => handleInputChange('lastSalesActivity', e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Actions */}
+      <div className="form-actions">
+        <button type="submit" className="btn btn-primary">
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button type="button" className="btn btn-secondary" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    </form>
   );
 };
 

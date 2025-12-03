@@ -39,137 +39,182 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const [hrSubmenuTop, setHrSubmenuTop] = useState(100);
   const [nestedSubmenuTop, setNestedSubmenuTop] = useState({});
 
+  // Helper function to calculate dynamic submenu position
+  const calculateSubmenuPosition = (rect, submenuItems) => {
+    const itemHeight = 44; // Height per menu item
+    const padding = 16; // Top and bottom padding
+    const estimatedHeight = submenuItems.length * itemHeight + padding;
+    const maxSubmenuHeight = Math.min(estimatedHeight, window.innerHeight * 0.7); // 70vh max
+    
+    const viewportHeight = window.innerHeight;
+    const spaceBelow = viewportHeight - rect.top;
+    const spaceAbove = rect.top;
+    
+    // If submenu fits below, position it at menu item level
+    if (maxSubmenuHeight <= spaceBelow - 20) {
+      return rect.top;
+    }
+    
+    // If submenu fits above, position it to end at menu item bottom
+    if (maxSubmenuHeight <= spaceAbove - 20) {
+      return Math.max(10, rect.bottom - maxSubmenuHeight);
+    }
+    
+    // Submenu doesn't fit either way - position to maximize visibility
+    if (spaceAbove > spaceBelow) {
+      return Math.max(10, viewportHeight - maxSubmenuHeight - 10);
+    } else {
+      return rect.top;
+    }
+  };
+
   const handleSalesHover = () => {
     if (salesItemRef.current) {
       const rect = salesItemRef.current.getBoundingClientRect();
-      setSubmenuTop(rect.top);
+      setSubmenuTop(calculateSubmenuPosition(rect, salesSubItems));
     }
   };
 
   const handleCrmHover = () => {
     if (crmItemRef.current) {
       const rect = crmItemRef.current.getBoundingClientRect();
-      setCrmSubmenuTop(rect.top);
+      setCrmSubmenuTop(calculateSubmenuPosition(rect, crmSubItems));
     }
   };
 
   const handleProjectManagementHover = () => {
     if (projectManagementItemRef.current) {
       const rect = projectManagementItemRef.current.getBoundingClientRect();
-      setProjectManagementSubmenuTop(rect.top);
+      setProjectManagementSubmenuTop(calculateSubmenuPosition(rect, projectManagementSubItems));
     }
   };
 
   const handlePurchasesHover = () => {
     if (purchasesItemRef.current) {
       const rect = purchasesItemRef.current.getBoundingClientRect();
-      setPurchasesSubmenuTop(rect.top);
+      setPurchasesSubmenuTop(calculateSubmenuPosition(rect, purchasesSubItems));
     }
   };
 
   const handlePayablesHover = () => {
     if (payablesItemRef.current) {
       const rect = payablesItemRef.current.getBoundingClientRect();
-      setPayablesSubmenuTop(rect.top);
+      setPayablesSubmenuTop(calculateSubmenuPosition(rect, payablesSubItems));
     }
   };
 
   const handleInventoryHover = () => {
     if (inventoryItemRef.current) {
       const rect = inventoryItemRef.current.getBoundingClientRect();
-      setInventorySubmenuTop(rect.top);
+      setInventorySubmenuTop(calculateSubmenuPosition(rect, inventorySubItems));
     }
   };
 
   const handleBankHover = () => {
     if (bankItemRef.current) {
       const rect = bankItemRef.current.getBoundingClientRect();
-      setBankSubmenuTop(rect.top);
+      setBankSubmenuTop(calculateSubmenuPosition(rect, bankSubItems));
     }
   };
 
   const handleOrderManagementHover = () => {
     if (orderManagementItemRef.current) {
       const rect = orderManagementItemRef.current.getBoundingClientRect();
-      setOrderManagementSubmenuTop(rect.top);
+      setOrderManagementSubmenuTop(calculateSubmenuPosition(rect, orderManagementSubItems));
     }
   };
 
   const handleCustomersHover = () => {
     if (customersItemRef.current) {
       const rect = customersItemRef.current.getBoundingClientRect();
-      setCustomersSubmenuTop(rect.top);
+      setCustomersSubmenuTop(calculateSubmenuPosition(rect, customersSubItems));
     }
   };
 
   const handleProductionHover = () => {
     if (productionItemRef.current) {
       const rect = productionItemRef.current.getBoundingClientRect();
-      setProductionSubmenuTop(rect.top);
+      setProductionSubmenuTop(calculateSubmenuPosition(rect, productionSubItems));
     }
   };
 
   const handleMasterTablesHover = () => {
     if (masterTablesItemRef.current) {
       const rect = masterTablesItemRef.current.getBoundingClientRect();
-      setMasterTablesSubmenuTop(rect.top);
+      setMasterTablesSubmenuTop(calculateSubmenuPosition(rect, []));
     }
   };
 
   const handleDrawingsDocumentsHover = () => {
     if (drawingsDocumentsItemRef.current) {
       const rect = drawingsDocumentsItemRef.current.getBoundingClientRect();
-      setDrawingsDocumentsSubmenuTop(rect.top);
+      setDrawingsDocumentsSubmenuTop(calculateSubmenuPosition(rect, []));
     }
   };
 
   const handleSetupHover = () => {
     if (setupItemRef.current) {
       const rect = setupItemRef.current.getBoundingClientRect();
-      setSetupSubmenuTop(rect.top);
+      setSetupSubmenuTop(calculateSubmenuPosition(rect, setupSubItems));
     }
   };
 
   const handlePayrollHover = () => {
     if (payrollItemRef.current) {
       const rect = payrollItemRef.current.getBoundingClientRect();
-      setPayrollSubmenuTop(rect.top);
+      setPayrollSubmenuTop(calculateSubmenuPosition(rect, payrollSubItems));
     }
   };
 
   const handleHrHover = () => {
     if (hrItemRef.current) {
       const rect = hrItemRef.current.getBoundingClientRect();
-      setHrSubmenuTop(rect.top);
+      setHrSubmenuTop(calculateSubmenuPosition(rect, hrSubItems));
     }
   };
 
   const handleMastersHover = () => {
     if (mastersItemRef.current) {
       const rect = mastersItemRef.current.getBoundingClientRect();
-      setMastersSubmenuTop(rect.top);
+      setMastersSubmenuTop(calculateSubmenuPosition(rect, mastersSubItems));
     }
   };
 
   const handleReportsHover = () => {
     if (reportsItemRef.current) {
       const rect = reportsItemRef.current.getBoundingClientRect();
-      setReportsSubmenuTop(rect.top);
+      setReportsSubmenuTop(calculateSubmenuPosition(rect, reportsSubItems));
     }
   };
 
   const handleFinancialHover = () => {
     if (financialItemRef.current) {
       const rect = financialItemRef.current.getBoundingClientRect();
-      setFinancialSubmenuTop(rect.top);
+      setFinancialSubmenuTop(calculateSubmenuPosition(rect, financialSubItems));
     }
   };
 
   const handleNestedHover = (event, itemId) => {
     const rect = event.currentTarget.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const nestedSubmenuHeight = 200; // Max height we set in CSS
+    
+    // Always try to align with the parent item first
+    let position = rect.top;
+    
+    // Only adjust if it would go significantly off-screen
+    if (rect.top + nestedSubmenuHeight > viewportHeight - 20) {
+      // Calculate how much we need to move up
+      const overhang = (rect.top + nestedSubmenuHeight) - (viewportHeight - 20);
+      position = rect.top - overhang;
+      
+      // But don't go above a reasonable minimum
+      position = Math.max(20, position);
+    }
+    
     setNestedSubmenuTop(prev => ({
       ...prev,
-      [itemId]: rect.top
+      [itemId]: position
     }));
   };
 

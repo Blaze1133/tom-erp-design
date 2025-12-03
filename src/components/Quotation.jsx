@@ -1,34 +1,51 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import './Enquiries.css';
 
 const Quotation = () => {
-  const [items, setItems] = useState([]);
-
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   
-  // Customer search states
+  // Customer project dropdown states
+  const [customerProjectHovered, setCustomerProjectHovered] = useState(false);
   const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
-  const [customerSearch, setCustomerSearch] = useState('');
   const [showAddCustomer, setShowAddCustomer] = useState(false);
-  const [isHoveringCustomer, setIsHoveringCustomer] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
-
+  
   // Row actions states
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  
+  // Items state
+  const [items, setItems] = useState([
+    {
+      id: 1,
+      item: 'Welding',
+      quantity: 4,
+      units: 'Kgs',
+      description: 'Aluminum Electrodes 3.2mm x 4 kgs',
+      priceLevel: 'Custom',
+      rate: 15.00,
+      amount: 60.00,
+      taxCode: 'GST_SG:7%',
+      taxRate: '7.0%',
+      taxAmount: 4.20,
+      grossAmount: 64.20
+    }
+  ]);
 
   const [formData, setFormData] = useState({
     // Primary Information
-    customForm: 'Standard Quotation',
-    estimateNumber: 'EST-2023-001',
+    customForm: 'TOM Supply Quotation',
+    estimateNumber: 'To Be Generated',
     customerProject: '',
     title: '',
-    expires: '',
-    date: '',
-    expectedClose: '',
-    status: 'Draft',
-    probability: '',
+    date: '3/12/2025',
+    status: 'Proposal',
+    probability: '50.0%',
+    expectedClose: '3/12/2025',
+    expires: '1/1/2026',
     memo: '',
     
     // Sales Information
@@ -36,141 +53,91 @@ const Quotation = () => {
     opportunity: '',
     forecastType: 'Omitted',
     
-    // Quotation Details
+    // Classification
     subsidiary: '',
     class: '',
     location: '',
     department: '',
     taxesAndDuties: '',
-    variations: '',
-    approvalStatus: 'Pending',
+    variation: '',
+    approvalStatus: 'Pending Approval',
     contactPerson: '',
-    signature: '',
-    countryOfOrigin: '',
     hsCode: '',
+    countryOfOrigin: ''
   });
 
-  // Customer data array
-  const allCustomers = [
-    'Keppel Offshore & Marine Ltd',
-    'Sembcorp Marine Ltd',
-    'Jurong Shipyard Pte Ltd',
-    'ST Engineering Marine Ltd',
-    'Damen Shipyards Singapore',
-    'Seatrium Limited',
-    'Penguin International Limited',
-    'Marco Polo Marine Ltd',
-    'Vallianz Holdings Limited',
-    'ASL Marine Holdings Ltd',
-    'Cosco Shipping Heavy Industry',
-    'Yantai CIMC Raffles Offshore',
-    'Drydocks World Singapore',
-    'PaxOcean Engineering Pte Ltd',
-    'Vard Holdings Limited'
+  // Customer options for dropdown
+  const customerOptions = [
+    '612 Raise Pte Ltd',
+    'ABC Corporation',
+    'XYZ Industries',
+    'Tech Marine Solutions'
   ];
 
-  const calculateAmount = (item) => {
-    return item.quantity * item.rate;
+  const handleInputChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
   };
 
-  const calculateTaxAmount = (item) => {
-    const amount = calculateAmount(item);
-    return amount * 0.10; // 10% tax
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
   };
 
-  const calculateGrossAmount = (item) => {
-    return calculateAmount(item) + calculateTaxAmount(item);
+  const handleSubmit = () => {
+    showToast('Quotation saved successfully!', 'success');
   };
 
-  const calculateSubtotal = () => {
-    return items.reduce((sum, item) => sum + calculateAmount(item), 0);
-  };
-
-  const calculateTotalTax = () => {
-    return items.reduce((sum, item) => sum + calculateTaxAmount(item), 0);
-  };
-
-  const calculateTotal = () => {
-    return calculateSubtotal() + calculateTotalTax();
-  };
-
-  const addItem = () => {
-    setItems([...items, {
-      id: Date.now(),
-      item: '',
-      quantity: 1,
-      units: 'Pieces',
-      description: '',
-      priceLevel: 'Standard',
-      rate: 0,
-      amount: 0,
-      taxCode: 'GST 10%',
-      grossAmount: 0,
-      class: '',
-      costEstimateType: 'Fixed',
-      estimatedExtendedCost: 0.00
-    }]);
-  };
-
-  const removeItem = (id) => {
-    if (items.length > 1) {
-      setItems(items.filter(item => item.id !== id));
+  const handleCancel = () => {
+    if (window.confirm('Are you sure you want to close this transaction? Any unsaved changes will be lost.')) {
+      showToast('Transaction cancelled', 'error');
     }
   };
 
-  const updateItem = (id, field, value) => {
-    setItems(items.map(item => 
-      item.id === id ? { ...item, [field]: value } : item
-    ));
+  const handleSaveDraft = () => {
+    showToast('Draft saved successfully!', 'success');
   };
 
-  const handleInsertAbove = (index) => {
-    const newItem = {
-      id: Date.now(),
-      item: '',
-      quantity: 1,
-      units: 'Pieces',
-      description: '',
-      priceLevel: 'Standard',
-      rate: 0,
-      amount: 0,
-      taxCode: 'GST 10%',
-      grossAmount: 0,
-      class: '',
-      costEstimateType: 'Fixed',
-      estimatedExtendedCost: 0.00
-    };
-    const newItems = [...items.slice(0, index), newItem, ...items.slice(index)];
-    setItems(newItems);
+  const handleConvertToOrder = () => {
+    showToast('Quotation converted to sales order!', 'success');
   };
 
-  const handleInsertBelow = (index) => {
-    const newItem = {
-      id: Date.now(),
-      item: '',
-      quantity: 1,
-      units: 'Pieces',
-      description: '',
-      priceLevel: 'Standard',
-      rate: 0,
-      amount: 0,
-      taxCode: 'GST 10%',
-      grossAmount: 0,
-      class: '',
-      costEstimateType: 'Fixed',
-      estimatedExtendedCost: 0.00
-    };
-    const newItems = [...items.slice(0, index + 1), newItem, ...items.slice(index + 1)];
-    setItems(newItems);
+  // Customer project handlers
+  const handleCustomerSelect = (customer) => {
+    handleInputChange('customerProject', customer);
+    setShowCustomerDropdown(false);
+    setCustomerSearch('');
   };
 
-  const handleDeleteRow = (index) => {
-    if (window.confirm('Are you sure you want to delete this row?')) {
-      setItems(items.filter((_, i) => i !== index));
-      showToast('Row deleted successfully', 'success');
+  const handleCustomerSearchChange = (e) => {
+    const value = e.target.value;
+    setCustomerSearch(value);
+    handleInputChange('customerProject', value);
+    
+    if (value) {
+      const filtered = customerOptions.filter(customer =>
+        customer.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredCustomers(filtered);
+    } else {
+      setFilteredCustomers(customerOptions);
     }
+    setShowCustomerDropdown(true);
   };
 
+  const handleAddNewCustomer = () => {
+    setShowAddCustomer(true);
+    setShowCustomerDropdown(false);
+  };
+
+  const handleSaveNewCustomer = (customerData) => {
+    // Add the new customer to the options list
+    customerOptions.push(customerData.companyName);
+    // Set it as selected
+    handleInputChange('customerProject', customerData.companyName);
+    setShowAddCustomer(false);
+    showToast('New customer added successfully!', 'success');
+  };
+
+  // Row actions handlers
   const handleMenuToggle = (index, event) => {
     event.stopPropagation();
     if (activeMenu === index) {
@@ -186,803 +153,734 @@ const Quotation = () => {
     }
   };
 
+  const handleInsertAbove = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 1,
+      units: 'Pcs',
+      description: '',
+      priceLevel: 'Custom',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: 'GST_SG:7%',
+      taxRate: '7.0%',
+      taxAmount: 0.00,
+      grossAmount: 0.00
+    };
+    const newItems = [...items.slice(0, index), newItem, ...items.slice(index)];
+    setItems(newItems);
+  };
+
+  const handleInsertBelow = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 1,
+      units: 'Pcs',
+      description: '',
+      priceLevel: 'Custom',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: 'GST_SG:7%',
+      taxRate: '7.0%',
+      taxAmount: 0.00,
+      grossAmount: 0.00
+    };
+    const newItems = [...items.slice(0, index + 1), newItem, ...items.slice(index + 1)];
+    setItems(newItems);
+  };
+
+  const handleDeleteRow = (index) => {
+    if (window.confirm('Are you sure you want to delete this row?')) {
+      setItems(items.filter((_, i) => i !== index));
+      showToast('Row deleted successfully', 'success');
+    }
+  };
+
   // Close menu when clicking outside
   React.useEffect(() => {
     const handleClickOutside = () => {
       setActiveMenu(null);
+      if (showCustomerDropdown && !customerProjectHovered) {
+        setShowCustomerDropdown(false);
+      }
     };
-    if (activeMenu !== null) {
+    if (activeMenu !== null || showCustomerDropdown) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
-  }, [activeMenu]);
+  }, [activeMenu, showCustomerDropdown, customerProjectHovered]);
 
-  const handleInputChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
+  // Item management functions
+  const addItem = () => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      quantity: 1,
+      units: 'Pcs',
+      description: '',
+      priceLevel: 'Custom',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: 'GST_SG:7%',
+      taxRate: '7.0%',
+      taxAmount: 0.00,
+      grossAmount: 0.00
+    };
+    setItems([...items, newItem]);
   };
 
-  const showToast = (message, type = 'success') => {
-    setToast({ show: true, message, type });
+  const updateItem = (id, field, value) => {
+    setItems(items.map(item => {
+      if (item.id === id) {
+        const updatedItem = { ...item, [field]: value };
+        
+        // Recalculate amount when quantity or rate changes
+        if (field === 'quantity' || field === 'rate') {
+          updatedItem.amount = updatedItem.quantity * updatedItem.rate;
+        }
+        
+        // Update tax rate when tax code changes
+        if (field === 'taxCode') {
+          if (value === 'GST_SG:7%') {
+            updatedItem.taxRate = '7.0%';
+          } else if (value === 'GST_SG:9%') {
+            updatedItem.taxRate = '9.0%';
+          } else {
+            updatedItem.taxRate = '0.0%';
+          }
+        }
+        
+        // Recalculate tax amount and gross amount
+        const taxRateNum = parseFloat(updatedItem.taxRate) / 100 || 0;
+        updatedItem.taxAmount = updatedItem.amount * taxRateNum;
+        updatedItem.grossAmount = updatedItem.amount + updatedItem.taxAmount;
+        
+        return updatedItem;
+      }
+      return item;
+    }));
   };
 
-  const handleSubmit = () => {
-    showToast('Quotation submitted successfully!', 'success');
-  };
-
-  const handleSaveDraft = () => {
-    showToast('Draft saved successfully!', 'success');
-  };
-
-  const handleConvertToOrder = () => {
-    showToast('Quotation converted to sales order!', 'success');
-  };
-
-  const handleCancel = () => {
-    if (window.confirm('Are you sure you want to close this transaction? Any unsaved changes will be lost.')) {
-      showToast('Transaction cancelled', 'error');
+  const removeItem = (id) => {
+    if (items.length > 1) {
+      setItems(items.filter(item => item.id !== id));
     }
   };
 
-  // Customer search functionality
-  const handleCustomerSearch = (searchTerm) => {
-    setCustomerSearch(searchTerm);
-    if (searchTerm.trim() === '') {
-      setFilteredCustomers(allCustomers);
-    } else {
-      const filtered = allCustomers.filter(customer =>
-        customer.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredCustomers(filtered);
-    }
+  // Calculate totals
+  const calculateSubtotal = () => {
+    return items.reduce((sum, item) => sum + (item.amount || 0), 0);
   };
 
-  const handleSaveNewCustomer = (newCustomerData) => {
-    showToast('Customer added successfully!', 'success');
-    setShowAddCustomer(false);
-    handleInputChange('customerProject', newCustomerData.name);
+  const calculateTaxTotal = () => {
+    return items.reduce((sum, item) => sum + ((item.amount || 0) * 0.07), 0);
+  };
+
+  const calculateTotal = () => {
+    return calculateSubtotal() + calculateTaxTotal();
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Sales Quotation Preparation</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-file-invoice"></i>
+          <div>
+            <h1>Sales Quotation</h1>
+            <div className="detail-subtitle">
+              <span>New Sales Quotation</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Close Transaction
-          </button>
-            <button className="btn btn-secondary" onClick={handleSaveDraft}>
-              <i className="fas fa-save"></i>
-              Save Draft
-            </button>
-            <button className="btn btn-secondary" onClick={handleConvertToOrder}>
-              <i className="fas fa-exchange-alt"></i>
-              Convert to Order
-            </button>
-            <button className="btn btn-primary" onClick={handleSubmit}>
-              <i className="fas fa-check"></i>
-              Submit
-            </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="form-container">
-        {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-user"></i>
-            Customer Information
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label required">Custom Form</label>
-              <select 
-                className="form-control"
-                value={formData.customForm}
-                onChange={(e) => handleInputChange('customForm', e.target.value)}
-              >
-                <option>Standard Quotation</option>
-                <option>TOM Service Quotation</option>
-                <option>TOM Supply Quotation</option>
-                <option>TOM DfMA Quotation</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Estimate Number</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.estimateNumber}
-                readOnly
-                placeholder="Auto generated"
-              />
-            </div>
-            <div className="form-group" style={{ position: 'relative' }}>
-              <label className="form-label required">Customer Project</label>
-              <div 
-                style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
-                onMouseEnter={() => setIsHoveringCustomer(true)}
-                onMouseLeave={() => setIsHoveringCustomer(false)}
-              >
-                <div style={{ position: 'relative', flex: 1 }}>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.customerProject}
-                    onChange={(e) => handleInputChange('customerProject', e.target.value)}
-                    onFocus={() => {
-                      setShowCustomerDropdown(true);
-                      setFilteredCustomers(allCustomers);
-                    }}
-                    placeholder="<Type then tab>"
-                  />
-                  <button 
-                    type="button"
-                    style={{ 
-                      position: 'absolute', 
-                      right: '8px', 
-                      top: '50%', 
-                      transform: 'translateY(-50%)', 
-                      background: 'none', 
-                      border: 'none', 
-                      cursor: 'pointer',
-                      color: '#666',
-                      fontSize: '14px'
-                    }}
-                    onClick={() => {
-                      setShowCustomerDropdown(!showCustomerDropdown);
-                      if (!showCustomerDropdown) {
-                        setFilteredCustomers(allCustomers);
-                      }
-                    }}
-                  >
-                    <i className="fas fa-chevron-down"></i>
-                  </button>
-                  {showCustomerDropdown && (
-                    <>
-                      <div 
-                        style={{ 
-                          position: 'fixed', 
-                          top: 0, 
-                          left: 0, 
-                          right: 0, 
-                          bottom: 0, 
-                          zIndex: 999 
-                        }}
-                        onClick={() => setShowCustomerDropdown(false)}
-                      />
-                      <div style={{ 
-                        position: 'absolute', 
-                        top: '100%', 
-                        left: 0, 
-                        right: 0, 
-                        background: '#fff', 
-                        border: '1px solid #ddd', 
-                        borderRadius: '4px', 
-                        marginTop: '4px', 
-                        zIndex: 1000,
-                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                        maxHeight: '300px',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column'
-                      }}>
-                        <div style={{ padding: '12px', borderBottom: '1px solid #e0e0e0', background: '#f8f9fa' }}>
-                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                            <i className="fas fa-search" style={{ color: '#666', fontSize: '14px' }}></i>
-                            <input 
-                              type="text"
-                              placeholder="Search customers..."
-                              value={customerSearch}
-                              onChange={(e) => handleCustomerSearch(e.target.value)}
-                              style={{ 
-                                flex: 1, 
-                                padding: '6px 10px', 
-                                border: '1px solid #ddd', 
-                                borderRadius: '4px',
-                                fontSize: '13px'
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <div style={{ 
-                          flex: 1, 
-                          overflowY: 'auto',
-                          maxHeight: '200px'
-                        }}>
-                          {(filteredCustomers.length > 0 ? filteredCustomers : allCustomers).map((customer, idx) => (
-                            <div 
-                              key={idx}
-                              onClick={() => {
-                                handleInputChange('customerProject', customer);
-                                setShowCustomerDropdown(false);
-                                setCustomerSearch('');
-                              }}
-                              style={{ 
-                                padding: '10px 12px', 
-                                cursor: 'pointer',
-                                fontSize: '13px',
-                                borderBottom: '1px solid #f0f0f0',
-                                transition: 'background 0.2s'
-                              }}
-                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
-                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleSubmit}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar" onClick={handleSaveDraft}>
+          <i className="fas fa-copy"></i>
+          Save Draft
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-print"></i>
+          Print
+        </button>
+        <button className="btn-toolbar" onClick={handleConvertToOrder}>
+          <i className="fas fa-exchange-alt"></i>
+          Convert to Order
+        </button>
+        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
+          <button className="btn-toolbar">
+            <i className="fas fa-cog"></i>
+            Actions
+            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
+          </button>
+        </div>
+      </div>
+
+      <div className="detail-content">
+        {/* Primary Information Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>CUSTOM FORM <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.customForm}
+                  onChange={(e) => handleInputChange('customForm', e.target.value)}
+                >
+                  <option>TOM Supply Quotation</option>
+                  <option>Standard Quotation</option>
+                  <option>TOM Service Quotation</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>DATE <span className="required">*</span></label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.date}
+                  onChange={(e) => handleInputChange('date', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>ESTIMATE #</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.estimateNumber}
+                  placeholder="To Be Generated"
+                  disabled
+                />
+              </div>
+              <div className="detail-field">
+                <label>STATUS <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.status}
+                  onChange={(e) => handleInputChange('status', e.target.value)}
+                >
+                  <option>Proposal</option>
+                  <option>Draft</option>
+                  <option>Sent</option>
+                  <option>Accepted</option>
+                  <option>Expired</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>CUSTOMER:PROJECT <span className="required">*</span></label>
+                <div 
+                  className="field-with-external-add" 
+                  onMouseEnter={() => setCustomerProjectHovered(true)}
+                  onMouseLeave={() => setCustomerProjectHovered(false)}
+                >
+                  <div className="searchable-dropdown-with-add">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="<Type then tab>"
+                      value={formData.customerProject}
+                      onChange={handleCustomerSearchChange}
+                      onFocus={() => {
+                        setShowCustomerDropdown(true);
+                        setFilteredCustomers(customerOptions);
+                      }}
+                    />
+                    {showCustomerDropdown && (
+                      <>
+                        <div 
+                          className="dropdown-overlay"
+                          onClick={() => setShowCustomerDropdown(false)}
+                        />
+                        <div className="dropdown-options">
+                          {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, index) => (
+                            <div
+                              key={index}
+                              className="dropdown-option"
+                              onClick={() => handleCustomerSelect(customer)}
                             >
                               {customer}
                             </div>
                           ))}
-                          {filteredCustomers.length === 0 && customerSearch && (
-                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                          {customerSearch && !customerOptions.some(c => c.toLowerCase() === customerSearch.toLowerCase()) && (
+                            <div className="dropdown-option no-results">
                               No customers found
                             </div>
                           )}
                         </div>
-                      </div>
-                    </>
+                      </>
+                    )}
+                  </div>
+                  {customerProjectHovered && (
+                    <button 
+                      type="button"
+                      className="external-add-button"
+                      onClick={handleAddNewCustomer}
+                      title="Add new customer"
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
                   )}
                 </div>
-                {isHoveringCustomer && (
-                  <button 
-                    type="button"
-                    className="btn btn-secondary" 
-                    style={{ 
-                      padding: '8px 16px',
-                      fontSize: '14px',
-                      minWidth: 'auto',
-                      transition: 'opacity 0.2s'
-                    }}
-                    onClick={() => setShowAddCustomer(true)}
-                    title="Add new customer"
-                  >
-                    <i className="fas fa-plus"></i>
-                  </button>
-                )}
+              </div>
+              <div className="detail-field">
+                <label>TITLE</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  placeholder="Enter quotation title"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>EXP. CLOSE <span className="required">*</span></label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.expectedClose}
+                  onChange={(e) => handleInputChange('expectedClose', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>EXPIRES</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.expires}
+                  onChange={(e) => handleInputChange('expires', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  placeholder="Enter memo"
+                  value={formData.memo}
+                  onChange={(e) => handleInputChange('memo', e.target.value)}
+                />
               </div>
             </div>
-            <div className="form-group">
-              <label className="form-label required">Title</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.title}
-                onChange={(e) => handleInputChange('title', e.target.value)}
-                placeholder="Enter quotation title"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Date</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.date}
-                onChange={(e) => handleInputChange('date', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Expires</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.expires}
-                onChange={(e) => handleInputChange('expires', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Expected Close</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.expectedClose}
-                onChange={(e) => handleInputChange('expectedClose', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Status</label>
-              <select 
-                className="form-control"
-                value={formData.status}
-                onChange={(e) => handleInputChange('status', e.target.value)}
-              >
-                <option value="Draft">Draft</option>
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Probability (%)</label>
-              <input 
-                type="number" 
-                className="form-control"
-                value={formData.probability}
-                onChange={(e) => handleInputChange('probability', e.target.value)}
-                placeholder="Enter probability"
-                min="0"
-                max="100"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Memo</label>
-              <textarea 
-                className="form-control"
-                rows="2"
-                value={formData.memo}
-                onChange={(e) => handleInputChange('memo', e.target.value)}
-                placeholder="Enter memo"
-              />
+          </div>
+        </div>
+
+        {/* Sales Information Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Sales Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SALES REP</label>
+                <select className="form-control">
+                  <option>Select...</option>
+                  <option>John Doe</option>
+                  <option>Jane Smith</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>OPPORTUNITY</label>
+                <select className="form-control">
+                  <option>Select...</option>
+                  <option>High Priority</option>
+                  <option>Medium Priority</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>FORECAST TYPE</label>
+                <select 
+                  className="form-control"
+                  value={formData.forecastType}
+                  onChange={(e) => handleInputChange('forecastType', e.target.value)}
+                >
+                  <option>Omitted</option>
+                  <option>Included</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
-        {/* Sales Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-briefcase"></i>
-            Sales Information
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">Sales Rep</label>
-              <select 
-                className="form-control"
-                value={formData.salesRep}
-                onChange={(e) => handleInputChange('salesRep', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>TEA0021 Subbiah</option>
-                <option>TEA0022 John Tan</option>
-                <option>TEA0023 Mary Lim</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Opportunity</label>
-              <select 
-                className="form-control"
-                value={formData.opportunity}
-                onChange={(e) => handleInputChange('opportunity', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Marine Project 2024</option>
-                <option>Offshore Platform Build</option>
-                <option>Ship Repair Contract</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Forecast Type</label>
-              <select 
-                className="form-control"
-                value={formData.forecastType}
-                onChange={(e) => handleInputChange('forecastType', e.target.value)}
-              >
-                <option>Omitted</option>
-                <option>Most Likely</option>
-                <option>Best Case</option>
-                <option>Worst Case</option>
-              </select>
+        {/* Classification Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.subsidiary}
+                  onChange={(e) => handleInputChange('subsidiary', e.target.value)}
+                >
+                  <option>Select...</option>
+                  <option>Tech Onshore MEP Prefabricators Pte Ltd.</option>
+                  <option>Tech Marine Offshore (S) Pte Ltd</option>
+                  <option>TOM Offshore Marine Engineering Pte Ltd</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>CLASS</label>
+                <select 
+                  className="form-control"
+                  value={formData.class}
+                  onChange={(e) => handleInputChange('class', e.target.value)}
+                >
+                  <option>Select...</option>
+                  <option>Consumable Item</option>
+                  <option>Course</option>
+                  <option>Electrical</option>
+                  <option>Fabrication</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>LOCATION</label>
+                <select 
+                  className="form-control"
+                  value={formData.location}
+                  onChange={(e) => handleInputChange('location', e.target.value)}
+                >
+                  <option>Select...</option>
+                  <option>Hong Hang Shipyard</option>
+                  <option>Mega yard</option>
+                  <option>Singapore (MEP)</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>DEPARTMENT <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.department}
+                  onChange={(e) => handleInputChange('department', e.target.value)}
+                >
+                  <option>Select...</option>
+                  <option>TOM: Engineering</option>
+                  <option>TOM: Production</option>
+                  <option>TOM: Sales and Marketing</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>TAXES AND DUTIES</label>
+                <textarea 
+                  className="form-control"
+                  rows="3"
+                  placeholder="Quotation does not include any applicable foreign taxes and overhead costs such as but not limited to foreign withholding tax, international tax..."
+                  value={formData.taxesAndDuties}
+                  onChange={(e) => handleInputChange('taxesAndDuties', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>VARIATION</label>
+                <textarea 
+                  className="form-control"
+                  rows="3"
+                  placeholder="Variation to this quotation applies to the scope of work as herein specified, any additional work or incurrence of any other costs not..."
+                  value={formData.variation}
+                  onChange={(e) => handleInputChange('variation', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>APPROVAL STATUS</label>
+                <select 
+                  className="form-control"
+                  value={formData.approvalStatus}
+                  onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
+                >
+                  <option>Pending Approval</option>
+                  <option>Approved</option>
+                  <option>Rejected</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>CONTACT PERSON</label>
+                <select 
+                  className="form-control"
+                  value={formData.contactPerson}
+                  onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                >
+                  <option>Select...</option>
+                  <option>John Smith</option>
+                  <option>Jane Doe</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>HS CODE</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  placeholder="Enter HS code"
+                  value={formData.hsCode}
+                  onChange={(e) => handleInputChange('hsCode', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>COUNTRY OF ORIGIN</label>
+                <select 
+                  className="form-control"
+                  value={formData.countryOfOrigin}
+                  onChange={(e) => handleInputChange('countryOfOrigin', e.target.value)}
+                >
+                  <option>Select...</option>
+                  <option>Singapore</option>
+                  <option>Malaysia</option>
+                  <option>China</option>
+                  <option>India</option>
+                  <option>Japan</option>
+                  <option>South Korea</option>
+                  <option>United States</option>
+                  <option>Germany</option>
+                  <option>United Kingdom</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
-        {/* Quotation Details */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-info-circle"></i>
-            Quotation Details
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">Subsidiary</label>
-              <select 
-                className="form-control"
-                value={formData.subsidiary}
-                onChange={(e) => handleInputChange('subsidiary', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option value="TOM S">Tech Offshore Marine (S) Pte Ltd - "TOM S" (ROC 200709673M)</option>
-                <option value="DQ">Tech Offshore Marine (DQ) Pte Ltd - "DQ" (ROC 200704907R)</option>
-                <option value="TEA">Tech Electric & Automation Pte Ltd - "TEA" (ROC 198700264M)</option>
-                <option value="TMO">Tech Marine Offshore (S) Pte Ltd - "TMO" (ROC 200512260M)</option>
-                <option value="SV">Tech Offshore Marine (SV) Pte Ltd - "SV" (ROC 200608955Z)</option>
-                <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd - "TOM" (ROC 199507962E)</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Class</label>
-              <select 
-                className="form-control"
-                value={formData.class}
-                onChange={(e) => handleInputChange('class', e.target.value)}
-              >
-                <option value="">Select Class</option>
-                <option value="class1">Marine Engineering</option>
-                <option value="class2">Offshore Services</option>
-                <option value="class3">Ship Repair</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Location</label>
-              <select 
-                className="form-control"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
-              >
-                <option value="">Select Location</option>
-                <option value="loc1">Singapore Yard</option>
-                <option value="loc2">Johor Facility</option>
-                <option value="loc3">Batam Workshop</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Department</label>
-              <select 
-                className="form-control"
-                value={formData.department}
-                onChange={(e) => handleInputChange('department', e.target.value)}
-              >
-                <option value="">Select Department</option>
-                <option value="dept1">Sales</option>
-                <option value="dept2">Engineering</option>
-                <option value="dept3">Operations</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Taxes and Duties</label>
-              <textarea 
-                className="form-control"
-                rows="3"
-                value={formData.taxesAndDuties}
-                onChange={(e) => handleInputChange('taxesAndDuties', e.target.value)}
-                placeholder="Enter taxes and duties"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Variations</label>
-              <textarea 
-                className="form-control"
-                rows="3"
-                value={formData.variations}
-                onChange={(e) => handleInputChange('variations', e.target.value)}
-                placeholder="Enter variations"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Approval Status</label>
-              <select 
-                className="form-control"
-                value={formData.approvalStatus}
-                onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
-              >
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Contact Person</label>
-              <select 
-                className="form-control"
-                value={formData.contactPerson}
-                onChange={(e) => handleInputChange('contactPerson', e.target.value)}
-              >
-                <option value="">Select Contact</option>
-                <option value="contact1">John Smith</option>
-                <option value="contact2">Jane Doe</option>
-                <option value="contact3">Mike Johnson</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Country of Origin</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.countryOfOrigin}
-                onChange={(e) => handleInputChange('countryOfOrigin', e.target.value)}
-                placeholder="Enter country of origin"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">HS Code</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.hsCode}
-                onChange={(e) => handleInputChange('hsCode', e.target.value)}
-                placeholder="Enter HS code"
-              />
-            </div>
+        {/* Items Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Items</h3>
           </div>
-        </div>
-
-        {/* Items Table */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-boxes"></i>
-            Items
-          </h2>
-          <div className="items-table-wrapper">
-            <table className="detail-items-table">
-              <thead>
-                <tr>
-                  <th style={{ width: '30px' }}></th>
-                  <th style={{minWidth: '200px'}}>Item</th>
-                  <th style={{minWidth: '100px'}}>Qty</th>
-                  <th style={{minWidth: '120px'}}>Units</th>
-                  <th style={{minWidth: '250px'}}>Desc</th>
-                  <th style={{minWidth: '150px'}}>Price Level</th>
-                  <th style={{minWidth: '120px'}}>Rate</th>
-                  <th style={{minWidth: '120px'}}>Amt</th>
-                  <th style={{minWidth: '150px'}}>Tax Code</th>
-                  <th style={{minWidth: '120px'}}>Gross Amt</th>
-                  <th style={{minWidth: '180px'}}>Class</th>
-                  <th style={{minWidth: '180px'}}>Cost Estimate Type</th>
-                  <th style={{minWidth: '180px'}}>Est. Extended Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item, index) => (
-                  <tr 
-                    key={item.id}
-                    className="table-row-with-actions"
-                    onMouseEnter={() => setHoveredRow(index)}
-                    onMouseLeave={() => setHoveredRow(null)}
-                  >
-                    <td style={{ textAlign: 'center', position: 'relative' }}>
-                      {hoveredRow === index && (
-                        <button 
-                          className="row-actions-btn" 
-                          title="Row Actions"
-                          onClick={(e) => handleMenuToggle(index, e)}
-                        >
-                          <i className="fas fa-ellipsis-v"></i>
-                        </button>
-                      )}
-                      {activeMenu === index && (
-                        <div 
-                          className="row-actions-menu" 
-                          style={{ 
-                            top: `${menuPosition.top}px`, 
-                            left: `${menuPosition.left}px`,
-                            display: 'block'
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <button onClick={() => {
-                            handleInsertAbove(index);
-                            setActiveMenu(null);
-                          }}>
-                            <i className="fas fa-arrow-up"></i>
-                            Insert Above
-                          </button>
-                          <button onClick={() => {
-                            handleInsertBelow(index);
-                            setActiveMenu(null);
-                          }}>
-                            <i className="fas fa-arrow-down"></i>
-                            Insert Below
-                          </button>
-                          <button onClick={() => {
-                            handleDeleteRow(index);
-                            setActiveMenu(null);
-                          }} className="delete-action">
-                            <i className="fas fa-trash"></i>
-                            Delete Row
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      <select 
-                        className="table-input"
-                        value={item.item}
-                        onChange={(e) => updateItem(item.id, 'item', e.target.value)}
-                        style={{width: '100%'}}
-                      >
-                        <option value="">Select Item</option>
-                        <option value="Steel Beams (Grade A)">Steel Beams (Grade A)</option>
-                        <option value="Marine Paint (5L)">Marine Paint (5L)</option>
-                        <option value="Hydraulic Pumps">Hydraulic Pumps</option>
-                        <option value="Welding Equipment">Welding Equipment</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        className="table-input"
-                        value={item.quantity}
-                        onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                        min="1"
-                        style={{width: '100%'}}
-                      />
-                    </td>
-                    <td>
-                      <select 
-                        className="table-input"
-                        value={item.units}
-                        onChange={(e) => updateItem(item.id, 'units', e.target.value)}
-                        style={{width: '100%'}}
-                      >
-                        <option value="Pieces">Pieces</option>
-                        <option value="Kg">Kg</option>
-                        <option value="Liters">Liters</option>
-                        <option value="Meters">Meters</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input 
-                        type="text" 
-                        className="table-input"
-                        value={item.description}
-                        onChange={(e) => updateItem(item.id, 'description', e.target.value)}
-                        placeholder="Description"
-                        style={{width: '100%'}}
-                      />
-                    </td>
-                    <td>
-                      <select 
-                        className="table-input"
-                        value={item.priceLevel}
-                        onChange={(e) => updateItem(item.id, 'priceLevel', e.target.value)}
-                        style={{width: '100%'}}
-                      >
-                        <option value="Standard">Standard</option>
-                        <option value="Premium">Premium</option>
-                        <option value="Bulk">Bulk</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        className="table-input"
-                        value={item.rate}
-                        onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
-                        step="0.01"
-                        min="0"
-                        style={{width: '100%'}}
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        className="table-input"
-                        value={calculateAmount(item)}
-                        onChange={(e) => updateItem(item.id, 'amount', parseFloat(e.target.value) || 0)}
-                        step="0.01"
-                        min="0"
-                        style={{width: '100%'}}
-                      />
-                    </td>
-                    <td>
-                      <select 
-                        className="table-input"
-                        value={item.taxCode}
-                        onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)}
-                        style={{width: '100%'}}
-                      >
-                        <option value="GST 10%">GST 10%</option>
-                        <option value="GST 7%">GST 7%</option>
-                        <option value="No Tax">No Tax</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        className="table-input"
-                        value={calculateGrossAmount(item)}
-                        onChange={(e) => updateItem(item.id, 'grossAmount', parseFloat(e.target.value) || 0)}
-                        step="0.01"
-                        min="0"
-                        style={{width: '100%'}}
-                      />
-                    </td>
-                    <td>
-                      <select 
-                        className="table-input"
-                        value={item.class}
-                        onChange={(e) => updateItem(item.id, 'class', e.target.value)}
-                        style={{width: '100%'}}
-                      >
-                        <option value="">Select...</option>
-                        <option>Consumable Item</option>
-                        <option>Course</option>
-                        <option>Cutting Works</option>
-                        <option>Electrical</option>
-                        <option>Fabrication</option>
-                        <option>Hydrotesting</option>
-                        <option>Installation work</option>
-                        <option>Manpower Supply</option>
-                        <option>Material Supply</option>
-                        <option>Module /Prefab</option>
-                        <option>Piping</option>
-                        <option>Project Works</option>
-                        <option>Refurbishment works</option>
-                        <option>Rental</option>
-                        <option>Repair & Referable</option>
-                        <option>Sale of Scrap Metal</option>
-                        <option>Structure</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select 
-                        className="table-input"
-                        value={item.costEstimateType}
-                        onChange={(e) => updateItem(item.id, 'costEstimateType', e.target.value)}
-                        style={{width: '100%'}}
-                      >
-                        <option value="Fixed">Fixed</option>
-                        <option value="Variable">Variable</option>
-                        <option value="Estimated">Estimated</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        className="table-input"
-                        value={item.estimatedExtendedCost}
-                        onChange={(e) => updateItem(item.id, 'estimatedExtendedCost', parseFloat(e.target.value) || 0)}
-                        step="0.01"
-                        min="0"
-                        style={{width: '100%'}}
-                      />
-                    </td>
+          <div className="section-body">
+            <div className="items-table-container">
+              <table className="items-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '12%' }}>ITEM</th>
+                    <th style={{ width: '6%' }}>QTY</th>
+                    <th style={{ width: '8%' }}>UNITS</th>
+                    <th style={{ width: '20%' }}>DESCRIPTION</th>
+                    <th style={{ width: '10%' }}>PRICE LEVEL</th>
+                    <th style={{ width: '8%' }}>RATE</th>
+                    <th style={{ width: '8%' }}>AMOUNT</th>
+                    <th style={{ width: '10%' }}>TAX CODE</th>
+                    <th style={{ width: '6%' }}>TAX RATE</th>
+                    <th style={{ width: '6%' }}>TAX AMT</th>
+                    <th style={{ width: '8%' }}>GROSS AMT</th>
+                    <th style={{ width: '6%' }}>ACTION</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <button className="add-item-btn" onClick={addItem}>
-            <i className="fas fa-plus"></i>
-            Add Item
-          </button>
+                </thead>
+                <tbody>
+                  {items.map((item, index) => (
+                    <tr 
+                      key={item.id}
+                      className={`table-row-with-actions ${hoveredRow === index ? 'hovered' : ''}`}
+                      onMouseEnter={() => setHoveredRow(index)}
+                      onMouseLeave={() => setHoveredRow(null)}
+                    >
+                      <td>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={item.item}
+                          onChange={(e) => updateItem(item.id, 'item', e.target.value)}
+                          placeholder="Enter item"
+                        />
+                      </td>
+                      <td>
+                        <input 
+                          type="number" 
+                          className="form-control"
+                          value={item.quantity}
+                          onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                          min="0"
+                          step="0.01"
+                        />
+                      </td>
+                      <td>
+                        <select 
+                          className="form-control"
+                          value={item.units}
+                          onChange={(e) => updateItem(item.id, 'units', e.target.value)}
+                        >
+                          <option>Kgs</option>
+                          <option>Pcs</option>
+                          <option>Meters</option>
+                          <option>Hours</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={item.description}
+                          onChange={(e) => updateItem(item.id, 'description', e.target.value)}
+                          placeholder="Enter description"
+                        />
+                      </td>
+                      <td>
+                        <select 
+                          className="form-control"
+                          value={item.priceLevel}
+                          onChange={(e) => updateItem(item.id, 'priceLevel', e.target.value)}
+                        >
+                          <option>Custom</option>
+                          <option>Standard</option>
+                          <option>Premium</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input 
+                          type="number" 
+                          className="form-control"
+                          value={item.rate}
+                          onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                          min="0"
+                          step="0.01"
+                        />
+                      </td>
+                      <td>
+                        <strong>${(item.amount || 0).toFixed(2)}</strong>
+                      </td>
+                      <td>
+                        <select 
+                          className="form-control"
+                          value={item.taxCode}
+                          onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)}
+                        >
+                          <option>GST_SG:7%</option>
+                          <option>GST_SG:9%</option>
+                          <option>No Tax</option>
+                        </select>
+                      </td>
+                      <td>
+                        <span>{item.taxRate || '7.0%'}</span>
+                      </td>
+                      <td>
+                        <strong>${(item.taxAmount || 0).toFixed(2)}</strong>
+                      </td>
+                      <td>
+                        <strong>${(item.grossAmount || 0).toFixed(2)}</strong>
+                      </td>
+                      <td style={{ textAlign: 'center', position: 'relative' }}>
+                        {hoveredRow === index && (
+                          <button 
+                            className="row-actions-btn"
+                            title="Row Actions"
+                            onClick={(e) => handleMenuToggle(index, e)}
+                          >
+                            <i className="fas fa-ellipsis-v"></i>
+                          </button>
+                        )}
+                        {activeMenu === index && (
+                          <div 
+                            className="row-actions-menu"
+                            style={{
+                              top: `${menuPosition.top}px`,
+                              left: `${menuPosition.left}px`,
+                              display: 'block'
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <button onClick={() => {
+                              handleInsertAbove(index);
+                              setActiveMenu(null);
+                            }}>
+                              <i className="fas fa-arrow-up"></i>
+                              Insert Above
+                            </button>
+                            <button onClick={() => {
+                              handleInsertBelow(index);
+                              setActiveMenu(null);
+                            }}>
+                              <i className="fas fa-arrow-down"></i>
+                              Insert Below
+                            </button>
+                            <button onClick={() => {
+                              handleDeleteRow(index);
+                              setActiveMenu(null);
+                            }} className="delete-action">
+                              <i className="fas fa-trash"></i>
+                              Delete Row
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            <div style={{ marginBottom: '1.5rem' }}>
+              <button className="btn btn-primary" onClick={addItem}>
+                <i className="fas fa-plus"></i>
+                Add Item
+              </button>
+            </div>
 
-          <div className="summary-grid">
-            <div className="summary-card">
-              <div className="summary-title">Subtotal</div>
-              <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
+            <div className="summary-grid">
+              <div className="summary-card">
+                <div className="summary-title">Subtotal</div>
+                <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
+              </div>
+              <div className="summary-card">
+                <div className="summary-title">Tax (7%)</div>
+                <div className="summary-value">${calculateTaxTotal().toFixed(2)}</div>
+              </div>
+              <div className="summary-card">
+                <div className="summary-title">Discount</div>
+                <div className="summary-value">$0.00</div>
+              </div>
+              <div className="summary-card" style={{ background: 'var(--gray-ultralight)' }}>
+                <div className="summary-title">Total Amount</div>
+                <div className="summary-value" style={{ color: 'var(--red-primary)' }}>${calculateTotal().toFixed(2)}</div>
+              </div>
             </div>
-            <div className="summary-card">
-              <div className="summary-title">Tax Amount</div>
-              <div className="summary-value">${calculateTotalTax().toFixed(2)}</div>
-            </div>
-            <div className="summary-card">
-              <div className="summary-title">Discount</div>
-              <div className="summary-value">$0.00</div>
-            </div>
-            <div className="summary-card" style={{ background: 'var(--gray-ultralight)' }}>
-              <div className="summary-title">Total Amount</div>
-              <div className="summary-value" style={{ color: 'var(--red-primary)' }}>${calculateTotal().toFixed(2)}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Close Transaction
-          </button>
-          <div>
-            <button className="btn btn-secondary" onClick={handleSaveDraft}>
-              <i className="fas fa-save"></i>
-              Save Draft
-            </button>
-            <button className="btn btn-secondary" onClick={handleConvertToOrder}>
-              <i className="fas fa-exchange-alt"></i>
-              Convert to Order
-            </button>
-            <button className="btn btn-primary" onClick={handleSubmit}>
-              <i className="fas fa-check"></i>
-              Submit
-            </button>
           </div>
         </div>
       </div>
+
+      {/* Add Customer Modal */}
+      {showAddCustomer && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>
+                <i className="fas fa-user-plus"></i>
+                Add New Customer
+              </h2>
+              <button 
+                className="modal-close"
+                onClick={() => setShowAddCustomer(false)}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <AddCustomerForm 
+                onSave={handleSaveNewCustomer}
+                onCancel={() => setShowAddCustomer(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
       
       <Toast 
         message={toast.message} 
@@ -990,126 +888,297 @@ const Quotation = () => {
         show={toast.show} 
         onClose={() => setToast({ ...toast, show: false })} 
       />
+    </div>
+  );
+};
 
-      {/* Add Customer Modal */}
-      {showAddCustomer && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 2000
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            padding: '2rem',
-            minWidth: '500px',
-            maxWidth: '90vw',
-            maxHeight: '90vh',
-            overflow: 'auto',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h2 style={{ margin: 0, color: 'var(--dark-gray)' }}>
-                <i className="fas fa-user-plus" style={{ marginRight: '0.5rem', color: 'var(--blue-accent)' }}></i>
-                Add New Customer
-              </h2>
-              <button 
-                onClick={() => setShowAddCustomer(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '1.5rem',
-                  cursor: 'pointer',
-                  color: 'var(--gray-medium)'
-                }}
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label required">Customer Name</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  placeholder="Enter customer name"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Company Type</label>
-                <select className="form-control">
-                  <option value="Company">Company</option>
-                  <option value="Individual">Individual</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Email</label>
-                <input 
-                  type="email" 
-                  className="form-control"
-                  placeholder="Enter email address"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Phone</label>
-                <input 
-                  type="tel" 
-                  className="form-control"
-                  placeholder="Enter phone number"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Primary Subsidiary</label>
-                <select className="form-control">
-                  <option value="">Select Subsidiary</option>
-                  <option value="TOM S">Tech Offshore Marine (S) Pte Ltd</option>
-                  <option value="DQ">Tech Offshore Marine (DQ) Pte Ltd</option>
-                  <option value="TEA">Tech Electric & Automation Pte Ltd</option>
-                  <option value="TMO">Tech Marine Offshore (S) Pte Ltd</option>
-                  <option value="SV">Tech Offshore Marine (SV) Pte Ltd</option>
-                  <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Category</label>
-                <select className="form-control">
-                  <option value="">Select Category</option>
-                  <option value="Direct Owner">Direct Owner</option>
-                  <option value="Oil & Gas">Oil & Gas</option>
-                  <option value="Shipyard">Shipyard</option>
-                  <option value="Other">Other</option>
-                </select>
+// Add Customer Form Component
+const AddCustomerForm = ({ onSave, onCancel }) => {
+  const [customerData, setCustomerData] = useState({
+    customerId: 'To Be Generated',
+    type: 'COMPANY',
+    companyName: '',
+    parentCompany: '',
+    salesRep: '',
+    webAddress: '',
+    category: '',
+    defaultOrderPriority: '',
+    email: '',
+    phone: '',
+    altPhone: '',
+    fax: '',
+    primarySubsidiary: '',
+    transactionsNeedApproval: false,
+    stopSendingSms: false,
+    defaultDiscount: '',
+    lastSalesActivity: ''
+  });
+
+  const handleInputChange = (field, value) => {
+    setCustomerData({ ...customerData, [field]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!customerData.companyName.trim()) {
+      alert('Company Name is required');
+      return;
+    }
+    onSave(customerData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="add-customer-form">
+      {/* Primary Information Section */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Primary Information</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>CUSTOMER ID <span className="required">*</span></label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.customerId}
+                disabled
+              />
+              <div className="form-checkbox">
+                <input type="checkbox" id="auto" defaultChecked />
+                <label htmlFor="auto">AUTO</label>
               </div>
             </div>
-            
-            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '2rem' }}>
-              <button 
-                className="btn btn-tertiary"
-                onClick={() => setShowAddCustomer(false)}
+            <div className="form-group">
+              <label>TYPE</label>
+              <div className="radio-group">
+                <label>
+                  <input 
+                    type="radio" 
+                    name="type" 
+                    value="COMPANY"
+                    checked={customerData.type === 'COMPANY'}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                  />
+                  COMPANY
+                </label>
+                <label>
+                  <input 
+                    type="radio" 
+                    name="type" 
+                    value="INDIVIDUAL"
+                    checked={customerData.type === 'INDIVIDUAL'}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                  />
+                  INDIVIDUAL
+                </label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>COMPANY NAME <span className="required">*</span></label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.companyName}
+                onChange={(e) => handleInputChange('companyName', e.target.value)}
+                placeholder="Enter company name"
+              />
+            </div>
+            <div className="form-group">
+              <label>PARENT COMPANY</label>
+              <select 
+                className="form-control"
+                value={customerData.parentCompany}
+                onChange={(e) => handleInputChange('parentCompany', e.target.value)}
               >
-                <i className="fas fa-times"></i>
-                Cancel
-              </button>
-              <button 
-                className="btn btn-primary"
-                onClick={() => handleSaveNewCustomer({ name: 'New Customer' })}
+                <option>&lt;Type then tab&gt;</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>SALES REP</label>
+              <select 
+                className="form-control"
+                value={customerData.salesRep}
+                onChange={(e) => handleInputChange('salesRep', e.target.value)}
               >
-                <i className="fas fa-save"></i>
-                Save Customer
-              </button>
+                <option>Select...</option>
+                <option>John Doe</option>
+                <option>Jane Smith</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>WEB ADDRESS</label>
+              <input 
+                type="url" 
+                className="form-control"
+                value={customerData.webAddress}
+                onChange={(e) => handleInputChange('webAddress', e.target.value)}
+                placeholder="https://"
+              />
+            </div>
+            <div className="form-group">
+              <label>CATEGORY</label>
+              <select 
+                className="form-control"
+                value={customerData.category}
+                onChange={(e) => handleInputChange('category', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>Premium</option>
+                <option>Standard</option>
+                <option>Basic</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>DEFAULT ORDER PRIORITY</label>
+              <select 
+                className="form-control"
+                value={customerData.defaultOrderPriority}
+                onChange={(e) => handleInputChange('defaultOrderPriority', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+
+      {/* Email | Phone | Address Section */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Email | Phone | Address</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>EMAIL</label>
+              <input 
+                type="email" 
+                className="form-control"
+                value={customerData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder="Enter email address"
+              />
+            </div>
+            <div className="form-group">
+              <label>PHONE</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                placeholder="Enter phone number"
+              />
+            </div>
+            <div className="form-group">
+              <label>ALT. PHONE</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.altPhone}
+                onChange={(e) => handleInputChange('altPhone', e.target.value)}
+                placeholder="Enter alternate phone"
+              />
+            </div>
+            <div className="form-group">
+              <label>FAX</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.fax}
+                onChange={(e) => handleInputChange('fax', e.target.value)}
+                placeholder="Enter fax number"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Classification Section */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Classification</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>PRIMARY SUBSIDIARY <span className="required">*</span></label>
+              <select 
+                className="form-control"
+                value={customerData.primarySubsidiary}
+                onChange={(e) => handleInputChange('primarySubsidiary', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>Tech Onshore MEP Prefabricators Pte Ltd</option>
+                <option>Tech Marine Offshore (S) Pte Ltd</option>
+                <option>TOM Offshore Marine Engineering Pte Ltd</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <div className="form-checkbox">
+                <input 
+                  type="checkbox" 
+                  id="transactionsApproval"
+                  checked={customerData.transactionsNeedApproval}
+                  onChange={(e) => handleInputChange('transactionsNeedApproval', e.target.checked)}
+                />
+                <label htmlFor="transactionsApproval">TRANSACTIONS NEED APPROVAL</label>
+              </div>
+            </div>
+            <div className="form-group">
+              <div className="form-checkbox">
+                <input 
+                  type="checkbox" 
+                  id="stopSms"
+                  checked={customerData.stopSendingSms}
+                  onChange={(e) => handleInputChange('stopSendingSms', e.target.checked)}
+                />
+                <label htmlFor="stopSms">STOP SENDING SMS</label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>DEFAULT DISCOUNT</label>
+              <select 
+                className="form-control"
+                value={customerData.defaultDiscount}
+                onChange={(e) => handleInputChange('defaultDiscount', e.target.value)}
+              >
+                <option>Select...</option>
+                <option>5%</option>
+                <option>10%</option>
+                <option>15%</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>LAST SALES ACTIVITY</label>
+              <input 
+                type="date" 
+                className="form-control"
+                value={customerData.lastSalesActivity}
+                onChange={(e) => handleInputChange('lastSalesActivity', e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Actions */}
+      <div className="form-actions">
+        <button type="submit" className="btn btn-primary">
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button type="button" className="btn btn-secondary" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    </form>
   );
 };
 
