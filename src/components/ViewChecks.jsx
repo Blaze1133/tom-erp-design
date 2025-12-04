@@ -161,62 +161,16 @@ const ViewChecks = ({ setCurrentPage }) => {
   };
 
   return (
-    <div style={{ background: '#f5f5f5', minHeight: '100vh' }}>
-      {/* Header */}
-      <div style={{ 
-        background: 'white', 
-        padding: '16px 24px',
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <i className="fas fa-money-check" style={{ fontSize: '20px', color: '#4a90e2' }}></i>
-          <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>Checks</h1>
+    <div className="enquiries-list">
+      <div className="page-header">
+        <div className="page-title">
+          <i className="fas fa-money-check" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+          <h1>Checks</h1>
         </div>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button 
-            style={{
-              padding: '8px 24px',
-              background: '#4a90e2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-              minWidth: '80px'
-            }}
-          >
-            List
-          </button>
-          <button 
-            style={{
-              padding: '8px 24px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              minWidth: '80px'
-            }}
-          >
-            Search
-          </button>
-          <button 
-            style={{
-              padding: '8px 24px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              minWidth: '100px'
-            }}
-          >
-            Audit Trail
-          </button>
+        <div className="page-actions">
+          <button className="btn-view-option active">List</button>
+          <button className="btn-view-option">Search</button>
+          <button className="btn-view-option">Audit Trail</button>
         </div>
       </div>
 
@@ -225,57 +179,20 @@ const ViewChecks = ({ setCurrentPage }) => {
         <div style={{ background: 'white', borderRadius: '8px', padding: '20px' }}>
           
           {/* View and New Transaction */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <label style={{ fontSize: '14px', color: '#333', fontWeight: '500' }}>VIEW:</label>
+          <div className="list-controls">
+            <div className="view-filter">
+              <label>VIEW:</label>
               <select 
+                className="form-control"
                 value={viewType}
                 onChange={(e) => setViewType(e.target.value)}
-                style={{
-                  padding: '8px 16px',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                  minWidth: '200px',
-                  cursor: 'pointer',
-                  background: 'white'
-                }}
               >
                 <option>Search Project</option>
                 <option>All Checks</option>
                 <option>Recent Checks</option>
               </select>
-              <button 
-                style={{
-                  padding: '8px 20px',
-                  background: 'white',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  minWidth: '120px'
-                }}
-              >
-                Customize View
-              </button>
             </div>
-            <button 
-              onClick={handleNewTransaction}
-              style={{
-                padding: '8px 24px',
-                background: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontWeight: '500',
-                fontSize: '14px',
-                minWidth: '160px'
-              }}
-            >
+            <button className="btn-new-transaction" onClick={handleNewTransaction}>
               <i className="fas fa-plus"></i> New Transaction
             </button>
           </div>

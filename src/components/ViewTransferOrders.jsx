@@ -152,55 +152,21 @@ const ViewTransferOrders = ({ setCurrentPage }) => {
         <div style={{ background: 'white', borderRadius: '8px', padding: '20px' }}>
           
           {/* View and New Transaction */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <label style={{ fontSize: '13px', color: '#666', fontWeight: '500' }}>VIEW:</label>
+          <div className="list-controls">
+            <div className="view-filter">
+              <label>VIEW:</label>
               <select 
+                className="form-control"
                 value={viewType}
                 onChange={(e) => setViewType(e.target.value)}
-                style={{
-                  padding: '8px 12px',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '13px',
-                  minWidth: '200px',
-                  cursor: 'pointer'
-                }}
               >
                 <option>Search Project</option>
                 <option>All Transfer Orders</option>
                 <option>Pending Approval</option>
                 <option>Pending Fulfillment</option>
               </select>
-              <button 
-                style={{
-                  padding: '8px 16px',
-                  background: 'white',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '13px'
-                }}
-              >
-                Edit View
-              </button>
             </div>
-            <button 
-              onClick={handleNewTransaction}
-              style={{
-                padding: '8px 20px',
-                background: '#4a90e2',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontWeight: '500',
-                fontSize: '13px'
-              }}
-            >
+            <button className="btn-new-transaction" onClick={handleNewTransaction}>
               <i className="fas fa-plus"></i> New Transaction
             </button>
           </div>

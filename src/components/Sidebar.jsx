@@ -440,7 +440,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       label: 'Order Items',
       hasSubmenu: true,
       submenu: [
-        { id: 'view-item-orders', label: 'List' }
+        { id: 'view-order-items', label: 'List' },
+        { id: 'order-items', label: 'New Order Items' }
       ]
     },
   ];

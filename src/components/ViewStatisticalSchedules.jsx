@@ -77,11 +77,22 @@ const ViewStatisticalSchedules = ({ setCurrentPage }) => {
           <i className="fas fa-chart-bar" style={{ color: '#4a90e2', fontSize: '24px' }}></i>
           <h1>Statistical Schedules</h1>
         </div>
+        <div className="list-actions">
+          <button className="btn-view-option active">List</button>
+          <button className="btn-view-option">Search</button>
+        </div>
       </div>
 
-      <div style={{ background: '#f8f9fa', padding: '15px 20px', borderBottom: '1px solid #e0e0e0' }}>
-        <button className="btn btn-primary" onClick={handleNew} style={{ padding: '8px 20px', fontSize: '14px' }}>
-          <i className="fas fa-plus"></i> New
+      <div className="list-controls">
+        <div className="view-filter">
+          <label>VIEW:</label>
+          <select className="form-control">
+            <option>All Schedules</option>
+            <option>Active</option>
+          </select>
+        </div>
+        <button className="btn-new-transaction" onClick={handleNew}>
+          <i className="fas fa-plus"></i> New Schedule
         </button>
       </div>
 

@@ -156,33 +156,31 @@ const ViewEnquiries = ({ setCurrentPage }) => {
             <option value="proposal">Proposal</option>
             <option value="discussion">In Discussion</option>
           </select>
-          <button className="btn-customize">Customize View</button>
-          <button className="btn btn-primary" onClick={handleNewEnquiry} style={{ marginLeft: '10px' }}>
-            <i className="fas fa-plus"></i> New Enquiry
-          </button>
         </div>
+        <button className="btn-new-transaction" onClick={handleNewEnquiry}>
+          <i className="fas fa-plus"></i> New Enquiry
+        </button>
       </div>
 
       <div className="list-filters">
-        <button className="filter-btn">
-          <i className="fas fa-filter"></i>
-          FILTERS
-        </button>
         <div className="list-toolbar">
-          <button className="toolbar-btn" title="Export to Excel">
-            <i className="fas fa-file-excel"></i>
+          <button className="toolbar-btn" title="Edit">
+            <i className="fas fa-edit"></i> EDIT
           </button>
-          <button className="toolbar-btn" title="Export to PDF">
-            <i className="fas fa-file-pdf"></i>
+          <button className="toolbar-btn" title="Delete">
+            <i className="fas fa-times"></i>
+          </button>
+          <button className="toolbar-btn" title="Attach">
+            <i className="fas fa-paperclip"></i>
           </button>
           <button className="toolbar-btn" title="Print">
             <i className="fas fa-print"></i>
           </button>
-          <button className="toolbar-btn">EDIT</button>
         </div>
         <div className="list-sort">
           <label>QUICK SORT:</label>
           <select className="form-control">
+            <option>7/1/2022 — 31/1/2022</option>
             <option>Expected Close</option>
             <option>Date Created</option>
             <option>Customer Name</option>

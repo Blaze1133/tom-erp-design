@@ -11,6 +11,7 @@ import ViewEnquiries from './components/ViewEnquiries';
 import ViewQuotations from './components/ViewQuotations';
 import ViewQuotationDetail from './components/ViewQuotationDetail';
 import EditQuotation from './components/EditQuotation';
+import CreateQuotation from './components/CreateQuotation';
 import ViewSalesOrders from './components/ViewSalesOrders';
 import ViewSalesOrderDetail from './components/ViewSalesOrderDetail';
 import EditSalesOrder from './components/EditSalesOrder';
@@ -167,6 +168,7 @@ import ViewIntercompanyTransferOrders from './components/ViewIntercompanyTransfe
 import ViewIntercompanyTransferOrderDetail from './components/ViewIntercompanyTransferOrderDetail';
 import EditIntercompanyTransferOrder from './components/EditIntercompanyTransferOrder';
 import OrderItems from './components/OrderItems';
+import ViewOrderItems from './components/ViewOrderItems';
 import EnterTransferOrder from './components/EnterTransferOrder';
 import ViewTransferOrders from './components/ViewTransferOrders';
 import ViewTransferOrderDetail from './components/ViewTransferOrderDetail';
@@ -437,6 +439,8 @@ function App() {
         return <ViewQuotationDetail setCurrentPage={setCurrentPage} />;
       case 'edit-quotation':
         return <EditQuotation setCurrentPage={setCurrentPage} />;
+      case 'create-quotation':
+        return <CreateQuotation setCurrentPage={setCurrentPage} />;
       case 'enter-sales-orders':
         return <SalesOrder setCurrentPage={setCurrentPage} />;
       case 'view-sales-orders':
@@ -524,7 +528,7 @@ function App() {
       case 'edit-journal-entry':
         return <EditJournalEntry setCurrentPage={setCurrentPage} />;
       case 'view-order-items':
-        return <div style={{ padding: '30px' }}><h1>{currentPage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} - Coming Soon</h1></div>;
+        return <ViewOrderItems setCurrentPage={setCurrentPage} />;
       case 'make-advanced-intercompany-journal-entries':
         return <MakeAdvancedIntercompanyJournal setCurrentPage={setCurrentPage} />;
       case 'view-advanced-intercompany-journal-entries':

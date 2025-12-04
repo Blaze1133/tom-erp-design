@@ -352,57 +352,128 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     <option>Standard Enquiry</option>
                   </select>
                 </div>
-                <div className="detail-field">
-                  <label>COMPANY *</label>
+                <div className="detail-field" style={{ position: 'relative' }}>
+                  <label className="form-label required">Company</label>
                   <div 
-                    className="field-with-external-add" 
+                    style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
                     onMouseEnter={() => setCompanyFieldHovered(true)}
                     onMouseLeave={() => setCompanyFieldHovered(false)}
                   >
-                    <div className="searchable-dropdown-with-add" ref={companyDropdownRef}>
-                      <input
+                    <div style={{ position: 'relative', flex: 1 }}>
+                      <input 
                         type="text"
                         className="form-control"
+                        value={formData.company}
+                        onChange={(e) => handleFormChange('company', e.target.value)}
+                        onFocus={() => {
+                          setCompanyDropdownOpen(true);
+                        }}
                         placeholder="<Type then tab>"
-                        value={companySearch}
-                        onChange={handleCompanySearchChange}
-                        onFocus={() => setCompanyDropdownOpen(true)}
                       />
+                      <button 
+                        type="button"
+                        style={{ 
+                          position: 'absolute', 
+                          right: '8px', 
+                          top: '50%', 
+                          transform: 'translateY(-50%)', 
+                          background: 'transparent', 
+                          border: 'none', 
+                          cursor: 'pointer', 
+                          padding: '4px 8px',
+                          fontSize: '14px'
+                        }}
+                        onClick={() => {
+                          setCompanyDropdownOpen(!companyDropdownOpen);
+                        }}
+                      >
+                        <i className="fas fa-chevron-down"></i>
+                      </button>
                       {companyDropdownOpen && (
-                        <div className="dropdown-options">
-                          {filteredCompanies.length > 0 ? (
-                            filteredCompanies.map((company) => (
-                              <div
-                                key={company.id}
-                                className="dropdown-option"
-                                onClick={() => handleCompanySelect(company)}
-                              >
-                                {company.name}
-                              </div>
-                            ))
-                          ) : companySearch && filteredCompanies.length === 0 ? (
-                            <div className="dropdown-option no-results">
-                              No companies found
+                        <>
+                          <div 
+                            style={{ 
+                              position: 'fixed', 
+                              top: 0, 
+                              left: 0, 
+                              right: 0, 
+                              bottom: 0, 
+                              zIndex: 999 
+                            }}
+                            onClick={() => setCompanyDropdownOpen(false)}
+                          />
+                          <div style={{ 
+                            position: 'absolute', 
+                            top: '100%', 
+                            left: 0, 
+                            right: 0, 
+                            background: 'white', 
+                            border: '1px solid #ddd', 
+                            borderRadius: '4px', 
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                            zIndex: 1000, 
+                            marginTop: '4px'
+                          }}>
+                            <div style={{ padding: '10px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <i className="fas fa-search" style={{ color: '#666', fontSize: '14px' }}></i>
+                              <input 
+                                type="text"
+                                placeholder="Search companies..."
+                                value={companySearch}
+                                onChange={handleCompanySearchChange}
+                                style={{ 
+                                  flex: 1, 
+                                  padding: '6px 10px', 
+                                  border: '1px solid #ddd', 
+                                  borderRadius: '4px', 
+                                  fontSize: '13px'
+                                }}
+                              />
                             </div>
-                          ) : (
-                            companyOptions.slice(0, 10).map((company) => (
-                              <div
-                                key={company.id}
-                                className="dropdown-option"
-                                onClick={() => handleCompanySelect(company)}
-                              >
-                                {company.name}
-                              </div>
-                            ))
-                          )}
-                        </div>
+                            <div style={{ 
+                              overflowY: 'auto',
+                              maxHeight: '200px'
+                            }}>
+                              {(filteredCompanies.length > 0 ? filteredCompanies : companyOptions).map((company, idx) => (
+                                <div 
+                                  key={idx}
+                                  onClick={() => {
+                                    handleFormChange('company', company.name);
+                                    setCompanyDropdownOpen(false);
+                                    setCompanySearch('');
+                                  }}
+                                  style={{ 
+                                    padding: '10px 12px', 
+                                    cursor: 'pointer', 
+                                    fontSize: '13px',
+                                    borderBottom: '1px solid #f5f5f5'
+                                  }}
+                                  onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                                  onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                                >
+                                  {company.name}
+                                </div>
+                              ))}
+                              {filteredCompanies.length === 0 && companySearch && (
+                                <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                                  No companies found
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </>
                       )}
                     </div>
                     {companyFieldHovered && (
                       <button 
                         type="button"
-                        className="external-add-button"
-                        onClick={handleAddNewCompany}
+                        className="btn btn-secondary" 
+                        style={{ 
+                          padding: '0.5rem', 
+                          minWidth: 'auto',
+                          transition: 'opacity 0.2s'
+                        }}
+                        onClick={() => setShowAddCompanyModal(true)}
                         title="Add new company"
                       >
                         <i className="fas fa-plus"></i>
@@ -428,35 +499,96 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     disabled
                   />
                 </div>
-                <div className="detail-field">
-                  <label>SALES REP</label>
-                  <div className="searchable-dropdown" ref={salesRepDropdownRef}>
-                    <input
+                <div className="detail-field" style={{ position: 'relative' }}>
+                  <label className="form-label">Sales Rep</label>
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <input 
                       type="text"
                       className="form-control"
-                      placeholder="Search sales rep..."
-                      value={salesRepSearch}
-                      onChange={handleSalesRepSearchChange}
-                      onFocus={() => setSalesRepDropdownOpen(true)}
+                      value={salesRepSearch || formData.salesRep}
+                      onChange={(e) => {
+                        setSalesRepSearch(e.target.value);
+                        handleFormChange('salesRep', e.target.value);
+                        setSalesRepDropdownOpen(true);
+                      }}
+                      onFocus={() => {
+                        setSalesRepDropdownOpen(true);
+                      }}
+                      placeholder="<Type then tab>"
                     />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={() => {
+                        setSalesRepDropdownOpen(!salesRepDropdownOpen);
+                      }}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
                     {salesRepDropdownOpen && (
-                      <div className="dropdown-options">
-                        {filteredSalesReps.length > 0 ? (
-                          filteredSalesReps.map((rep) => (
-                            <div
-                              key={rep.id}
-                              className="dropdown-option"
-                              onClick={() => handleSalesRepSelect(rep)}
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 999 
+                          }}
+                          onClick={() => setSalesRepDropdownOpen(false)}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 1000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredSalesReps.length > 0 ? filteredSalesReps : salesRepOptions).map((rep, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => {
+                                handleFormChange('salesRep', rep.name);
+                                setSalesRepSearch(rep.name);
+                                setSalesRepDropdownOpen(false);
+                              }}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f5f5f5'
+                              }}
+                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
                             >
                               {rep.name}
                             </div>
-                          ))
-                        ) : (
-                          <div className="dropdown-option no-results">
-                            No sales reps found
-                          </div>
-                        )}
-                      </div>
+                          ))}
+                          {filteredSalesReps.length === 0 && salesRepSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No sales reps found
+                            </div>
+                          )}
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -1002,30 +1134,14 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
       {/* Add Company Modal */}
       {showAddCompanyModal && (
         <div className="modal-overlay" onClick={() => setShowAddCompanyModal(false)}>
-          <div className="modal-content sales-quotation" onClick={(e) => e.stopPropagation()}>
-            <div className="page-header">
-              <div className="page-title">
-                <i className="fas fa-building" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-                <h1>Prospect</h1>
-              </div>
-              <div className="page-actions">
-                <button className="btn btn-primary" onClick={() => {
-                  if (companySearch.trim()) {
-                    handleFormChange('company', companySearch);
-                    setShowAddCompanyModal(false);
-                    showToast('New company added successfully!', 'success');
-                  }
-                }}>
-                  <i className="fas fa-save"></i>
-                  Save
-                </button>
-                <button className="btn btn-secondary" onClick={() => setShowAddCompanyModal(false)}>
-                  Cancel
-                </button>
-              </div>
+          <div className="modal-content" style={{ maxWidth: '600px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Company</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddCompanyModal(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
+              </button>
             </div>
-
-            <div className="quotation-container">
+            <div className="modal-body" style={{ padding: '2rem' }}>
               {/* Primary Information */}
               <div className="form-section">
                 <h2 className="section-title">
@@ -1209,7 +1325,21 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                   </div>
                 </div>
               </div>
-
+            </div>
+            <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '1rem', justifyContent: 'flex-end', background: '#f8f9fa' }}>
+              <button className="btn btn-secondary" onClick={() => setShowAddCompanyModal(false)} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
+                Cancel
+              </button>
+              <button className="btn-new-transaction" onClick={() => {
+                if (companySearch.trim()) {
+                  handleFormChange('company', companySearch);
+                  setShowAddCompanyModal(false);
+                  showToast('New company added successfully!', 'success');
+                }
+              }} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
+                <i className="fas fa-save"></i>
+                Save
+              </button>
             </div>
           </div>
         </div>

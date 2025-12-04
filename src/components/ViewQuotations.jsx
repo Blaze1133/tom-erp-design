@@ -63,14 +63,20 @@ const ViewQuotations = ({ setCurrentPage }) => {
     }
   };
 
+  const handleNewQuotation = () => {
+    if (setCurrentPage) {
+      setCurrentPage('create-quotation');
+    }
+  };
+
   return (
     <div className="enquiries-list">
-      <div className="list-header">
-        <div className="list-title">
-          <i className="fas fa-file-invoice"></i>
+      <div className="page-header">
+        <div className="page-title">
+          <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
           <h1>Quotations</h1>
         </div>
-        <div className="list-actions">
+        <div className="page-actions">
           <button className="btn-view-option active">List</button>
           <button className="btn-view-option">Search</button>
           <button className="btn-view-option">Audit Trail</button>
@@ -90,30 +96,31 @@ const ViewQuotations = ({ setCurrentPage }) => {
             <option value="expired">Expired Quotations</option>
             <option value="pending">Pending Approval</option>
           </select>
-          <button className="btn-edit-view">Edit View</button>
         </div>
+        <button className="btn-new-transaction" onClick={handleNewQuotation}>
+          <i className="fas fa-plus"></i> New Quotation
+        </button>
       </div>
 
       <div className="list-filters">
-        <button className="filter-btn">
-          <i className="fas fa-filter"></i>
-          FILTERS
-        </button>
         <div className="list-toolbar">
-          <button className="toolbar-btn" title="Export to Excel">
-            <i className="fas fa-file-excel"></i>
+          <button className="toolbar-btn" title="Edit">
+            <i className="fas fa-edit"></i> EDIT
           </button>
-          <button className="toolbar-btn" title="Export to PDF">
-            <i className="fas fa-file-pdf"></i>
+          <button className="toolbar-btn" title="Delete">
+            <i className="fas fa-times"></i>
+          </button>
+          <button className="toolbar-btn" title="Attach">
+            <i className="fas fa-paperclip"></i>
           </button>
           <button className="toolbar-btn" title="Print">
             <i className="fas fa-print"></i>
           </button>
-          <button className="toolbar-btn">EDIT</button>
         </div>
         <div className="list-sort">
           <label>QUICK SORT:</label>
           <select className="form-control">
+            <option>7/1/2022 — 31/1/2022</option>
             <option>Date</option>
             <option>Customer Name</option>
             <option>Amount</option>

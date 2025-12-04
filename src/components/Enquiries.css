@@ -46,9 +46,9 @@
 }
 
 .btn-view-option.active {
-    background: var(--blue-accent);
-    color: var(--white);
-    border-color: var(--blue-accent);
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
 }
 
 .btn-view-option:hover:not(.active) {
@@ -113,7 +113,7 @@
 
 .btn-new-enquiry {
     padding: 0.65rem 1.5rem;
-    background: var(--blue-accent);
+    background: var(--red-primary);
     color: var(--white);
     border: none;
     border-radius: 6px;
@@ -124,19 +124,43 @@
     align-items: center;
     gap: 0.5rem;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(49, 130, 206, 0.2);
+    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.2);
 }
 
 .btn-new-enquiry:hover {
-    background: #2c5aa0;
+    background: #c82333;
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(49, 130, 206, 0.3);
+    box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-new-transaction {
+    padding: 0.6rem 1.25rem;
+    background: var(--red-primary);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-new-transaction:hover {
+    background: #c82333;
+}
+
+.btn-new-transaction i {
+    font-size: 0.75rem;
 }
 
 .list-filters {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 1rem;
     padding: 1rem 2rem;
     background: #f8f8f8;
     border-bottom: 1px solid #e0e0e0;
@@ -213,7 +237,6 @@
 .list-toolbar {
     display: flex;
     gap: 0.5rem;
-    margin-left: auto;
 }
 
 .toolbar-btn {
@@ -234,6 +257,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin-left: auto;
 }
 
 .list-sort label {
@@ -512,7 +536,7 @@
 
 .btn-toolbar-primary {
     padding: 0.5rem 1.25rem;
-    background: var(--blue-accent);
+    background: var(--red-primary);
     color: var(--white);
     border: none;
     border-radius: 4px;
@@ -523,10 +547,15 @@
     align-items: center;
     gap: 0.5rem;
     transition: all 0.2s ease;
+    order: 2;
 }
 
 .btn-toolbar-primary:hover {
-    background: #2c5aa0;
+    background: #c82333;
+}
+
+.detail-toolbar .btn-toolbar:first-child {
+    order: 1;
 }
 
 .btn-toolbar {
@@ -637,22 +666,19 @@
 
 .tabs-header {
     display: flex;
-    background: #5b6b7e;
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    background: #5b6b8a;
+    border-bottom: 2px solid #4a5a7a;
 }
 
 .tab-btn {
-    padding: 0.875rem 1.5rem;
+    padding: 0.75rem 1.25rem;
     background: transparent;
-    color: var(--white);
+    color: rgba(255, 255, 255, 0.8);
     border: none;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
-    font-weight: 400;
-    letter-spacing: 0.3px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tab-btn:hover {
@@ -661,7 +687,7 @@
 }
 
 .tab-btn.active {
-    background: #4a5a6d;
+    background: #4a5a7a;
     color: var(--white);
     font-weight: 500;
 }
@@ -872,7 +898,7 @@
 
 .add-item-btn {
     padding: 0.65rem 1.5rem;
-    background: var(--blue-accent);
+    background: var(--red-primary);
     color: var(--white);
     border: none;
     border-radius: 6px;
@@ -883,14 +909,14 @@
     align-items: center;
     gap: 0.5rem;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(49, 130, 206, 0.2);
+    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.2);
     margin-bottom: 1rem;
 }
 
 .add-item-btn:hover {
-    background: #2c5aa0;
+    background: #c82333;
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(49, 130, 206, 0.3);
+    box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
 }
 
 .summary-grid {
@@ -940,6 +966,13 @@
 /* Tabs Styling */
 .tabs-container {
     margin-top: 2rem;
+}
+
+.tabs-header {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1.5rem;
 }
 
 .tab-button {
@@ -1623,373 +1656,4 @@
 
 .table-row-with-actions:hover {
     background-color: #fafafa;
-}
-
-/* Searchable Dropdown Styles */
-.searchable-dropdown {
-    position: relative;
-    width: 100%;
-}
-
-.dropdown-options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.dropdown-option {
-    padding: 12px 16px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background-color 0.2s ease;
-    font-size: 14px;
-}
-
-.dropdown-option:hover {
-    background-color: #f8f9fa;
-}
-
-.dropdown-option:last-child {
-    border-bottom: none;
-}
-
-.dropdown-option.no-results {
-    color: #666;
-    font-style: italic;
-    cursor: default;
-}
-
-.dropdown-option.no-results:hover {
-    background-color: transparent;
-}
-
-/* Ensure dropdown appears above other elements */
-.searchable-dropdown .form-control:focus {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-color: #ddd;
-}
-
-/* Company dropdown with add functionality */
-.searchable-dropdown-with-add {
-    position: relative;
-    width: 100%;
-}
-
-.input-with-placeholder input::placeholder {
-    color: #999;
-    font-style: italic;
-}
-
-.dropdown-option.add-new {
-    background-color: #f8f9fa;
-    color: #007bff;
-    font-weight: 500;
-    border-bottom: 2px solid #e9ecef;
-}
-
-.dropdown-option.add-new:hover {
-    background-color: #e9ecef;
-    color: #0056b3;
-}
-
-.dropdown-option.add-new i {
-    margin-right: 8px;
-    font-size: 12px;
-}
-
-/* Field with external add button */
-.field-with-external-add {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.field-with-external-add .searchable-dropdown-with-add {
-    flex: 1;
-}
-
-.external-add-button {
-    background: #007bff;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    width: 32px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 14px;
-    opacity: 0;
-    transform: scale(0.8);
-    animation: fadeInScale 0.2s ease forwards;
-}
-
-@keyframes fadeInScale {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.external-add-button:hover {
-    background: #0056b3;
-    transform: scale(1.05);
-}
-
-.external-add-button:active {
-    transform: scale(0.95);
-}
-
-.external-add-button i {
-    font-size: 12px;
-}
-
-/* Add Company Modal */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-}
-
-.modal-content {
-    background: white;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 800px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid #e0e0e0;
-    background: #f8f9fa;
-}
-
-.modal-header h2 {
-    margin: 0;
-    color: #333;
-    font-size: 1.5rem;
-}
-
-.modal-close-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #666;
-    cursor: pointer;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-close-btn:hover {
-    color: #333;
-}
-
-.modal-body {
-    padding: 2rem;
-}
-
-.form-section h3 {
-    margin: 0 0 1.5rem 0;
-    color: #333;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.form-field label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #555;
-    font-size: 0.9rem;
-}
-
-.radio-group {
-    display: flex;
-    gap: 1rem;
-}
-
-.radio-option {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-.radio-option input[type="radio"] {
-    margin: 0;
-}
-
-.radio-option span {
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.modal-footer {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    padding: 1.5rem 2rem;
-    border-top: 1px solid #e0e0e0;
-    background: #f8f9fa;
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-}
-
-.btn-primary {
-    background: #007bff;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #0056b3;
-}
-
-.btn-secondary {
-    background: #6c757d;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: #545b62;
-}
-
-/* Additional form elements for Add Company modal */
-.input-with-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.input-with-checkbox input {
-    flex: 1;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: #555;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.checkbox-label input[type="checkbox"] {
-    margin: 0;
-}
-
-.checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.checkbox-option {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-.checkbox-option input[type="checkbox"] {
-    margin: 0;
-}
-
-.checkbox-option span {
-    font-size: 0.9rem;
-    color: #555;
-}
-
-/* Tabs styling for Add Company modal */
-.tabs-container {
-    margin-top: 1rem;
-}
-
-.tab-button {
-    background: #f8f9fa;
-    border: none;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    font-weight: 500;
-    color: #666;
-    transition: all 0.2s ease;
-    border-right: 1px solid #e0e0e0;
-}
-
-.tab-button:last-child {
-    border-right: none;
-}
-
-.tab-button:hover {
-    background: #e9ecef;
-    color: #333;
-}
-
-.tab-button.active {
-    background: #007bff;
-    color: white;
-}
-
-.tab-content {
-    background: white;
-    padding: 1.5rem;
-    border: 1px solid #e0e0e0;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    min-height: 120px;
-}
-
-.subsidiary-section {
-    max-width: 100%;
-}
-
-.btn-sm {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
 }

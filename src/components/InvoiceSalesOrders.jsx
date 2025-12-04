@@ -134,162 +134,161 @@ const InvoiceSalesOrders = ({ setCurrentPage }) => {
 
   return (
     <div className="enquiries-list">
-      <div className="list-header">
-        <div className="list-title">
-          <i className="fas fa-file-invoice"></i>
+      <div className="page-header">
+        <div className="page-title">
+          <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
           <h1>Invoice Sales Orders</h1>
         </div>
-        <div className="list-actions">
-          <button className="btn-view-option">More</button>
+        <div className="page-actions">
+          <button className="btn-view-option active">List</button>
+          <button className="btn-view-option">Search</button>
+          <button className="btn-view-option">Audit Trail</button>
         </div>
       </div>
 
-      <div style={{ padding: '20px', background: 'white', marginBottom: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '25px' }}>
-          <button className="btn btn-primary" onClick={handleSubmit}>
-            <i className="fas fa-check"></i>
-            Submit
+      <div style={{ background: 'white', padding: '2rem', margin: '1.5rem', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginBottom: '2rem' }}>
+          <button className="btn-new-transaction" onClick={handleSubmit}>
+            <i className="fas fa-check"></i> Submit
           </button>
-          <button className="btn btn-secondary" onClick={handleMarkAll}>
+          <button className="toolbar-btn" onClick={handleMarkAll}>
             Mark All
           </button>
-          <button className="btn btn-secondary" onClick={handleUnmarkAll}>
+          <button className="toolbar-btn" onClick={handleUnmarkAll}>
             Unmark All
           </button>
         </div>
 
-        <div className="form-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-          <div className="form-group">
-            <label className="form-label">Customer</label>
-            <select className="form-control">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem 2rem', marginBottom: '1.5rem' }}>
+          <div className="detail-field">
+            <label className="detail-label" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', display: 'block', textTransform: 'uppercase' }}>CUSTOMER</label>
+            <select className="form-control" style={{ width: '100%' }}>
               <option>All</option>
-              <option>20-0131 Gimi Ms Corporation</option>
-              <option>21-0139 Best Fit Engineering</option>
+              <option>Pacific Shipping Ltd</option>
+              <option>Oceanic Engineering Pte Ltd</option>
             </select>
           </div>
-          <div className="form-group">
-            <label className="form-label">A/R Account</label>
-            <select className="form-control">
+          <div className="detail-field">
+            <label className="detail-label" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', display: 'block', textTransform: 'uppercase' }}>A/R ACCOUNT</label>
+            <select className="form-control" style={{ width: '100%' }}>
               <option>Use System Preference</option>
             </select>
           </div>
-          <div className="form-group">
-            <label className="form-label">Posting Period</label>
-            <select className="form-control">
+          <div className="detail-field">
+            <label className="detail-label" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', display: 'block', textTransform: 'uppercase' }}>POSTING PERIOD</label>
+            <select className="form-control" style={{ width: '100%' }}>
               <option>Nov 2025</option>
               <option>Dec 2025</option>
             </select>
           </div>
-          <div className="form-group">
-            <label className="form-label">Date</label>
-            <input type="date" className="form-control" defaultValue="2025-11-06" />
+          <div className="detail-field">
+            <label className="detail-label" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', display: 'block', textTransform: 'uppercase' }}>DATE</label>
+            <input type="date" className="form-control" defaultValue="2025-11-06" style={{ width: '100%' }} />
           </div>
-          <div className="form-group">
-            <label className="form-label">Next Bill On Or Before</label>
-            <input type="date" className="form-control" defaultValue="2025-11-30" />
+          <div className="detail-field">
+            <label className="detail-label" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', display: 'block', textTransform: 'uppercase' }}>NEXT BILL ON OR BEFORE</label>
+            <input type="date" className="form-control" defaultValue="2025-11-30" style={{ width: '100%' }} />
           </div>
-          <div className="form-group">
-            <label className="form-label">To Be Printed</label>
-            <select className="form-control">
+          <div className="detail-field">
+            <label className="detail-label" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', display: 'block', textTransform: 'uppercase' }}>TO BE PRINTED</label>
+            <select className="form-control" style={{ width: '100%' }}>
               <option>Respect Customer Preference</option>
             </select>
           </div>
-          <div className="form-group">
-            <label className="form-label">To Be Emailed</label>
-            <select className="form-control">
+          <div className="detail-field">
+            <label className="detail-label" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', display: 'block', textTransform: 'uppercase' }}>TO BE EMAILED</label>
+            <select className="form-control" style={{ width: '100%' }}>
               <option>Respect Customer Preference</option>
             </select>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '30px', marginTop: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '6px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="checkbox" id="creditCard" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-            <label htmlFor="creditCard" style={{ margin: 0, cursor: 'pointer', fontSize: '0.875rem' }}>Credit Card Approved</label>
+        <div style={{ display: 'flex', gap: '2rem', padding: '0.75rem 0', marginTop: '1rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#333' }}>
+            <input type="checkbox" style={{ width: '16px', height: '16px' }} />
+            Credit Card Approved
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#333' }}>
+            <input type="checkbox" style={{ width: '16px', height: '16px' }} />
+            Do Not Apply Grouping
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#333' }}>
+            <input type="checkbox" style={{ width: '16px', height: '16px' }} />
+            Include Invoices For Grouping
+          </label>
+        </div>
+      </div>
+
+      <div style={{ background: 'white', padding: '1rem 2rem', margin: '0 1.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #e0e0e0' }}>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button className="toolbar-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
+            <i className="fas fa-th"></i> Orders
+          </button>
+          <button className="toolbar-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
+            Customize
+          </button>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <label style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>QUICK SORT:</label>
+            <select className="form-control" style={{ minWidth: '180px', fontSize: '0.875rem' }}>
+              <option>Order Date</option>
+              <option>Customer Name</option>
+              <option>Order Number</option>
+            </select>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="checkbox" id="noGrouping" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-            <label htmlFor="noGrouping" style={{ margin: 0, cursor: 'pointer', fontSize: '0.875rem' }}>Do Not Apply Grouping</label>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input type="checkbox" id="includeInvoices" style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-            <label htmlFor="includeInvoices" style={{ margin: 0, cursor: 'pointer', fontSize: '0.875rem' }}>Include Invoices For Grouping</label>
+          <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#666' }}>
+            TOTAL: {orders.length}
           </div>
         </div>
       </div>
 
-      <div style={{ padding: '20px', background: 'white', borderRadius: '8px' }}>
-        <div style={{ marginBottom: '15px', display: 'flex', gap: '10px', borderBottom: '2px solid #e0e0e0', paddingBottom: '10px' }}>
-          <button className="tab-btn active" style={{ padding: '8px 16px', background: '#f0f0f0', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '500' }}>
-            Orders
-          </button>
-          <button className="tab-btn" style={{ padding: '8px 16px', background: 'transparent', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-            Set Fields
-          </button>
-          <button className="btn-customize" style={{ marginLeft: 'auto' }}>
-            Customize
-          </button>
-        </div>
-
-        <div className="enquiries-table-container">
-          <table className="enquiries-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>INVOICE</th>
-                <th>PROCESS</th>
-                <th>ORDER DATE</th>
-                <th>ORDER #</th>
-                <th>BILL DATE</th>
-                <th>CUSTOMER:PROJECT NAME</th>
-                <th>MEMO</th>
-                <th>CURRENCY</th>
-                <th>ORDER TYPE</th>
+      <div className="enquiries-table-container">
+        <table className="enquiries-table">
+          <thead>
+            <tr>
+              <th style={{ width: '40px' }}></th>
+              <th>INVOICE</th>
+              <th>PROCESS</th>
+              <th>ORDER DATE</th>
+              <th>ORDER #</th>
+              <th>BILL DATE</th>
+              <th>CUSTOMER:PROJECT NAME</th>
+              <th>MEMO</th>
+              <th>CURRENCY</th>
+              <th>ORDER TYPE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>
+                  <input 
+                    type="checkbox" 
+                    checked={selectedOrders.includes(order.id)}
+                    onChange={() => handleCheckboxChange(order.id)}
+                  />
+                </td>
+                <td>
+                  <button 
+                    className="view-link"
+                    onClick={() => handleInvoiceClick(order)}
+                  >
+                    {order.invoice}
+                  </button>
+                </td>
+                <td>{order.process}</td>
+                <td>{order.orderDate}</td>
+                <td className="doc-number">{order.orderNumber}</td>
+                <td>{order.billDate}</td>
+                <td>{order.customerProjectName}</td>
+                <td>{order.memo}</td>
+                <td>{order.currency}</td>
+                <td>{order.orderType}</td>
               </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order.id}>
-                  <td>
-                    <input 
-                      type="checkbox" 
-                      checked={selectedOrders.includes(order.id)}
-                      onChange={() => handleCheckboxChange(order.id)}
-                    />
-                  </td>
-                  <td>
-                    <button 
-                      className="view-link"
-                      onClick={() => handleInvoiceClick(order)}
-                    >
-                      {order.invoice}
-                    </button>
-                  </td>
-                  <td>{order.process}</td>
-                  <td>{order.orderDate}</td>
-                  <td className="doc-number">{order.orderNumber}</td>
-                  <td>{order.billDate}</td>
-                  <td>{order.customerProjectName}</td>
-                  <td>{order.memo}</td>
-                  <td>{order.currency}</td>
-                  <td>{order.orderType}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-          <button className="btn btn-primary" onClick={handleSubmit}>
-            Submit
-          </button>
-          <button className="btn btn-secondary" onClick={handleMarkAll}>
-            Mark All
-          </button>
-          <button className="btn btn-secondary" onClick={handleUnmarkAll}>
-            Unmark All
-          </button>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <Toast 

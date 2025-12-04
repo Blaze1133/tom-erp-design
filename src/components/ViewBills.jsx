@@ -155,11 +155,10 @@ const ViewBills = ({ setCurrentPage }) => {
             <option value="All Bills">All Bills</option>
             <option value="Pending Approval">Pending Approval</option>
           </select>
-          <button className="btn-customize">Customize View</button>
-          <button className="btn btn-primary" onClick={handleNewTransaction} style={{ marginLeft: '10px' }}>
-            <i className="fas fa-plus"></i> New Transaction
-          </button>
         </div>
+        <button className="btn-new-transaction" onClick={handleNewTransaction}>
+          <i className="fas fa-plus"></i> New Transaction
+        </button>
       </div>
 
       <div className="list-filters">

@@ -384,43 +384,106 @@ const SalesOrder = () => {
                     <option>Completed</option>
                   </select>
                 </div>
-                <div className="detail-field">
-                  <label>CUSTOMER:PROJECT <span className="required">*</span></label>
+                <div className="detail-field" style={{ position: 'relative' }}>
+                  <label className="form-label required">Customer:Project</label>
                   <div 
-                    className="field-with-external-add" 
+                    style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
                     onMouseEnter={() => setCustomerProjectHovered(true)}
                     onMouseLeave={() => setCustomerProjectHovered(false)}
                   >
-                    <div className="searchable-dropdown-with-add">
-                      <input
+                    <div style={{ position: 'relative', flex: 1 }}>
+                      <input 
                         type="text"
                         className="form-control"
-                        placeholder="<Type then tab>"
                         value={formData.customerProject}
-                        onChange={handleCustomerSearchChange}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setFormData({...formData, customerProject: value});
+                          setCustomerSearch(value);
+                          if (value.trim()) {
+                            const filtered = customerOptions.filter(customer =>
+                              customer.toLowerCase().includes(value.toLowerCase())
+                            );
+                            setFilteredCustomers(filtered);
+                          } else {
+                            setFilteredCustomers(customerOptions);
+                          }
+                          setShowCustomerDropdown(true);
+                        }}
                         onFocus={() => {
                           setShowCustomerDropdown(true);
                           setFilteredCustomers(customerOptions);
                         }}
+                        placeholder="<Type then tab>"
                       />
+                      <button 
+                        type="button"
+                        style={{ 
+                          position: 'absolute', 
+                          right: '8px', 
+                          top: '50%', 
+                          transform: 'translateY(-50%)', 
+                          background: 'transparent', 
+                          border: 'none', 
+                          cursor: 'pointer', 
+                          padding: '4px 8px',
+                          fontSize: '14px'
+                        }}
+                        onClick={() => {
+                          setShowCustomerDropdown(!showCustomerDropdown);
+                        }}
+                      >
+                        <i className="fas fa-chevron-down"></i>
+                      </button>
                       {showCustomerDropdown && (
                         <>
                           <div 
-                            className="dropdown-overlay"
+                            style={{ 
+                              position: 'fixed', 
+                              top: 0, 
+                              left: 0, 
+                              right: 0, 
+                              bottom: 0, 
+                              zIndex: 999 
+                            }}
                             onClick={() => setShowCustomerDropdown(false)}
                           />
-                          <div className="dropdown-options">
-                            {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, index) => (
-                              <div
-                                key={index}
-                                className="dropdown-option"
-                                onClick={() => handleCustomerSelect(customer)}
+                          <div style={{ 
+                            position: 'absolute', 
+                            top: '100%', 
+                            left: 0, 
+                            right: 0, 
+                            background: 'white', 
+                            border: '1px solid #ddd', 
+                            borderRadius: '4px', 
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                            zIndex: 1000, 
+                            marginTop: '4px',
+                            overflowY: 'auto',
+                            maxHeight: '200px'
+                          }}>
+                            {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
+                              <div 
+                                key={idx}
+                                onClick={() => {
+                                  setFormData({...formData, customerProject: customer});
+                                  setShowCustomerDropdown(false);
+                                  setCustomerSearch('');
+                                }}
+                                style={{ 
+                                  padding: '10px 12px', 
+                                  cursor: 'pointer', 
+                                  fontSize: '13px',
+                                  borderBottom: '1px solid #f5f5f5'
+                                }}
+                                onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                                onMouseLeave={(e) => e.target.style.background = 'transparent'}
                               >
                                 {customer}
                               </div>
                             ))}
-                            {customerSearch && !customerOptions.some(c => c.toLowerCase() === customerSearch.toLowerCase()) && (
-                              <div className="dropdown-option no-results">
+                            {filteredCustomers.length === 0 && customerSearch && (
+                              <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
                                 No customers found
                               </div>
                             )}
@@ -431,7 +494,12 @@ const SalesOrder = () => {
                     {customerProjectHovered && (
                       <button 
                         type="button"
-                        className="external-add-button"
+                        className="btn btn-secondary"
+                        style={{ 
+                          padding: '0.5rem', 
+                          minWidth: 'auto',
+                          transition: 'opacity 0.2s'
+                        }}
                         onClick={handleAddNewCustomer}
                         title="Add new customer"
                       >
@@ -490,54 +558,56 @@ const SalesOrder = () => {
             </div>
             <div className="section-body">
               <div className="detail-grid">
-            <div className="form-group">
-              <label className="form-label">Sales Rep</label>
-              <select 
-                className="form-control"
-                value={formData.salesRep}
-                onChange={(e) => handleInputChange('salesRep', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>TEA0021 Subbiah</option>
-                <option>TEA0022 John Tan</option>
-                <option>TEA0023 Mary Lim</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Opportunity</label>
-              <select 
-                className="form-control"
-                value={formData.opportunity}
-                onChange={(e) => handleInputChange('opportunity', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Marine Project 2024</option>
-                <option>Offshore Platform Build</option>
-                <option>Ship Repair Contract</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Sales Effective Date</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.salesEffectiveDate}
-                onChange={(e) => handleInputChange('salesEffectiveDate', e.target.value)}
-              />
+                <div className="detail-field">
+                  <label className="form-label">Sales Rep</label>
+                  <select 
+                    className="form-control"
+                    value={formData.salesRep}
+                    onChange={(e) => handleInputChange('salesRep', e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                    <option>TEA0021 Subbiah</option>
+                    <option>TEA0022 John Tan</option>
+                    <option>TEA0023 Mary Lim</option>
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label className="form-label">Opportunity</label>
+                  <select 
+                    className="form-control"
+                    value={formData.opportunity}
+                    onChange={(e) => handleInputChange('opportunity', e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                    <option>Marine Project 2024</option>
+                    <option>Offshore Platform Build</option>
+                    <option>Ship Repair Contract</option>
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label className="form-label">Sales Effective Date</label>
+                  <input 
+                    type="date" 
+                    className="form-control"
+                    value={formData.salesEffectiveDate}
+                    onChange={(e) => handleInputChange('salesEffectiveDate', e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1.5rem 0' }} />
 
-        {/* Classification */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-tags"></i>
-            Classification
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
+          {/* Classification */}
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Classification</h3>
+            </div>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
               <label className="form-label required">Subsidiary</label>
               <select 
                 className="form-control"
@@ -552,65 +622,23 @@ const SalesOrder = () => {
                 <option value="SV">Tech Offshore Marine (SV) Pte Ltd - "SV" (ROC 200608955Z)</option>
                 <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd - "TOM" (ROC 199507962E)</option>
               </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Approval Status</label>
-              <select 
-                className="form-control"
-                value={formData.approvalStatus}
-                onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
-              >
-                <option>Submit For Approval</option>
-                <option>Pending Approval</option>
-                <option>Approved</option>
-                <option>Rejected</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Contact Person</label>
-              <select 
-                className="form-control"
-                value={formData.contactPerson}
-                onChange={(e) => handleInputChange('contactPerson', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>John Smith</option>
-                <option>Jane Doe</option>
-                <option>Mike Johnson</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Country of Origin</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.countryOfOrigin}
-                onChange={(e) => handleInputChange('countryOfOrigin', e.target.value)}
-                placeholder="Enter country of origin"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">HS Code</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.hsCode}
-                onChange={(e) => handleInputChange('hsCode', e.target.value)}
-                placeholder="Enter HS code"
-              />
-            </div>
-            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.forInvoiceGrouping}
-                  onChange={(e) => handleInputChange('forInvoiceGrouping', e.target.checked)}
-                />
-                For Invoice Grouping
-              </label>
+                </div>
+                <div className="detail-field">
+                  <label className="form-label">Approval Status</label>
+                  <select 
+                    className="form-control"
+                    value={formData.approvalStatus}
+                    onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
+                  >
+                    <option>Submit For Approval</option>
+                    <option>Pending Approval</option>
+                    <option>Approved</option>
+                    <option>Rejected</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
@@ -1268,26 +1296,19 @@ const SalesOrder = () => {
           </div>
         </div>
       </div>
-      </div>
 
       {/* Add Customer Modal */}
       {showAddCustomer && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>
-                <i className="fas fa-user-plus"></i>
-                Add New Customer
-              </h2>
-              <button 
-                className="modal-close"
-                onClick={() => setShowAddCustomer(false)}
-              >
-                <i className="fas fa-times"></i>
+        <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
+          <div className="modal-content" style={{ maxWidth: '600px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
               </button>
             </div>
             
-            <div className="modal-body">
+            <div className="modal-body" style={{ padding: '2rem' }}>
               <AddCustomerForm 
                 onSave={handleSaveNewCustomer}
                 onCancel={() => setShowAddCustomer(false)}
@@ -1584,13 +1605,13 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
       </div>
 
       {/* Form Actions */}
-      <div className="form-actions">
-        <button type="submit" className="btn btn-primary">
+      <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '1rem', justifyContent: 'flex-end', background: '#f8f9fa', marginTop: '2rem' }}>
+        <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
+          Cancel
+        </button>
+        <button type="submit" className="btn-new-transaction" style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
           <i className="fas fa-save"></i>
           Save
-        </button>
-        <button type="button" className="btn btn-secondary" onClick={onCancel}>
-          Cancel
         </button>
       </div>
     </form>

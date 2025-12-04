@@ -279,27 +279,21 @@ const ViewCurrencyRevaluations = ({ setCurrentPage }) => {
         </div>
       </div>
 
-      <div className="filters-section" style={{ background: '#f8f9fa', padding: '15px 20px', marginBottom: '0' }}>
-        <div className="filter-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-            <div className="filter-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <label style={{ fontWeight: '500', fontSize: '13px', color: '#666' }}>VIEW:</label>
-              <select 
-                className="filter-select" 
-                style={{ padding: '6px 12px', border: '1px solid #ddd', borderRadius: '4px' }}
-                value={viewType}
-                onChange={(e) => setViewType(e.target.value)}
-              >
-                <option>Search Project</option>
-                <option>All Revaluations</option>
-              </select>
-            </div>
-            <button className="btn-filter" style={{ padding: '6px 16px', border: '1px solid #ddd', background: 'white', borderRadius: '4px', fontSize: '13px' }}>Edit View</button>
-            <button className="btn-filter-primary" onClick={handleNewTransaction} style={{ padding: '8px 20px', background: '#4a90e2', color: 'white', border: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: '500' }}>
-              <i className="fas fa-plus"></i> New Transaction
-            </button>
-          </div>
+      <div className="list-controls">
+        <div className="view-filter">
+          <label>VIEW:</label>
+          <select 
+            className="form-control"
+            value={viewType}
+            onChange={(e) => setViewType(e.target.value)}
+          >
+            <option>Search Project</option>
+            <option>All Revaluations</option>
+          </select>
         </div>
+        <button className="btn-new-transaction" onClick={handleNewTransaction}>
+          <i className="fas fa-plus"></i> New Transaction
+        </button>
       </div>
 
       <div className="filters-bar" style={{ background: '#f8f9fa', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', borderBottom: '1px solid #e0e0e0' }}>

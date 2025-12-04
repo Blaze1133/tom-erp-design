@@ -354,43 +354,106 @@ const EnterCashSales = () => {
                 <option>Jan 2026</option>
               </select>
             </div>
-            <div className="form-group">
+            <div className="form-group" style={{ position: 'relative' }}>
               <label className="form-label required">Customer:Project</label>
               <div 
-                className="field-with-external-add" 
+                style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
                 onMouseEnter={() => setCustomerProjectHovered(true)}
                 onMouseLeave={() => setCustomerProjectHovered(false)}
               >
-                <div className="searchable-dropdown-with-add">
-                  <input
+                <div style={{ position: 'relative', flex: 1 }}>
+                  <input 
                     type="text"
                     className="form-control"
-                    placeholder="<Type then tab>"
                     value={formData.customerProject}
-                    onChange={handleCustomerSearchChange}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleInputChange('customerProject', value);
+                      setCustomerSearch(value);
+                      if (value.trim()) {
+                        const filtered = customerOptions.filter(customer =>
+                          customer.toLowerCase().includes(value.toLowerCase())
+                        );
+                        setFilteredCustomers(filtered);
+                      } else {
+                        setFilteredCustomers(customerOptions);
+                      }
+                      setShowCustomerDropdown(true);
+                    }}
                     onFocus={() => {
                       setShowCustomerDropdown(true);
                       setFilteredCustomers(customerOptions);
                     }}
+                    placeholder="<Type then tab>"
                   />
+                  <button 
+                    type="button"
+                    style={{ 
+                      position: 'absolute', 
+                      right: '8px', 
+                      top: '50%', 
+                      transform: 'translateY(-50%)', 
+                      background: 'transparent', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      padding: '4px 8px',
+                      fontSize: '14px'
+                    }}
+                    onClick={() => {
+                      setShowCustomerDropdown(!showCustomerDropdown);
+                    }}
+                  >
+                    <i className="fas fa-chevron-down"></i>
+                  </button>
                   {showCustomerDropdown && (
                     <>
                       <div 
-                        className="dropdown-overlay"
+                        style={{ 
+                          position: 'fixed', 
+                          top: 0, 
+                          left: 0, 
+                          right: 0, 
+                          bottom: 0, 
+                          zIndex: 999 
+                        }}
                         onClick={() => setShowCustomerDropdown(false)}
                       />
-                      <div className="dropdown-options">
-                        {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, index) => (
-                          <div
-                            key={index}
-                            className="dropdown-option"
-                            onClick={() => handleCustomerSelect(customer)}
+                      <div style={{ 
+                        position: 'absolute', 
+                        top: '100%', 
+                        left: 0, 
+                        right: 0, 
+                        background: 'white', 
+                        border: '1px solid #ddd', 
+                        borderRadius: '4px', 
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                        zIndex: 1000, 
+                        marginTop: '4px',
+                        overflowY: 'auto',
+                        maxHeight: '200px'
+                      }}>
+                        {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
+                          <div 
+                            key={idx}
+                            onClick={() => {
+                              handleInputChange('customerProject', customer);
+                              setShowCustomerDropdown(false);
+                              setCustomerSearch('');
+                            }}
+                            style={{ 
+                              padding: '10px 12px', 
+                              cursor: 'pointer', 
+                              fontSize: '13px',
+                              borderBottom: '1px solid #f5f5f5'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
                           >
                             {customer}
                           </div>
                         ))}
-                        {customerSearch && !customerOptions.some(c => c.toLowerCase() === customerSearch.toLowerCase()) && (
-                          <div className="dropdown-option no-results">
+                        {filteredCustomers.length === 0 && customerSearch && (
+                          <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
                             No customers found
                           </div>
                         )}
@@ -401,7 +464,12 @@ const EnterCashSales = () => {
                 {customerProjectHovered && (
                   <button 
                     type="button"
-                    className="external-add-button"
+                    className="btn btn-secondary"
+                    style={{ 
+                      padding: '0.5rem', 
+                      minWidth: 'auto',
+                      transition: 'opacity 0.2s'
+                    }}
                     onClick={handleAddNewCustomer}
                     title="Add new customer"
                   >
@@ -1042,6 +1110,27 @@ const EnterCashSales = () => {
         </div>
       </div>
 
+      {/* Add Customer Modal */}
+      {showAddCustomer && (
+        <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
+          <div className="modal-content" style={{ maxWidth: '600px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
+              </button>
+            </div>
+            
+            <div className="modal-body" style={{ padding: '2rem' }}>
+              <AddCustomerForm 
+                onSave={handleSaveNewCustomer}
+                onCancel={() => setShowAddCustomer(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <Toast 
         message={toast.message} 
         type={toast.type} 
@@ -1049,6 +1138,280 @@ const EnterCashSales = () => {
         onClose={() => setToast({ ...toast, show: false })} 
       />
     </div>
+  );
+};
+
+// Add Customer Form Component
+const AddCustomerForm = ({ onSave, onCancel }) => {
+  const [customerData, setCustomerData] = useState({
+    customerId: 'To Be Generated',
+    type: 'COMPANY',
+    companyName: '',
+    parentCompany: '',
+    salesRep: '',
+    webAddress: '',
+    category: '',
+    defaultOrderPriority: '',
+    email: '',
+    phone: '',
+    altPhone: '',
+    fax: '',
+    primarySubsidiary: '',
+    transactionsNeedApproval: false,
+    stopSendingSms: false,
+    defaultDiscount: '',
+    lastSalesActivity: ''
+  });
+
+  const handleInputChange = (field, value) => {
+    setCustomerData({ ...customerData, [field]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!customerData.companyName.trim()) {
+      alert('Company Name is required');
+      return;
+    }
+    onSave(customerData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="add-customer-form">
+      {/* Primary Information Section */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Primary Information</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>CUSTOMER ID <span className="required">*</span></label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.customerId}
+                disabled
+              />
+              <div className="form-checkbox">
+                <input type="checkbox" id="auto" defaultChecked />
+                <label htmlFor="auto">AUTO</label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>TYPE</label>
+              <div className="radio-group">
+                <label>
+                  <input 
+                    type="radio" 
+                    name="type" 
+                    value="COMPANY"
+                    checked={customerData.type === 'COMPANY'}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                  />
+                  COMPANY
+                </label>
+                <label>
+                  <input 
+                    type="radio" 
+                    name="type" 
+                    value="INDIVIDUAL"
+                    checked={customerData.type === 'INDIVIDUAL'}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                  />
+                  INDIVIDUAL
+                </label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>COMPANY NAME <span className="required">*</span></label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.companyName}
+                onChange={(e) => handleInputChange('companyName', e.target.value)}
+                placeholder="Enter company name"
+              />
+            </div>
+            <div className="form-group">
+              <label>PARENT COMPANY</label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.parentCompany}
+                onChange={(e) => handleInputChange('parentCompany', e.target.value)}
+                placeholder="Enter parent company"
+              />
+            </div>
+            <div className="form-group">
+              <label>SALES REP</label>
+              <select 
+                className="form-control"
+                value={customerData.salesRep}
+                onChange={(e) => handleInputChange('salesRep', e.target.value)}
+              >
+                <option value="">Select...</option>
+                <option>TEA0021 Subbiah</option>
+                <option>TEA0022 John Tan</option>
+                <option>TEA0023 Mary Lim</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>WEB ADDRESS</label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.webAddress}
+                onChange={(e) => handleInputChange('webAddress', e.target.value)}
+                placeholder="Enter web address"
+              />
+            </div>
+            <div className="form-group">
+              <label>CATEGORY</label>
+              <select 
+                className="form-control"
+                value={customerData.category}
+                onChange={(e) => handleInputChange('category', e.target.value)}
+              >
+                <option value="">Select...</option>
+                <option>Customer</option>
+                <option>Vendor</option>
+                <option>Partner</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>DEFAULT ORDER PRIORITY</label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={customerData.defaultOrderPriority}
+                onChange={(e) => handleInputChange('defaultOrderPriority', e.target.value)}
+                placeholder="Enter priority"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Email | Phone | Address */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Email | Phone | Address</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>EMAIL</label>
+              <input 
+                type="email" 
+                className="form-control"
+                value={customerData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder="Enter email address"
+              />
+            </div>
+            <div className="form-group">
+              <label>PHONE</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                placeholder="Enter phone number"
+              />
+            </div>
+            <div className="form-group">
+              <label>ALT. PHONE</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.altPhone}
+                onChange={(e) => handleInputChange('altPhone', e.target.value)}
+                placeholder="Enter alternate phone"
+              />
+            </div>
+            <div className="form-group">
+              <label>FAX</label>
+              <input 
+                type="tel" 
+                className="form-control"
+                value={customerData.fax}
+                onChange={(e) => handleInputChange('fax', e.target.value)}
+                placeholder="Enter fax number"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Classification */}
+      <div className="form-section">
+        <div className="section-header">
+          <i className="fas fa-chevron-down"></i>
+          <h3>Classification</h3>
+        </div>
+        <div className="section-body">
+          <div className="form-grid">
+            <div className="form-group">
+              <label>PRIMARY SUBSIDIARY</label>
+              <select 
+                className="form-control"
+                value={customerData.primarySubsidiary}
+                onChange={(e) => handleInputChange('primarySubsidiary', e.target.value)}
+              >
+                <option value="">Select...</option>
+                <option>Tech Onshore MEP Prefabricators Pte Ltd</option>
+                <option>Tech Marine Offshore (S) Pte Ltd</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>TRANSACTIONS NEED APPROVAL</label>
+              <input 
+                type="checkbox" 
+                checked={customerData.transactionsNeedApproval}
+                onChange={(e) => handleInputChange('transactionsNeedApproval', e.target.checked)}
+              />
+            </div>
+            <div className="form-group">
+              <label>DEFAULT DISCOUNT %</label>
+              <select 
+                className="form-control"
+                value={customerData.defaultDiscount}
+                onChange={(e) => handleInputChange('defaultDiscount', e.target.value)}
+              >
+                <option value="">Select...</option>
+                <option>0%</option>
+                <option>5%</option>
+                <option>10%</option>
+                <option>15%</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>LAST SALES ACTIVITY</label>
+              <input 
+                type="date" 
+                className="form-control"
+                value={customerData.lastSalesActivity}
+                onChange={(e) => handleInputChange('lastSalesActivity', e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Actions */}
+      <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '1rem', justifyContent: 'flex-end', background: '#f8f9fa', marginTop: '2rem' }}>
+        <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
+          Cancel
+        </button>
+        <button type="submit" className="btn-new-transaction" style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+      </div>
+    </form>
   );
 };
 

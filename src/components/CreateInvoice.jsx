@@ -355,43 +355,106 @@ const CreateInvoice = () => {
                 onChange={(e) => handleInputChange('dueDate', e.target.value)}
               />
             </div>
-            <div className="form-group">
+            <div className="form-group" style={{ position: 'relative' }}>
               <label className="form-label required">Customer:Project</label>
               <div 
-                className="field-with-external-add" 
+                style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
                 onMouseEnter={() => setCustomerProjectHovered(true)}
                 onMouseLeave={() => setCustomerProjectHovered(false)}
               >
-                <div className="searchable-dropdown-with-add">
-                  <input
+                <div style={{ position: 'relative', flex: 1 }}>
+                  <input 
                     type="text"
                     className="form-control"
-                    placeholder="<Type then tab>"
                     value={formData.customerProject}
-                    onChange={handleCustomerSearchChange}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleInputChange('customerProject', value);
+                      setCustomerSearch(value);
+                      if (value.trim()) {
+                        const filtered = customerOptions.filter(customer =>
+                          customer.toLowerCase().includes(value.toLowerCase())
+                        );
+                        setFilteredCustomers(filtered);
+                      } else {
+                        setFilteredCustomers(customerOptions);
+                      }
+                      setShowCustomerDropdown(true);
+                    }}
                     onFocus={() => {
                       setShowCustomerDropdown(true);
                       setFilteredCustomers(customerOptions);
                     }}
+                    placeholder="<Type then tab>"
                   />
+                  <button 
+                    type="button"
+                    style={{ 
+                      position: 'absolute', 
+                      right: '8px', 
+                      top: '50%', 
+                      transform: 'translateY(-50%)', 
+                      background: 'transparent', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      padding: '4px 8px',
+                      fontSize: '14px'
+                    }}
+                    onClick={() => {
+                      setShowCustomerDropdown(!showCustomerDropdown);
+                    }}
+                  >
+                    <i className="fas fa-chevron-down"></i>
+                  </button>
                   {showCustomerDropdown && (
                     <>
                       <div 
-                        className="dropdown-overlay"
+                        style={{ 
+                          position: 'fixed', 
+                          top: 0, 
+                          left: 0, 
+                          right: 0, 
+                          bottom: 0, 
+                          zIndex: 999 
+                        }}
                         onClick={() => setShowCustomerDropdown(false)}
                       />
-                      <div className="dropdown-options">
-                        {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, index) => (
-                          <div
-                            key={index}
-                            className="dropdown-option"
-                            onClick={() => handleCustomerSelect(customer)}
+                      <div style={{ 
+                        position: 'absolute', 
+                        top: '100%', 
+                        left: 0, 
+                        right: 0, 
+                        background: 'white', 
+                        border: '1px solid #ddd', 
+                        borderRadius: '4px', 
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                        zIndex: 1000, 
+                        marginTop: '4px',
+                        overflowY: 'auto',
+                        maxHeight: '200px'
+                      }}>
+                        {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
+                          <div 
+                            key={idx}
+                            onClick={() => {
+                              handleInputChange('customerProject', customer);
+                              setShowCustomerDropdown(false);
+                              setCustomerSearch('');
+                            }}
+                            style={{ 
+                              padding: '10px 12px', 
+                              cursor: 'pointer', 
+                              fontSize: '13px',
+                              borderBottom: '1px solid #f5f5f5'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
                           >
                             {customer}
                           </div>
                         ))}
-                        {customerSearch && !customerOptions.some(c => c.toLowerCase() === customerSearch.toLowerCase()) && (
-                          <div className="dropdown-option no-results">
+                        {filteredCustomers.length === 0 && customerSearch && (
+                          <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
                             No customers found
                           </div>
                         )}
@@ -402,7 +465,12 @@ const CreateInvoice = () => {
                 {customerProjectHovered && (
                   <button 
                     type="button"
-                    className="external-add-button"
+                    className="btn btn-secondary"
+                    style={{ 
+                      padding: '0.5rem', 
+                      minWidth: 'auto',
+                      transition: 'opacity 0.2s'
+                    }}
                     onClick={handleAddNewCustomer}
                     title="Add new customer"
                   >
@@ -1076,22 +1144,16 @@ const CreateInvoice = () => {
 
       {/* Add Customer Modal */}
       {showAddCustomer && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>
-                <i className="fas fa-user-plus"></i>
-                Add New Customer
-              </h2>
-              <button 
-                className="modal-close"
-                onClick={() => setShowAddCustomer(false)}
-              >
-                <i className="fas fa-times"></i>
+        <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
+          <div className="modal-content" style={{ maxWidth: '600px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
               </button>
             </div>
             
-            <div className="modal-body">
+            <div className="modal-body" style={{ padding: '2rem' }}>
               <AddCustomerForm 
                 onSave={handleSaveNewCustomer}
                 onCancel={() => setShowAddCustomer(false)}
@@ -1388,13 +1450,13 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
       </div>
 
       {/* Form Actions */}
-      <div className="form-actions">
-        <button type="submit" className="btn btn-primary">
+      <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '1rem', justifyContent: 'flex-end', background: '#f8f9fa', marginTop: '2rem' }}>
+        <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
+          Cancel
+        </button>
+        <button type="submit" className="btn-new-transaction" style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
           <i className="fas fa-save"></i>
           Save
-        </button>
-        <button type="button" className="btn btn-secondary" onClick={onCancel}>
-          Cancel
         </button>
       </div>
     </form>

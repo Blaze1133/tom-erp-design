@@ -111,42 +111,21 @@ const ViewVendorPrepayments = ({ setCurrentPage }) => {
       </div>
 
       <div className="list-controls">
-        <div className="view-filter" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <label style={{ fontSize: '13px', fontWeight: '600' }}>VIEW:</label>
+        <div className="view-filter">
+          <label>VIEW:</label>
           <select 
             className="form-control"
             value={viewFilter}
             onChange={(e) => setViewFilter(e.target.value)}
-            style={{ width: '300px' }}
           >
             <option value="Search Project">Search Project</option>
             <option value="All Prepayments">All Prepayments</option>
             <option value="Pending">Pending</option>
           </select>
-          <button 
-            className="btn btn-secondary" 
-            style={{ 
-              padding: '8px 20px', 
-              fontSize: '13px',
-              height: '38px',
-              minWidth: '120px'
-            }}
-          >
-            Edit View
-          </button>
-          <button 
-            className="btn btn-primary" 
-            onClick={handleNewTransaction} 
-            style={{ 
-              padding: '8px 20px', 
-              fontSize: '13px',
-              height: '38px',
-              minWidth: '160px'
-            }}
-          >
-            <i className="fas fa-plus"></i> New Transaction
-          </button>
         </div>
+        <button className="btn-new-transaction" onClick={handleNewTransaction}>
+          <i className="fas fa-plus"></i> New Transaction
+        </button>
       </div>
 
       <div className="list-filters">
