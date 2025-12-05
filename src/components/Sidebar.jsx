@@ -402,48 +402,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       label: 'Items',
       hasSubmenu: false,
       hideArrow: true
-    },
-    { 
-      id: 'adjust-inventory',
-      label: 'Adjust Inventory',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-inventory-adjustments', label: 'List' }
-      ]
-    },
-    { 
-      id: 'adjust-inventory-worksheet',
-      label: 'Adjust Inventory Worksheet',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-inventory-worksheets', label: 'List' }
-      ]
-    },
-    { 
-      id: 'enter-intercompany-transfer-orders',
-      label: 'Intercompany Transfer',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-intercompany-transfer-orders', label: 'List' }
-      ]
-    },
-    { 
-      id: 'enter-transfer-orders',
-      label: 'Enter Transfer Orders',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-transfer-orders', label: 'List' }
-      ]
-    },
-    { 
-      id: 'order-items',
-      label: 'Order Items',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-order-items', label: 'List' },
-        { id: 'order-items', label: 'New Order Items' }
-      ]
-    },
+    }
   ];
 
   const financialSubItems = [
@@ -834,16 +793,9 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'inventory-profitability', label: 'Inventory Profitability' },
-        { id: 'inventory-summary', label: 'Inventory Summary' },
-        { id: 'inventory-valuation', label: 'Inventory Valuation' },
-        { id: 'stock-movement', label: 'Stock Movement Report' },
-        { id: 'low-stock-report', label: 'Low Stock Report' },
-        { id: 'inventory-aging', label: 'Inventory Aging Report' },
-        { id: 'abc-analysis', label: 'ABC Analysis' },
-        { id: 'inventory-turnover', label: 'Inventory Turnover Report' },
-        { id: 'dead-stock-report', label: 'Dead Stock Report' },
-        { id: 'inventory-reconciliation', label: 'Inventory Reconciliation' },
-        { id: 'warehouse-summary', label: 'Warehouse Summary' }
+        { id: 'current-inventory-snapshot', label: 'Current Inventory Snapshot' },
+        { id: 'inventory-valuation-summary', label: 'Inventory Valuation Summary' },
+        { id: 'items-pending-fulfillment', label: 'Items Pending Fulfillment' }
       ]
     }
   ];

@@ -157,7 +157,76 @@ const TopBar = ({ collapsed, setCollapsed, setCurrentPage }) => {
     { name: 'View Cash Sales', icon: 'fas fa-cash-register', category: 'Sales', route: 'view-cash-sales' },
     
     // Transfer Orders
-    { name: 'View Transfer Orders', icon: 'fas fa-exchange-alt', category: 'Inventory', route: 'view-transfer-orders' }
+    { name: 'View Transfer Orders', icon: 'fas fa-exchange-alt', category: 'Inventory', route: 'view-transfer-orders' },
+    
+    // Reports Module
+    { name: 'Financial Reports', icon: 'fas fa-chart-line', category: 'Reports', route: 'financial-reports' },
+    { name: 'Income Statement', icon: 'fas fa-file-invoice-dollar', category: 'Reports', route: 'income-statement' },
+    { name: 'Balance Sheet', icon: 'fas fa-balance-scale', category: 'Reports', route: 'balance-sheet' },
+    { name: 'Cash Flow Statement', icon: 'fas fa-money-bill-wave', category: 'Reports', route: 'cash-flow-statement' },
+    { name: 'General Ledger', icon: 'fas fa-book', category: 'Reports', route: 'general-ledger' },
+    { name: 'Trial Balance', icon: 'fas fa-balance-scale-left', category: 'Reports', route: 'trial-balance' },
+    { name: 'Transaction Detail', icon: 'fas fa-list-alt', category: 'Reports', route: 'transaction-detail' },
+    { name: 'Inventory Profitability', icon: 'fas fa-chart-line', category: 'Reports', route: 'inventory-profitability' },
+    { name: 'Current Inventory Snapshot', icon: 'fas fa-warehouse', category: 'Reports', route: 'current-inventory-snapshot' },
+    { name: 'Inventory Valuation Summary', icon: 'fas fa-box-open', category: 'Reports', route: 'inventory-valuation-summary' },
+    { name: 'Inventory Valuation Detail', icon: 'fas fa-box-open', category: 'Reports', route: 'inventory-valuation-detail' },
+    { name: 'Items Pending Fulfillment', icon: 'fas fa-clipboard-list', category: 'Reports', route: 'items-pending-fulfillment' },
+    { name: 'Realized Exchange Gains/Losses', icon: 'fas fa-exchange-alt', category: 'Reports', route: 'realized-exchange-gains-losses' },
+    { name: 'Unrealized Exchange Gains/Losses', icon: 'fas fa-exchange-alt', category: 'Reports', route: 'unrealized-exchange-gains-losses' },
+    { name: 'CTA Balance Audit', icon: 'fas fa-audit', category: 'Reports', route: 'cta-balance-audit' },
+    { name: 'Pay-batch Posting Journals', icon: 'fas fa-file-alt', category: 'Reports', route: 'pay-batch-posting-journals' },
+    { name: 'View Pay-batch Posting Journals', icon: 'fas fa-list', category: 'Reports', route: 'view-pay-batch-posting-journals' },
+    { name: 'Create Pay-batch Posting Journal', icon: 'fas fa-plus', category: 'Reports', route: 'create-pay-batch-posting-journal' },
+    
+    // Project Management Module
+    { name: 'View Projects', icon: 'fas fa-project-diagram', category: 'Project Management', route: 'view-projects' },
+    { name: 'New Project', icon: 'fas fa-plus-circle', category: 'Project Management', route: 'new-project' },
+    { name: 'View Tasks', icon: 'fas fa-tasks', category: 'Project Management', route: 'view-tasks' },
+    { name: 'New Task', icon: 'fas fa-plus', category: 'Project Management', route: 'new-task' },
+    { name: 'View Milestones', icon: 'fas fa-flag-checkered', category: 'Project Management', route: 'view-milestones' },
+    { name: 'New Milestone', icon: 'fas fa-plus', category: 'Project Management', route: 'new-milestone' },
+    { name: 'View Resources', icon: 'fas fa-users', category: 'Project Management', route: 'view-resources' },
+    { name: 'Allocate Resource', icon: 'fas fa-user-plus', category: 'Project Management', route: 'allocate-resource' },
+    { name: 'Gantt Chart', icon: 'fas fa-chart-gantt', category: 'Project Management', route: 'gantt-chart' },
+    { name: 'Project Reports & Analytics', icon: 'fas fa-chart-bar', category: 'Project Management', route: 'project-reports-analytics' },
+    
+    // Production Module
+    { name: 'Scan QR Code', icon: 'fas fa-qrcode', category: 'Production', route: 'scan-qr-code' },
+    { name: 'Production Dashboard', icon: 'fas fa-tachometer-alt', category: 'Production', route: 'production-dashboard' },
+    { name: 'View Work Orders', icon: 'fas fa-clipboard-list', category: 'Production', route: 'view-work-orders' },
+    { name: 'Create Work Order', icon: 'fas fa-plus', category: 'Production', route: 'create-work-order' },
+    { name: 'View Production Plans', icon: 'fas fa-calendar-alt', category: 'Production', route: 'view-production-plans' },
+    { name: 'Create Production Plan', icon: 'fas fa-plus', category: 'Production', route: 'create-production-plan' },
+    { name: 'View Bill of Materials', icon: 'fas fa-list', category: 'Production', route: 'view-bill-of-materials' },
+    { name: 'Create Bill of Materials', icon: 'fas fa-plus', category: 'Production', route: 'create-bill-of-materials' },
+    { name: 'View Assemblies', icon: 'fas fa-cubes', category: 'Production', route: 'view-assemblies' },
+    { name: 'Build Assembly', icon: 'fas fa-hammer', category: 'Production', route: 'build-assembly' },
+    
+    // Order Management
+    { name: 'Order Management Dashboard', icon: 'fas fa-tachometer-alt', category: 'Order Management', route: 'order-management-dashboard' },
+    { name: 'View All Orders', icon: 'fas fa-list', category: 'Order Management', route: 'view-all-orders' },
+    { name: 'Pending Orders', icon: 'fas fa-clock', category: 'Order Management', route: 'pending-orders' },
+    { name: 'Fulfilled Orders', icon: 'fas fa-check-circle', category: 'Order Management', route: 'fulfilled-orders' },
+    { name: 'Cancelled Orders', icon: 'fas fa-times-circle', category: 'Order Management', route: 'cancelled-orders' },
+    
+    // Bank Module
+    { name: 'Bank Reconciliation', icon: 'fas fa-university', category: 'Banking', route: 'bank-reconciliation' },
+    { name: 'View Bank Reconciliations', icon: 'fas fa-list', category: 'Banking', route: 'view-bank-reconciliations' },
+    { name: 'Reconciliation Rules', icon: 'fas fa-ruler', category: 'Banking', route: 'reconciliation-rules' },
+    { name: 'View Reconciliation Rules', icon: 'fas fa-list', category: 'Banking', route: 'view-reconciliation-rules' },
+    
+    // Setup Module
+    { name: 'Enable Features', icon: 'fas fa-toggle-on', category: 'Setup', route: 'enable-features' },
+    { name: 'Accounting Preferences', icon: 'fas fa-cog', category: 'Setup', route: 'accounting-preferences' },
+    { name: 'Tax Setup', icon: 'fas fa-percent', category: 'Setup', route: 'tax-setup' },
+    { name: 'Payment Methods', icon: 'fas fa-credit-card', category: 'Setup', route: 'payment-methods' },
+    { name: 'Shipping Methods', icon: 'fas fa-shipping-fast', category: 'Setup', route: 'shipping-methods' },
+    { name: 'Custom Fields', icon: 'fas fa-th-list', category: 'Setup', route: 'custom-fields' },
+    { name: 'Custom Records', icon: 'fas fa-database', category: 'Setup', route: 'custom-records' },
+    { name: 'Workflows', icon: 'fas fa-project-diagram', category: 'Setup', route: 'workflows' },
+    { name: 'Email Templates', icon: 'fas fa-envelope', category: 'Setup', route: 'email-templates' },
+    { name: 'PDF Templates', icon: 'fas fa-file-pdf', category: 'Setup', route: 'pdf-templates' }
   ];
 
   // Search functionality

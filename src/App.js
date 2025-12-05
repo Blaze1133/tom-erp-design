@@ -380,6 +380,11 @@ import ViewCRMProjects from './components/ViewCRMProjects';
 
 // Reports Module Components
 import FinancialReports from './components/FinancialReports';
+import InventoryProfitability from './components/InventoryProfitability';
+import CurrentInventorySnapshot from './components/CurrentInventorySnapshot';
+import InventoryValuationSummary from './components/InventoryValuationSummary';
+import InventoryValuationDetail from './components/InventoryValuationDetail';
+import ItemsPendingFulfillment from './components/ItemsPendingFulfillment';
 import IncomeStatement from './components/IncomeStatement';
 import IncomeStatementDetail from './components/IncomeStatementDetail';
 import BalanceSheet from './components/BalanceSheet';
@@ -399,7 +404,6 @@ import CTABalanceAudit from './components/CTABalanceAudit';
 import ViewPayBatchPostingJournals from './components/ViewPayBatchPostingJournals';
 import ViewPayBatchPostingJournalDetail from './components/ViewPayBatchPostingJournalDetail';
 import CreatePayBatchPostingJournal from './components/CreatePayBatchPostingJournal';
-import InventoryProfitability from './components/InventoryProfitability';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1631,6 +1635,20 @@ function App() {
           onTrialBalanceClick={() => setCurrentPage('trial-balance')}
           onTransactionDetailClick={() => setCurrentPage('transaction-detail')}
         />;
+      case 'inventory-profitability':
+        return <InventoryProfitability />;
+      case 'current-inventory-snapshot':
+        return <CurrentInventorySnapshot />;
+      case 'inventory-valuation-summary':
+        return <InventoryValuationSummary 
+          onViewDetailClick={() => setCurrentPage('inventory-valuation-detail')}
+        />;
+      case 'inventory-valuation-detail':
+        return <InventoryValuationDetail 
+          onBackClick={() => setCurrentPage('inventory-valuation-summary')}
+        />;
+      case 'items-pending-fulfillment':
+        return <ItemsPendingFulfillment />;
       case 'income-statement':
         return <IncomeStatement 
           onViewDetailClick={() => setCurrentPage('income-statement-detail')}
