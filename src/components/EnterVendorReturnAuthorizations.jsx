@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const EnterVendorReturnAuthorizations = () => {
+const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('expenses');
   const [showVendorDropdown, setShowVendorDropdown] = useState(false);
@@ -63,7 +63,9 @@ const EnterVendorReturnAuthorizations = () => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Vendor return authorization cancelled', 'info');
+      if (setCurrentPage) {
+        setCurrentPage('view-vendor-return-authorizations');
+      }
     }
   };
 

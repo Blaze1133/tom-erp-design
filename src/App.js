@@ -26,9 +26,11 @@ import ViewCashSales from './components/ViewCashSales';
 import EditCashSale from './components/EditCashSale';
 import EnterPurchaseOrders from './components/EnterPurchaseOrders';
 import ViewPurchaseOrders from './components/ViewPurchaseOrders';
+import ViewPurchaseOrderDetail from './components/ViewPurchaseOrderDetail';
 import ReceiveOrders from './components/ReceiveOrders';
 import ViewReceiveOrders from './components/ViewReceiveOrders';
 import ItemReceipt from './components/ItemReceipt';
+import ViewItemReceiptDetail from './components/ViewItemReceiptDetail';
 import EnterVendorReturnAuthorizations from './components/EnterVendorReturnAuthorizations';
 import ViewVendorReturnAuthorizations from './components/ViewVendorReturnAuthorizations';
 import ApproveVendorReturns from './components/ApproveVendorReturns';
@@ -468,25 +470,29 @@ function App() {
       case 'edit-cash-sale':
         return <EditCashSale setCurrentPage={setCurrentPage} />;
       case 'enter-purchase-orders':
-        return <EnterPurchaseOrders />;
+        return <EnterPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'view-purchase-orders':
-        return <ViewPurchaseOrders />;
+        return <ViewPurchaseOrders setCurrentPage={setCurrentPage} />;
+      case 'view-purchase-order-detail':
+        return <ViewPurchaseOrderDetail setCurrentPage={setCurrentPage} />;
       case 'receive-orders':
         return <ReceiveOrders setCurrentPage={setCurrentPage} />;
       case 'view-receive-orders':
-        return <ViewReceiveOrders />;
+        return <ViewReceiveOrders setCurrentPage={setCurrentPage} />;
       case 'item-receipt':
-        return <ItemReceipt />;
+        return <ItemReceipt setCurrentPage={setCurrentPage} />;
+      case 'view-item-receipt-detail':
+        return <ViewItemReceiptDetail setCurrentPage={setCurrentPage} />;
       case 'enter-vendor-return-authorizations':
-        return <EnterVendorReturnAuthorizations />;
+        return <EnterVendorReturnAuthorizations setCurrentPage={setCurrentPage} />;
       case 'view-vendor-return-authorizations':
-        return <ViewVendorReturnAuthorizations />;
+        return <ViewVendorReturnAuthorizations setCurrentPage={setCurrentPage} />;
       case 'approve-vendor-returns':
-        return <ApproveVendorReturns />;
+        return <ApproveVendorReturns setCurrentPage={setCurrentPage} />;
       case 'ship-vendor-returns':
-        return <ShipVendorReturns />;
+        return <ShipVendorReturns setCurrentPage={setCurrentPage} />;
       case 'purchase-requisition':
-        return <CreatePurchaseRequisition />;
+        return <CreatePurchaseRequisition setCurrentPage={setCurrentPage} />;
       case 'view-purchase-requisition':
         return <ViewPurchaseRequisitions 
           onNewClick={() => setCurrentPage('purchase-requisition')} 
@@ -499,7 +505,7 @@ function App() {
           onEdit={() => setCurrentPage('edit-purchase-requisition')}
         />;
       case 'edit-purchase-requisition':
-        return <CreatePurchaseRequisition />;
+        return <CreatePurchaseRequisition setCurrentPage={setCurrentPage} />;
       case 'order-requisition':
         return <OrderRequisitions />;
       case 'tom-custom-delivery-order':

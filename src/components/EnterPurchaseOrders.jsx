@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const EnterPurchaseOrders = () => {
+const EnterPurchaseOrders = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('items');
   
@@ -78,7 +78,9 @@ const EnterPurchaseOrders = () => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Purchase order cancelled', 'info');
+      if (setCurrentPage) {
+        setCurrentPage('view-purchase-orders');
+      }
     }
   };
 

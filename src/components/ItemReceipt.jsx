@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ItemReceipt = () => {
+const ItemReceipt = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('items');
   
@@ -60,7 +60,9 @@ const ItemReceipt = () => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Item receipt cancelled', 'info');
+      if (setCurrentPage) {
+        setCurrentPage('view-receive-orders');
+      }
     }
   };
 

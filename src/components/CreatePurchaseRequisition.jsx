@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const CreatePurchaseRequisition = () => {
+const CreatePurchaseRequisition = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   // Form state
@@ -69,8 +69,9 @@ const CreatePurchaseRequisition = () => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to close this transaction? Any unsaved changes will be lost.')) {
-      showToast('Transaction cancelled', 'info');
-      window.location.reload();
+      if (setCurrentPage) {
+        setCurrentPage('view-purchase-requisition');
+      }
     }
   };
 
