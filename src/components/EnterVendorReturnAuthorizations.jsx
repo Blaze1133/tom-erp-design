@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const EnterVendorReturnAuthorizations = () => {
+const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('expenses');
   const [showVendorDropdown, setShowVendorDropdown] = useState(false);
@@ -63,7 +63,9 @@ const EnterVendorReturnAuthorizations = () => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Vendor return authorization cancelled', 'info');
+      if (setCurrentPage) {
+        setCurrentPage('view-vendor-return-authorizations');
+      }
     }
   };
 
@@ -113,7 +115,14 @@ const EnterVendorReturnAuthorizations = () => {
       <div className="page-header">
         <div className="page-title">
           <i className="fas fa-undo" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Vendor Return Authorization</h1>
+          <div>
+            <h1>Vendor Return Authorization</h1>
+            <div className="detail-subtitle">
+              <span>{formData.referenceNo || 'To Be Generated'}</span>
+              <span style={{ margin: '0 8px', color: '#ccc' }}>|</span>
+              <span>New Vendor Return Authorization</span>
+            </div>
+          </div>
         </div>
         <div className="page-actions">
           <button className="btn btn-tertiary" onClick={handleCancel}>

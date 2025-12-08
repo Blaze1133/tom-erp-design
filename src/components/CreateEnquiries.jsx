@@ -4,6 +4,7 @@ import './Enquiries.css';
 
 const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isSaved, setIsSaved] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -181,6 +182,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
 
   const handleSaveEnquiry = () => {
     showToast('Enquiry saved successfully!', 'success');
+    setIsSaved(true);
   };
 
   const handleCancel = () => {
@@ -292,7 +294,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
           <div>
             <h1>{headerTitle}</h1>
             <div className="detail-subtitle">
-              <span>New {headerTitle}</span>
+              <span># To be generated – New {headerTitle}</span>
             </div>
           </div>
         </div>
@@ -304,32 +306,29 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
       </div>
 
       <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
         <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
           <i className="fas fa-save"></i>
           Save
         </button>
-        <button className="btn-toolbar" onClick={handleCancel}>
-          Cancel
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-copy"></i>
-          Copy
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-print"></i>
-          Print
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-exchange-alt"></i>
-          Convert to Order
-        </button>
-        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
-          <button className="btn-toolbar">
-            <i className="fas fa-cog"></i>
-            Actions
-            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
-          </button>
-        </div>
+        {isSaved && (
+          <>
+            <button className="btn-toolbar">
+              <i className="fas fa-copy"></i>
+              Copy
+            </button>
+            <button className="btn-toolbar">
+              <i className="fas fa-print"></i>
+              Print
+            </button>
+            <button className="btn-toolbar">
+              <i className="fas fa-exchange-alt"></i>
+              Convert to Order
+            </button>
+          </>
+        )}
       </div>
 
         <div className="detail-content">

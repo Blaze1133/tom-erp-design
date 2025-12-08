@@ -166,8 +166,15 @@ const EnterBills = ({ setCurrentPage }) => {
     <div className="sales-quotation">
       <div className="page-header">
         <div className="page-title">
-          <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Bill</h1>
+          <i className="fas fa-file-invoice-dollar" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+          <div>
+            <h1>Bill</h1>
+            <div className="detail-subtitle">
+              <span>{formData.billNumber || 'To Be Generated'}</span>
+              <span style={{ margin: '0 8px', color: '#ccc' }}>|</span>
+              <span>New Bill</span>
+            </div>
+          </div>
         </div>
         <div className="page-actions">
           <button className="btn btn-primary" onClick={handleSave}>

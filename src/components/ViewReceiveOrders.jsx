@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewReceiveOrders = () => {
+const ViewReceiveOrders = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewFilter, setViewFilter] = useState('all');
 
@@ -124,11 +124,15 @@ const ViewReceiveOrders = () => {
   };
 
   const handleEdit = (receipt) => {
-    showToast(`Editing item receipt ${receipt.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('item-receipt');
+    }
   };
 
   const handleView = (receipt) => {
-    showToast(`Viewing item receipt ${receipt.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('view-item-receipt-detail');
+    }
   };
 
   return (
@@ -159,6 +163,10 @@ const ViewReceiveOrders = () => {
           </select>
           <button className="btn-edit-view">Edit View</button>
         </div>
+        <button className="btn-new-enquiry" onClick={() => setCurrentPage && setCurrentPage('item-receipt')}>
+          <i className="fas fa-plus"></i>
+          New Item Receipt
+        </button>
       </div>
 
       <div className="list-filters">

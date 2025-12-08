@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewVendorReturnAuthorizations = () => {
+const ViewVendorReturnAuthorizations = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewFilter, setViewFilter] = useState('all');
 
@@ -158,11 +158,15 @@ const ViewVendorReturnAuthorizations = () => {
   };
 
   const handleEdit = (returnItem) => {
-    showToast(`Editing vendor return ${returnItem.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('enter-vendor-return-authorizations');
+    }
   };
 
   const handleView = (returnItem) => {
-    showToast(`Viewing vendor return ${returnItem.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('view-vendor-return-detail');
+    }
   };
 
   return (
@@ -193,7 +197,7 @@ const ViewVendorReturnAuthorizations = () => {
           </select>
           <button className="btn-edit-view">Edit View</button>
         </div>
-        <button className="btn-new-enquiry" onClick={() => showToast('Opening new vendor return...', 'info')}>
+        <button className="btn-new-enquiry" onClick={() => setCurrentPage && setCurrentPage('enter-vendor-return-authorizations')}>
           <i className="fas fa-plus"></i>
           New Transaction
         </button>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewPurchaseOrders = () => {
+const ViewPurchaseOrders = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewFilter, setViewFilter] = useState('all');
 
@@ -110,11 +110,15 @@ const ViewPurchaseOrders = () => {
   };
 
   const handleEdit = (order) => {
-    showToast(`Editing purchase order ${order.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('enter-purchase-orders');
+    }
   };
 
   const handleView = (order) => {
-    showToast(`Viewing purchase order ${order.documentNumber}`, 'info');
+    if (setCurrentPage) {
+      setCurrentPage('view-purchase-order-detail');
+    }
   };
 
   return (
@@ -146,7 +150,7 @@ const ViewPurchaseOrders = () => {
           </select>
           <button className="btn-edit-view">Edit View</button>
         </div>
-        <button className="btn-new-enquiry" onClick={() => showToast('Opening new purchase order form...', 'info')}>
+        <button className="btn-new-enquiry" onClick={() => setCurrentPage && setCurrentPage('enter-purchase-orders')}>
           <i className="fas fa-plus"></i>
           New Transaction
         </button>

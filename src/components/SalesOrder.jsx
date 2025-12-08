@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const SalesOrder = () => {
+const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
   const [items, setItems] = useState([]);
 
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isSaved, setIsSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('items');
 
   // Customer project dropdown states
@@ -23,7 +24,7 @@ const SalesOrder = () => {
   const [formData, setFormData] = useState({
     // Primary Information
     customForm: 'TOM Performa Invoice',
-    orderNumber: 'To Be Generated',
+    orderNumber: isEdit ? 'SO-2024-001' : 'To Be Generated',
     customerProject: '',
     date: '',
     status: 'Pending Approval',
@@ -271,10 +272,12 @@ const SalesOrder = () => {
 
   const handleSubmit = () => {
     showToast('Sales Order submitted successfully!', 'success');
+    setIsSaved(true);
   };
 
   const handleSaveDraft = () => {
-    showToast('Draft saved successfully!', 'success');
+    showToast('Sales Order saved as draft!', 'success');
+    setIsSaved(true);
   };
 
   const handleCancel = () => {
@@ -291,7 +294,11 @@ const SalesOrder = () => {
           <div>
             <h1>Sales Order</h1>
             <div className="detail-subtitle">
-              <span>New Sales Order</span>
+              {isEdit ? (
+                <span>{formData.orderNumber}</span>
+              ) : (
+                <span># To be generated – New Sales Order</span>
+              )}
             </div>
           </div>
         </div>
@@ -303,25 +310,29 @@ const SalesOrder = () => {
       </div>
 
       <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
         <button className="btn-toolbar-primary" onClick={handleSubmit}>
           <i className="fas fa-save"></i>
           Save
         </button>
-        <button className="btn-toolbar" onClick={handleCancel}>
-          Cancel
-        </button>
-        <button className="btn-toolbar" onClick={handleSaveDraft}>
-          <i className="fas fa-copy"></i>
-          Save Draft
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-print"></i>
-          Print
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-exchange-alt"></i>
-          Convert to Invoice
-        </button>
+        {isSaved && (
+          <>
+            <button className="btn-toolbar" onClick={handleSaveDraft}>
+              <i className="fas fa-copy"></i>
+              Save Draft
+            </button>
+            <button className="btn-toolbar">
+              <i className="fas fa-print"></i>
+              Print
+            </button>
+            <button className="btn-toolbar">
+              <i className="fas fa-exchange-alt"></i>
+              Convert to Invoice
+            </button>
+          </>
+        )}
         <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
           <button className="btn-toolbar">
             <i className="fas fa-cog"></i>

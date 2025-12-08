@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const EnterPurchaseOrders = () => {
+const EnterPurchaseOrders = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('items');
   
@@ -78,7 +78,9 @@ const EnterPurchaseOrders = () => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Purchase order cancelled', 'info');
+      if (setCurrentPage) {
+        setCurrentPage('view-purchase-orders');
+      }
     }
   };
 
@@ -129,7 +131,12 @@ const EnterPurchaseOrders = () => {
       <div className="page-header">
         <div className="page-title">
           <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Purchase Order</h1>
+          <div>
+            <h1>Purchase Order</h1>
+            <div className="detail-subtitle">
+              <span># To be generated – New Purchase Order</span>
+            </div>
+          </div>
         </div>
         <div className="page-actions">
           <button className="btn btn-tertiary" onClick={handleCancel}>

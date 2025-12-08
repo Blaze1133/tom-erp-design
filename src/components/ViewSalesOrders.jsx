@@ -74,6 +74,13 @@ const ViewSalesOrders = ({ setCurrentPage }) => {
           <h1>Sales Orders</h1>
         </div>
         <div className="list-actions">
+          <button 
+            className="btn-new-transaction"
+            onClick={() => setCurrentPage && setCurrentPage('create-sales-order')}
+          >
+            <i className="fas fa-plus"></i>
+            New
+          </button>
           <button className="btn-view-option active">List</button>
           <button className="btn-view-option">Search</button>
           <button className="btn-view-option">Audit Trail</button>

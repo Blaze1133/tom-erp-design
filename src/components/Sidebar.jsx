@@ -220,8 +220,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
 
   const crmSubItems = [
     { id: 'view-leads', label: 'Lead Management', hideArrow: true },
-    { id: 'view-opportunities', label: 'Opportunity Management', hideArrow: true },
-    { id: 'view-crm-quotations', label: 'Quotation Management', hideArrow: true }
+    { id: 'view-opportunities', label: 'Opportunity Management', hideArrow: true }
   ];
 
   const projectManagementSubItems = [
@@ -1112,7 +1111,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <span>{subItem.label}</span>
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`purchases-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`purchases-${subItem.id}`] || 0}px` }}>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`purchases-${subItem.id}`] !== undefined ? nestedSubmenuTop[`purchases-${subItem.id}`] : 100}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}

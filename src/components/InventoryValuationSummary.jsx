@@ -1,38 +1,28 @@
 import React, { useState } from 'react';
 import './Enquiries.css';
 
-const InventoryProfitability = () => {
+const InventoryValuationSummary = ({ onViewDetailClick }) => {
   const [showParameters, setShowParameters] = useState(true);
-  const [fromDate, setFromDate] = useState('Dec 2025');
-  const [toDate, setToDate] = useState('Dec 2025');
+  const [asOfDate, setAsOfDate] = useState('Dec 2025');
   const [subsidiary, setSubsidiary] = useState('Tech Onshore MEP P...td. (Consolidated)');
-  const [column, setColumn] = useState('Total');
 
-  // Sample inventory profitability data
+  // Sample inventory valuation data
   const [inventoryData] = useState([
     {
       id: 1,
-      item: 'Test Item',
-      description: '',
-      qtySold: 0,
-      totalCost: 0.00,
-      totalRevenue: 0.00,
-      percentOfTotalRevenue: 0.00,
-      grossProfit: 0.00,
-      grossProfitPercent: 0.00
+      item: 'Inventory Item',
+      children: [
+        {
+          id: 2,
+          item: 'Test Item',
+          description: '',
+          invValue: 0.00,
+          percentOfInvValue: 0.00,
+          onHand: 0
+        }
+      ]
     }
   ]);
-
-  const totalRow = {
-    item: 'Total',
-    description: '',
-    qtySold: inventoryData.reduce((sum, item) => sum + item.qtySold, 0),
-    totalCost: inventoryData.reduce((sum, item) => sum + item.totalCost, 0),
-    totalRevenue: inventoryData.reduce((sum, item) => sum + item.totalRevenue, 0),
-    percentOfTotalRevenue: 0.00,
-    grossProfit: inventoryData.reduce((sum, item) => sum + item.grossProfit, 0),
-    grossProfitPercent: 0.00
-  };
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
@@ -46,11 +36,17 @@ const InventoryProfitability = () => {
   };
 
   const handleRefresh = () => {
-    console.log('Refreshing inventory profitability data...');
+    console.log('Refreshing inventory valuation data...');
   };
 
   const handleCustomize = () => {
     console.log('Customizing report...');
+  };
+
+  const handleViewDetail = () => {
+    if (onViewDetailClick) {
+      onViewDetailClick();
+    }
   };
 
   return (
@@ -58,11 +54,11 @@ const InventoryProfitability = () => {
       {/* Header */}
       <div className="list-header">
         <div className="list-title">
-          <i className="fas fa-chart-line" style={{ color: '#007bff' }}></i>
-          <h1>Inventory Profitability</h1>
+          <i className="fas fa-box-open" style={{ color: '#007bff' }}></i>
+          <h1>Inventory Valuation Summary</h1>
         </div>
         <div className="list-actions">
-          <button className="btn-view-option" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <button className="btn-view-option" onClick={handleViewDetail} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <i className="fas fa-list"></i>
             View Detail
           </button>
@@ -116,39 +112,10 @@ const InventoryProfitability = () => {
                 color: '#6c757d',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px'
-              }}>FROM</label>
+              }}>AS OF DATE</label>
               <select 
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  border: '1px solid #ced4da',
-                  borderRadius: '6px',
-                  fontSize: '0.875rem',
-                  backgroundColor: 'white',
-                  cursor: 'pointer'
-                }}
-              >
-                <option>Dec 2025</option>
-                <option>Nov 2025</option>
-                <option>Oct 2025</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem', 
-                fontSize: '0.75rem', 
-                fontWeight: '600', 
-                color: '#6c757d',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>TO</label>
-              <select 
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
+                value={asOfDate}
+                onChange={(e) => setAsOfDate(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '0.6rem 0.75rem',
@@ -191,35 +158,6 @@ const InventoryProfitability = () => {
                 <option>Tech Onshore MEP P...td. (Consolidated)</option>
                 <option>Tech Marine Offshore (S) Pte Ltd</option>
                 <option>TOM Offshore Marine Engineering Pte Ltd</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem', 
-                fontSize: '0.75rem', 
-                fontWeight: '600', 
-                color: '#6c757d',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>COLUMN</label>
-              <select 
-                value={column}
-                onChange={(e) => setColumn(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.75rem',
-                  border: '1px solid #ced4da',
-                  borderRadius: '6px',
-                  fontSize: '0.875rem',
-                  backgroundColor: 'white',
-                  cursor: 'pointer'
-                }}
-              >
-                <option>Total</option>
-                <option>By Location</option>
-                <option>By Department</option>
               </select>
             </div>
           </div>
@@ -324,7 +262,7 @@ const InventoryProfitability = () => {
             fontWeight: '600', 
             color: '#495057' 
           }}>
-            Inventory Profitability - {fromDate} to {toDate}
+            Inventory Valuation Summary
           </h2>
           <span style={{ 
             marginLeft: 'auto', 
@@ -374,7 +312,7 @@ const InventoryProfitability = () => {
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   borderBottom: '2px solid #dee2e6'
-                }}>QTY. SOLD</th>
+                }}>INV. VALUE</th>
                 <th style={{
                   padding: '0.75rem 1rem',
                   textAlign: 'right',
@@ -384,7 +322,7 @@ const InventoryProfitability = () => {
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   borderBottom: '2px solid #dee2e6'
-                }}>TOTAL COST</th>
+                }}>% OF INV. VALUE</th>
                 <th style={{
                   padding: '0.75rem 1rem',
                   textAlign: 'right',
@@ -394,122 +332,112 @@ const InventoryProfitability = () => {
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   borderBottom: '2px solid #dee2e6'
-                }}>TOTAL REVENUE</th>
-                <th style={{
-                  padding: '0.75rem 1rem',
-                  textAlign: 'right',
-                  fontWeight: '600',
-                  fontSize: '0.75rem',
-                  color: '#6c757d',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  borderBottom: '2px solid #dee2e6'
-                }}>% OF TOTAL REVENUE</th>
-                <th style={{
-                  padding: '0.75rem 1rem',
-                  textAlign: 'right',
-                  fontWeight: '600',
-                  fontSize: '0.75rem',
-                  color: '#6c757d',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  borderBottom: '2px solid #dee2e6'
-                }}>GROSS PROFIT</th>
-                <th style={{
-                  padding: '0.75rem 1rem',
-                  textAlign: 'right',
-                  fontWeight: '600',
-                  fontSize: '0.75rem',
-                  color: '#6c757d',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  borderBottom: '2px solid #dee2e6'
-                }}>GROSS PROFIT %</th>
+                }}>ON HAND</th>
               </tr>
             </thead>
             <tbody>
-              {inventoryData.map((item, index) => (
-                <tr key={item.id} style={{
-                  backgroundColor: index % 2 === 0 ? 'white' : '#f8f9fa',
-                  transition: 'background-color 0.2s'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9ecef'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? 'white' : '#f8f9fa'}
-                >
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    color: '#495057',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{item.item}</td>
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    color: '#6c757d',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{item.description}</td>
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    color: '#495057',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{item.qtySold}</td>
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    color: '#495057',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{formatCurrency(item.totalCost)}</td>
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    color: '#495057',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{formatCurrency(item.totalRevenue)}</td>
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    color: '#6c757d',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{formatPercent(item.percentOfTotalRevenue)}</td>
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    color: '#495057',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{formatCurrency(item.grossProfit)}</td>
-                  <td style={{
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    color: '#6c757d',
-                    borderBottom: '1px solid #dee2e6'
-                  }}>{formatPercent(item.grossProfitPercent)}</td>
-                </tr>
+              {inventoryData.map((category) => (
+                <React.Fragment key={category.id}>
+                  {/* Category Header */}
+                  <tr style={{ backgroundColor: '#e9ecef' }}>
+                    <td colSpan="5" style={{
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.875rem',
+                      fontWeight: '700',
+                      color: '#212529',
+                      borderBottom: '1px solid #dee2e6'
+                    }}>
+                      <i className="fas fa-minus-square" style={{ marginRight: '0.5rem', color: '#6c757d' }}></i>
+                      {category.item}
+                    </td>
+                  </tr>
+                  
+                  {/* Category Items */}
+                  {category.children.map((item, index) => (
+                    <tr key={item.id} style={{
+                      backgroundColor: index % 2 === 0 ? 'white' : '#f8f9fa',
+                      transition: 'background-color 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9ecef'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? 'white' : '#f8f9fa'}
+                    >
+                      <td style={{
+                        padding: '0.75rem 1rem 0.75rem 3rem',
+                        fontSize: '0.875rem',
+                        color: '#495057',
+                        borderBottom: '1px solid #dee2e6'
+                      }}>{item.item}</td>
+                      <td style={{
+                        padding: '0.75rem 1rem',
+                        fontSize: '0.875rem',
+                        color: '#6c757d',
+                        borderBottom: '1px solid #dee2e6'
+                      }}>{item.description}</td>
+                      <td style={{
+                        padding: '0.75rem 1rem',
+                        fontSize: '0.875rem',
+                        textAlign: 'right',
+                        color: '#495057',
+                        borderBottom: '1px solid #dee2e6'
+                      }}>{formatCurrency(item.invValue)}</td>
+                      <td style={{
+                        padding: '0.75rem 1rem',
+                        fontSize: '0.875rem',
+                        textAlign: 'right',
+                        color: '#6c757d',
+                        borderBottom: '1px solid #dee2e6'
+                      }}>{formatPercent(item.percentOfInvValue)}</td>
+                      <td style={{
+                        padding: '0.75rem 1rem',
+                        fontSize: '0.875rem',
+                        textAlign: 'right',
+                        color: '#495057',
+                        borderBottom: '1px solid #dee2e6'
+                      }}>{item.onHand}</td>
+                    </tr>
+                  ))}
+                  
+                  {/* Category Total */}
+                  <tr style={{ backgroundColor: '#f8f9fa' }}>
+                    <td colSpan="3" style={{
+                      padding: '0.75rem 1rem 0.75rem 3rem',
+                      fontSize: '0.875rem',
+                      fontWeight: '600',
+                      color: '#212529',
+                      borderBottom: '1px solid #dee2e6'
+                    }}>Total - {category.item}</td>
+                    <td style={{
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.875rem',
+                      textAlign: 'right',
+                      fontWeight: '600',
+                      color: '#212529',
+                      borderBottom: '1px solid #dee2e6'
+                    }}>0.00%</td>
+                    <td style={{
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.875rem',
+                      textAlign: 'right',
+                      fontWeight: '600',
+                      color: '#212529',
+                      borderBottom: '1px solid #dee2e6'
+                    }}></td>
+                  </tr>
+                </React.Fragment>
               ))}
-              {/* Total Row */}
+              
+              {/* Grand Total */}
               <tr style={{
                 backgroundColor: '#e9ecef',
                 borderTop: '3px solid #495057'
               }}>
-                <td style={{
+                <td colSpan="3" style={{
                   padding: '0.75rem 1rem',
                   fontSize: '0.875rem',
                   fontWeight: '700',
                   color: '#212529',
                   borderBottom: '2px solid #495057'
-                }}>{totalRow.item}</td>
-                <td style={{
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.875rem',
-                  color: '#6c757d',
-                  borderBottom: '2px solid #495057'
-                }}>{totalRow.description}</td>
+                }}>Total</td>
                 <td style={{
                   padding: '0.75rem 1rem',
                   fontSize: '0.875rem',
@@ -517,7 +445,7 @@ const InventoryProfitability = () => {
                   fontWeight: '700',
                   color: '#212529',
                   borderBottom: '2px solid #495057'
-                }}>{totalRow.qtySold}</td>
+                }}>0.00%</td>
                 <td style={{
                   padding: '0.75rem 1rem',
                   fontSize: '0.875rem',
@@ -525,39 +453,7 @@ const InventoryProfitability = () => {
                   fontWeight: '700',
                   color: '#212529',
                   borderBottom: '2px solid #495057'
-                }}>{formatCurrency(totalRow.totalCost)}</td>
-                <td style={{
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.875rem',
-                  textAlign: 'right',
-                  fontWeight: '700',
-                  color: '#212529',
-                  borderBottom: '2px solid #495057'
-                }}>{formatCurrency(totalRow.totalRevenue)}</td>
-                <td style={{
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.875rem',
-                  textAlign: 'right',
-                  fontWeight: '700',
-                  color: '#212529',
-                  borderBottom: '2px solid #495057'
-                }}>{formatPercent(totalRow.percentOfTotalRevenue)}</td>
-                <td style={{
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.875rem',
-                  textAlign: 'right',
-                  fontWeight: '700',
-                  color: '#212529',
-                  borderBottom: '2px solid #495057'
-                }}>{formatCurrency(totalRow.grossProfit)}</td>
-                <td style={{
-                  padding: '0.75rem 1rem',
-                  fontSize: '0.875rem',
-                  textAlign: 'right',
-                  fontWeight: '700',
-                  color: '#212529',
-                  borderBottom: '2px solid #495057'
-                }}>{formatPercent(totalRow.grossProfitPercent)}</td>
+                }}></td>
               </tr>
             </tbody>
           </table>
@@ -567,4 +463,4 @@ const InventoryProfitability = () => {
   );
 };
 
-export default InventoryProfitability;
+export default InventoryValuationSummary;

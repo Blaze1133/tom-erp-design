@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const EnterCashSales = () => {
+const EnterCashSales = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isSaved, setIsSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('items');
 
   // Customer project dropdown states
@@ -153,6 +154,7 @@ const EnterCashSales = () => {
 
   const handleSave = () => {
     showToast('Cash sale saved successfully!', 'success');
+    setIsSaved(true);
   };
 
   const handleCancel = () => {
@@ -285,7 +287,12 @@ const EnterCashSales = () => {
       <div className="page-header">
         <div className="page-title">
           <i className="fas fa-cash-register" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Cash Sale</h1>
+          <div>
+            <h1>Cash Sale</h1>
+            <div className="detail-subtitle">
+              <span># To be generated – New Cash Sale</span>
+            </div>
+          </div>
         </div>
         <div className="page-actions">
           <button className="btn btn-tertiary" onClick={handleCancel}>
@@ -296,12 +303,16 @@ const EnterCashSales = () => {
             <i className="fas fa-save"></i>
             Save
           </button>
-          <button className="btn btn-secondary">
-            Auto Fill
-          </button>
-          <button className="btn btn-secondary">
-            Actions
-          </button>
+          {isSaved && (
+            <>
+              <button className="btn btn-secondary">
+                Auto Fill
+              </button>
+              <button className="btn btn-secondary">
+                Actions
+              </button>
+            </>
+          )}
         </div>
       </div>
 

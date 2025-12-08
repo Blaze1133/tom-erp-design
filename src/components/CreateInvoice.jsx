@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const CreateInvoice = () => {
+const CreateInvoice = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isSaved, setIsSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('items');
 
   // Customer project dropdown states
@@ -169,6 +170,7 @@ const CreateInvoice = () => {
 
   const handleSave = () => {
     showToast('Invoice saved successfully!', 'success');
+    setIsSaved(true);
   };
 
   const handleCancel = () => {
@@ -284,7 +286,12 @@ const CreateInvoice = () => {
       <div className="page-header">
         <div className="page-title">
           <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Invoice</h1>
+          <div>
+            <h1>Invoice</h1>
+            <div className="detail-subtitle">
+              <span># To be generated – New Invoice</span>
+            </div>
+          </div>
         </div>
         <div className="page-actions">
           <button className="btn btn-tertiary" onClick={handleCancel}>
@@ -295,12 +302,16 @@ const CreateInvoice = () => {
             <i className="fas fa-save"></i>
             Save
           </button>
-          <button className="btn btn-secondary">
-            Auto Fill
-          </button>
-          <button className="btn btn-secondary">
-            Actions
-          </button>
+          {isSaved && (
+            <>
+              <button className="btn btn-secondary">
+                Auto Fill
+              </button>
+              <button className="btn btn-secondary">
+                Actions
+              </button>
+            </>
+          )}
         </div>
       </div>
 

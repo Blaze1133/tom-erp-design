@@ -14,6 +14,7 @@ import EditQuotation from './components/EditQuotation';
 import CreateQuotation from './components/CreateQuotation';
 import ViewSalesOrders from './components/ViewSalesOrders';
 import ViewSalesOrderDetail from './components/ViewSalesOrderDetail';
+import CreateSalesOrder from './components/CreateSalesOrder';
 import EditSalesOrder from './components/EditSalesOrder';
 import InvoiceSalesOrders from './components/InvoiceSalesOrders';
 import InvoiceDetail from './components/InvoiceDetail';
@@ -443,6 +444,8 @@ function App() {
         return <CreateQuotation setCurrentPage={setCurrentPage} />;
       case 'enter-sales-orders':
         return <SalesOrder setCurrentPage={setCurrentPage} />;
+      case 'create-sales-order':
+        return <CreateSalesOrder setCurrentPage={setCurrentPage} />;
       case 'view-sales-orders':
         return <ViewSalesOrders setCurrentPage={setCurrentPage} />;
       case 'view-sales-order-detail':
@@ -468,19 +471,19 @@ function App() {
       case 'edit-cash-sale':
         return <EditCashSale setCurrentPage={setCurrentPage} />;
       case 'enter-purchase-orders':
-        return <EnterPurchaseOrders />;
+        return <EnterPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'view-purchase-orders':
-        return <ViewPurchaseOrders />;
+        return <ViewPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'receive-orders':
         return <ReceiveOrders setCurrentPage={setCurrentPage} />;
       case 'view-receive-orders':
-        return <ViewReceiveOrders />;
+        return <ViewReceiveOrders setCurrentPage={setCurrentPage} />;
       case 'item-receipt':
-        return <ItemReceipt />;
+        return <ItemReceipt setCurrentPage={setCurrentPage} />;
       case 'enter-vendor-return-authorizations':
-        return <EnterVendorReturnAuthorizations />;
+        return <EnterVendorReturnAuthorizations setCurrentPage={setCurrentPage} />;
       case 'view-vendor-return-authorizations':
-        return <ViewVendorReturnAuthorizations />;
+        return <ViewVendorReturnAuthorizations setCurrentPage={setCurrentPage} />;
       case 'approve-vendor-returns':
         return <ApproveVendorReturns />;
       case 'ship-vendor-returns':
