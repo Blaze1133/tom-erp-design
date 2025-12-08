@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import AddProjectForm from './AddProjectForm';
+import AddCustomerForm from './AddCustomerForm';
 import './Enquiries.css';
 
 const Quotation = ({ setCurrentPage, isEdit = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [isSaved, setIsSaved] = useState(false);
   
-  // Customer project dropdown states
-  const [customerProjectHovered, setCustomerProjectHovered] = useState(false);
+  // Customer dropdown states
+  const [customerHovered, setCustomerHovered] = useState(false);
   const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
   const [showAddCustomer, setShowAddCustomer] = useState(false);
   const [customerSearch, setCustomerSearch] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  
+  // Project dropdown states
+  const [projectHovered, setProjectHovered] = useState(false);
+  const [showProjectDropdown, setShowProjectDropdown] = useState(false);
+  const [showAddProject, setShowAddProject] = useState(false);
+  const [projectSearch, setProjectSearch] = useState('');
+  const [filteredProjects, setFilteredProjects] = useState([]);
   
   // Row actions states
   const [hoveredRow, setHoveredRow] = useState(null);
@@ -40,7 +49,8 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     // Primary Information
     customForm: 'TOM Supply Quotation',
     estimateNumber: isEdit ? 'Q-2024-001' : 'To Be Generated',
-    customerProject: '',
+    customer: '',
+    project: '',
     title: '',
     date: '3/12/2025',
     status: 'Proposal',
@@ -74,6 +84,13 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     'XYZ Industries',
     'Tech Marine Solutions'
   ];
+  
+  // Project options for dropdown (linked to customers)
+  const projectOptions = [
+    { id: 1, name: 'Marine Equipment Supply – Q1 2024', customer: '612 Raise Pte Ltd', jobId: 'PRJ-001', startDate: '2024-01-15', location: 'Singapore', vesselName: 'MV Pacific Star', scopeOfWork: 'Supply and installation of marine equipment' },
+    { id: 2, name: 'Hull Repair Project', customer: 'ABC Corporation', jobId: 'PRJ-002', startDate: '2024-02-01', location: 'Jurong Port', vesselName: 'MV Ocean Breeze', scopeOfWork: 'Hull repair and maintenance' },
+    { id: 3, name: 'Piping System Upgrade', customer: 'XYZ Industries', jobId: 'PRJ-003', startDate: '2024-03-10', location: 'Tuas', vesselName: 'MV Sea Dragon', scopeOfWork: 'Piping system upgrade and testing' }
+  ];
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -103,9 +120,9 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     showToast('Quotation converted to sales order!', 'success');
   };
 
-  // Customer project handlers
+  // Customer handlers
   const handleCustomerSelect = (customer) => {
-    handleInputChange('customerProject', customer);
+    handleInputChange('customer', customer);
     setShowCustomerDropdown(false);
     setCustomerSearch('');
   };
@@ -113,7 +130,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
   const handleCustomerSearchChange = (e) => {
     const value = e.target.value;
     setCustomerSearch(value);
-    handleInputChange('customerProject', value);
+    handleInputChange('customer', value);
     
     if (value) {
       const filtered = customerOptions.filter(customer =>
@@ -135,9 +152,63 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     // Add the new customer to the options list
     customerOptions.push(customerData.companyName);
     // Set it as selected
-    handleInputChange('customerProject', customerData.companyName);
+    handleInputChange('customer', customerData.companyName);
     setShowAddCustomer(false);
     showToast('New customer added successfully!', 'success');
+  };
+  
+  // Project handlers
+  const handleProjectSelect = (project) => {
+    handleInputChange('project', project.name);
+    setShowProjectDropdown(false);
+    setProjectSearch('');
+  };
+
+  const handleProjectSearchChange = (e) => {
+    const value = e.target.value;
+    setProjectSearch(value);
+    handleInputChange('project', value);
+    
+    if (value) {
+      const filtered = projectOptions.filter(project =>
+        project.name.toLowerCase().includes(value.toLowerCase()) ||
+        project.jobId.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredProjects(filtered);
+    } else {
+      // Filter projects by selected customer if any
+      if (formData.customer) {
+        const filtered = projectOptions.filter(p => p.customer === formData.customer);
+        setFilteredProjects(filtered);
+      } else {
+        setFilteredProjects(projectOptions);
+      }
+    }
+    setShowProjectDropdown(true);
+  };
+
+  const handleAddNewProject = () => {
+    setShowAddProject(true);
+    setShowProjectDropdown(false);
+  };
+
+  const handleSaveNewProject = (projectData) => {
+    // Add the new project to the options list
+    const newProject = {
+      id: projectOptions.length + 1,
+      name: projectData.projectName,
+      customer: projectData.customer,
+      jobId: projectData.jobId,
+      startDate: projectData.startDate,
+      location: projectData.projectLocation,
+      vesselName: projectData.vesselName,
+      scopeOfWork: projectData.scopeOfWork
+    };
+    projectOptions.push(newProject);
+    // Set it as selected
+    handleInputChange('project', newProject.name);
+    setShowAddProject(false);
+    showToast('New project added successfully!', 'success');
   };
 
   // Row actions handlers
@@ -205,15 +276,18 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
   React.useEffect(() => {
     const handleClickOutside = () => {
       setActiveMenu(null);
-      if (showCustomerDropdown && !customerProjectHovered) {
+      if (showCustomerDropdown && !customerHovered) {
         setShowCustomerDropdown(false);
       }
+      if (showProjectDropdown && !projectHovered) {
+        setShowProjectDropdown(false);
+      }
     };
-    if (activeMenu !== null || showCustomerDropdown) {
+    if (activeMenu !== null || showCustomerDropdown || showProjectDropdown) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
-  }, [activeMenu, showCustomerDropdown, customerProjectHovered]);
+  }, [activeMenu, showCustomerDropdown, showProjectDropdown, customerHovered, projectHovered]);
 
   // Item management functions
   const addItem = () => {
@@ -396,25 +470,19 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                 </select>
               </div>
               <div className="detail-field" style={{ position: 'relative' }}>
-                <label className="form-label required">Customer:Project</label>
+                <label className="form-label required">Customer</label>
                 <div 
                   style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
-                  onMouseEnter={() => setCustomerProjectHovered(true)}
-                  onMouseLeave={() => setCustomerProjectHovered(false)}
+                  onMouseEnter={() => setCustomerHovered(true)}
+                  onMouseLeave={() => setCustomerHovered(false)}
                 >
                   <div style={{ position: 'relative', flex: 1 }}>
                     <input 
                       type="text"
                       className="form-control"
-                      value={formData.customerProject}
-                      onChange={(e) => {
-                        setFormData({...formData, customerProject: e.target.value});
-                        setCustomerSearch(e.target.value);
-                        setShowCustomerDropdown(true);
-                      }}
-                      onFocus={() => {
-                        setShowCustomerDropdown(true);
-                      }}
+                      value={formData.customer}
+                      onChange={handleCustomerSearchChange}
+                      onFocus={() => setShowCustomerDropdown(true)}
                       placeholder="<Type then tab>"
                     />
                     <button 
@@ -430,9 +498,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                         padding: '4px 8px',
                         fontSize: '14px'
                       }}
-                      onClick={() => {
-                        setShowCustomerDropdown(!showCustomerDropdown);
-                      }}
+                      onClick={() => setShowCustomerDropdown(!showCustomerDropdown)}
                     >
                       <i className="fas fa-chevron-down"></i>
                     </button>
@@ -466,11 +532,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                           {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
                             <div 
                               key={idx}
-                              onClick={() => {
-                                setFormData({...formData, customerProject: customer});
-                                setShowCustomerDropdown(false);
-                                setCustomerSearch('');
-                              }}
+                              onClick={() => handleCustomerSelect(customer)}
                               style={{ 
                                 padding: '10px 12px', 
                                 cursor: 'pointer', 
@@ -492,7 +554,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                       </>
                     )}
                   </div>
-                  {customerProjectHovered && (
+                  {customerHovered && (
                     <button 
                       type="button"
                       className="btn btn-secondary"
@@ -503,6 +565,111 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                       }}
                       onClick={handleAddNewCustomer}
                       title="Add new customer"
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="detail-field" style={{ position: 'relative' }}>
+                <label className="form-label">Project</label>
+                <div 
+                  style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+                  onMouseEnter={() => setProjectHovered(true)}
+                  onMouseLeave={() => setProjectHovered(false)}
+                >
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={formData.project}
+                      onChange={handleProjectSearchChange}
+                      onFocus={() => setShowProjectDropdown(true)}
+                      placeholder="<Type then tab>"
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={() => setShowProjectDropdown(!showProjectDropdown)}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {showProjectDropdown && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 999 
+                          }}
+                          onClick={() => setShowProjectDropdown(false)}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 1000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredProjects.length > 0 ? filteredProjects : (formData.customer ? projectOptions.filter(p => p.customer === formData.customer) : projectOptions)).map((project, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => handleProjectSelect(project)}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f5f5f5'
+                              }}
+                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                            >
+                              <div style={{ fontWeight: '500' }}>{project.name}</div>
+                              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
+                                {project.jobId} • {project.customer}
+                              </div>
+                            </div>
+                          ))}
+                          {filteredProjects.length === 0 && projectSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No projects found
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {projectHovered && (
+                    <button 
+                      type="button"
+                      className="btn btn-secondary"
+                      style={{ 
+                        padding: '0.5rem', 
+                        minWidth: 'auto',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onClick={handleAddNewProject}
+                      title="Add new project"
                     >
                       <i className="fas fa-plus"></i>
                     </button>
@@ -927,7 +1094,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
       {/* Add Customer Modal */}
       {showAddCustomer && (
         <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
-          <div className="modal-content" style={{ maxWidth: '600px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
               <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -944,6 +1111,28 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
           </div>
         </div>
       )}
+
+      {/* Add Project Modal */}
+      {showAddProject && (
+        <div className="modal-overlay" onClick={() => setShowAddProject(false)}>
+          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Project</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddProject(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <AddProjectForm 
+                onSave={handleSaveNewProject}
+                onCancel={() => setShowAddProject(false)}
+                customers={customerOptions}
+              />
+            </div>
+          </div>
+        </div>
+      )}
       
       <Toast 
         message={toast.message} 
@@ -952,296 +1141,6 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
         onClose={() => setToast({ ...toast, show: false })} 
       />
     </div>
-  );
-};
-
-// Add Customer Form Component
-const AddCustomerForm = ({ onSave, onCancel }) => {
-  const [customerData, setCustomerData] = useState({
-    customerId: 'To Be Generated',
-    type: 'COMPANY',
-    companyName: '',
-    parentCompany: '',
-    salesRep: '',
-    webAddress: '',
-    category: '',
-    defaultOrderPriority: '',
-    email: '',
-    phone: '',
-    altPhone: '',
-    fax: '',
-    primarySubsidiary: '',
-    transactionsNeedApproval: false,
-    stopSendingSms: false,
-    defaultDiscount: '',
-    lastSalesActivity: ''
-  });
-
-  const handleInputChange = (field, value) => {
-    setCustomerData({ ...customerData, [field]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!customerData.companyName.trim()) {
-      alert('Company Name is required');
-      return;
-    }
-    onSave(customerData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="add-customer-form">
-      {/* Primary Information Section */}
-      <div className="form-section">
-        <div className="section-header">
-          <i className="fas fa-chevron-down"></i>
-          <h3>Primary Information</h3>
-        </div>
-        <div className="section-body">
-          <div className="form-grid">
-            <div className="form-group">
-              <label>CUSTOMER ID <span className="required">*</span></label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={customerData.customerId}
-                disabled
-              />
-              <div className="form-checkbox">
-                <input type="checkbox" id="auto" defaultChecked />
-                <label htmlFor="auto">AUTO</label>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>TYPE</label>
-              <div className="radio-group">
-                <label>
-                  <input 
-                    type="radio" 
-                    name="type" 
-                    value="COMPANY"
-                    checked={customerData.type === 'COMPANY'}
-                    onChange={(e) => handleInputChange('type', e.target.value)}
-                  />
-                  COMPANY
-                </label>
-                <label>
-                  <input 
-                    type="radio" 
-                    name="type" 
-                    value="INDIVIDUAL"
-                    checked={customerData.type === 'INDIVIDUAL'}
-                    onChange={(e) => handleInputChange('type', e.target.value)}
-                  />
-                  INDIVIDUAL
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>COMPANY NAME <span className="required">*</span></label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={customerData.companyName}
-                onChange={(e) => handleInputChange('companyName', e.target.value)}
-                placeholder="Enter company name"
-              />
-            </div>
-            <div className="form-group">
-              <label>PARENT COMPANY</label>
-              <select 
-                className="form-control"
-                value={customerData.parentCompany}
-                onChange={(e) => handleInputChange('parentCompany', e.target.value)}
-              >
-                <option>&lt;Type then tab&gt;</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>SALES REP</label>
-              <select 
-                className="form-control"
-                value={customerData.salesRep}
-                onChange={(e) => handleInputChange('salesRep', e.target.value)}
-              >
-                <option>Select...</option>
-                <option>John Doe</option>
-                <option>Jane Smith</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>WEB ADDRESS</label>
-              <input 
-                type="url" 
-                className="form-control"
-                value={customerData.webAddress}
-                onChange={(e) => handleInputChange('webAddress', e.target.value)}
-                placeholder="https://"
-              />
-            </div>
-            <div className="form-group">
-              <label>CATEGORY</label>
-              <select 
-                className="form-control"
-                value={customerData.category}
-                onChange={(e) => handleInputChange('category', e.target.value)}
-              >
-                <option>Select...</option>
-                <option>Premium</option>
-                <option>Standard</option>
-                <option>Basic</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>DEFAULT ORDER PRIORITY</label>
-              <select 
-                className="form-control"
-                value={customerData.defaultOrderPriority}
-                onChange={(e) => handleInputChange('defaultOrderPriority', e.target.value)}
-              >
-                <option>Select...</option>
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Email | Phone | Address Section */}
-      <div className="form-section">
-        <div className="section-header">
-          <i className="fas fa-chevron-down"></i>
-          <h3>Email | Phone | Address</h3>
-        </div>
-        <div className="section-body">
-          <div className="form-grid">
-            <div className="form-group">
-              <label>EMAIL</label>
-              <input 
-                type="email" 
-                className="form-control"
-                value={customerData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="Enter email address"
-              />
-            </div>
-            <div className="form-group">
-              <label>PHONE</label>
-              <input 
-                type="tel" 
-                className="form-control"
-                value={customerData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                placeholder="Enter phone number"
-              />
-            </div>
-            <div className="form-group">
-              <label>ALT. PHONE</label>
-              <input 
-                type="tel" 
-                className="form-control"
-                value={customerData.altPhone}
-                onChange={(e) => handleInputChange('altPhone', e.target.value)}
-                placeholder="Enter alternate phone"
-              />
-            </div>
-            <div className="form-group">
-              <label>FAX</label>
-              <input 
-                type="tel" 
-                className="form-control"
-                value={customerData.fax}
-                onChange={(e) => handleInputChange('fax', e.target.value)}
-                placeholder="Enter fax number"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Classification Section */}
-      <div className="form-section">
-        <div className="section-header">
-          <i className="fas fa-chevron-down"></i>
-          <h3>Classification</h3>
-        </div>
-        <div className="section-body">
-          <div className="form-grid">
-            <div className="form-group">
-              <label>PRIMARY SUBSIDIARY <span className="required">*</span></label>
-              <select 
-                className="form-control"
-                value={customerData.primarySubsidiary}
-                onChange={(e) => handleInputChange('primarySubsidiary', e.target.value)}
-              >
-                <option>Select...</option>
-                <option>Tech Onshore MEP Prefabricators Pte Ltd</option>
-                <option>Tech Marine Offshore (S) Pte Ltd</option>
-                <option>TOM Offshore Marine Engineering Pte Ltd</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <div className="form-checkbox">
-                <input 
-                  type="checkbox" 
-                  id="transactionsApproval"
-                  checked={customerData.transactionsNeedApproval}
-                  onChange={(e) => handleInputChange('transactionsNeedApproval', e.target.checked)}
-                />
-                <label htmlFor="transactionsApproval">TRANSACTIONS NEED APPROVAL</label>
-              </div>
-            </div>
-            <div className="form-group">
-              <div className="form-checkbox">
-                <input 
-                  type="checkbox" 
-                  id="stopSms"
-                  checked={customerData.stopSendingSms}
-                  onChange={(e) => handleInputChange('stopSendingSms', e.target.checked)}
-                />
-                <label htmlFor="stopSms">STOP SENDING SMS</label>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>DEFAULT DISCOUNT</label>
-              <select 
-                className="form-control"
-                value={customerData.defaultDiscount}
-                onChange={(e) => handleInputChange('defaultDiscount', e.target.value)}
-              >
-                <option>Select...</option>
-                <option>5%</option>
-                <option>10%</option>
-                <option>15%</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>LAST SALES ACTIVITY</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={customerData.lastSalesActivity}
-                onChange={(e) => handleInputChange('lastSalesActivity', e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Form Actions */}
-      <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '1rem', justifyContent: 'flex-end', background: '#f8f9fa', marginTop: '2rem' }}>
-        <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
-          Cancel
-        </button>
-        <button type="submit" className="btn-new-transaction" style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
-          <i className="fas fa-save"></i>
-          Save
-        </button>
-      </div>
-    </form>
   );
 };
 

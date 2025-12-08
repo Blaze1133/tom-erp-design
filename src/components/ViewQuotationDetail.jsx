@@ -11,6 +11,7 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
   const quotationData = {
     documentNumber: 'Q21TOM00025',
     customer: '612 Raise Pte Ltd',
+    project: 'Marine Equipment Supply – Q1 2024',
     status: 'EXPIRED',
     estimate: 'Q21TOM00025',
     quotationStatus: 'Proposal',
@@ -105,7 +106,7 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
         </button>
         <button className="btn-toolbar">
           <i className="fas fa-file-alt"></i>
-          Sales Order
+          Convert to Order
         </button>
         <button className="btn-toolbar">
           <i className="fas fa-print"></i>
@@ -142,8 +143,12 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
                 <div className="field-value">{quotationData.quotationStatus}</div>
               </div>
               <div className="detail-field">
-                <label>CUSTOMER:PROJECT</label>
+                <label>CUSTOMER</label>
                 <div className="field-value">{quotationData.customer}</div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT</label>
+                <div className="field-value">{quotationData.project}</div>
               </div>
               <div className="detail-field">
                 <label>PROBABILITY</label>

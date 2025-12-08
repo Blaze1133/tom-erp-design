@@ -133,28 +133,13 @@ const EditEnquiry = ({ setCurrentPage }) => {
       </div>
 
       <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
         <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
           <i className="fas fa-save"></i>
           Save
         </button>
-        <button className="btn-toolbar" onClick={handleCancel}>
-          Cancel
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-copy"></i>
-          Copy
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-print"></i>
-          Print
-        </button>
-        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
-          <button className="btn-toolbar">
-            <i className="fas fa-cog"></i>
-            Actions
-            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
-          </button>
-        </div>
       </div>
 
       <div className="detail-content">
