@@ -8,7 +8,7 @@ const EditEnquiry = ({ setCurrentPage }) => {
   // Form state with pre-filled data
   const [formData, setFormData] = useState({
     documentNumber: 'E22TOM80024',
-    customForm: 'Standard Enquiry',
+    customForm: 'TOM Supply Enquiry',
     company: 'TOM22-00733',
     salesRep: '',
     title: 'Test Enquiry',
@@ -107,9 +107,14 @@ const EditEnquiry = ({ setCurrentPage }) => {
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      if (setCurrentPage) {
-        setCurrentPage('view-enquiries');
-      }
+      showToast('Changes cancelled', 'info');
+      setCurrentPage('view-enquiries');
+    }
+  };
+
+  const handleBack = () => {
+    if (setCurrentPage) {
+      setCurrentPage('view-enquiries');
     }
   };
 
@@ -133,6 +138,10 @@ const EditEnquiry = ({ setCurrentPage }) => {
       </div>
 
       <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
         <button className="btn-toolbar" onClick={handleCancel}>
           Cancel
         </button>
@@ -543,13 +552,17 @@ const EditEnquiry = ({ setCurrentPage }) => {
 
         {/* Footer Actions */}
         <div className="detail-footer-actions">
-          <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
-            <i className="fas fa-save"></i>
-            Save
+          <button className="btn-toolbar" onClick={handleBack}>
+            <i className="fas fa-arrow-left"></i>
+            Back
           </button>
           <button className="btn-toolbar" onClick={handleCancel}>
             <i className="fas fa-times"></i>
             Cancel
+          </button>
+          <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
+            <i className="fas fa-save"></i>
+            Save
           </button>
         </div>
       </div>

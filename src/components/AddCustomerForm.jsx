@@ -35,11 +35,11 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: '1.5rem' }}>
+    <form onSubmit={handleSubmit} style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Primary Information Section */}
       <div style={{ marginBottom: '2.5rem' }}>
-        <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#333', textTransform: 'uppercase', marginBottom: '1.25rem', letterSpacing: '0.5px', paddingBottom: '0.75rem', borderBottom: '2px solid #e0e0e0' }}>Primary Information</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.25rem' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#333', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '0.5px', paddingBottom: '1rem', borderBottom: '2px solid #e0e0e0' }}>Primary Information</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1.5rem' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
               CUSTOMER ID <span style={{ color: '#e53e3e' }}>*</span>
@@ -167,10 +167,12 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
         </div>
       </div>
 
+      <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+
       {/* Email | Phone | Address Section */}
       <div style={{ marginBottom: '2.5rem' }}>
-        <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#333', textTransform: 'uppercase', marginBottom: '1.25rem', letterSpacing: '0.5px', paddingBottom: '0.75rem', borderBottom: '2px solid #e0e0e0' }}>Email | Phone | Address</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.25rem' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#333', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '0.5px', paddingBottom: '1rem', borderBottom: '2px solid #e0e0e0' }}>Email | Phone | Address</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1.5rem' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
               EMAIL
@@ -222,10 +224,12 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
         </div>
       </div>
 
+      <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+
       {/* Classification Section */}
       <div style={{ marginBottom: '2.5rem' }}>
-        <h3 style={{ fontSize: '0.875rem', fontWeight: '600', color: '#333', textTransform: 'uppercase', marginBottom: '1.25rem', letterSpacing: '0.5px', paddingBottom: '0.75rem', borderBottom: '2px solid #e0e0e0' }}>Classification</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.25rem' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#333', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '0.5px', paddingBottom: '1rem', borderBottom: '2px solid #e0e0e0' }}>Classification</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1.5rem' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
               PRIMARY SUBSIDIARY <span style={{ color: '#e53e3e' }}>*</span>

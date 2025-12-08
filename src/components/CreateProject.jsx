@@ -1,95 +1,185 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Toast from './Toast';
+import SearchableDropdown from './SearchableDropdown';
+import { CLASS_OPTIONS, DEPARTMENT_OPTIONS, SUBSIDIARY_OPTIONS, ADJUSTMENT_LOCATION_OPTIONS } from '../constants/dropdownOptions';
 import './Enquiries.css';
 
 const CreateProject = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isSaved, setIsSaved] = useState(false);
+  
   const [formData, setFormData] = useState({
     jobId: '',
     projectName: '',
     customer: '',
+    salesPerson: '',
+    projectManager: '',
     startDate: '',
+    endDate: '',
     projectLocation: '',
-    vesselName: '',
     scopeOfWork: '',
     subsidiary: '',
-    projDepartment: '',
-    projClass: '',
+    department: '',
+    class: '',
     customerProjectNo: '',
     estimatedCost: '',
-    estimatedRevenue: ''
+    estimatedRevenue: '',
+    status: 'Planning',
+    priority: 'Medium'
   });
 
-  const subsidiaryOptions = [
-    'Tech Onshore MEP Prefabricators Pte Ltd',
-    'Tech Marine Offshore (S) Pte Ltd',
-    'TOM Offshore Marine Engineering Pte Ltd',
-    'TOM Shipyard Pte Ltd',
-    'TOM Engineering & Trading Pte Ltd',
-    'TOM Industrial Services Pte Ltd'
+  // Sales Person searchable dropdown state
+  const [salesPersonSearch, setSalesPersonSearch] = useState('');
+  const [salesPersonDropdownOpen, setSalesPersonDropdownOpen] = useState(false);
+  const salesPersonDropdownRef = useRef(null);
+  
+  // Project Manager searchable dropdown state
+  const [projectManagerSearch, setProjectManagerSearch] = useState('');
+  const [projectManagerDropdownOpen, setProjectManagerDropdownOpen] = useState(false);
+  const projectManagerDropdownRef = useRef(null);
+  
+  // Customer searchable dropdown state
+  const [customerSearch, setCustomerSearch] = useState('');
+  const [customerDropdownOpen, setCustomerDropdownOpen] = useState(false);
+  const customerDropdownRef = useRef(null);
+
+  // Customer options
+  const customerOptions = [
+    { id: '100-102', name: '100 Baroid Surface Solutions, Halliburton Energy Services Inc' },
+    { id: '1000', name: '1000 TEAM LEAD CONSTRUCTION PTE LTD' },
+    { id: '1001', name: '1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD' },
+    { id: '1002', name: '1002 TECH MARINE OFFSHORE (S) PTE LTD' },
+    { id: '1003', name: '1003 TECH ELECTRIC AUTOMATION PTE LTD' },
+    { id: '1004', name: '1004 TECH OFFSHORE MARINE (DO) PTE LTD' },
+    { id: '1005', name: '1005 TECH OFFSHORE MARINE (SV) PTE LTD' }
   ];
 
-  const classOptions = [
-    'Consumable Item',
-    'Course',
-    'Cutting Works',
-    'Electrical',
-    'Fabrication',
-    'Hydrotesting',
-    'Installation work',
-    'Manpower Supply',
-    'Material Supply',
-    'Module /Prefab',
-    'Piping',
-    'Project Works',
-    'Refurbishment works',
-    'Rental',
-    'Repair & Referable',
-    'Sale of Scrap Metal',
-    'Structure'
+  // Sales Person options
+  const salesPersonOptions = [
+    { id: 'TD0059', name: 'TD0059 Kumarasamy Madhavan Subash' },
+    { id: 'TSV025', name: 'TSV025 Sasapu Venkateshwara Rao' },
+    { id: 'MEP01', name: 'MEP01 001 JEGANATHAN SUNDARAVELU' },
+    { id: 'TOM01', name: 'TOM01 John Smith' },
+    { id: 'TOM02', name: 'TOM02 Jane Doe' }
   ];
 
-  const departmentOptions = [
-    'TOM: Human Resource',
-    'TOM: Finance: Internal Transfer',
-    'TOM: IT',
-    'TOM: Logistic',
-    'TOM: Operating',
-    'TOM: Purchase',
-    'TOM: Sales and Marketing',
-    'TOM: Security',
-    'TOM: TOM INTERNALS: TOM HR',
-    'TOM: Nampak Reinsure',
-    'TOM: Auction Handover',
-    'TOM: Engineering',
-    'TOM: Production'
+  // Project Manager options
+  const projectManagerOptions = [
+    { id: 'PM001', name: 'PM001 Michael Chen' },
+    { id: 'PM002', name: 'PM002 Sarah Williams' },
+    { id: 'PM003', name: 'PM003 David Kumar' },
+    { id: 'PM004', name: 'PM004 Lisa Anderson' },
+    { id: 'PM005', name: 'PM005 Robert Lee' }
   ];
 
-  const locationOptions = [
-    'Hong Hang Shipyard',
-    'Mega yard',
-    'MEP MARINE CC',
-    'Shipyards/Construction',
-    'Singapore (MEP)',
-    'TOM-11',
-    'TOM External Workshop',
-    'TOM-13'
-  ];
+  // Status options
+  const statusOptions = ['Planning', 'In Progress', 'On Hold', 'Completed', 'Cancelled'];
+  
+  // Priority options
+  const priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
+
+  // Filter customer options based on search
+  const filteredCustomers = customerOptions.filter(customer =>
+    customer.name.toLowerCase().includes(customerSearch.toLowerCase())
+  );
+
+  // Filter sales person options based on search
+  const filteredSalesPersons = salesPersonOptions.filter(person =>
+    person.name.toLowerCase().includes(salesPersonSearch.toLowerCase())
+  );
+
+  // Filter project manager options based on search
+  const filteredProjectManagers = projectManagerOptions.filter(manager =>
+    manager.name.toLowerCase().includes(projectManagerSearch.toLowerCase())
+  );
+
+  // Handle customer selection
+  const handleCustomerSelect = (customer) => {
+    handleFormChange('customer', customer.name);
+    setCustomerSearch(customer.name);
+    setCustomerDropdownOpen(false);
+  };
+
+  // Handle customer search input
+  const handleCustomerSearchChange = (e) => {
+    setCustomerSearch(e.target.value);
+    setCustomerDropdownOpen(true);
+    if (e.target.value !== formData.customer) {
+      handleFormChange('customer', '');
+    }
+  };
+
+  // Handle sales person selection
+  const handleSalesPersonSelect = (person) => {
+    handleFormChange('salesPerson', person.name);
+    setSalesPersonSearch(person.name);
+    setSalesPersonDropdownOpen(false);
+  };
+
+  // Handle sales person search input
+  const handleSalesPersonSearchChange = (e) => {
+    setSalesPersonSearch(e.target.value);
+    setSalesPersonDropdownOpen(true);
+    if (e.target.value !== formData.salesPerson) {
+      handleFormChange('salesPerson', '');
+    }
+  };
+
+  // Handle project manager selection
+  const handleProjectManagerSelect = (manager) => {
+    handleFormChange('projectManager', manager.name);
+    setProjectManagerSearch(manager.name);
+    setProjectManagerDropdownOpen(false);
+  };
+
+  // Handle project manager search input
+  const handleProjectManagerSearchChange = (e) => {
+    setProjectManagerSearch(e.target.value);
+    setProjectManagerDropdownOpen(true);
+    if (e.target.value !== formData.projectManager) {
+      handleFormChange('projectManager', '');
+    }
+  };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (salesPersonDropdownRef.current && !salesPersonDropdownRef.current.contains(event.target)) {
+        setSalesPersonDropdownOpen(false);
+      }
+      if (projectManagerDropdownRef.current && !projectManagerDropdownRef.current.contains(event.target)) {
+        setProjectManagerDropdownOpen(false);
+      }
+      if (customerDropdownRef.current && !customerDropdownRef.current.contains(event.target)) {
+        setCustomerDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleFormChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [field]: value
     }));
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    handleFormChange(name, value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSaved(true);
     showToast('Project created successfully!', 'success');
     setTimeout(() => {
       if (setCurrentPage) {
@@ -102,6 +192,11 @@ const CreateProject = ({ setCurrentPage }) => {
     if (setCurrentPage) {
       setCurrentPage('view-projects');
     }
+  };
+
+  const handleSave = () => {
+    setIsSaved(true);
+    showToast('Project saved successfully!', 'success');
   };
 
   return (
@@ -172,16 +267,139 @@ const CreateProject = ({ setCurrentPage }) => {
                 required
               />
             </div>
-            <div className="form-group">
+            {/* Customer Searchable Dropdown */}
+            <div className="form-group" ref={customerDropdownRef}>
               <label>Customer *</label>
-              <input
-                type="text"
-                name="customer"
-                value={formData.customer}
+              <div className="searchable-input-wrapper">
+                <input
+                  type="text"
+                  value={customerSearch}
+                  onChange={handleCustomerSearchChange}
+                  onFocus={() => setCustomerDropdownOpen(true)}
+                  className="form-control"
+                  placeholder="Search customer..."
+                  required
+                />
+                <i className="fas fa-search search-icon"></i>
+                {customerDropdownOpen && (
+                  <div className="searchable-dropdown-menu">
+                    {filteredCustomers.length > 0 ? (
+                      filteredCustomers.map((customer) => (
+                        <div
+                          key={customer.id}
+                          className="searchable-dropdown-item"
+                          onClick={() => handleCustomerSelect(customer)}
+                        >
+                          {customer.name}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="searchable-dropdown-item no-results">
+                        No customers found
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Sales Person Searchable Dropdown */}
+            <div className="form-group" ref={salesPersonDropdownRef}>
+              <label>Sales Person *</label>
+              <div className="searchable-input-wrapper">
+                <input
+                  type="text"
+                  value={salesPersonSearch}
+                  onChange={handleSalesPersonSearchChange}
+                  onFocus={() => setSalesPersonDropdownOpen(true)}
+                  className="form-control"
+                  placeholder="Search sales person..."
+                  required
+                />
+                <i className="fas fa-search search-icon"></i>
+                {salesPersonDropdownOpen && (
+                  <div className="searchable-dropdown-menu">
+                    {filteredSalesPersons.length > 0 ? (
+                      filteredSalesPersons.map((person) => (
+                        <div
+                          key={person.id}
+                          className="searchable-dropdown-item"
+                          onClick={() => handleSalesPersonSelect(person)}
+                        >
+                          {person.name}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="searchable-dropdown-item no-results">
+                        No sales person found
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Project Manager Searchable Dropdown */}
+            <div className="form-group" ref={projectManagerDropdownRef}>
+              <label>Project Manager *</label>
+              <div className="searchable-input-wrapper">
+                <input
+                  type="text"
+                  value={projectManagerSearch}
+                  onChange={handleProjectManagerSearchChange}
+                  onFocus={() => setProjectManagerDropdownOpen(true)}
+                  className="form-control"
+                  placeholder="Search project manager..."
+                  required
+                />
+                <i className="fas fa-search search-icon"></i>
+                {projectManagerDropdownOpen && (
+                  <div className="searchable-dropdown-menu">
+                    {filteredProjectManagers.length > 0 ? (
+                      filteredProjectManagers.map((manager) => (
+                        <div
+                          key={manager.id}
+                          className="searchable-dropdown-item"
+                          onClick={() => handleProjectManagerSelect(manager)}
+                        >
+                          {manager.name}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="searchable-dropdown-item no-results">
+                        No project manager found
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Status</label>
+              <select
+                name="status"
+                value={formData.status}
                 onChange={handleInputChange}
                 className="form-control"
-                required
-              />
+              >
+                {statusOptions.map((status, index) => (
+                  <option key={index} value={status}>{status}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Priority</label>
+              <select
+                name="priority"
+                value={formData.priority}
+                onChange={handleInputChange}
+                className="form-control"
+              >
+                {priorityOptions.map((priority, index) => (
+                  <option key={index} value={priority}>{priority}</option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label>Start Date</label>
@@ -189,6 +407,16 @@ const CreateProject = ({ setCurrentPage }) => {
                 type="date"
                 name="startDate"
                 value={formData.startDate}
+                onChange={handleInputChange}
+                className="form-control"
+              />
+            </div>
+            <div className="form-group">
+              <label>End Date</label>
+              <input
+                type="date"
+                name="endDate"
+                value={formData.endDate}
                 onChange={handleInputChange}
                 className="form-control"
               />
@@ -202,22 +430,22 @@ const CreateProject = ({ setCurrentPage }) => {
                 className="form-control"
               >
                 <option value="">Select Location</option>
-                {locationOptions.map((location, index) => (
+                {ADJUSTMENT_LOCATION_OPTIONS.map((location, index) => (
                   <option key={index} value={location}>{location}</option>
                 ))}
               </select>
             </div>
             <div className="form-group">
-              <label>Vessel Name</label>
+              <label>Customer Project No</label>
               <input
                 type="text"
-                name="vesselName"
-                value={formData.vesselName}
+                name="customerProjectNo"
+                value={formData.customerProjectNo}
                 onChange={handleInputChange}
                 className="form-control"
               />
             </div>
-            <div className="form-group">
+            <div className="form-group full-width">
               <label>Scope of Work</label>
               <textarea
                 name="scopeOfWork"
@@ -246,49 +474,25 @@ const CreateProject = ({ setCurrentPage }) => {
                 required
               >
                 <option value="">Select Subsidiary</option>
-                {subsidiaryOptions.map((subsidiary, index) => (
+                {SUBSIDIARY_OPTIONS.map((subsidiary, index) => (
                   <option key={index} value={subsidiary}>{subsidiary}</option>
                 ))}
               </select>
             </div>
-            <div className="form-group">
-              <label>Department</label>
-              <select
-                name="projDepartment"
-                value={formData.projDepartment}
-                onChange={handleInputChange}
-                className="form-control"
-              >
-                <option value="">Select Department</option>
-                {departmentOptions.map((department, index) => (
-                  <option key={index} value={department}>{department}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Class</label>
-              <select
-                name="projClass"
-                value={formData.projClass}
-                onChange={handleInputChange}
-                className="form-control"
-              >
-                <option value="">Select Class</option>
-                {classOptions.map((cls, index) => (
-                  <option key={index} value={cls}>{cls}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Customer Project No</label>
-              <input
-                type="text"
-                name="customerProjectNo"
-                value={formData.customerProjectNo}
-                onChange={handleInputChange}
-                className="form-control"
-              />
-            </div>
+            <SearchableDropdown
+              label="Department"
+              options={DEPARTMENT_OPTIONS}
+              value={formData.department}
+              onChange={(value) => handleFormChange('department', value)}
+              placeholder="Select or search department..."
+            />
+            <SearchableDropdown
+              label="Class"
+              options={CLASS_OPTIONS}
+              value={formData.class}
+              onChange={(value) => handleFormChange('class', value)}
+              placeholder="Select or search class..."
+            />
           </div>
         </div>
 

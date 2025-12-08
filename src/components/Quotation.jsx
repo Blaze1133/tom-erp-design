@@ -111,6 +111,12 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     }
   };
 
+  const handleBack = () => {
+    if (setCurrentPage) {
+      setCurrentPage('view-quotations');
+    }
+  };
+
   const handleSaveDraft = () => {
     showToast('Draft saved successfully!', 'success');
     setIsSaved(true);
@@ -383,6 +389,10 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
       </div>
 
       <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
         <button className="btn-toolbar" onClick={handleCancel}>
           Cancel
         </button>
@@ -406,13 +416,6 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
             </button>
           </>
         )}
-        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
-          <button className="btn-toolbar">
-            <i className="fas fa-cog"></i>
-            Actions
-            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
-          </button>
-        </div>
       </div>
 
       <div className="detail-content">
@@ -432,7 +435,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   onChange={(e) => handleInputChange('customForm', e.target.value)}
                 >
                   <option>TOM Supply Quotation</option>
-                  <option>Standard Quotation</option>
+                  <option>DFMA Quotation</option>
                   <option>TOM Service Quotation</option>
                 </select>
               </div>
@@ -443,16 +446,6 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   className="form-control"
                   value={formData.date}
                   onChange={(e) => handleInputChange('date', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>ESTIMATE #</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.estimateNumber}
-                  placeholder="To Be Generated"
-                  disabled
                 />
               </div>
               <div className="detail-field">
@@ -706,12 +699,21 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
               </div>
               <div className="detail-field">
                 <label>MEMO</label>
-                <input 
-                  type="text" 
+                <textarea 
                   className="form-control"
                   placeholder="Enter memo"
                   value={formData.memo}
                   onChange={(e) => handleInputChange('memo', e.target.value)}
+                  style={{ 
+                    minHeight: '60px',
+                    resize: 'both',
+                    overflow: 'auto'
+                  }}
+                  rows="3"
+                  onInput={(e) => {
+                    e.target.style.height = 'auto';
+                    e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                  }}
                 />
               </div>
             </div>
@@ -862,35 +864,6 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   <option>Jane Doe</option>
                 </select>
               </div>
-              <div className="detail-field">
-                <label>HS CODE</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  placeholder="Enter HS code"
-                  value={formData.hsCode}
-                  onChange={(e) => handleInputChange('hsCode', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>COUNTRY OF ORIGIN</label>
-                <select 
-                  className="form-control"
-                  value={formData.countryOfOrigin}
-                  onChange={(e) => handleInputChange('countryOfOrigin', e.target.value)}
-                >
-                  <option>Select...</option>
-                  <option>Singapore</option>
-                  <option>Malaysia</option>
-                  <option>China</option>
-                  <option>India</option>
-                  <option>Japan</option>
-                  <option>South Korea</option>
-                  <option>United States</option>
-                  <option>Germany</option>
-                  <option>United Kingdom</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>
@@ -906,18 +879,20 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
               <table className="items-table">
                 <thead>
                   <tr>
-                    <th style={{ width: '12%' }}>ITEM</th>
-                    <th style={{ width: '6%' }}>QTY</th>
-                    <th style={{ width: '8%' }}>UNITS</th>
-                    <th style={{ width: '20%' }}>DESCRIPTION</th>
-                    <th style={{ width: '10%' }}>PRICE LEVEL</th>
-                    <th style={{ width: '8%' }}>RATE</th>
-                    <th style={{ width: '8%' }}>AMOUNT</th>
-                    <th style={{ width: '10%' }}>TAX CODE</th>
-                    <th style={{ width: '6%' }}>TAX RATE</th>
-                    <th style={{ width: '6%' }}>TAX AMT</th>
-                    <th style={{ width: '8%' }}>GROSS AMT</th>
-                    <th style={{ width: '6%' }}>ACTION</th>
+                    <th style={{ width: '30px' }}></th>
+                    <th style={{ minWidth: '150px' }}>ITEM</th>
+                    <th style={{ minWidth: '400px' }}>DESCRIPTION</th>
+                    <th style={{ minWidth: '80px' }}>QTY</th>
+                    <th style={{ minWidth: '100px' }}>UNITS</th>
+                    <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                    <th style={{ minWidth: '100px' }}>RATE</th>
+                    <th style={{ minWidth: '100px' }}>AMOUNT</th>
+                    <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                    <th style={{ minWidth: '80px' }}>TAX RATE</th>
+                    <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                    <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                    <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                    <th style={{ minWidth: '150px' }}>HS CODE</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -928,6 +903,50 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                       onMouseEnter={() => setHoveredRow(index)}
                       onMouseLeave={() => setHoveredRow(null)}
                     >
+                      <td style={{ textAlign: 'center', position: 'relative' }}>
+                        {hoveredRow === index && (
+                          <button 
+                            className="row-actions-btn"
+                            title="Row Actions"
+                            onClick={(e) => handleMenuToggle(index, e)}
+                          >
+                            <i className="fas fa-ellipsis-v"></i>
+                          </button>
+                        )}
+                        {activeMenu === index && (
+                          <div 
+                            className="row-actions-menu"
+                            style={{
+                              top: `${menuPosition.top}px`,
+                              left: `${menuPosition.left}px`,
+                              display: 'block'
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <button onClick={() => {
+                              handleInsertAbove(index);
+                              setActiveMenu(null);
+                            }}>
+                              <i className="fas fa-arrow-up"></i>
+                              Insert Above
+                            </button>
+                            <button onClick={() => {
+                              handleInsertBelow(index);
+                              setActiveMenu(null);
+                            }}>
+                              <i className="fas fa-arrow-down"></i>
+                              Insert Below
+                            </button>
+                            <button onClick={() => {
+                              handleDeleteRow(index);
+                              setActiveMenu(null);
+                            }} className="delete-action">
+                              <i className="fas fa-trash"></i>
+                              Delete Row
+                            </button>
+                          </div>
+                        )}
+                      </td>
                       <td>
                         <input 
                           type="text" 
@@ -935,6 +954,26 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                           value={item.item}
                           onChange={(e) => updateItem(item.id, 'item', e.target.value)}
                           placeholder="Enter item"
+                          style={{ minWidth: '200px', height: '40px' }}
+                        />
+                      </td>
+                      <td>
+                        <textarea 
+                          className="form-control"
+                          value={item.description}
+                          onChange={(e) => updateItem(item.id, 'description', e.target.value)}
+                          placeholder="Enter description"
+                          style={{ 
+                            minWidth: '400px', 
+                            minHeight: '60px',
+                            resize: 'both',
+                            overflow: 'auto'
+                          }}
+                          rows="3"
+                          onInput={(e) => {
+                            e.target.style.height = 'auto';
+                            e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                          }}
                         />
                       </td>
                       <td>
@@ -945,6 +984,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                           onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)}
                           min="0"
                           step="0.01"
+                          style={{ minWidth: '100px', height: '40px' }}
                         />
                       </td>
                       <td>
@@ -952,21 +992,13 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                           className="form-control"
                           value={item.units}
                           onChange={(e) => updateItem(item.id, 'units', e.target.value)}
+                          style={{ minWidth: '120px', height: '40px' }}
                         >
                           <option>Kgs</option>
                           <option>Pcs</option>
                           <option>Meters</option>
                           <option>Hours</option>
                         </select>
-                      </td>
-                      <td>
-                        <input 
-                          type="text" 
-                          className="form-control"
-                          value={item.description}
-                          onChange={(e) => updateItem(item.id, 'description', e.target.value)}
-                          placeholder="Enter description"
-                        />
                       </td>
                       <td>
                         <select 
@@ -1012,49 +1044,25 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                       <td>
                         <strong>${(item.grossAmount || 0).toFixed(2)}</strong>
                       </td>
-                      <td style={{ textAlign: 'center', position: 'relative' }}>
-                        {hoveredRow === index && (
-                          <button 
-                            className="row-actions-btn"
-                            title="Row Actions"
-                            onClick={(e) => handleMenuToggle(index, e)}
-                          >
-                            <i className="fas fa-ellipsis-v"></i>
-                          </button>
-                        )}
-                        {activeMenu === index && (
-                          <div 
-                            className="row-actions-menu"
-                            style={{
-                              top: `${menuPosition.top}px`,
-                              left: `${menuPosition.left}px`,
-                              display: 'block'
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <button onClick={() => {
-                              handleInsertAbove(index);
-                              setActiveMenu(null);
-                            }}>
-                              <i className="fas fa-arrow-up"></i>
-                              Insert Above
-                            </button>
-                            <button onClick={() => {
-                              handleInsertBelow(index);
-                              setActiveMenu(null);
-                            }}>
-                              <i className="fas fa-arrow-down"></i>
-                              Insert Below
-                            </button>
-                            <button onClick={() => {
-                              handleDeleteRow(index);
-                              setActiveMenu(null);
-                            }} className="delete-action">
-                              <i className="fas fa-trash"></i>
-                              Delete Row
-                            </button>
-                          </div>
-                        )}
+                      <td>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={item.countryOfOrigin || ''}
+                          onChange={(e) => updateItem(item.id, 'countryOfOrigin', e.target.value)}
+                          placeholder="Country"
+                          style={{ minWidth: '180px', height: '40px' }}
+                        />
+                      </td>
+                      <td>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={item.hsCode || ''}
+                          onChange={(e) => updateItem(item.id, 'hsCode', e.target.value)}
+                          placeholder="HS Code"
+                          style={{ minWidth: '180px', height: '40px' }}
+                        />
                       </td>
                     </tr>
                   ))}

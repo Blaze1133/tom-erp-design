@@ -259,18 +259,6 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
               System Information
             </button>
             <button 
-              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
-              onClick={() => setActiveTab('custom')}
-            >
-              Custom
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'access' ? 'active' : ''}`}
-              onClick={() => setActiveTab('access')}
-            >
-              Access
-            </button>
-            <button 
               className={`tab-btn ${activeTab === 'subsidiaries' ? 'active' : ''}`}
               onClick={() => setActiveTab('subsidiaries')}
             >
@@ -280,43 +268,79 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
 
           <div className="tabs-content">
             {activeTab === 'relationships' && (
-              <div>
-                <div style={{ marginBottom: '1rem' }}>
-                  <h4>OTHER RELATIONSHIPS</h4>
+              <div style={{ padding: '1rem' }}>
+                <div style={{ marginBottom: '1.5rem', padding: '0.75rem', background: '#f0f0f0', borderRadius: '4px' }}>
+                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#555', margin: 0 }}>OTHER RELATIONSHIPS</h4>
                 </div>
-                <div style={{ marginBottom: '2rem' }}>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <h4>Contacts</h4>
-                    <h4>Subcustomers</h4>
+
+                {/* Relationships Sub-tabs */}
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: '#6c7a89',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Contacts
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Subcustomers
+                    </button>
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label>CONTACT</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
+                </div>
+
+                {/* Contacts Content */}
+                <div>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'flex-end' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>CONTACT</label>
+                      <input type="text" className="form-control" placeholder="<Type then tab>" />
                     </div>
-                    <div>
-                      <label>ROLE</label>
-                      <select className="form-control" style={{ width: '200px' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>ROLE</label>
+                      <select className="form-control">
                         <option>Default</option>
                         {contactRoles.map(role => (
                           <option key={role} value={role}>{role}</option>
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label>VIEW</label>
-                      <select className="form-control" style={{ width: '200px' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>VIEW</label>
+                      <select className="form-control">
                         <option>Default</option>
                       </select>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <button className="btn btn-primary">New Contact</button>
-                    <button className="btn btn-secondary">Attach</button>
-                    <button className="btn btn-secondary">Update Primary</button>
-                    <button className="btn btn-secondary">Customize View</button>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Attach
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Update Primary
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Customize View
+                    </button>
+                    <button className="btn-toolbar-primary" style={{ padding: '0.5rem 1.5rem' }}>
+                      New Contact
+                    </button>
                   </div>
                   <table className="detail-items-table">
                     <thead>
@@ -328,8 +352,8 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                         <th>PHONE</th>
                         <th>EMAIL</th>
                         <th>STOP SENDING SMS</th>
-                        <th>MESSAGES/MEDIA LAST OPTIN KEYWORD</th>
-                        <th>MESSAGES/MEDIA EXPIRY ENTITY</th>
+                        <th>MESSAGEMEDIA LAST OPTIN KEYWORD</th>
+                        <th>MESSAGEMEDIA ISKEYLINK ENTITY</th>
                         <th>ROLE</th>
                         <th>REMOVE</th>
                       </tr>
@@ -347,31 +371,98 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'communication' && (
-              <div>
-                <div style={{ marginBottom: '2rem' }}>
-                  <h4 style={{ marginBottom: '1rem' }}>Messages</h4>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <h4>Activities</h4>
-                    <h4>Files</h4>
-                    <h4>User_Notes</h4>
+              <div style={{ padding: '1rem' }}>
+                {/* Communication Sub-tabs */}
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: '#6c7a89',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Messages
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Activities
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Files
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      User_Notes
+                    </button>
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label>VIEW</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>Default</option>
-                      </select>
-                    </div>
+                </div>
+
+                {/* Messages Content */}
+                <div>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>VIEW</label>
+                    <select className="form-control" style={{ maxWidth: '300px' }}>
+                      <option>Default</option>
+                    </select>
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <button className="btn btn-primary">Email</button>
-                    <button className="btn btn-secondary">Attach</button>
-                    <button className="btn btn-secondary">Letter</button>
-                    <button className="btn btn-secondary">PDF</button>
-                    <button className="btn btn-secondary">Fax</button>
-                    <button className="btn btn-secondary">Refresh</button>
-                    <button className="btn btn-secondary">View History</button>
-                    <button className="btn btn-secondary">Customize View</button>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                    <button className="btn-toolbar-primary" style={{ padding: '0.5rem 1.5rem' }}>
+                      Email
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Attach
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Letter
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      PDF
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Fax
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Refresh
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      View History
+                    </button>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Customize View
+                    </button>
                   </div>
                   <table className="detail-items-table">
                     <thead>
@@ -435,184 +526,334 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'sales' && (
-              <div>
-                <div style={{ marginBottom: '2rem' }}>
-                  <h4>TERRITORY</h4>
-                </div>
-                <div style={{ marginBottom: '2rem' }}>
-                  <h4>Opportunities</h4>
-                  <h4>Transactions</h4>
-                  <h4>Items Purchased</h4>
-                  <h4>Upsell</h4>
-                  <h4>Projects</h4>
-                  <h4>Qualification</h4>
-                </div>
-                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                  <div>
-                    <label>VIEW</label>
-                    <select className="form-control" style={{ width: '200px' }}>
-                      <option>Opportunity Default</option>
-                    </select>
+              <div style={{ padding: '1rem' }}>
+                {/* Sales Sub-tabs */}
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: '#6c7a89',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Opportunities
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Transactions
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Items Purchased
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Upsell
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Projects
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Qualification
+                    </button>
                   </div>
-                  <div>
-                    <label>STATUS</label>
-                    <select className="form-control" style={{ width: '200px' }}>
-                      <option>- All -</option>
-                    </select>
+                </div>
+
+                {/* Opportunities Content */}
+                <div>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'flex-end' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>VIEW</label>
+                      <select className="form-control">
+                        <option>Opportunity Default</option>
+                      </select>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>STATUS</label>
+                      <select className="form-control">
+                        <option>- All -</option>
+                      </select>
+                    </div>
                   </div>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Customize View
+                    </button>
+                    <button className="btn-toolbar-primary" style={{ padding: '0.5rem 1.5rem' }}>
+                      New Enquiry
+                    </button>
+                  </div>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>EDIT</th>
+                        <th>DATE</th>
+                        <th>TITLE</th>
+                        <th>DOCUMENT NUMBER</th>
+                        <th>CUSTOMER</th>
+                        <th>ENQUIRY STATUS</th>
+                        <th>EXPECTED CLOSE</th>
+                        <th>PROJECTED TOTAL</th>
+                        <th>PROBABILITY</th>
+                        <th>FORECAST TYPE</th>
+                        <th>APPROVAL STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colSpan="11" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                          No records to show.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                  <button className="btn btn-primary">New Enquiry</button>
-                  <button className="btn btn-secondary">Customize View</button>
-                </div>
-                <table className="detail-items-table">
-                  <thead>
-                    <tr>
-                      <th>EDIT</th>
-                      <th>DATE</th>
-                      <th>TITLE</th>
-                      <th>DOCUMENT NUMBER</th>
-                      <th>CUSTOMER</th>
-                      <th>ENQUIRY STATUS</th>
-                      <th>EXPECTED CLOSE</th>
-                      <th>PROJECTED TOTAL</th>
-                      <th>PROBABILITY</th>
-                      <th>FORECAST TYPE</th>
-                      <th>APPROVAL STATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colSpan="11" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                        No records to show.
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
             )}
 
             {activeTab === 'financial' && (
-              <div>
-                <div className={`detail-section`}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Account Information</h3>
+              <div style={{ padding: '1rem' }}>
+                {/* Account Information Collapsible Section */}
+                <div className="detail-section" style={{ marginBottom: '1rem' }}>
+                  <div className="section-header" style={{ background: '#f0f0f0', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem' }}></i>
+                    <h3 style={{ fontSize: '14px', fontWeight: '600', margin: 0, display: 'inline' }}>Account Information</h3>
                   </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
+                  <div className="section-body" style={{ padding: '1rem', border: '1px solid #e0e0e0', borderTop: 'none' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
                       <div className="detail-field">
-                        <label>ACCOUNT</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>ACCOUNT</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>END DATE</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>END DATE</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>PRIMARY CURRENCY</label>
-                        <div className="field-value">SGD</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>PRIMARY CURRENCY <span style={{ color: 'red' }}>*</span></label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>SGD</div>
                       </div>
                       <div className="detail-field">
-                        <label>DEFAULT RECEIVABLES ACCOUNT</label>
-                        <div className="field-value">Use System Preference</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>DEFAULT RECEIVABLES ACCOUNT</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>Use System Preference</div>
                       </div>
                       <div className="detail-field">
-                        <label>REMINDER DAYS</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>REMINDER DAYS</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>TERMS</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>TERMS</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>START DATE</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>START DATE</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>PRICE LEVEL</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>PRICE LEVEL</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>CREDIT LIMIT</label>
-                        <div className="field-value">HOLD AUTO</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>CREDIT LIMIT</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>HOLD AUTO</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className={`detail-section`}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Tax Information</h3>
+                {/* Tax Information Collapsible Section */}
+                <div className="detail-section" style={{ marginBottom: '1rem' }}>
+                  <div className="section-header" style={{ background: '#f0f0f0', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem' }}></i>
+                    <h3 style={{ fontSize: '14px', fontWeight: '600', margin: 0, display: 'inline' }}>Tax Information</h3>
                   </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
+                  <div className="section-body" style={{ padding: '1rem', border: '1px solid #e0e0e0', borderTop: 'none' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
                       <div className="detail-field">
-                        <label>TAX REG. NUMBER</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>TAX REG. NUMBER</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>TAX ROUNDING METHOD</label>
-                        <div className="field-value">Round Off</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>TAX ROUNDING METHOD</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>Round Off</div>
                       </div>
                       <div className="detail-field">
-                        <label>RESALE NUMBER</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>TAX ITEM</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>TAX ROUNDING PRECISION</label>
-                        <div className="field-value">0.01 and Below</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>TAX ROUNDING PRECISION</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>0.01 and Below</div>
                       </div>
                       <div className="detail-field">
-                        <label>TAX ITEM</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>RESALE NUMBER</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className={`detail-section`}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Balance Information</h3>
+                {/* Balance Information Collapsible Section */}
+                <div className="detail-section" style={{ marginBottom: '1.5rem' }}>
+                  <div className="section-header" style={{ background: '#f0f0f0', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem' }}></i>
+                    <h3 style={{ fontSize: '14px', fontWeight: '600', margin: 0, display: 'inline' }}>Balance Information</h3>
                   </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
+                  <div className="section-body" style={{ padding: '1rem', border: '1px solid #e0e0e0', borderTop: 'none' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
                       <div className="detail-field">
-                        <label>BALANCE</label>
-                        <div className="field-value">0.00</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>BALANCE</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>0.00</div>
                       </div>
                       <div className="detail-field">
-                        <label>OVERDUE BALANCE</label>
-                        <div className="field-value">0.00</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>OVERDUE BALANCE</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>0.00</div>
                       </div>
                       <div className="detail-field">
-                        <label>DAYS OVERDUE</label>
-                        <div className="field-value">-</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>DAYS OVERDUE</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                       </div>
                       <div className="detail-field">
-                        <label>UNBILLED BALANCE</label>
-                        <div className="field-value">0.00</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>DEPOSIT BALANCE</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>0.00</div>
                       </div>
                       <div className="detail-field">
-                        <label>UNBILLED ORDERS</label>
-                        <div className="field-value">0.00</div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>UNBILLED ORDERS</label>
+                        <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>0.00</div>
                       </div>
-                      <div className="detail-field">
-                        <label>DEPOSIT BALANCE</label>
-                        <div className="field-value">0.00</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input type="checkbox" disabled style={{ cursor: 'not-allowed' }} />
+                        <label style={{ fontSize: '13px', fontWeight: '500', margin: 0 }}>GROUP INVOICES</label>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div style={{ marginTop: '2rem' }}>
-                  <h4>Currencies</h4>
-                  <h4>Credit Cards</h4>
-                  <h4>Group Pricing</h4>
-                  <h4>Item Pricing</h4>
-                  <h4>Time Tracking</h4>
+                {/* Financial Sub-tabs */}
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginTop: '2rem', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: '#6c7a89',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Currencies
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Credit Cards
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Group Pricing
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Item Pricing
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Time Tracking
+                    </button>
+                  </div>
+                </div>
+
+                {/* Currencies Table */}
+                <div>
                   <table className="detail-items-table">
                     <thead>
                       <tr>
@@ -640,39 +881,75 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'system-info' && (
-              <div>
-                <div className="detail-grid">
-                  <div className="detail-field">
-                    <label>DATE CREATED</label>
-                    <div className="field-value">10/10/2021 11:40 pm</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>INACTIVE</label>
-                    <div className="field-value">-</div>
+              <div style={{ padding: '1rem' }}>
+                {/* System Notes Sub-tabs */}
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: '#6c7a89',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      System Notes
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Active Workflows
+                    </button>
+                    <button 
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: 'transparent',
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontWeight: '500',
+                        fontSize: '13px'
+                      }}
+                    >
+                      Workflow History
+                    </button>
                   </div>
                 </div>
-                <div style={{ marginTop: '2rem' }}>
-                  <h4>System Notes</h4>
-                  <h4>Active Workflows</h4>
-                  <h4>Workflow History</h4>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label>VIEW</label>
-                      <select className="form-control" style={{ width: '200px' }}>
+
+                {/* System Notes Content */}
+                <div>
+                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'flex-end' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>VIEW</label>
+                      <select className="form-control">
                         <option>Default</option>
                       </select>
                     </div>
-                    <div>
-                      <label>FIELD</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>FIELD</label>
+                      <input type="text" className="form-control" placeholder="<Type then tab>" />
                     </div>
                   </div>
-                  <button className="btn btn-secondary">Customize View</button>
-                  <table className="detail-items-table" style={{ marginTop: '1rem' }}>
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }}>
+                      Customize View
+                    </button>
+                  </div>
+                  <table className="detail-items-table">
                     <thead>
                       <tr>
+                        <th>DATE ▼</th>
                         <th>SET BY</th>
                         <th>CONTEXT</th>
                         <th>TYPE</th>
@@ -689,6 +966,7 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                         <td>Change</td>
                         <td>Primary Subsidiary</td>
                         <td>Tech Offshore Marine (s) Pte Ltd</td>
+                        <td>Tech Onshore MEP Prefabricators Pte Ltd.</td>
                       </tr>
                       <tr>
                         <td>10/10/2021 11:40 pm</td>
@@ -696,7 +974,8 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                         <td>CSV</td>
                         <td>Create</td>
                         <td>Record</td>
-                        <td>Custom</td>
+                        <td>CustJob</td>
+                        <td>496</td>
                       </tr>
                     </tbody>
                   </table>
@@ -740,54 +1019,24 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'marketing' && (
-              <div>
-                <div className={`detail-section`}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Lead Information</h3>
+              <div style={{ padding: '1rem' }}>
+                {/* Lead Information Collapsible Section */}
+                <div className="detail-section" style={{ marginBottom: '1.5rem' }}>
+                  <div className="section-header" style={{ background: '#f0f0f0', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem' }}></i>
+                    <h3 style={{ fontSize: '14px', fontWeight: '600', margin: 0, display: 'inline' }}>Lead Information</h3>
                   </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
-                      <div className="detail-field">
-                        <label>LEAD SOURCE</label>
-                        <div className="field-value">-</div>
-                      </div>
+                  <div className="section-body" style={{ padding: '1rem', border: '1px solid #e0e0e0', borderTop: 'none' }}>
+                    <div className="detail-field" style={{ maxWidth: '400px' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>LEAD SOURCE</label>
+                      <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                     </div>
                   </div>
                 </div>
 
-                <div style={{ marginTop: '2rem' }}>
-                  <h4 style={{ marginBottom: '1rem' }}>Online Forms</h4>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label>FORM</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label>DATE SENT</label>
-                      <input type="date" className="form-control" style={{ width: '200px' }} />
-                    </div>
-                    <div>
-                      <label>CONTACT</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label>LEAD SOURCE</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label>CAMPAIGN EVENT</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
-                    </div>
-                  </div>
+                {/* Online Forms Section */}
+                <div>
+                  <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Online Forms</h4>
                   <table className="detail-items-table">
                     <thead>
                       <tr>
@@ -811,67 +1060,62 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'preferences' && (
-              <div>
-                <div className="detail-grid">
+              <div style={{ padding: '1.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
                   <div className="detail-field">
-                    <label>NUMBER FORMAT</label>
-                    <div className="field-value">-</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>NUMBER FORMAT</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                   </div>
                   <div className="detail-field">
-                    <label>SHIP COMPLETE</label>
-                    <div className="field-value">-</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>SHIP COMPLETE</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                   </div>
                   <div className="detail-field">
-                    <label>NEGATIVE NUMBER FORMAT</label>
-                    <div className="field-value">-</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>NEGATIVE NUMBER FORMAT</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                   </div>
                   <div className="detail-field">
-                    <label>SHIPPING CARRIER</label>
-                    <div className="field-value">More</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>SHIPPING CARRIER</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>More</div>
                   </div>
                   <div className="detail-field">
-                    <label>EMAIL PREFERENCE</label>
-                    <div className="field-value">Default</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>EMAIL PREFERENCE</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>Default</div>
                   </div>
                   <div className="detail-field">
-                    <label>SHIPPING METHOD</label>
-                    <div className="field-value">-</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>SHIPPING METHOD</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                   </div>
                   <div className="detail-field">
-                    <label>PRINT ON CHECK AS</label>
-                    <div className="field-value">-</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>PRINT ON CHECK AS</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>-</div>
                   </div>
                   <div className="detail-field">
-                    <label>ALCOHOL RECIPIENT TYPE</label>
-                    <div className="field-value">Consumer</div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>ALCOHOL RECIPIENT TYPE</label>
+                    <div className="field-value" style={{ padding: '0.5rem', background: '#f8f9fa', borderRadius: '4px', fontSize: '14px' }}>Consumer</div>
                   </div>
                 </div>
-                <div style={{ marginTop: '2rem' }}>
-                  <h4>SEND TRANSACTIONS VIA EMAIL</h4>
-                  <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                    <label className="checkbox-label">
-                      <input type="checkbox" />
-                      <span>EMAIL</span>
+                
+                <div style={{ padding: '1rem', background: '#f8f9fa', borderRadius: '4px' }}>
+                  <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>SEND TRANSACTIONS VIA EMAIL</h4>
+                  <div style={{ display: 'flex', gap: '2rem' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                      <input type="checkbox" disabled style={{ cursor: 'not-allowed' }} />
+                      <span style={{ fontSize: '13px', fontWeight: '500' }}>EMAIL</span>
                     </label>
-                    <label className="checkbox-label">
-                      <input type="checkbox" />
-                      <span>PRINT</span>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                      <input type="checkbox" disabled style={{ cursor: 'not-allowed' }} />
+                      <span style={{ fontSize: '13px', fontWeight: '500' }}>PRINT</span>
                     </label>
-                    <label className="checkbox-label">
-                      <input type="checkbox" />
-                      <span>FAX</span>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                      <input type="checkbox" disabled style={{ cursor: 'not-allowed' }} />
+                      <span style={{ fontSize: '13px', fontWeight: '500' }}>FAX</span>
                     </label>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Other tabs with placeholder content */}
-            {['custom', 'access'].includes(activeTab) && (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
-                <p>Content for {activeTab} tab will be displayed here.</p>
-              </div>
-            )}
           </div>
         </div>
 

@@ -693,7 +693,7 @@
 }
 
 .tabs-content {
-    padding: 1.5rem;
+    padding: 0;
 }
 
 .currency-info {
@@ -800,7 +800,8 @@
 
 .items-table-wrapper {
     overflow-x: auto;
-    margin-top: 1rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
 }
 
 .detail-items-table {
@@ -1010,13 +1011,14 @@
 
 /* Form Section Styling */
 .form-section {
-    margin-bottom: 30px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 0;
 }
 
 .section-title {
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 1.5rem;
     color: #333;
 }
 

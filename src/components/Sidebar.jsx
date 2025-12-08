@@ -251,7 +251,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const salesSubItems = [
     { 
       id: 'create-enquiries',
-      label: 'Create Enquiry',
+      label: 'Sales Enquiry',
       hasSubmenu: true,
       submenu: [
         { id: 'view-enquiries', label: 'List' }
@@ -259,7 +259,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     },
     { 
       id: 'prepare-quotations',
-      label: 'Create Quotation',
+      label: 'Sales Quotation',
       hasSubmenu: true,
       submenu: [
         { id: 'view-quotations', label: 'List' }

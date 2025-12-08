@@ -88,6 +88,13 @@ const EditEmployeeDailyAttendance = ({ onBack, onSave }) => {
     if (onBack) onBack();
   };
 
+  const handleCancel = () => {
+    if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+      showToast('Changes cancelled', 'info');
+      if (onBack) onBack();
+    }
+  };
+
   return (
     <div className="enquiry-detail">
       <div className="detail-header">
@@ -122,13 +129,16 @@ const EditEmployeeDailyAttendance = ({ onBack, onSave }) => {
       </div>
 
       <div className="detail-toolbar">
-        <button className="btn-toolbar-primary" onClick={handleSave}>
-          <i className="fas fa-save"></i>
-          Save
-        </button>
         <button className="btn-toolbar" onClick={handleBack}>
           <i className="fas fa-arrow-left"></i>
           Back
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
         </button>
         <button className="btn-toolbar">
           <i className="fas fa-print"></i>
@@ -617,13 +627,16 @@ const EditEmployeeDailyAttendance = ({ onBack, onSave }) => {
 
         {/* Footer Actions */}
         <div className="detail-footer-actions">
-          <button className="btn-toolbar-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
           <button className="btn-toolbar" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
+          </button>
+          <button className="btn-toolbar" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-save"></i>
+            Save
           </button>
         </div>
       </div>

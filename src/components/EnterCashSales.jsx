@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import AddProjectForm from './AddProjectForm';
+import AddCustomerForm from './AddCustomerForm';
 import './Enquiries.css';
 
 const EnterCashSales = ({ setCurrentPage }) => {
@@ -7,12 +9,19 @@ const EnterCashSales = ({ setCurrentPage }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('items');
 
-  // Customer project dropdown states
-  const [customerProjectHovered, setCustomerProjectHovered] = useState(false);
+  // Customer dropdown states
+  const [customerHovered, setCustomerHovered] = useState(false);
   const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
   const [showAddCustomer, setShowAddCustomer] = useState(false);
   const [customerSearch, setCustomerSearch] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  
+  // Project dropdown states
+  const [projectHovered, setProjectHovered] = useState(false);
+  const [showProjectDropdown, setShowProjectDropdown] = useState(false);
+  const [showAddProject, setShowAddProject] = useState(false);
+  const [projectSearch, setProjectSearch] = useState('');
+  const [filteredProjects, setFilteredProjects] = useState([]);
   
   // Row actions states
   const [hoveredRow, setHoveredRow] = useState(null);
@@ -20,26 +29,34 @@ const EnterCashSales = ({ setCurrentPage }) => {
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   
   const [formData, setFormData] = useState({
+    // Primary Information
     customForm: 'TOM Cash Sale',
     saleNumber: 'To Be Generated',
-    endDate: '',
-    customerProject: '',
     postingPeriod: 'Nov 2025',
+    customer: '',
+    project: '',
     date: '2025-11-06',
     checkNumber: '',
     startDate: '',
+    endDate: '',
     memo: '',
+    
+    // Sales Information
     salesRep: '',
     opportunity: '',
     salesEffectiveDate: '',
+    
+    // Classification
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     class: '',
     location: '',
     department: 'MEP',
-    countryOfOrigin: '',
-    hsCode: '',
     contactPerson: '',
+    
+    // Items
     items: [],
+    currency: 'SGD',
+    exchangeRate: '1.00',
     
     // Shipping Information
     shippingCarrier: 'None',
@@ -54,15 +71,10 @@ const EnterCashSales = ({ setCurrentPage }) => {
     // Accounting
     undepositedFunds: true,
     account: '',
-    currency: 'SGD',
-    exchangeRate: '1.00',
     extendedCost: '0.00',
     grossProfit: '0.00',
     taxId: '',
     grossProfitPercent: '',
-    
-    // Relationships
-    contacts: [],
     
     // Communication
     toBePrinted: false,
@@ -89,10 +101,17 @@ const EnterCashSales = ({ setCurrentPage }) => {
     'Oceanic Engineering Pte Ltd',
     'Marine Construction Co'
   ];
+  
+  // Project options for dropdown (linked to customers)
+  const projectOptions = [
+    { id: 1, name: 'Marine Equipment Supply – Q1 2024', customer: '612 Raise Pte Ltd', jobId: 'PRJ-001', startDate: '2024-01-15', location: 'Singapore', vesselName: 'MV Pacific Star', scopeOfWork: 'Supply and installation of marine equipment' },
+    { id: 2, name: 'Hull Repair Project', customer: 'ABC Corporation', jobId: 'PRJ-002', startDate: '2024-02-01', location: 'Jurong Port', vesselName: 'MV Ocean Breeze', scopeOfWork: 'Hull repair and maintenance' },
+    { id: 3, name: 'Piping System Upgrade', customer: 'XYZ Industries', jobId: 'PRJ-003', startDate: '2024-03-10', location: 'Tuas', vesselName: 'MV Sea Dragon', scopeOfWork: 'Piping system upgrade and testing' }
+  ];
 
-  // Customer project handlers
+  // Customer handlers
   const handleCustomerSelect = (customer) => {
-    handleInputChange('customerProject', customer);
+    handleInputChange('customer', customer);
     setShowCustomerDropdown(false);
     setCustomerSearch('');
   };
@@ -100,7 +119,7 @@ const EnterCashSales = ({ setCurrentPage }) => {
   const handleCustomerSearchChange = (e) => {
     const value = e.target.value;
     setCustomerSearch(value);
-    handleInputChange('customerProject', value);
+    handleInputChange('customer', value);
     
     if (value) {
       const filtered = customerOptions.filter(customer =>
@@ -119,47 +138,103 @@ const EnterCashSales = ({ setCurrentPage }) => {
   };
 
   const handleSaveNewCustomer = (customerData) => {
-    // Add the new customer to the options list
     customerOptions.push(customerData.companyName);
-    // Set it as selected
-    handleInputChange('customerProject', customerData.companyName);
+    handleInputChange('customer', customerData.companyName);
     setShowAddCustomer(false);
     showToast('New customer added successfully!', 'success');
   };
+  
+  // Project handlers
+  const handleProjectSelect = (project) => {
+    handleInputChange('project', project.name);
+    setShowProjectDropdown(false);
+    setProjectSearch('');
+  };
 
-  // Close menu when clicking outside
-  React.useEffect(() => {
-    const handleClickOutside = () => {
-      setActiveMenu(null);
-      if (showCustomerDropdown && !customerProjectHovered) {
-        setShowCustomerDropdown(false);
+  const handleProjectSearchChange = (e) => {
+    const value = e.target.value;
+    setProjectSearch(value);
+    handleInputChange('project', value);
+    
+    if (value) {
+      const filtered = projectOptions.filter(project =>
+        project.name.toLowerCase().includes(value.toLowerCase()) ||
+        project.jobId.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredProjects(filtered);
+    } else {
+      // Filter projects by selected customer if any
+      if (formData.customer) {
+        const filtered = projectOptions.filter(p => p.customer === formData.customer);
+        setFilteredProjects(filtered);
+      } else {
+        setFilteredProjects(projectOptions);
       }
-    };
-    if (activeMenu !== null || showCustomerDropdown) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
     }
-  }, [activeMenu, showCustomerDropdown, customerProjectHovered]);
+    setShowProjectDropdown(true);
+  };
+
+  const handleAddNewProject = () => {
+    setShowAddProject(true);
+    setShowProjectDropdown(false);
+  };
+
+  const handleSaveNewProject = (projectData) => {
+    const newProject = {
+      id: projectOptions.length + 1,
+      name: projectData.projectName,
+      customer: projectData.customer,
+      jobId: projectData.jobId,
+      startDate: projectData.startDate,
+      location: projectData.projectLocation,
+      vesselName: projectData.vesselName,
+      scopeOfWork: projectData.scopeOfWork
+    };
+    projectOptions.push(newProject);
+    handleInputChange('project', newProject.name);
+    setShowAddProject(false);
+    showToast('New project added successfully!', 'success');
+  };
+
+  // Calculation functions
+  const calculateSubtotal = () => {
+    return formData.items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+  };
+
+  const calculateTaxAmount = () => {
+    return formData.items.reduce((sum, item) => {
+      const amount = parseFloat(item.amount) || 0;
+      const taxRate = 9.0;
+      return sum + (amount * taxRate / 100);
+    }, 0);
+  };
+
+  const calculateTotal = () => {
+    return calculateSubtotal() + calculateTaxAmount();
+  };
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
-    showToast('Cash sale saved successfully!', 'success');
+    showToast('Cash Sale saved successfully!', 'success');
     setIsSaved(true);
   };
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Cash sale cancelled', 'info');
+      showToast('Cash Sale cancelled', 'info');
+    }
+  };
+
+  const handleBack = () => {
+    if (setCurrentPage) {
+      setCurrentPage('view-cash-sales');
     }
   };
 
@@ -177,11 +252,22 @@ const EnterCashSales = ({ setCurrentPage }) => {
       grossAmount: 0.00,
       class: '',
       costEstimateType: 'Fixed',
-      estimatedExtendedCost: 0.00
+      estimatedExtendedCost: 0.00,
+      countryOfOrigin: '',
+      hsCode: ''
     };
     setFormData(prev => ({
       ...prev,
       items: [...prev.items, newItem]
+    }));
+  };
+
+  const updateItem = (id, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      items: prev.items.map(item =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
     }));
   };
 
@@ -199,12 +285,12 @@ const EnterCashSales = ({ setCurrentPage }) => {
       grossAmount: 0.00,
       class: '',
       costEstimateType: 'Fixed',
-      estimatedExtendedCost: 0.00
+      estimatedExtendedCost: 0.00,
+      countryOfOrigin: '',
+      hsCode: ''
     };
-    setFormData(prev => ({
-      ...prev,
-      items: [...prev.items.slice(0, index), newItem, ...prev.items.slice(index)]
-    }));
+    const newItems = [...formData.items.slice(0, index), newItem, ...formData.items.slice(index)];
+    setFormData(prev => ({ ...prev, items: newItems }));
   };
 
   const handleInsertBelow = (index) => {
@@ -221,12 +307,12 @@ const EnterCashSales = ({ setCurrentPage }) => {
       grossAmount: 0.00,
       class: '',
       costEstimateType: 'Fixed',
-      estimatedExtendedCost: 0.00
+      estimatedExtendedCost: 0.00,
+      countryOfOrigin: '',
+      hsCode: ''
     };
-    setFormData(prev => ({
-      ...prev,
-      items: [...prev.items.slice(0, index + 1), newItem, ...prev.items.slice(index + 1)]
-    }));
+    const newItems = [...formData.items.slice(0, index + 1), newItem, ...formData.items.slice(index + 1)];
+    setFormData(prev => ({ ...prev, items: newItems }));
   };
 
   const handleDeleteRow = (index) => {
@@ -258,446 +344,532 @@ const EnterCashSales = ({ setCurrentPage }) => {
   React.useEffect(() => {
     const handleClickOutside = () => {
       setActiveMenu(null);
+      if (showCustomerDropdown && !customerHovered) {
+        setShowCustomerDropdown(false);
+      }
+      if (showProjectDropdown && !projectHovered) {
+        setShowProjectDropdown(false);
+      }
     };
-    if (activeMenu !== null) {
+    if (activeMenu !== null || showCustomerDropdown || showProjectDropdown) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
-  }, [activeMenu]);
-
-  // Calculation functions
-  const calculateSubtotal = () => {
-    return formData.items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
-  };
-
-  const calculateTaxAmount = () => {
-    return formData.items.reduce((sum, item) => {
-      const amount = parseFloat(item.amount) || 0;
-      const taxRate = 9.0; // 9% GST
-      return sum + (amount * taxRate / 100);
-    }, 0);
-  };
-
-  const calculateTotal = () => {
-    return calculateSubtotal() + calculateTaxAmount();
-  };
+  }, [activeMenu, showCustomerDropdown, showProjectDropdown, customerHovered, projectHovered]);
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-cash-register" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-cash-register"></i>
           <div>
             <h1>Cash Sale</h1>
-            <div className="detail-subtitle">
-              <span># To be generated – New Cash Sale</span>
-            </div>
           </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-secondary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          {isSaved && (
-            <>
-              <button className="btn btn-secondary">
-                Auto Fill
-              </button>
-              <button className="btn btn-secondary">
-                Actions
-              </button>
-            </>
-          )}
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label required">Custom Form</label>
-              <select 
-                className="form-control"
-                value={formData.customForm}
-                onChange={(e) => handleInputChange('customForm', e.target.value)}
-              >
-                <option>TOM Cash Sale</option>
-                <option>Standard Cash Sale</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">End Date</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.endDate}
-                onChange={(e) => handleInputChange('endDate', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Sale #</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.saleNumber}
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Posting Period</label>
-              <select 
-                className="form-control"
-                value={formData.postingPeriod}
-                onChange={(e) => handleInputChange('postingPeriod', e.target.value)}
-              >
-                <option>Nov 2025</option>
-                <option>Dec 2025</option>
-                <option>Jan 2026</option>
-              </select>
-            </div>
-            <div className="form-group" style={{ position: 'relative' }}>
-              <label className="form-label required">Customer:Project</label>
-              <div 
-                style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
-                onMouseEnter={() => setCustomerProjectHovered(true)}
-                onMouseLeave={() => setCustomerProjectHovered(false)}
-              >
-                <div style={{ position: 'relative', flex: 1 }}>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.customerProject}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      handleInputChange('customerProject', value);
-                      setCustomerSearch(value);
-                      if (value.trim()) {
-                        const filtered = customerOptions.filter(customer =>
-                          customer.toLowerCase().includes(value.toLowerCase())
-                        );
-                        setFilteredCustomers(filtered);
-                      } else {
-                        setFilteredCustomers(customerOptions);
-                      }
-                      setShowCustomerDropdown(true);
-                    }}
-                    onFocus={() => {
-                      setShowCustomerDropdown(true);
-                      setFilteredCustomers(customerOptions);
-                    }}
-                    placeholder="<Type then tab>"
-                  />
-                  <button 
-                    type="button"
-                    style={{ 
-                      position: 'absolute', 
-                      right: '8px', 
-                      top: '50%', 
-                      transform: 'translateY(-50%)', 
-                      background: 'transparent', 
-                      border: 'none', 
-                      cursor: 'pointer', 
-                      padding: '4px 8px',
-                      fontSize: '14px'
-                    }}
-                    onClick={() => {
-                      setShowCustomerDropdown(!showCustomerDropdown);
-                    }}
-                  >
-                    <i className="fas fa-chevron-down"></i>
-                  </button>
-                  {showCustomerDropdown && (
-                    <>
-                      <div 
-                        style={{ 
-                          position: 'fixed', 
-                          top: 0, 
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        {isSaved && (
+          <>
+            <button className="btn-toolbar">
+              <i className="fas fa-print"></i>
+              Print
+            </button>
+            <button className="btn-toolbar">
+              <i className="fas fa-file-invoice"></i>
+              Convert to Invoice
+            </button>
+          </>
+        )}
+      </div>
+
+      <div className="detail-content">
+        {/* Primary Information Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>CUSTOM FORM <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.customForm}
+                  onChange={(e) => handleInputChange('customForm', e.target.value)}
+                >
+                  <option>TOM Cash Sale</option>
+                  <option>Standard Cash Sale</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>POSTING PERIOD <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.postingPeriod}
+                  onChange={(e) => handleInputChange('postingPeriod', e.target.value)}
+                >
+                  <option>Nov 2025</option>
+                  <option>Dec 2025</option>
+                  <option>Jan 2026</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>DATE <span className="required">*</span></label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.date}
+                  onChange={(e) => handleInputChange('date', e.target.value)}
+                />
+              </div>
+              <div className="detail-field" style={{ position: 'relative' }}>
+                <label className="form-label required">Customer</label>
+                <div 
+                  style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+                  onMouseEnter={() => setCustomerHovered(true)}
+                  onMouseLeave={() => setCustomerHovered(false)}
+                >
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={formData.customer}
+                      onChange={handleCustomerSearchChange}
+                      onFocus={() => setShowCustomerDropdown(true)}
+                      placeholder="<Type then tab>"
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={() => setShowCustomerDropdown(!showCustomerDropdown)}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {showCustomerDropdown && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 999 
+                          }}
+                          onClick={() => setShowCustomerDropdown(false)}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
                           left: 0, 
                           right: 0, 
-                          bottom: 0, 
-                          zIndex: 999 
-                        }}
-                        onClick={() => setShowCustomerDropdown(false)}
-                      />
-                      <div style={{ 
-                        position: 'absolute', 
-                        top: '100%', 
-                        left: 0, 
-                        right: 0, 
-                        background: 'white', 
-                        border: '1px solid #ddd', 
-                        borderRadius: '4px', 
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                        zIndex: 1000, 
-                        marginTop: '4px',
-                        overflowY: 'auto',
-                        maxHeight: '200px'
-                      }}>
-                        {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
-                          <div 
-                            key={idx}
-                            onClick={() => {
-                              handleInputChange('customerProject', customer);
-                              setShowCustomerDropdown(false);
-                              setCustomerSearch('');
-                            }}
-                            style={{ 
-                              padding: '10px 12px', 
-                              cursor: 'pointer', 
-                              fontSize: '13px',
-                              borderBottom: '1px solid #f5f5f5'
-                            }}
-                            onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
-                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                          >
-                            {customer}
-                          </div>
-                        ))}
-                        {filteredCustomers.length === 0 && customerSearch && (
-                          <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
-                            No customers found
-                          </div>
-                        )}
-                      </div>
-                    </>
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 1000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => handleCustomerSelect(customer)}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f5f5f5'
+                              }}
+                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                            >
+                              {customer}
+                            </div>
+                          ))}
+                          {filteredCustomers.length === 0 && customerSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No customers found
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {customerHovered && (
+                    <button 
+                      type="button"
+                      className="btn btn-secondary"
+                      style={{ 
+                        padding: '0.5rem', 
+                        minWidth: 'auto',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onClick={handleAddNewCustomer}
+                      title="Add new customer"
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
                   )}
                 </div>
-                {customerProjectHovered && (
-                  <button 
-                    type="button"
-                    className="btn btn-secondary"
-                    style={{ 
-                      padding: '0.5rem', 
-                      minWidth: 'auto',
-                      transition: 'opacity 0.2s'
-                    }}
-                    onClick={handleAddNewCustomer}
-                    title="Add new customer"
-                  >
-                    <i className="fas fa-plus"></i>
-                  </button>
-                )}
+              </div>
+              <div className="detail-field" style={{ position: 'relative' }}>
+                <label className="form-label">Project</label>
+                <div 
+                  style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+                  onMouseEnter={() => setProjectHovered(true)}
+                  onMouseLeave={() => setProjectHovered(false)}
+                >
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={formData.project}
+                      onChange={handleProjectSearchChange}
+                      onFocus={() => setShowProjectDropdown(true)}
+                      placeholder="<Type then tab>"
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={() => setShowProjectDropdown(!showProjectDropdown)}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {showProjectDropdown && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 999 
+                          }}
+                          onClick={() => setShowProjectDropdown(false)}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 1000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredProjects.length > 0 ? filteredProjects : (formData.customer ? projectOptions.filter(p => p.customer === formData.customer) : projectOptions)).map((project, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => handleProjectSelect(project)}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f5f5f5'
+                              }}
+                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                            >
+                              <div style={{ fontWeight: '500' }}>{project.name}</div>
+                              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
+                                {project.jobId} • {project.customer}
+                              </div>
+                            </div>
+                          ))}
+                          {filteredProjects.length === 0 && projectSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No projects found
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {projectHovered && (
+                    <button 
+                      type="button"
+                      className="btn btn-secondary"
+                      style={{ 
+                        padding: '0.5rem', 
+                        minWidth: 'auto',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onClick={handleAddNewProject}
+                      title="Add new project"
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="detail-field">
+                <label>CHECK NUMBER</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.checkNumber}
+                  onChange={(e) => handleInputChange('checkNumber', e.target.value)}
+                  placeholder="Enter check number"
+                />
+              </div>
+              <div className="detail-field">
+                <label>START DATE</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.startDate}
+                  onChange={(e) => handleInputChange('startDate', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>END DATE</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.endDate}
+                  onChange={(e) => handleInputChange('endDate', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <textarea 
+                  className="form-control"
+                  placeholder="Enter memo"
+                  value={formData.memo}
+                  onChange={(e) => handleInputChange('memo', e.target.value)}
+                  style={{ 
+                    minHeight: '60px',
+                    resize: 'both',
+                    overflow: 'auto'
+                  }}
+                  rows="3"
+                  onInput={(e) => {
+                    e.target.style.height = 'auto';
+                    e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                  }}
+                />
               </div>
             </div>
-            <div className="form-group">
-              <label className="form-label">Check #</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.checkNumber}
-                onChange={(e) => handleInputChange('checkNumber', e.target.value)}
-                placeholder="Enter check number"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Date</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.date}
-                onChange={(e) => handleInputChange('date', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Start Date</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.startDate}
-                onChange={(e) => handleInputChange('startDate', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Memo</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.memo}
-                onChange={(e) => handleInputChange('memo', e.target.value)}
-                placeholder="Enter memo"
-              />
+          </div>
+        </div>
+
+        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+
+        {/* Sales Information Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Sales Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SALES REP</label>
+                <select 
+                  className="form-control"
+                  value={formData.salesRep}
+                  onChange={(e) => handleInputChange('salesRep', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>John Anderson</option>
+                  <option>Sarah Chen</option>
+                  <option>Michael Wong</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>OPPORTUNITY</label>
+                <select 
+                  className="form-control"
+                  value={formData.opportunity}
+                  onChange={(e) => handleInputChange('opportunity', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>Marine Project 2024</option>
+                  <option>Offshore Platform Build</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>SALES EFFECTIVE DATE</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.salesEffectiveDate}
+                  onChange={(e) => handleInputChange('salesEffectiveDate', e.target.value)}
+                />
+              </div>
             </div>
           </div>
         </div>
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
-        {/* Sales Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-chart-line"></i>
-            Sales Information
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">Sales Rep</label>
-              <select 
-                className="form-control"
-                value={formData.salesRep}
-                onChange={(e) => handleInputChange('salesRep', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>John Anderson</option>
-                <option>Sarah Chen</option>
-                <option>Michael Wong</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Opportunity</label>
-              <select 
-                className="form-control"
-                value={formData.opportunity}
-                onChange={(e) => handleInputChange('opportunity', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Q4 Marine Project</option>
-                <option>Offshore Expansion</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Sales Effective Date</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={formData.salesEffectiveDate}
-                onChange={(e) => handleInputChange('salesEffectiveDate', e.target.value)}
-              />
+        {/* Classification Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.subsidiary}
+                  onChange={(e) => handleInputChange('subsidiary', e.target.value)}
+                >
+                  <option>Tech Onshore MEP Prefabricators Pte Ltd.</option>
+                  <option>Tech Marine Offshore (S) Pte Ltd</option>
+                  <option>TOM Offshore Marine Engineering Pte Ltd</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>CLASS</label>
+                <select 
+                  className="form-control"
+                  value={formData.class}
+                  onChange={(e) => handleInputChange('class', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>Consumable Item</option>
+                  <option>Fabrication</option>
+                  <option>Installation work</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>LOCATION</label>
+                <select 
+                  className="form-control"
+                  value={formData.location}
+                  onChange={(e) => handleInputChange('location', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>Singapore (MEP)</option>
+                  <option>Hong Hang Shipyard</option>
+                  <option>Mega yard</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>DEPARTMENT</label>
+                <select 
+                  className="form-control"
+                  value={formData.department}
+                  onChange={(e) => handleInputChange('department', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>MEP</option>
+                  <option>Engineering</option>
+                  <option>Operations</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>CONTACT PERSON</label>
+                <select 
+                  className="form-control"
+                  value={formData.contactPerson}
+                  onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>John Smith</option>
+                  <option>Jane Doe</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
-        {/* Classification */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-tags"></i>
-            Classification
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label required">Subsidiary</label>
-              <select 
-                className="form-control"
-                value={formData.subsidiary}
-                onChange={(e) => handleInputChange('subsidiary', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option value="TOM S">Tech Offshore Marine (S) Pte Ltd - "TOM S" (ROC 200709673M)</option>
-                <option value="DQ">Tech Offshore Marine (DQ) Pte Ltd - "DQ" (ROC 200704907R)</option>
-                <option value="TEA">Tech Electric & Automation Pte Ltd - "TEA" (ROC 198700264M)</option>
-                <option value="TMO">Tech Marine Offshore (S) Pte Ltd - "TMO" (ROC 200512260M)</option>
-                <option value="SV">Tech Offshore Marine (SV) Pte Ltd - "SV" (ROC 200608955Z)</option>
-                <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd - "TOM" (ROC 199507962E)</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Class</label>
-              <select 
-                className="form-control"
-                value={formData.class}
-                onChange={(e) => handleInputChange('class', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Consumable Item</option>
-                <option>Course</option>
-                <option>Cutting Works</option>
-                <option>Electrical</option>
-                <option>Fabrication</option>
-                <option>Hydrotesting</option>
-                <option>Installation work</option>
-                <option>Manpower Supply</option>
-                <option>Material Supply</option>
-                <option>Module /Prefab</option>
-                <option>Piping</option>
-                <option>Project Works</option>
-                <option>Refurbishment works</option>
-                <option>Rental</option>
-                <option>Repair & Referable</option>
-                <option>Sale of Scrap Metal</option>
-                <option>Structure</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Location</label>
-              <select 
-                className="form-control"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Singapore Yard</option>
-                <option>Johor Facility</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Department</label>
-              <select 
-                className="form-control"
-                value={formData.department}
-                onChange={(e) => handleInputChange('department', e.target.value)}
-              >
-                <option>MEP</option>
-                <option>Engineering</option>
-                <option>Operations</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Country of Origin</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.countryOfOrigin}
-                onChange={(e) => handleInputChange('countryOfOrigin', e.target.value)}
-                placeholder="Enter country of origin"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">HS Code</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.hsCode}
-                onChange={(e) => handleInputChange('hsCode', e.target.value)}
-                placeholder="Enter HS code"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Contact Person</label>
-              <select 
-                className="form-control"
-                value={formData.contactPerson}
-                onChange={(e) => handleInputChange('contactPerson', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>John Smith</option>
-                <option>Jane Doe</option>
-              </select>
-            </div>
-          </div>
-        </div>
 
         {/* Tabbed Interface */}
-        <div className="detail-tabs" style={{ marginTop: '2rem' }}>
+        <div className="detail-tabs">
           <div className="tabs-header">
-            <button className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`} onClick={() => setActiveTab('items')}>Items</button>
-            <button className={`tab-btn ${activeTab === 'shipping' ? 'active' : ''}`} onClick={() => setActiveTab('shipping')}>Shipping</button>
-            <button className={`tab-btn ${activeTab === 'billing' ? 'active' : ''}`} onClick={() => setActiveTab('billing')}>Billing</button>
-            <button className={`tab-btn ${activeTab === 'accounting' ? 'active' : ''}`} onClick={() => setActiveTab('accounting')}>Accounting</button>
-            <button className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`} onClick={() => setActiveTab('relationships')}>Relationships</button>
-            <button className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`} onClick={() => setActiveTab('communication')}>Communication</button>
-            <button className={`tab-btn ${activeTab === 'system' ? 'active' : ''}`} onClick={() => setActiveTab('system')}>System Information</button>
-            <button className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`} onClick={() => setActiveTab('custom')}>Custom</button>
+            <button 
+              className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`}
+              onClick={() => setActiveTab('items')}
+            >
+              Items
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'shipping' ? 'active' : ''}`}
+              onClick={() => setActiveTab('shipping')}
+            >
+              Shipping
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'billing' ? 'active' : ''}`}
+              onClick={() => setActiveTab('billing')}
+            >
+              Billing
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'accounting' ? 'active' : ''}`}
+              onClick={() => setActiveTab('accounting')}
+            >
+              Accounting
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`}
+              onClick={() => setActiveTab('communication')}
+            >
+              Communication
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'system' ? 'active' : ''}`}
+              onClick={() => setActiveTab('system')}
+            >
+              System Information
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
+              onClick={() => setActiveTab('custom')}
+            >
+              Custom
+            </button>
           </div>
 
           <div className="tabs-content">
@@ -709,168 +881,308 @@ const EnterCashSales = ({ setCurrentPage }) => {
                   Items
                 </h2>
                 
+                <div className="detail-grid" style={{ gridTemplateColumns: '1fr 1fr', marginBottom: '1rem' }}>
+                  <div className="detail-field">
+                    <label>CURRENCY <span className="required">*</span></label>
+                    <select 
+                      className="form-control"
+                      value={formData.currency}
+                      onChange={(e) => handleInputChange('currency', e.target.value)}
+                    >
+                      <option>SGD</option>
+                      <option>USD</option>
+                      <option>EUR</option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>EXCHANGE RATE <span className="required">*</span></label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.exchangeRate}
+                      onChange={(e) => handleInputChange('exchangeRate', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="items-table-wrapper">
+                  <table className="detail-items-table" style={{ minWidth: '2200px' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ width: '30px' }}></th>
+                        <th style={{ minWidth: '150px' }}>ITEM</th>
+                        <th style={{ minWidth: '400px' }}>DESC</th>
+                        <th style={{ minWidth: '80px' }}>QTY</th>
+                        <th style={{ minWidth: '100px' }}>UNITS</th>
+                        <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                        <th style={{ minWidth: '100px' }}>RATE</th>
+                        <th style={{ minWidth: '100px' }}>AMT</th>
+                        <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                        <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                        <th style={{ minWidth: '150px' }}>CLASS</th>
+                        <th style={{ minWidth: '150px' }}>COST EST. TYPE</th>
+                        <th style={{ minWidth: '150px' }}>EST. EXT. COST</th>
+                        <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                        <th style={{ minWidth: '150px' }}>HS CODE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {formData.items.map((item, index) => (
+                        <tr 
+                          key={item.id}
+                          className="table-row-with-actions"
+                          onMouseEnter={() => setHoveredRow(index)}
+                          onMouseLeave={() => setHoveredRow(null)}
+                        >
+                          <td style={{ textAlign: 'center', position: 'relative' }}>
+                            {hoveredRow === index && (
+                              <button 
+                                className="row-actions-btn" 
+                                title="Row Actions"
+                                onClick={(e) => handleMenuToggle(index, e)}
+                              >
+                                <i className="fas fa-ellipsis-v"></i>
+                              </button>
+                            )}
+                            {activeMenu === index && (
+                              <div 
+                                className="row-actions-menu" 
+                                style={{ 
+                                  top: `${menuPosition.top}px`, 
+                                  left: `${menuPosition.left}px`,
+                                  display: 'block'
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button onClick={() => {
+                                  handleInsertAbove(index);
+                                  setActiveMenu(null);
+                                }}>
+                                  <i className="fas fa-arrow-up"></i>
+                                  Insert Above
+                                </button>
+                                <button onClick={() => {
+                                  handleInsertBelow(index);
+                                  setActiveMenu(null);
+                                }}>
+                                  <i className="fas fa-arrow-down"></i>
+                                  Insert Below
+                                </button>
+                                <button onClick={() => {
+                                  handleDeleteRow(index);
+                                  setActiveMenu(null);
+                                }} className="delete-action">
+                                  <i className="fas fa-trash"></i>
+                                  Delete Row
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={item.item}
+                              onChange={(e) => updateItem(item.id, 'item', e.target.value)}
+                              style={{ minWidth: '200px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <textarea 
+                              className="form-control"
+                              value={item.description}
+                              onChange={(e) => updateItem(item.id, 'description', e.target.value)}
+                              style={{ 
+                                minWidth: '400px', 
+                                minHeight: '60px',
+                                resize: 'both',
+                                overflow: 'auto'
+                              }}
+                              rows="3"
+                              onInput={(e) => {
+                                e.target.style.height = 'auto';
+                                e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                              }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control"
+                              value={item.quantity}
+                              onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '100px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={item.units}
+                              onChange={(e) => updateItem(item.id, 'units', e.target.value)}
+                              style={{ minWidth: '120px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={item.priceLevel}
+                              onChange={(e) => updateItem(item.id, 'priceLevel', e.target.value)}
+                              style={{ minWidth: '110px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control"
+                              value={item.rate}
+                              onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '120px', height: '40px' }}
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control"
+                              value={item.amount}
+                              onChange={(e) => updateItem(item.id, 'amount', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '120px', height: '40px' }}
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={item.taxCode}
+                              onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)}
+                              style={{ minWidth: '110px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control"
+                              value={item.grossAmount}
+                              onChange={(e) => updateItem(item.id, 'grossAmount', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '110px', height: '40px' }}
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <select 
+                              className="form-control"
+                              value={item.class}
+                              onChange={(e) => updateItem(item.id, 'class', e.target.value)}
+                              style={{ minWidth: '180px', height: '40px' }}
+                            >
+                              <option value="">Select...</option>
+                              <option>Consumable Item</option>
+                              <option>Fabrication</option>
+                              <option>Installation work</option>
+                            </select>
+                          </td>
+                          <td>
+                            <select 
+                              className="form-control"
+                              value={item.costEstimateType}
+                              onChange={(e) => updateItem(item.id, 'costEstimateType', e.target.value)}
+                              style={{ minWidth: '180px', height: '40px' }}
+                            >
+                              <option>Fixed</option>
+                              <option>Variable</option>
+                              <option>Estimated</option>
+                            </select>
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              className="form-control"
+                              value={item.estimatedExtendedCost}
+                              onChange={(e) => updateItem(item.id, 'estimatedExtendedCost', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '180px', height: '40px' }}
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={item.countryOfOrigin || ''}
+                              onChange={(e) => updateItem(item.id, 'countryOfOrigin', e.target.value)}
+                              placeholder="Country"
+                              style={{ minWidth: '180px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={item.hsCode || ''}
+                              onChange={(e) => updateItem(item.id, 'hsCode', e.target.value)}
+                              placeholder="HS Code"
+                              style={{ minWidth: '180px', height: '40px' }}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
                 <button className="add-item-btn" onClick={handleAddItem}>
                   <i className="fas fa-plus"></i>
                   Add Item
                 </button>
-          {formData.items.length > 0 ? (
-            <div className="items-table-wrapper">
-              <table className="detail-items-table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '30px' }}></th>
-                    <th style={{minWidth: '200px'}}>ITEM</th>
-                    <th style={{minWidth: '100px'}}>QTY</th>
-                    <th style={{minWidth: '120px'}}>UNITS</th>
-                    <th style={{minWidth: '250px'}}>DESC</th>
-                    <th style={{minWidth: '150px'}}>PRICE LEVEL</th>
-                    <th style={{minWidth: '120px'}}>RATE</th>
-                    <th style={{minWidth: '120px'}}>AMT</th>
-                    <th style={{minWidth: '150px'}}>TAX CODE</th>
-                    <th style={{minWidth: '120px'}}>GROSS AMT</th>
-                    <th style={{minWidth: '180px'}}>CLASS</th>
-                    <th style={{minWidth: '180px'}}>COST ESTIMATE TYPE</th>
-                    <th style={{minWidth: '180px'}}>EST. EXTENDED COST</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {formData.items.map((item, index) => (
-                    <tr 
-                      key={item.id}
-                      className="table-row-with-actions"
-                      onMouseEnter={() => setHoveredRow(index)}
-                      onMouseLeave={() => setHoveredRow(null)}
-                    >
-                      <td style={{ textAlign: 'center', position: 'relative' }}>
-                        {hoveredRow === index && (
-                          <button 
-                            className="row-actions-btn" 
-                            title="Row Actions"
-                            onClick={(e) => handleMenuToggle(index, e)}
-                          >
-                            <i className="fas fa-ellipsis-v"></i>
-                          </button>
-                        )}
-                        {activeMenu === index && (
-                          <div 
-                            className="row-actions-menu" 
-                            style={{ 
-                              top: `${menuPosition.top}px`, 
-                              left: `${menuPosition.left}px`,
-                              display: 'block'
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <button onClick={() => {
-                              handleInsertAbove(index);
-                              setActiveMenu(null);
-                            }}>
-                              <i className="fas fa-arrow-up"></i>
-                              Insert Above
-                            </button>
-                            <button onClick={() => {
-                              handleInsertBelow(index);
-                              setActiveMenu(null);
-                            }}>
-                              <i className="fas fa-arrow-down"></i>
-                              Insert Below
-                            </button>
-                            <button onClick={() => {
-                              handleDeleteRow(index);
-                              setActiveMenu(null);
-                            }} className="delete-action">
-                              <i className="fas fa-trash"></i>
-                              Delete Row
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                      <td><input type="text" className="table-input" defaultValue={item.item} style={{width: '100%'}} /></td>
-                      <td><input type="number" className="table-input" defaultValue={item.quantity} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.units} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.description} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.priceLevel} style={{width: '100%'}} /></td>
-                      <td><input type="number" className="table-input" defaultValue={item.rate} style={{width: '100%'}} /></td>
-                      <td><input type="number" className="table-input" defaultValue={item.amount} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.taxCode} style={{width: '100%'}} /></td>
-                      <td><input type="number" className="table-input" defaultValue={item.grossAmount} style={{width: '100%'}} /></td>
-                      <td>
-                        <select className="table-input" defaultValue={item.class} style={{width: '100%'}}>
-                          <option value="">Select...</option>
-                          <option>Consumable Item</option>
-                          <option>Course</option>
-                          <option>Cutting Works</option>
-                          <option>Electrical</option>
-                          <option>Fabrication</option>
-                          <option>Hydrotesting</option>
-                          <option>Installation work</option>
-                          <option>Manpower Supply</option>
-                          <option>Material Supply</option>
-                          <option>Module /Prefab</option>
-                          <option>Piping</option>
-                          <option>Project Works</option>
-                          <option>Refurbishment works</option>
-                          <option>Rental</option>
-                          <option>Repair & Referable</option>
-                          <option>Sale of Scrap Metal</option>
-                          <option>Structure</option>
-                        </select>
-                      </td>
-                      <td>
-                        <select className="table-input" defaultValue={item.costEstimateType} style={{width: '100%'}}>
-                          <option>Fixed</option>
-                          <option>Variable</option>
-                          <option>Estimated</option>
-                        </select>
-                      </td>
-                      <td><input type="number" className="table-input" defaultValue={item.estimatedExtendedCost} style={{width: '100%'}} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="empty-items-message">
-              <p>No items added yet. Click "Add Item" to start adding items to this cash sale.</p>
-            </div>
-          )}
 
-          {/* Summary Grid */}
-          {formData.items.length > 0 && (
-            <div className="summary-grid">
-              <div className="summary-card">
-                <div className="summary-title">SUBTOTAL</div>
-                <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
-              </div>
-              <div className="summary-card">
-                <div className="summary-title">TAX AMOUNT</div>
-                <div className="summary-value">${calculateTaxAmount().toFixed(2)}</div>
-              </div>
-              <div className="summary-card">
-                <div className="summary-title">DISCOUNT</div>
-                <div className="summary-value">$0.00</div>
-              </div>
-              <div className="summary-card" style={{ background: 'var(--gray-ultralight)' }}>
-                <div className="summary-title">TOTAL AMOUNT</div>
-                <div className="summary-value" style={{ color: 'var(--red-primary)' }}>${calculateTotal().toFixed(2)}</div>
-              </div>
-            </div>
-          )}
+                {formData.items.length > 0 && (
+                  <div className="summary-grid">
+                    <div className="summary-card">
+                      <div className="summary-title">SUBTOTAL</div>
+                      <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
+                    </div>
+                    <div className="summary-card">
+                      <div className="summary-title">TAX AMOUNT</div>
+                      <div className="summary-value">${calculateTaxAmount().toFixed(2)}</div>
+                    </div>
+                    <div className="summary-card">
+                      <div className="summary-title">DISCOUNT</div>
+                      <div className="summary-value">$0.00</div>
+                    </div>
+                    <div className="summary-card" style={{ background: 'var(--gray-ultralight)' }}>
+                      <div className="summary-title">TOTAL AMOUNT</div>
+                      <div className="summary-value" style={{ color: 'var(--red-primary)' }}>${calculateTotal().toFixed(2)}</div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
             {/* Shipping Tab */}
             {activeTab === 'shipping' && (
               <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Shipping Information</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">SHIPPING CARRIER</label>
-                    <select className="form-control" value={formData.shippingCarrier} onChange={(e) => handleInputChange('shippingCarrier', e.target.value)}>
-                      <option>None</option>
-                      <option>UPS</option>
-                      <option>More</option>
-                    </select>
+                <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="detail-field">
+                    <label>SHIPPING CARRIER</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.shippingCarrier}
+                      onChange={(e) => handleInputChange('shippingCarrier', e.target.value)}
+                      placeholder="Enter shipping carrier"
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>SHIPPING ADDRESS</label>
+                    <textarea 
+                      className="form-control"
+                      value={formData.shippingAddress}
+                      onChange={(e) => handleInputChange('shippingAddress', e.target.value)}
+                      placeholder="Enter shipping address"
+                      rows="3"
+                    />
                   </div>
                 </div>
               </div>
@@ -879,44 +1191,45 @@ const EnterCashSales = ({ setCurrentPage }) => {
             {/* Billing Tab */}
             {activeTab === 'billing' && (
               <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Billing Address</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">BILL TO SELECT</label>
-                    <select className="form-control" value={formData.billToSelect} onChange={(e) => handleInputChange('billToSelect', e.target.value)}>
-                      <option>Maersk Oil</option>
-                      <option>- Custom -</option>
-                    </select>
+                <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                  <div className="detail-field">
+                    <label>BILL TO SELECT</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.billToSelect}
+                      onChange={(e) => handleInputChange('billToSelect', e.target.value)}
+                    />
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">BILL TO</label>
-                    <textarea className="form-control" rows="4" value={formData.billingAddress} onChange={(e) => handleInputChange('billingAddress', e.target.value)} placeholder="Enter billing address" />
+                  <div className="detail-field">
+                    <label>BILLING ADDRESS</label>
+                    <textarea 
+                      className="form-control"
+                      value={formData.billingAddress}
+                      onChange={(e) => handleInputChange('billingAddress', e.target.value)}
+                      placeholder="Enter billing address"
+                      rows="3"
+                    />
                   </div>
-                  <div><a href="#" style={{ color: '#4a90e2', fontSize: '0.875rem', textDecoration: 'none' }}>🗺 Map</a></div>
-                  <div className="form-group">
-                    <label className="form-label">REF BANK PRINT</label>
-                    <select className="form-control" value={formData.refBankPrint} onChange={(e) => handleInputChange('refBankPrint', e.target.value)}>
-                      <option value="">Select...</option>
-                      <option>- New -</option>
-                      <option>Tech Electric & Automation Pte Ltd,(DBS)</option>
-                      <option>Tech Marine Offshore(s) DBS</option>
-                      <option>Tech Offshore Marine (DQ) -DBS</option>
-                      <option>Tech Offshore Marine (s)(DBS)</option>
-                      <option>TOM MEP OCBC</option>
-                      <option>TOM(S) DBS BANK SGD</option>
-                    </select>
+                  <div className="detail-field">
+                    <label>REF BANK PRINT</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.refBankPrint}
+                      onChange={(e) => handleInputChange('refBankPrint', e.target.value)}
+                    />
                   </div>
-                </div>
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-                <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Payment *</h4>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">PAYMENT METHOD</label>
-                    <select className="form-control" value={formData.paymentMethod} onChange={(e) => handleInputChange('paymentMethod', e.target.value)}>
+                  <div className="detail-field">
+                    <label>PAYMENT METHOD</label>
+                    <select 
+                      className="form-control"
+                      value={formData.paymentMethod}
+                      onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
+                    >
                       <option value="">Select...</option>
                       <option>Cash</option>
                       <option>Check</option>
-                      <option>Credit Card</option>
                       <option>Bank Transfer</option>
                     </select>
                   </div>
@@ -927,89 +1240,65 @@ const EnterCashSales = ({ setCurrentPage }) => {
             {/* Accounting Tab */}
             {activeTab === 'accounting' && (
               <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Account Information</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-                  <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <input type="radio" checked={formData.undepositedFunds} onChange={(e) => handleInputChange('undepositedFunds', e.target.checked)} style={{ width: '18px', height: '18px' }} />
-                    <label style={{ fontWeight: '600', fontSize: '0.875rem', margin: 0 }}>UNDEPOSITED FUNDS</label>
+                <div className="detail-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
+                  <div className="detail-field">
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <input 
+                        type="checkbox"
+                        checked={formData.undepositedFunds}
+                        onChange={(e) => handleInputChange('undepositedFunds', e.target.checked)}
+                      />
+                      UNDEPOSITED FUNDS
+                    </label>
                   </div>
-                  <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <input type="radio" checked={!formData.undepositedFunds} onChange={(e) => handleInputChange('undepositedFunds', !e.target.checked)} style={{ width: '18px', height: '18px' }} />
-                    <label style={{ fontWeight: '600', fontSize: '0.875rem', margin: 0 }}>ACCOUNT</label>
+                  <div className="detail-field">
+                    <label>ACCOUNT</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.account}
+                      onChange={(e) => handleInputChange('account', e.target.value)}
+                    />
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">CURRENCY <span className="required">*</span></label>
-                    <select className="form-control" value={formData.currency} onChange={(e) => handleInputChange('currency', e.target.value)}>
-                      <option>SGD</option>
-                      <option>USD</option>
-                      <option>EUR</option>
-                    </select>
+                  <div className="detail-field">
+                    <label>EXTENDED COST</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.extendedCost}
+                      onChange={(e) => handleInputChange('extendedCost', e.target.value)}
+                      disabled
+                    />
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">EXCHANGE RATE <span className="required">*</span></label>
-                    <input type="text" className="form-control" value={formData.exchangeRate} onChange={(e) => handleInputChange('exchangeRate', e.target.value)} />
+                  <div className="detail-field">
+                    <label>GROSS PROFIT</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.grossProfit}
+                      onChange={(e) => handleInputChange('grossProfit', e.target.value)}
+                      disabled
+                    />
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">EST. EXTENDED COST</label>
-                    <input type="text" className="form-control" value={formData.extendedCost} readOnly style={{ backgroundColor: '#f5f5f5' }} />
+                  <div className="detail-field">
+                    <label>TAX ID</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.taxId}
+                      onChange={(e) => handleInputChange('taxId', e.target.value)}
+                    />
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">EST. GROSS PROFIT</label>
-                    <input type="text" className="form-control" value={formData.grossProfit} readOnly style={{ backgroundColor: '#f5f5f5' }} />
+                  <div className="detail-field">
+                    <label>GROSS PROFIT %</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.grossProfitPercent}
+                      onChange={(e) => handleInputChange('grossProfitPercent', e.target.value)}
+                      disabled
+                    />
                   </div>
-                </div>
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Tax Information</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                  <div className="form-group">
-                    <label className="form-label">TAX ID</label>
-                    <input type="text" className="form-control" value={formData.taxId} onChange={(e) => handleInputChange('taxId', e.target.value)} placeholder="Enter tax ID" />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">EST. GROSS PROFIT PERCENT</label>
-                    <input type="text" className="form-control" value={formData.grossProfitPercent} readOnly style={{ backgroundColor: '#f5f5f5' }} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Relationships Tab */}
-            {activeTab === 'relationships' && (
-              <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Contacts</h3>
-                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove all</button>
-                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Clear All Lines</button>
-                </div>
-                <div className="items-table-wrapper">
-                  <table className="detail-items-table">
-                    <thead>
-                      <tr>
-                        <th style={{width: '25%'}}>CONTACT <span className="required">*</span></th>
-                        <th style={{width: '20%'}}>JOB TITLE</th>
-                        <th style={{width: '20%'}}>EMAIL</th>
-                        <th style={{width: '15%'}}>MAIN PHONE</th>
-                        <th style={{width: '15%'}}>SUBSIDIARY <span className="required">*</span></th>
-                        <th style={{width: '5%'}}>ROLE</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><input type="text" className="table-input" placeholder="Type to search" style={{width: '100%'}} /></td>
-                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
-                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
-                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
-                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
-                        <td><input type="text" className="table-input" style={{width: '100%'}} /></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
-                  <button className="btn btn-primary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}><i className="fas fa-check"></i> Add</button>
-                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}><i className="fas fa-times"></i> Cancel</button>
-                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Insert</button>
-                  <button className="btn btn-secondary" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Remove</button>
                 </div>
               </div>
             )}
@@ -1017,47 +1306,56 @@ const EnterCashSales = ({ setCurrentPage }) => {
             {/* Communication Tab */}
             {activeTab === 'communication' && (
               <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Messages <span className="required">*</span></h3>
-                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
-                  <div style={{ display: 'flex', gap: '0' }}>
-                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: '#fff', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Events</button>
-                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Tasks</button>
-                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Phone Calls</button>
-                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', borderRight: '1px solid rgba(255,255,255,0.1)', fontSize: '0.875rem', cursor: 'pointer' }}>Files</button>
-                    <button style={{ padding: '0.75rem 1.25rem', background: '#5b6b8a', color: 'rgba(255,255,255,0.8)', border: 'none', fontSize: '0.875rem', cursor: 'pointer' }}>User Notes</button>
+                <div className="detail-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                  <div className="detail-field">
+                    <div style={{ display: 'flex', gap: '2rem' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input 
+                          type="checkbox"
+                          checked={formData.toBePrinted}
+                          onChange={(e) => handleInputChange('toBePrinted', e.target.checked)}
+                        />
+                        TO BE PRINTED
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input 
+                          type="checkbox"
+                          checked={formData.toBeEmailed}
+                          onChange={(e) => handleInputChange('toBeEmailed', e.target.checked)}
+                        />
+                        TO BE EMAILED
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <input 
+                          type="checkbox"
+                          checked={formData.toBeFaxed}
+                          onChange={(e) => handleInputChange('toBeFaxed', e.target.checked)}
+                        />
+                        TO BE FAXED
+                      </label>
+                    </div>
                   </div>
-                </div>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                  <div>
-                    <div className="form-group">
-                      <label className="form-label">TO BE PRINTED</label>
-                      <input type="checkbox" checked={formData.toBePrinted} onChange={(e) => handleInputChange('toBePrinted', e.target.checked)} style={{ width: '18px', height: '18px' }} />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">TO BE E-MAILED</label>
-                      <input type="checkbox" checked={formData.toBeEmailed} onChange={(e) => handleInputChange('toBeEmailed', e.target.checked)} style={{ width: '18px', height: '18px' }} />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">TO BE FAXED</label>
-                      <input type="checkbox" checked={formData.toBeFaxed} onChange={(e) => handleInputChange('toBeFaxed', e.target.checked)} style={{ width: '18px', height: '18px' }} />
-                    </div>
+                  <div className="detail-field">
+                    <label>SELECT MESSAGE</label>
+                    <select 
+                      className="form-control"
+                      value={formData.selectMessage}
+                      onChange={(e) => handleInputChange('selectMessage', e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option>Standard Message</option>
+                      <option>Custom Message</option>
+                    </select>
                   </div>
-                  <div>
-                    <div className="form-group">
-                      <label className="form-label">SELECT MESSAGE</label>
-                      <select className="form-control" value={formData.selectMessage} onChange={(e) => handleInputChange('selectMessage', e.target.value)}>
-                        <option value=""></option>
-                        <option>All work is complete!</option>
-                        <option>It's been a pleasure working with you!</option>
-                        <option>Please remit to above address.</option>
-                        <option>Thank you for your business.</option>
-                        <option>We appreciate your prompt payment.</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">CUSTOMER MESSAGE</label>
-                      <textarea className="form-control" rows="6" value={formData.customerMessage} onChange={(e) => handleInputChange('customerMessage', e.target.value)} placeholder="Enter customer message" />
-                    </div>
+                  <div className="detail-field">
+                    <label>CUSTOMER MESSAGE</label>
+                    <textarea 
+                      className="form-control"
+                      value={formData.customerMessage}
+                      onChange={(e) => handleInputChange('customerMessage', e.target.value)}
+                      placeholder="Enter customer message"
+                      rows="4"
+                    />
                   </div>
                 </div>
               </div>
@@ -1066,17 +1364,15 @@ const EnterCashSales = ({ setCurrentPage }) => {
             {/* System Information Tab */}
             {activeTab === 'system' && (
               <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>System Information</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">REF CUSTOMER</label>
-                    <div style={{ position: 'relative' }}>
-                      <input type="text" className="form-control" value={formData.refCustomer} onChange={(e) => handleInputChange('refCustomer', e.target.value)} placeholder="< Type then tab >" />
-                      <div style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', display: 'flex', gap: '0.25rem' }}>
-                        <button style={{ background: 'none', border: 'none', padding: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>📋 List</button>
-                        <button style={{ background: 'none', border: 'none', padding: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>🔍 Search</button>
-                      </div>
-                    </div>
+                <div className="detail-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '500px' }}>
+                  <div className="detail-field">
+                    <label>REF CUSTOMER</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.refCustomer}
+                      onChange={(e) => handleInputChange('refCustomer', e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -1085,38 +1381,32 @@ const EnterCashSales = ({ setCurrentPage }) => {
             {/* Custom Tab */}
             {activeTab === 'custom' && (
               <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Custom Fields</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">TEST TRANSACTION FIELD</label>
-                    <input type="text" className="form-control" value={formData.testTransactionField} onChange={(e) => handleInputChange('testTransactionField', e.target.value)} placeholder="Enter test transaction field" />
+                <div className="detail-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
+                  <div className="detail-field">
+                    <label>TEST TRANSACTION FIELD</label>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.testTransactionField}
+                      onChange={(e) => handleInputChange('testTransactionField', e.target.value)}
+                    />
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">GST TYPE</label>
-                    <input type="text" className="form-control" value={formData.gstType} onChange={(e) => handleInputChange('gstType', e.target.value)} placeholder="Enter GST type" />
+                  <div className="detail-field">
+                    <label>GST TYPE</label>
+                    <select 
+                      className="form-control"
+                      value={formData.gstType}
+                      onChange={(e) => handleInputChange('gstType', e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option value="0">0 - Standard</option>
+                      <option value="1">1 - Zero Rated</option>
+                      <option value="2">2 - Exempt</option>
+                    </select>
                   </div>
                 </div>
               </div>
             )}
-          </div>
-        </div>
-
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <div>
-            <button className="btn btn-secondary" onClick={handleSave}>
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-            <button className="btn btn-secondary">
-              Auto Fill
-            </button>
-            <button className="btn btn-secondary">
-              Actions
-            </button>
           </div>
         </div>
       </div>
@@ -1124,7 +1414,7 @@ const EnterCashSales = ({ setCurrentPage }) => {
       {/* Add Customer Modal */}
       {showAddCustomer && (
         <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
-          <div className="modal-content" style={{ maxWidth: '600px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
               <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1142,6 +1432,28 @@ const EnterCashSales = ({ setCurrentPage }) => {
         </div>
       )}
 
+      {/* Add Project Modal */}
+      {showAddProject && (
+        <div className="modal-overlay" onClick={() => setShowAddProject(false)}>
+          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Project</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddProject(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <AddProjectForm 
+                onSave={handleSaveNewProject}
+                onCancel={() => setShowAddProject(false)}
+                customers={customerOptions}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <Toast 
         message={toast.message} 
         type={toast.type} 
@@ -1149,280 +1461,6 @@ const EnterCashSales = ({ setCurrentPage }) => {
         onClose={() => setToast({ ...toast, show: false })} 
       />
     </div>
-  );
-};
-
-// Add Customer Form Component
-const AddCustomerForm = ({ onSave, onCancel }) => {
-  const [customerData, setCustomerData] = useState({
-    customerId: 'To Be Generated',
-    type: 'COMPANY',
-    companyName: '',
-    parentCompany: '',
-    salesRep: '',
-    webAddress: '',
-    category: '',
-    defaultOrderPriority: '',
-    email: '',
-    phone: '',
-    altPhone: '',
-    fax: '',
-    primarySubsidiary: '',
-    transactionsNeedApproval: false,
-    stopSendingSms: false,
-    defaultDiscount: '',
-    lastSalesActivity: ''
-  });
-
-  const handleInputChange = (field, value) => {
-    setCustomerData({ ...customerData, [field]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!customerData.companyName.trim()) {
-      alert('Company Name is required');
-      return;
-    }
-    onSave(customerData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="add-customer-form">
-      {/* Primary Information Section */}
-      <div className="form-section">
-        <div className="section-header">
-          <i className="fas fa-chevron-down"></i>
-          <h3>Primary Information</h3>
-        </div>
-        <div className="section-body">
-          <div className="form-grid">
-            <div className="form-group">
-              <label>CUSTOMER ID <span className="required">*</span></label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={customerData.customerId}
-                disabled
-              />
-              <div className="form-checkbox">
-                <input type="checkbox" id="auto" defaultChecked />
-                <label htmlFor="auto">AUTO</label>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>TYPE</label>
-              <div className="radio-group">
-                <label>
-                  <input 
-                    type="radio" 
-                    name="type" 
-                    value="COMPANY"
-                    checked={customerData.type === 'COMPANY'}
-                    onChange={(e) => handleInputChange('type', e.target.value)}
-                  />
-                  COMPANY
-                </label>
-                <label>
-                  <input 
-                    type="radio" 
-                    name="type" 
-                    value="INDIVIDUAL"
-                    checked={customerData.type === 'INDIVIDUAL'}
-                    onChange={(e) => handleInputChange('type', e.target.value)}
-                  />
-                  INDIVIDUAL
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>COMPANY NAME <span className="required">*</span></label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={customerData.companyName}
-                onChange={(e) => handleInputChange('companyName', e.target.value)}
-                placeholder="Enter company name"
-              />
-            </div>
-            <div className="form-group">
-              <label>PARENT COMPANY</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={customerData.parentCompany}
-                onChange={(e) => handleInputChange('parentCompany', e.target.value)}
-                placeholder="Enter parent company"
-              />
-            </div>
-            <div className="form-group">
-              <label>SALES REP</label>
-              <select 
-                className="form-control"
-                value={customerData.salesRep}
-                onChange={(e) => handleInputChange('salesRep', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>TEA0021 Subbiah</option>
-                <option>TEA0022 John Tan</option>
-                <option>TEA0023 Mary Lim</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>WEB ADDRESS</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={customerData.webAddress}
-                onChange={(e) => handleInputChange('webAddress', e.target.value)}
-                placeholder="Enter web address"
-              />
-            </div>
-            <div className="form-group">
-              <label>CATEGORY</label>
-              <select 
-                className="form-control"
-                value={customerData.category}
-                onChange={(e) => handleInputChange('category', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Customer</option>
-                <option>Vendor</option>
-                <option>Partner</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>DEFAULT ORDER PRIORITY</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={customerData.defaultOrderPriority}
-                onChange={(e) => handleInputChange('defaultOrderPriority', e.target.value)}
-                placeholder="Enter priority"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Email | Phone | Address */}
-      <div className="form-section">
-        <div className="section-header">
-          <i className="fas fa-chevron-down"></i>
-          <h3>Email | Phone | Address</h3>
-        </div>
-        <div className="section-body">
-          <div className="form-grid">
-            <div className="form-group">
-              <label>EMAIL</label>
-              <input 
-                type="email" 
-                className="form-control"
-                value={customerData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="Enter email address"
-              />
-            </div>
-            <div className="form-group">
-              <label>PHONE</label>
-              <input 
-                type="tel" 
-                className="form-control"
-                value={customerData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                placeholder="Enter phone number"
-              />
-            </div>
-            <div className="form-group">
-              <label>ALT. PHONE</label>
-              <input 
-                type="tel" 
-                className="form-control"
-                value={customerData.altPhone}
-                onChange={(e) => handleInputChange('altPhone', e.target.value)}
-                placeholder="Enter alternate phone"
-              />
-            </div>
-            <div className="form-group">
-              <label>FAX</label>
-              <input 
-                type="tel" 
-                className="form-control"
-                value={customerData.fax}
-                onChange={(e) => handleInputChange('fax', e.target.value)}
-                placeholder="Enter fax number"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Classification */}
-      <div className="form-section">
-        <div className="section-header">
-          <i className="fas fa-chevron-down"></i>
-          <h3>Classification</h3>
-        </div>
-        <div className="section-body">
-          <div className="form-grid">
-            <div className="form-group">
-              <label>PRIMARY SUBSIDIARY</label>
-              <select 
-                className="form-control"
-                value={customerData.primarySubsidiary}
-                onChange={(e) => handleInputChange('primarySubsidiary', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>Tech Onshore MEP Prefabricators Pte Ltd</option>
-                <option>Tech Marine Offshore (S) Pte Ltd</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>TRANSACTIONS NEED APPROVAL</label>
-              <input 
-                type="checkbox" 
-                checked={customerData.transactionsNeedApproval}
-                onChange={(e) => handleInputChange('transactionsNeedApproval', e.target.checked)}
-              />
-            </div>
-            <div className="form-group">
-              <label>DEFAULT DISCOUNT %</label>
-              <select 
-                className="form-control"
-                value={customerData.defaultDiscount}
-                onChange={(e) => handleInputChange('defaultDiscount', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option>0%</option>
-                <option>5%</option>
-                <option>10%</option>
-                <option>15%</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>LAST SALES ACTIVITY</label>
-              <input 
-                type="date" 
-                className="form-control"
-                value={customerData.lastSalesActivity}
-                onChange={(e) => handleInputChange('lastSalesActivity', e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Form Actions */}
-      <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '1rem', justifyContent: 'flex-end', background: '#f8f9fa', marginTop: '2rem' }}>
-        <button type="button" className="btn btn-secondary" onClick={onCancel} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
-          Cancel
-        </button>
-        <button type="submit" className="btn-new-transaction" style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
-          <i className="fas fa-save"></i>
-          Save
-        </button>
-      </div>
-    </form>
   );
 };
 

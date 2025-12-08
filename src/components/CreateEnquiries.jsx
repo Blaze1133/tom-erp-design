@@ -8,7 +8,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
 
   // Form state
   const [formData, setFormData] = useState({
-    customForm: 'Standard Enquiry',
+    customForm: 'TOM Supply Enquiry',
     company: '',
     salesRep: '',
     title: '',
@@ -193,6 +193,12 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
     }
   };
 
+  const handleBack = () => {
+    if (setCurrentPage) {
+      setCurrentPage('view-enquiries');
+    }
+  };
+
   const handleAddItem = () => {
     const newItem = {
       id: formData.items.length + 1,
@@ -306,6 +312,10 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
       </div>
 
       <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
         <button className="btn-toolbar" onClick={handleCancel}>
           Cancel
         </button>
@@ -348,7 +358,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     onChange={(e) => handleFormChange('customForm', e.target.value)}
                   >
                     <option>TOM Supply Enquiry</option>
-                    <option>Standard Enquiry</option>
+                    <option>TOM Service Enquiry</option>
                   </select>
                 </div>
                 <div className="detail-field" style={{ position: 'relative' }}>
@@ -804,26 +814,6 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     disabled
                   />
                 </div>
-                <div className="detail-field">
-                  <label>COUNTRY OF ORIGIN</label>
-                  <input 
-                    type="text" 
-                    className="form-control"
-                    value={formData.countryOfOrigin}
-                    onChange={(e) => handleFormChange('countryOfOrigin', e.target.value)}
-                    placeholder="Enter country of origin"
-                  />
-                </div>
-                <div className="detail-field">
-                  <label>HS CODE</label>
-                  <input 
-                    type="text" 
-                    className="form-control"
-                    value={formData.hsCode}
-                    onChange={(e) => handleFormChange('hsCode', e.target.value)}
-                    placeholder="Enter HS code"
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -866,14 +856,14 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
               
               {formData.items.length > 0 && (
                 <div className="items-table-wrapper" style={{ overflowX: 'auto', marginBottom: '1rem' }}>
-                  <table className="detail-items-table" style={{ minWidth: '1900px' }}>
+                  <table className="detail-items-table" style={{ minWidth: '2200px' }}>
                     <thead>
                       <tr>
                         <th style={{ width: '30px' }}></th>
                         <th style={{ minWidth: '150px' }}>ITEM</th>
+                        <th style={{ minWidth: '400px' }}>DESC</th>
                         <th style={{ minWidth: '80px' }}>QTY</th>
                         <th style={{ minWidth: '100px' }}>UNITS</th>
-                        <th style={{ minWidth: '300px' }}>DESC</th>
                         <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
                         <th style={{ minWidth: '100px' }}>RATE</th>
                         <th style={{ minWidth: '100px' }}>AMT</th>
@@ -882,6 +872,8 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                         <th style={{ minWidth: '150px' }}>CLASS</th>
                         <th style={{ minWidth: '150px' }}>COST EST. TYPE</th>
                         <th style={{ minWidth: '150px' }}>EST. EXT. COST</th>
+                        <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                        <th style={{ minWidth: '150px' }}>HS CODE</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -945,6 +937,23 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                             />
                           </td>
                           <td>
+                            <textarea 
+                              className="form-control" 
+                              defaultValue={item.description} 
+                              style={{ 
+                                minWidth: '400px', 
+                                minHeight: '60px',
+                                resize: 'both',
+                                overflow: 'auto'
+                              }}
+                              rows="3"
+                              onInput={(e) => {
+                                e.target.style.height = 'auto';
+                                e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                              }}
+                            />
+                          </td>
+                          <td>
                             <input 
                               type="number" 
                               className="form-control" 
@@ -958,14 +967,6 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               className="form-control" 
                               defaultValue={item.units} 
                               style={{ minWidth: '120px', height: '40px' }} 
-                            />
-                          </td>
-                          <td>
-                            <textarea 
-                              className="form-control" 
-                              defaultValue={item.description} 
-                              style={{ minWidth: '290px', height: '40px', resize: 'vertical' }}
-                              rows="2"
                             />
                           </td>
                           <td>
@@ -1063,6 +1064,24 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               step="0.01"
                             />
                           </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control" 
+                              defaultValue={item.countryOfOrigin || ''} 
+                              style={{ minWidth: '180px', height: '40px' }} 
+                              placeholder="Country"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              className="form-control" 
+                              defaultValue={item.hsCode || ''} 
+                              style={{ minWidth: '180px', height: '40px' }} 
+                              placeholder="HS Code"
+                            />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -1119,13 +1138,17 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
 
           {/* Footer Actions */}
           <div className="detail-footer-actions">
-            <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
-              <i className="fas fa-save"></i>
-              Save
+            <button className="btn-toolbar" onClick={handleBack}>
+              <i className="fas fa-arrow-left"></i>
+              Back
             </button>
             <button className="btn-toolbar" onClick={handleCancel}>
               <i className="fas fa-times"></i>
               Cancel
+            </button>
+            <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
+              <i className="fas fa-save"></i>
+              Save
             </button>
           </div>
         </div>
