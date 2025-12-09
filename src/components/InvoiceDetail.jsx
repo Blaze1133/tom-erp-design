@@ -477,7 +477,7 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                   onChange={(e) => handleInputChange('dueDate', e.target.value)}
                 />
               </div>
-              <div className="detail-field" style={{ position: 'relative' }}>
+              <div className="detail-field" style={{ position: 'relative', zIndex: showCustomerDropdown ? 10001 : 'auto' }}>
                 <label className="form-label required">Customer</label>
                 <div 
                   style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
@@ -519,7 +519,7 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                             left: 0, 
                             right: 0, 
                             bottom: 0, 
-                            zIndex: 999 
+                            zIndex: 9999 
                           }}
                           onClick={() => setShowCustomerDropdown(false)}
                         />
@@ -532,7 +532,7 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                           border: '1px solid #ddd', 
                           borderRadius: '4px', 
                           boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                          zIndex: 1000, 
+                          zIndex: 10000, 
                           marginTop: '4px',
                           overflowY: 'auto',
                           maxHeight: '200px'
@@ -579,7 +579,7 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                   )}
                 </div>
               </div>
-              <div className="detail-field" style={{ position: 'relative' }}>
+              <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 10001 : 'auto' }}>
                 <label className="form-label">Project</label>
                 <div 
                   style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
@@ -621,7 +621,7 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                             left: 0, 
                             right: 0, 
                             bottom: 0, 
-                            zIndex: 999 
+                            zIndex: 9999 
                           }}
                           onClick={() => setShowProjectDropdown(false)}
                         />
@@ -634,7 +634,7 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                           border: '1px solid #ddd', 
                           borderRadius: '4px', 
                           boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                          zIndex: 1000, 
+                          zIndex: 10000, 
                           marginTop: '4px',
                           overflowY: 'auto',
                           maxHeight: '200px'

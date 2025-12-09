@@ -361,7 +361,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     <option>TOM Service Enquiry</option>
                   </select>
                 </div>
-                <div className="detail-field" style={{ position: 'relative' }}>
+                <div className="detail-field" style={{ position: 'relative', zIndex: companyDropdownOpen ? 10001 : 'auto' }}>
                   <label className="form-label required">Company</label>
                   <div 
                     style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
@@ -407,7 +407,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                               left: 0, 
                               right: 0, 
                               bottom: 0, 
-                              zIndex: 999 
+                              zIndex: 9999 
                             }}
                             onClick={() => setCompanyDropdownOpen(false)}
                           />
@@ -420,7 +420,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                             border: '1px solid #ddd', 
                             borderRadius: '4px', 
                             boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                            zIndex: 1000, 
+                            zIndex: 10000, 
                             marginTop: '4px'
                           }}>
                             <div style={{ padding: '10px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -508,7 +508,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     disabled
                   />
                 </div>
-                <div className="detail-field" style={{ position: 'relative' }}>
+                <div className="detail-field" style={{ position: 'relative', zIndex: salesRepDropdownOpen ? 10001 : 'auto' }}>
                   <label className="form-label">Sales Rep</label>
                   <div style={{ position: 'relative', flex: 1 }}>
                     <input 
@@ -553,7 +553,7 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                             left: 0, 
                             right: 0, 
                             bottom: 0, 
-                            zIndex: 999 
+                            zIndex: 9999 
                           }}
                           onClick={() => setSalesRepDropdownOpen(false)}
                         />

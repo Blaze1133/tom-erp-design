@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Toast from './Toast';
 import SearchableDropdown from './SearchableDropdown';
+import AddProjectForm from './AddProjectForm';
+import AddCustomerForm from './AddCustomerForm';
 import { CLASS_OPTIONS, DEPARTMENT_OPTIONS, SUBSIDIARY_OPTIONS, ADJUSTMENT_LOCATION_OPTIONS } from '../constants/dropdownOptions';
 import './Enquiries.css';
 
@@ -9,9 +11,10 @@ const CreateProject = ({ setCurrentPage }) => {
   const [isSaved, setIsSaved] = useState(false);
   
   const [formData, setFormData] = useState({
-    jobId: '',
+    jobId: 'To Be Generated',
     projectName: '',
     customer: '',
+    project: '',
     salesPerson: '',
     projectManager: '',
     startDate: '',
@@ -28,6 +31,20 @@ const CreateProject = ({ setCurrentPage }) => {
     priority: 'Medium'
   });
 
+  // Customer dropdown states
+  const [customerHovered, setCustomerHovered] = useState(false);
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState('');
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  
+  // Project dropdown states
+  const [projectHovered, setProjectHovered] = useState(false);
+  const [showProjectDropdown, setShowProjectDropdown] = useState(false);
+  const [showAddProject, setShowAddProject] = useState(false);
+  const [projectSearch, setProjectSearch] = useState('');
+  const [filteredProjects, setFilteredProjects] = useState([]);
+
   // Sales Person searchable dropdown state
   const [salesPersonSearch, setSalesPersonSearch] = useState('');
   const [salesPersonDropdownOpen, setSalesPersonDropdownOpen] = useState(false);
@@ -37,21 +54,17 @@ const CreateProject = ({ setCurrentPage }) => {
   const [projectManagerSearch, setProjectManagerSearch] = useState('');
   const [projectManagerDropdownOpen, setProjectManagerDropdownOpen] = useState(false);
   const projectManagerDropdownRef = useRef(null);
-  
-  // Customer searchable dropdown state
-  const [customerSearch, setCustomerSearch] = useState('');
-  const [customerDropdownOpen, setCustomerDropdownOpen] = useState(false);
-  const customerDropdownRef = useRef(null);
 
-  // Customer options
+  // Customer options for dropdown
   const customerOptions = [
-    { id: '100-102', name: '100 Baroid Surface Solutions, Halliburton Energy Services Inc' },
-    { id: '1000', name: '1000 TEAM LEAD CONSTRUCTION PTE LTD' },
-    { id: '1001', name: '1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD' },
-    { id: '1002', name: '1002 TECH MARINE OFFSHORE (S) PTE LTD' },
-    { id: '1003', name: '1003 TECH ELECTRIC AUTOMATION PTE LTD' },
-    { id: '1004', name: '1004 TECH OFFSHORE MARINE (DO) PTE LTD' },
-    { id: '1005', name: '1005 TECH OFFSHORE MARINE (SV) PTE LTD' }
+    '612 Raise Pte Ltd',
+    '100 Baroid Surface Solutions, Halliburton Energy Services Inc',
+    '1000 TEAM LEAD CONSTRUCTION PTE LTD',
+    '1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD',
+    '1002 TECH MARINE OFFSHORE (S) PTE LTD',
+    '1003 TECH ELECTRIC AUTOMATION PTE LTD',
+    '1004 TECH OFFSHORE MARINE (DO) PTE LTD',
+    '1005 TECH OFFSHORE MARINE (SV) PTE LTD'
   ];
 
   // Sales Person options
@@ -72,16 +85,19 @@ const CreateProject = ({ setCurrentPage }) => {
     { id: 'PM005', name: 'PM005 Robert Lee' }
   ];
 
+  // Project options for dropdown (linked to customers)
+  const projectOptions = [
+    { id: 1, name: 'Marine Equipment Supply – Q1 2024', customer: '612 Raise Pte Ltd', jobId: 'PRJ-001', startDate: '2024-01-15', location: 'Singapore', scopeOfWork: 'Supply and installation of marine equipment' },
+    { id: 2, name: 'Hull Repair Project', customer: '1000 TEAM LEAD CONSTRUCTION PTE LTD', jobId: 'PRJ-002', startDate: '2024-02-01', location: 'Jurong Port', scopeOfWork: 'Hull repair and maintenance' },
+    { id: 3, name: 'Piping System Upgrade', customer: '1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD', jobId: 'PRJ-003', startDate: '2024-03-10', location: 'Tuas', scopeOfWork: 'Piping system upgrade and testing' }
+  ];
+
   // Status options
   const statusOptions = ['Planning', 'In Progress', 'On Hold', 'Completed', 'Cancelled'];
   
   // Priority options
   const priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
 
-  // Filter customer options based on search
-  const filteredCustomers = customerOptions.filter(customer =>
-    customer.name.toLowerCase().includes(customerSearch.toLowerCase())
-  );
 
   // Filter sales person options based on search
   const filteredSalesPersons = salesPersonOptions.filter(person =>
@@ -93,20 +109,94 @@ const CreateProject = ({ setCurrentPage }) => {
     manager.name.toLowerCase().includes(projectManagerSearch.toLowerCase())
   );
 
-  // Handle customer selection
+  // Customer handlers
   const handleCustomerSelect = (customer) => {
-    handleFormChange('customer', customer.name);
-    setCustomerSearch(customer.name);
-    setCustomerDropdownOpen(false);
+    handleFormChange('customer', customer);
+    setShowCustomerDropdown(false);
+    setCustomerSearch('');
   };
 
-  // Handle customer search input
   const handleCustomerSearchChange = (e) => {
-    setCustomerSearch(e.target.value);
-    setCustomerDropdownOpen(true);
-    if (e.target.value !== formData.customer) {
-      handleFormChange('customer', '');
+    const value = e.target.value;
+    setCustomerSearch(value);
+    handleFormChange('customer', value);
+    
+    if (value) {
+      const filtered = customerOptions.filter(customer =>
+        customer.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredCustomers(filtered);
+    } else {
+      setFilteredCustomers(customerOptions);
     }
+    setShowCustomerDropdown(true);
+  };
+
+  const handleAddNewCustomer = () => {
+    setShowAddCustomer(true);
+    setShowCustomerDropdown(false);
+  };
+
+  // Project handlers
+  const handleProjectSelect = (project) => {
+    handleFormChange('project', project.name);
+    setShowProjectDropdown(false);
+    setProjectSearch('');
+  };
+
+  const handleProjectSearchChange = (e) => {
+    const value = e.target.value;
+    setProjectSearch(value);
+    handleFormChange('project', value);
+    
+    if (value) {
+      const filtered = projectOptions.filter(project =>
+        project.name.toLowerCase().includes(value.toLowerCase()) ||
+        project.jobId.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredProjects(filtered);
+    } else {
+      // Filter projects by selected customer if any
+      if (formData.customer) {
+        const filtered = projectOptions.filter(p => p.customer === formData.customer);
+        setFilteredProjects(filtered);
+      } else {
+        setFilteredProjects(projectOptions);
+      }
+    }
+    setShowProjectDropdown(true);
+  };
+
+  const handleAddNewProject = () => {
+    setShowAddProject(true);
+    setShowProjectDropdown(false);
+  };
+
+  const handleSaveNewCustomer = (customerData) => {
+    // Add the new customer to the options list
+    customerOptions.push(customerData.companyName);
+    // Set it as selected
+    handleFormChange('customer', customerData.companyName);
+    setShowAddCustomer(false);
+    showToast('New customer added successfully!', 'success');
+  };
+
+  const handleSaveNewProject = (projectData) => {
+    // Add the new project to the options list
+    const newProject = {
+      id: projectOptions.length + 1,
+      name: projectData.projectName,
+      customer: projectData.customer,
+      jobId: projectData.jobId,
+      startDate: projectData.startDate,
+      location: projectData.projectLocation,
+      scopeOfWork: projectData.scopeOfWork
+    };
+    projectOptions.push(newProject);
+    // Set it as selected
+    handleFormChange('project', newProject.name);
+    setShowAddProject(false);
+    showToast('New project added successfully!', 'success');
   };
 
   // Handle sales person selection
@@ -149,9 +239,6 @@ const CreateProject = ({ setCurrentPage }) => {
       }
       if (projectManagerDropdownRef.current && !projectManagerDropdownRef.current.contains(event.target)) {
         setProjectManagerDropdownOpen(false);
-      }
-      if (customerDropdownRef.current && !customerDropdownRef.current.contains(event.target)) {
-        setCustomerDropdownOpen(false);
       }
     };
 
@@ -200,112 +287,285 @@ const CreateProject = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="create-enquiry">
-      <div className="form-header">
-        <div className="form-title">
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
           <i className="fas fa-project-diagram"></i>
-          <h1>Create Project</h1>
+          <div>
+            <h1>Project</h1>
+            <div className="detail-subtitle">
+              <span># To be generated – New Project</span>
+            </div>
+          </div>
         </div>
-        <div className="form-actions">
-          <button className="btn-action">
-            <i className="fas fa-arrow-left"></i>
-          </button>
-          <button className="btn-action">
-            <i className="fas fa-arrow-right"></i>
-          </button>
-          <button className="btn-action" onClick={() => setCurrentPage('view-projects')}>List</button>
+        <div className="detail-actions">
+          <button className="btn-action" onClick={() => setCurrentPage && setCurrentPage('view-projects')}>List</button>
           <button className="btn-action">Search</button>
           <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="form-toolbar">
-        <button type="submit" form="project-form" className="btn-toolbar-primary">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
           <i className="fas fa-save"></i>
           Save
         </button>
-        <button className="btn-toolbar" onClick={handleCancel}>
-          <i className="fas fa-times"></i>
-          Cancel
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-print"></i>
-          Print
-        </button>
-        <button className="btn-toolbar">
-          <i className="fas fa-copy"></i>
-          Copy
-        </button>
+        {isSaved && (
+          <>
+            <button className="btn-toolbar">
+              <i className="fas fa-copy"></i>
+              Copy
+            </button>
+            <button className="btn-toolbar">
+              <i className="fas fa-print"></i>
+              Print
+            </button>
+          </>
+        )}
       </div>
 
-      <form id="project-form" onSubmit={handleSubmit} className="enquiry-form">
-        <div className="form-section">
+      <div className="detail-content">
+        {/* Primary Information */}
+        <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>
             <h3>Primary Information</h3>
           </div>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Job ID *</label>
-              <input
-                type="text"
-                name="jobId"
-                value={formData.jobId}
-                onChange={handleInputChange}
-                className="form-control"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Project Name *</label>
-              <input
-                type="text"
-                name="projectName"
-                value={formData.projectName}
-                onChange={handleInputChange}
-                className="form-control"
-                required
-              />
-            </div>
-            {/* Customer Searchable Dropdown */}
-            <div className="form-group" ref={customerDropdownRef}>
-              <label>Customer *</label>
-              <div className="searchable-input-wrapper">
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>JOB ID <span style={{ color: 'red' }}>*</span></label>
                 <input
                   type="text"
-                  value={customerSearch}
-                  onChange={handleCustomerSearchChange}
-                  onFocus={() => setCustomerDropdownOpen(true)}
+                  name="jobId"
+                  value={formData.jobId}
                   className="form-control"
-                  placeholder="Search customer..."
-                  required
+                  readOnly
+                  style={{ background: '#f5f5f5', cursor: 'not-allowed' }}
                 />
-                <i className="fas fa-search search-icon"></i>
-                {customerDropdownOpen && (
-                  <div className="searchable-dropdown-menu">
-                    {filteredCustomers.length > 0 ? (
-                      filteredCustomers.map((customer) => (
-                        <div
-                          key={customer.id}
-                          className="searchable-dropdown-item"
-                          onClick={() => handleCustomerSelect(customer)}
-                        >
-                          {customer.name}
+              </div>
+              {/* Customer Dropdown */}
+              <div className="detail-field" style={{ position: 'relative', zIndex: showCustomerDropdown ? 10001 : 'auto' }}>
+                <label className="form-label required">Customer <span style={{ color: 'red' }}>*</span></label>
+                <div 
+                  style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+                  onMouseEnter={() => setCustomerHovered(true)}
+                  onMouseLeave={() => setCustomerHovered(false)}
+                >
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={formData.customer}
+                      onChange={handleCustomerSearchChange}
+                      onFocus={() => setShowCustomerDropdown(true)}
+                      placeholder="<Type then tab>"
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={() => setShowCustomerDropdown(!showCustomerDropdown)}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {showCustomerDropdown && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 9999 
+                          }}
+                          onClick={() => setShowCustomerDropdown(false)}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          backgroundColor: '#ffffff', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 10000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => handleCustomerSelect(customer)}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f5f5f5',
+                                backgroundColor: '#ffffff'
+                              }}
+                              onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
+                            >
+                              {customer}
+                            </div>
+                          ))}
+                          {filteredCustomers.length === 0 && customerSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No customers found
+                            </div>
+                          )}
                         </div>
-                      ))
-                    ) : (
-                      <div className="searchable-dropdown-item no-results">
-                        No customers found
-                      </div>
+                      </>
                     )}
                   </div>
-                )}
+                  {customerHovered && (
+                    <button 
+                      type="button"
+                      className="btn btn-secondary"
+                      style={{ 
+                        padding: '0.5rem', 
+                        minWidth: 'auto',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onClick={handleAddNewCustomer}
+                      title="Add new customer"
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+              {/* Project Dropdown */}
+              <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 10001 : 'auto' }}>
+                <label className="form-label">Project</label>
+                <div 
+                  style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+                  onMouseEnter={() => setProjectHovered(true)}
+                  onMouseLeave={() => setProjectHovered(false)}
+                >
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={formData.project}
+                      onChange={handleProjectSearchChange}
+                      onFocus={() => setShowProjectDropdown(true)}
+                      placeholder="<Type then tab>"
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={() => setShowProjectDropdown(!showProjectDropdown)}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {showProjectDropdown && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 9999 
+                          }}
+                          onClick={() => setShowProjectDropdown(false)}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          backgroundColor: '#ffffff', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 10000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredProjects.length > 0 ? filteredProjects : (formData.customer ? projectOptions.filter(p => p.customer === formData.customer) : projectOptions)).map((project, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => handleProjectSelect(project)}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f5f5f5',
+                                backgroundColor: '#ffffff'
+                              }}
+                              onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
+                            >
+                              <div style={{ fontWeight: '500' }}>{project.name}</div>
+                              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
+                                {project.jobId} • {project.customer}
+                              </div>
+                            </div>
+                          ))}
+                          {filteredProjects.length === 0 && projectSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No projects found
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {projectHovered && (
+                    <button 
+                      type="button"
+                      className="btn btn-secondary"
+                      style={{ 
+                        padding: '0.5rem', 
+                        minWidth: 'auto',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onClick={handleAddNewProject}
+                      title="Add new project"
+                    >
+                      <i className="fas fa-plus"></i>
+                    </button>
+                  )}
+                </div>
+              </div>
 
             {/* Sales Person Searchable Dropdown */}
-            <div className="form-group" ref={salesPersonDropdownRef}>
-              <label>Sales Person *</label>
+            <div className="detail-field" ref={salesPersonDropdownRef}>
+              <label>SALES PERSON <span style={{ color: 'red' }}>*</span></label>
               <div className="searchable-input-wrapper">
                 <input
                   type="text"
@@ -340,8 +600,8 @@ const CreateProject = ({ setCurrentPage }) => {
             </div>
 
             {/* Project Manager Searchable Dropdown */}
-            <div className="form-group" ref={projectManagerDropdownRef}>
-              <label>Project Manager *</label>
+            <div className="detail-field" ref={projectManagerDropdownRef}>
+              <label>PROJECT MANAGER <span style={{ color: 'red' }}>*</span></label>
               <div className="searchable-input-wrapper">
                 <input
                   type="text"
@@ -375,8 +635,8 @@ const CreateProject = ({ setCurrentPage }) => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label>Status</label>
+            <div className="detail-field">
+              <label>STATUS</label>
               <select
                 name="status"
                 value={formData.status}
@@ -388,8 +648,8 @@ const CreateProject = ({ setCurrentPage }) => {
                 ))}
               </select>
             </div>
-            <div className="form-group">
-              <label>Priority</label>
+            <div className="detail-field">
+              <label>PRIORITY</label>
               <select
                 name="priority"
                 value={formData.priority}
@@ -401,8 +661,8 @@ const CreateProject = ({ setCurrentPage }) => {
                 ))}
               </select>
             </div>
-            <div className="form-group">
-              <label>Start Date</label>
+            <div className="detail-field">
+              <label>START DATE</label>
               <input
                 type="date"
                 name="startDate"
@@ -411,8 +671,8 @@ const CreateProject = ({ setCurrentPage }) => {
                 className="form-control"
               />
             </div>
-            <div className="form-group">
-              <label>End Date</label>
+            <div className="detail-field">
+              <label>END DATE</label>
               <input
                 type="date"
                 name="endDate"
@@ -421,8 +681,8 @@ const CreateProject = ({ setCurrentPage }) => {
                 className="form-control"
               />
             </div>
-            <div className="form-group">
-              <label>Project Location</label>
+            <div className="detail-field">
+              <label>PROJECT LOCATION</label>
               <select
                 name="projectLocation"
                 value={formData.projectLocation}
@@ -435,18 +695,8 @@ const CreateProject = ({ setCurrentPage }) => {
                 ))}
               </select>
             </div>
-            <div className="form-group">
-              <label>Customer Project No</label>
-              <input
-                type="text"
-                name="customerProjectNo"
-                value={formData.customerProjectNo}
-                onChange={handleInputChange}
-                className="form-control"
-              />
-            </div>
-            <div className="form-group full-width">
-              <label>Scope of Work</label>
+            <div className="detail-field full-width">
+              <label>SCOPE OF WORK</label>
               <textarea
                 name="scopeOfWork"
                 value={formData.scopeOfWork}
@@ -455,89 +705,130 @@ const CreateProject = ({ setCurrentPage }) => {
                 rows="3"
               />
             </div>
+            </div>
           </div>
         </div>
 
-        <div className="form-section">
+        {/* Classification */}
+        <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>
             <h3>Classification</h3>
           </div>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Subsidiary *</label>
-              <select
-                name="subsidiary"
-                value={formData.subsidiary}
-                onChange={handleInputChange}
-                className="form-control"
-                required
-              >
-                <option value="">Select Subsidiary</option>
-                {SUBSIDIARY_OPTIONS.map((subsidiary, index) => (
-                  <option key={index} value={subsidiary}>{subsidiary}</option>
-                ))}
-              </select>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY <span style={{ color: 'red' }}>*</span></label>
+                <select
+                  name="subsidiary"
+                  value={formData.subsidiary}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  required
+                >
+                  <option value="">Select Subsidiary</option>
+                  {SUBSIDIARY_OPTIONS.map((subsidiary, index) => (
+                    <option key={index} value={subsidiary}>{subsidiary}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="detail-field">
+                <SearchableDropdown
+                  label="DEPARTMENT"
+                  options={DEPARTMENT_OPTIONS}
+                  value={formData.department}
+                  onChange={(value) => handleFormChange('department', value)}
+                  placeholder="Select or search department..."
+                />
+              </div>
+              <div className="detail-field">
+                <SearchableDropdown
+                  label="CLASS"
+                  options={CLASS_OPTIONS}
+                  value={formData.class}
+                  onChange={(value) => handleFormChange('class', value)}
+                  placeholder="Select or search class..."
+                />
+              </div>
             </div>
-            <SearchableDropdown
-              label="Department"
-              options={DEPARTMENT_OPTIONS}
-              value={formData.department}
-              onChange={(value) => handleFormChange('department', value)}
-              placeholder="Select or search department..."
-            />
-            <SearchableDropdown
-              label="Class"
-              options={CLASS_OPTIONS}
-              value={formData.class}
-              onChange={(value) => handleFormChange('class', value)}
-              placeholder="Select or search class..."
-            />
           </div>
         </div>
 
-        <div className="form-section">
+        {/* Financial Information */}
+        <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>
             <h3>Financial Information</h3>
           </div>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Estimated Cost</label>
-              <input
-                type="number"
-                step="0.01"
-                name="estimatedCost"
-                value={formData.estimatedCost}
-                onChange={handleInputChange}
-                className="form-control"
-              />
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>ESTIMATED COST</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="estimatedCost"
+                  value={formData.estimatedCost}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="detail-field">
+                <label>ESTIMATED REVENUE</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="estimatedRevenue"
+                  value={formData.estimatedRevenue}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label>Estimated Revenue</label>
-              <input
-                type="number"
-                step="0.01"
-                name="estimatedRevenue"
-                value={formData.estimatedRevenue}
-                onChange={handleInputChange}
-                className="form-control"
+          </div>
+        </div>
+      </div>
+
+      {/* Add Customer Modal */}
+      {showAddCustomer && (
+        <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
+          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
+              </button>
+            </div>
+            <div className="modal-body" style={{ padding: '2rem' }}>
+              <AddCustomerForm 
+                onSave={handleSaveNewCustomer}
+                onCancel={() => setShowAddCustomer(false)}
               />
             </div>
           </div>
         </div>
+      )}
 
-        <div className="form-footer">
-          <button type="submit" className="btn-toolbar-primary">
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button type="button" className="btn-toolbar" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
+      {/* Add Project Modal */}
+      {showAddProject && (
+        <div className="modal-overlay" onClick={() => setShowAddProject(false)}>
+          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Project</h2>
+              <button className="modal-close-btn" onClick={() => setShowAddProject(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                ×
+              </button>
+            </div>
+            <div className="modal-body" style={{ padding: '2rem' }}>
+              <AddProjectForm 
+                onSave={handleSaveNewProject}
+                onCancel={() => setShowAddProject(false)}
+                customers={customerOptions}
+              />
+            </div>
+          </div>
         </div>
-      </form>
+      )}
 
       <Toast 
         message={toast.message} 

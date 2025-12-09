@@ -241,7 +241,7 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                           left: 0, 
                           right: 0, 
                           bottom: 0, 
-                          zIndex: 999 
+                          zIndex: 9999 
                         }}
                         onClick={() => setShowVendorDropdown(false)}
                       />
@@ -254,7 +254,7 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                         border: '1px solid #ddd', 
                         borderRadius: '4px', 
                         marginTop: '4px', 
-                        zIndex: 1000,
+                        zIndex: 10000,
                         boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
                         maxHeight: '300px',
                         overflow: 'hidden',

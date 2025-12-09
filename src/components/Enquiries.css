@@ -635,12 +635,17 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
+    position: relative;
+    overflow: visible;
 }
 
 .detail-field {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
+    position: relative;
+    overflow: visible;
+    z-index: 1;
 }
 
 .detail-field label {
