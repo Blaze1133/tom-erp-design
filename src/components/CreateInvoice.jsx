@@ -45,7 +45,6 @@ const CreateInvoice = ({ setCurrentPage }) => {
     
     // Sales Information
     salesRep: '',
-    opportunity: '',
     salesEffectiveDate: '',
     
     // Classification
@@ -740,18 +739,6 @@ const CreateInvoice = ({ setCurrentPage }) => {
                   <option>John Anderson</option>
                   <option>Sarah Chen</option>
                   <option>Michael Wong</option>
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>OPPORTUNITY</label>
-                <select 
-                  className="form-control"
-                  value={formData.opportunity}
-                  onChange={(e) => handleInputChange('opportunity', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  <option>Marine Project 2024</option>
-                  <option>Offshore Platform Build</option>
                 </select>
               </div>
               <div className="detail-field">

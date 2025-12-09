@@ -73,7 +73,7 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
         <div className="detail-title">
           <i className="fas fa-truck"></i>
           <div>
-            <h1>Custom Delivery Order</h1>
+            <h1>Delivery Order</h1>
             <div className="detail-subtitle">
               <span>{deliveryOrderData.documentNumber}</span>
               <span className="status-badge-detail" style={{ background: '#4caf50' }}>
@@ -89,7 +89,7 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
           <button className="btn-action">
             <i className="fas fa-arrow-right"></i>
           </button>
-          <button className="btn-action">List</button>
+          <button className="btn-action" onClick={handleBack}>List</button>
           <button className="btn-action">Search</button>
           <button className="btn-action">Customize</button>
         </div>

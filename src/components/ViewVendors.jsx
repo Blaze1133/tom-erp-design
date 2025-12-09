@@ -12,6 +12,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
     {
       id: 1,
       editView: true,
+      vendorId: 'VEN-2024-12324',
       name: '5MS Enterprise Pte Ltd',
       duplicate: '',
       category: 'Supplies',
@@ -28,6 +29,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
     {
       id: 2,
       editView: true,
+      vendorId: 'VEN-2024-12325',
       name: '7-ELEVEN COLD STORAGE',
       duplicate: '',
       category: '',
@@ -44,6 +46,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
     {
       id: 3,
       editView: true,
+      vendorId: 'VEN-2024-12326',
       name: '8 POINT ENGINEERING PTE LTD',
       duplicate: '',
       category: 'Supplies',
@@ -60,6 +63,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
     {
       id: 4,
       editView: true,
+      vendorId: 'VEN-2024-12327',
       name: '96 CRANE SOLUTIONS PTE LTD',
       duplicate: '',
       category: '',
@@ -76,6 +80,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
     {
       id: 5,
       editView: true,
+      vendorId: 'VEN-2024-12328',
       name: '365 PROPERTY SG PTE LTD',
       duplicate: '',
       category: 'Consultant',
@@ -92,6 +97,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
     {
       id: 6,
       editView: true,
+      vendorId: 'VEN-2024-12329',
       name: '818 TRADERS',
       duplicate: '',
       category: '',
@@ -219,6 +225,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
           <thead>
             <tr>
               <th style={{ width: '5%' }}>EDIT | VIEW</th>
+              <th style={{ width: '12%' }}>VENDOR ID</th>
               <th style={{ width: '15%' }}>NAME</th>
               <th style={{ width: '8%' }}>DUPLICATE</th>
               <th style={{ width: '10%' }}>CATEGORY</th>
@@ -251,6 +258,7 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
                     View
                   </button>
                 </td>
+                <td>{vendor.vendorId}</td>
                 <td>{vendor.name}</td>
                 <td>{vendor.duplicate}</td>
                 <td>{vendor.category}</td>

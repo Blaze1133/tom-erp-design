@@ -27,6 +27,7 @@ import ViewCashSales from './components/ViewCashSales';
 import EditCashSale from './components/EditCashSale';
 import EnterPurchaseOrders from './components/EnterPurchaseOrders';
 import ViewPurchaseOrders from './components/ViewPurchaseOrders';
+import ViewPurchaseOrderDetail from './components/ViewPurchaseOrderDetail';
 import ReceiveOrders from './components/ReceiveOrders';
 import ViewReceiveOrders from './components/ViewReceiveOrders';
 import ItemReceipt from './components/ItemReceipt';
@@ -474,6 +475,8 @@ function App() {
         return <EnterPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'view-purchase-orders':
         return <ViewPurchaseOrders setCurrentPage={setCurrentPage} />;
+      case 'view-purchase-order-detail':
+        return <ViewPurchaseOrderDetail setCurrentPage={setCurrentPage} />;
       case 'receive-orders':
         return <ReceiveOrders setCurrentPage={setCurrentPage} />;
       case 'view-receive-orders':

@@ -13,6 +13,7 @@ const CreateProject = ({ setCurrentPage }) => {
   const [formData, setFormData] = useState({
     jobId: 'To Be Generated',
     projectName: '',
+    secondaryProjectName: '',
     customer: '',
     project: '',
     salesPerson: '',
@@ -48,6 +49,14 @@ const CreateProject = ({ setCurrentPage }) => {
   // Sales Person searchable dropdown state
   const [salesPersonSearch, setSalesPersonSearch] = useState('');
   const [salesPersonDropdownOpen, setSalesPersonDropdownOpen] = useState(false);
+  
+  // Job ID edit state
+  const [jobIdHovered, setJobIdHovered] = useState(false);
+  const [jobIdEditable, setJobIdEditable] = useState(false);
+  
+  // Secondary Project Name edit state
+  const [secondaryProjectNameHovered, setSecondaryProjectNameHovered] = useState(false);
+  const [secondaryProjectNameEditable, setSecondaryProjectNameEditable] = useState(false);
   const salesPersonDropdownRef = useRef(null);
   
   // Project Manager searchable dropdown state
@@ -342,14 +351,44 @@ const CreateProject = ({ setCurrentPage }) => {
             <div className="detail-grid">
               <div className="detail-field">
                 <label>JOB ID <span style={{ color: 'red' }}>*</span></label>
-                <input
-                  type="text"
-                  name="jobId"
-                  value={formData.jobId}
-                  className="form-control"
-                  readOnly
-                  style={{ background: '#f5f5f5', cursor: 'not-allowed' }}
-                />
+                <div 
+                  style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                  onMouseEnter={() => setJobIdHovered(true)}
+                  onMouseLeave={() => setJobIdHovered(false)}
+                >
+                  <input
+                    type="text"
+                    name="jobId"
+                    value={formData.jobId}
+                    className="form-control"
+                    readOnly={!jobIdEditable}
+                    onChange={(e) => setFormData({ ...formData, jobId: e.target.value })}
+                    style={{ 
+                      background: jobIdEditable ? '#fff' : '#f5f5f5', 
+                      cursor: jobIdEditable ? 'text' : 'not-allowed',
+                      flex: 1
+                    }}
+                  />
+                  {jobIdHovered && (
+                    <button
+                      type="button"
+                      onClick={() => setJobIdEditable(!jobIdEditable)}
+                      style={{
+                        position: 'absolute',
+                        right: '10px',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: jobIdEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '4px 8px'
+                      }}
+                      title={jobIdEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={jobIdEditable ? 'fas fa-check' : 'fas fa-edit'}></i>
+                    </button>
+                  )}
+                </div>
               </div>
               {/* Customer Dropdown */}
               <div className="detail-field" style={{ position: 'relative', zIndex: showCustomerDropdown ? 10001 : 'auto' }}>
@@ -457,7 +496,7 @@ const CreateProject = ({ setCurrentPage }) => {
               </div>
               {/* Project Dropdown */}
               <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 10001 : 'auto' }}>
-                <label className="form-label">Project</label>
+                <label className="form-label">Project <span style={{ color: 'red' }}>*</span></label>
                 <div 
                   style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
                   onMouseEnter={() => setProjectHovered(true)}
@@ -749,6 +788,48 @@ const CreateProject = ({ setCurrentPage }) => {
                   onChange={(value) => handleFormChange('class', value)}
                   placeholder="Select or search class..."
                 />
+              </div>
+              <div className="detail-field">
+                <label>SECONDARY PROJECT NAME</label>
+                <div 
+                  style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                  onMouseEnter={() => setSecondaryProjectNameHovered(true)}
+                  onMouseLeave={() => setSecondaryProjectNameHovered(false)}
+                >
+                  <input
+                    type="text"
+                    name="secondaryProjectName"
+                    value={formData.secondaryProjectName || formData.projectName}
+                    className="form-control"
+                    readOnly={!secondaryProjectNameEditable}
+                    onChange={(e) => setFormData({ ...formData, secondaryProjectName: e.target.value })}
+                    style={{ 
+                      background: secondaryProjectNameEditable ? '#fff' : '#f5f5f5', 
+                      cursor: secondaryProjectNameEditable ? 'text' : 'not-allowed',
+                      flex: 1
+                    }}
+                    placeholder="Same as Project Name"
+                  />
+                  {secondaryProjectNameHovered && (
+                    <button
+                      type="button"
+                      onClick={() => setSecondaryProjectNameEditable(!secondaryProjectNameEditable)}
+                      style={{
+                        position: 'absolute',
+                        right: '10px',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: secondaryProjectNameEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '4px 8px'
+                      }}
+                      title={secondaryProjectNameEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={secondaryProjectNameEditable ? 'fas fa-check' : 'fas fa-edit'}></i>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

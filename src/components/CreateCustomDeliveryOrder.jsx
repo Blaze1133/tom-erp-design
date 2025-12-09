@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const CreateCustomDeliveryOrder = () => {
+const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   // Form state
@@ -62,7 +62,7 @@ const CreateCustomDeliveryOrder = () => {
   };
 
   const handleSave = () => {
-    showToast('Custom Delivery Order saved successfully!', 'success');
+    showToast('Delivery Order saved successfully!', 'success');
   };
 
   const handleCancel = () => {
@@ -126,27 +126,36 @@ const CreateCustomDeliveryOrder = () => {
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-truck" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Custom Delivery Order</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-truck"></i>
+          <div>
+            <h1>Delivery Order</h1>
+            <div className="detail-subtitle">
+              <span># To be generated – New Delivery Order</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-secondary" onClick={handleCancel}>
-            <i className="fas fa-arrow-left"></i>
-            Back
-          </button>
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-sync"></i>
-            Actions
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action" onClick={() => setCurrentPage && setCurrentPage('view-tom-custom-delivery-order')}>List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
+
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+      </div>
+
+      <div className="detail-content">
 
       <div className="quotation-container">
         {/* Primary Information */}
@@ -477,6 +486,7 @@ const CreateCustomDeliveryOrder = () => {
             </button>
           </div>
         </div>
+      </div>
       </div>
 
       <Toast 

@@ -301,6 +301,15 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   ];
 
   const purchasesSubItems = [
+    { 
+      id: 'purchase-requisition',
+      label: 'Purchase Requisition',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-purchase-requisition', label: 'List' }
+      ]
+    },
+    { id: 'order-requisition', label: 'Order Requisition' },
     {
       id: 'enter-purchase-orders',
       label: 'Enter Purchase Orders',
@@ -318,27 +327,18 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       ]
     },
     { 
-      id: 'enter-vendor-return-authorizations',
-      label: 'Enter Vendor Return Authorizations',
+      id: 'vendor-returns',
+      label: 'Vendor Returns',
       hasSubmenu: true,
       submenu: [
-        { id: 'view-vendor-return-authorizations', label: 'List' }
+        { id: 'enter-vendor-return-authorizations', label: 'Enter Vendor Return Authorizations' },
+        { id: 'approve-vendor-returns', label: 'Approve Vendor Returns' },
+        { id: 'ship-vendor-returns', label: 'Ship Vendor Returns' }
       ]
     },
-    { id: 'approve-vendor-returns', label: 'Approve Vendor Returns', hideArrow: true },
-    { id: 'ship-vendor-returns', label: 'Ship Vendor Returns', hideArrow: true },
-    { 
-      id: 'purchase-requisition',
-      label: 'Purchase Requisition',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-purchase-requisition', label: 'List' }
-      ]
-    },
-    { id: 'order-requisition', label: 'Order Requisition' },
     { 
       id: 'tom-custom-delivery-order',
-      label: 'TOM Custom Delivery Order',
+      label: 'Delivery Order',
       hasSubmenu: true,
       submenu: [
         { id: 'view-tom-custom-delivery-order', label: 'List' }

@@ -177,7 +177,7 @@ const ViewCustomDeliveryOrders = ({ onNewClick, onViewClick, onEditClick }) => {
       <div className="list-header">
         <div className="list-title">
           <i className="fas fa-truck"></i>
-          <h1>Custom Delivery Orders</h1>
+          <h1>Delivery Orders</h1>
         </div>
         <div className="list-actions">
           <button className="btn-view-option">List</button>
@@ -204,7 +204,7 @@ const ViewCustomDeliveryOrders = ({ onNewClick, onViewClick, onEditClick }) => {
         <div className="list-actions">
           <button className="btn btn-primary" onClick={handleNewDeliveryOrder}>
             <i className="fas fa-plus"></i>
-            New Custom Delivery Order
+            New Delivery Order
           </button>
         </div>
       </div>

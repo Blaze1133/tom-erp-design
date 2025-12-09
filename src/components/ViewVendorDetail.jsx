@@ -5,12 +5,13 @@ import './Enquiries.css';
 const ViewVendorDetail = ({ onBack, onEdit }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('subsidiaries');
+  const [communicationActiveTab, setCommunicationActiveTab] = useState('messages');
   const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
   const [emailPhoneCollapsed, setEmailPhoneCollapsed] = useState(false);
   const [classificationCollapsed, setClassificationCollapsed] = useState(false);
 
   const vendorData = {
-    id: '5MS Enterprise Pte Ltd',
+    id: 'VEN-2024-12324',
     name: '5MS Enterprise Pte Ltd',
     type: 'Company',
     category: 'Supplies',
@@ -86,7 +87,9 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
           <div>
             <h1>Vendor</h1>
             <div className="detail-subtitle">
-              <span>{vendorData.id}</span>
+              <span style={{ fontWeight: '600', color: '#333' }}>{vendorData.id}</span>
+              <span style={{ margin: '0 0.5rem', color: '#999' }}>|</span>
+              <span style={{ color: '#666' }}>{vendorData.name}</span>
             </div>
           </div>
         </div>
@@ -257,28 +260,10 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
               Financial
             </button>
             <button 
-              className={`tab-btn ${activeTab === 'preferences' ? 'active' : ''}`}
-              onClick={() => setActiveTab('preferences')}
-            >
-              Preferences
-            </button>
-            <button 
               className={`tab-btn ${activeTab === 'system-info' ? 'active' : ''}`}
               onClick={() => setActiveTab('system-info')}
             >
               System Information
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'access' ? 'active' : ''}`}
-              onClick={() => setActiveTab('access')}
-            >
-              Access
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
-              onClick={() => setActiveTab('custom')}
-            >
-              Custom
             </button>
             <button 
               className={`tab-btn ${activeTab === 'time-tracking' ? 'active' : ''}`}
@@ -321,37 +306,32 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'relationships' && (
-              <div>
-                <div style={{ marginBottom: '1rem' }}>
-                  <h4>OTHER RELATIONSHIPS</h4>
-                </div>
-                <div style={{ marginBottom: '2rem' }}>
-                  <h4>Contacts</h4>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ padding: '1.5rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#333', marginBottom: '1rem' }}>Contacts</h4>
+                  <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
                     <div>
-                      <label>CONTACT</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
+                      <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>CONTACT</label>
+                      <input className="form-control" placeholder="<Type then tab>" style={{ width: '200px' }} />
                     </div>
                     <div>
-                      <label>ROLE</label>
-                      <select className="form-control" style={{ width: '200px' }}>
+                      <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>ROLE</label>
+                      <select className="form-control" style={{ width: '150px' }}>
                         <option>Default</option>
                       </select>
                     </div>
                     <div>
-                      <label>VIEW</label>
-                      <select className="form-control" style={{ width: '200px' }}>
+                      <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>VIEW</label>
+                      <select className="form-control" style={{ width: '150px' }}>
                         <option>Default</option>
                       </select>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <button className="btn btn-primary">New Contact</button>
-                    <button className="btn btn-secondary">Attach</button>
-                    <button className="btn btn-secondary">Update Primary</button>
-                    <button className="btn btn-secondary">Customize View</button>
+                  <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                    <button className="btn-toolbar">New Contact</button>
+                    <button className="btn-toolbar">Attach</button>
+                    <button className="btn-toolbar">Update Primary</button>
+                    <button className="btn-toolbar">Customize View</button>
                   </div>
                   <table className="detail-items-table">
                     <thead>
@@ -583,68 +563,337 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'system-info' && (
-              <div>
-                <div className="detail-grid">
-                  <div className="detail-field">
-                    <label>DATE CREATED</label>
-                    <div className="field-value">{vendorData.dateCreated}</div>
+              <div style={{ padding: '1.5rem' }}>
+                <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>DATE CREATED</label>
+                    <div style={{ fontSize: '13px', color: '#333' }}>{vendorData.dateCreated}</div>
                   </div>
-                  <div className="detail-field">
-                    <label>INACTIVE</label>
-                    <div className="field-value">{vendorData.inactive ? 'Yes' : '-'}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input type="checkbox" checked={vendorData.inactive} disabled style={{ width: '18px', height: '18px' }} />
+                    <label style={{ fontSize: '13px', color: '#333', margin: 0 }}>INACTIVE</label>
                   </div>
                 </div>
-                <div style={{ marginTop: '2rem' }}>
-                  <h4>System Notes</h4>
-                  <h4>Active Workflows</h4>
-                  <h4>Workflow History</h4>
-                  <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <label>VIEW</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>Default</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label>FIELD</label>
-                      <select className="form-control" style={{ width: '200px' }}>
-                        <option>&lt;Type then tab&gt;</option>
-                      </select>
-                    </div>
+
+                {/* System Notes Tabs */}
+                <div className="detail-tabs" style={{ marginTop: '1.5rem' }}>
+                  <div className="tabs-header">
+                    <button className="tab-btn active">
+                      System Notes ●
+                    </button>
+                    <button className="tab-btn">
+                      Active Workflows
+                    </button>
+                    <button className="tab-btn">
+                      Workflow History
+                    </button>
                   </div>
-                  <button className="btn btn-secondary">Customize View</button>
-                  <table className="detail-items-table" style={{ marginTop: '1rem' }}>
-                    <thead>
-                      <tr>
-                        <th>DATE</th>
-                        <th>SET BY</th>
-                        <th>CONTEXT</th>
-                        <th>TYPE</th>
-                        <th>FIELD</th>
-                        <th>OLD VALUE</th>
-                        <th>NEW VALUE</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>27/12/2022 3:47 pm</td>
-                        <td>TOM-KARTHIGAI SELVI</td>
-                        <td>UI</td>
-                        <td>Create</td>
-                        <td>Record</td>
-                        <td>Vendor</td>
-                        <td>8879</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="tabs-content" style={{ marginTop: '1rem' }}>
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
+                      <div>
+                        <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>VIEW</label>
+                        <select className="form-control" style={{ width: '150px' }}>
+                          <option>Default</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>FIELD <span style={{ color: 'red' }}>*</span></label>
+                        <input className="form-control" placeholder="<Type then tab>" style={{ width: '200px' }} readOnly />
+                      </div>
+                      <button className="btn-toolbar">Customize View</button>
+                    </div>
+
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th>DATE <span style={{ color: 'red' }}>▼</span></th>
+                          <th>SET BY</th>
+                          <th>CONTEXT</th>
+                          <th>TYPE</th>
+                          <th>FIELD</th>
+                          <th>OLD VALUE</th>
+                          <th>NEW VALUE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>27/12/2022 3:47 pm</td>
+                          <td>TOM -KARTHIGAI SELVI</td>
+                          <td>UI</td>
+                          <td>Create</td>
+                          <td>Record</td>
+                          <td>Vendor</td>
+                          <td>8879</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Other tabs with placeholder content */}
-            {['communication', 'preferences', 'access', 'custom', 'time-tracking'].includes(activeTab) && (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
-                <p>Content for {activeTab} tab will be displayed here.</p>
+            {activeTab === 'communication' && (
+              <div>
+                {/* Communication Sub-tabs */}
+                <div className="detail-tabs">
+                  <div className="tabs-header">
+                    <button 
+                      className={`tab-btn ${communicationActiveTab === 'messages' ? 'active' : ''}`}
+                      onClick={() => setCommunicationActiveTab('messages')}
+                    >
+                      Messages
+                    </button>
+                    <button 
+                      className={`tab-btn ${communicationActiveTab === 'activities' ? 'active' : ''}`}
+                      onClick={() => setCommunicationActiveTab('activities')}
+                    >
+                      Activities
+                    </button>
+                    <button 
+                      className={`tab-btn ${communicationActiveTab === 'files' ? 'active' : ''}`}
+                      onClick={() => setCommunicationActiveTab('files')}
+                    >
+                      Files
+                    </button>
+                    <button 
+                      className={`tab-btn ${communicationActiveTab === 'user-notes' ? 'active' : ''}`}
+                      onClick={() => setCommunicationActiveTab('user-notes')}
+                    >
+                      User Notes
+                    </button>
+                  </div>
+                </div>
+
+                {/* Messages Tab */}
+                {communicationActiveTab === 'messages' && (
+                  <div style={{ padding: '1.5rem' }}>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>VIEW</label>
+                      <select className="form-control" style={{ width: '150px' }}>
+                        <option>Default</option>
+                      </select>
+                    </div>
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                      <button className="btn-toolbar">Attach</button>
+                      <button className="btn-toolbar">Letter</button>
+                      <button className="btn-toolbar">PDF</button>
+                      <button className="btn-toolbar">Fax</button>
+                      <button className="btn-toolbar">View History</button>
+                      <button className="btn-toolbar">Customize View</button>
+                      <button className="btn-toolbar-primary">Email</button>
+                      <button className="btn-toolbar-primary">Refresh</button>
+                    </div>
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>VIEW</th>
+                          <th>DATE</th>
+                          <th>AUTHOR</th>
+                          <th>PRIMARY RECIPIENT</th>
+                          <th>SUBJECT</th>
+                          <th>TYPE</th>
+                          <th>FILES</th>
+                          <th>ATTACHMENTS</th>
+                          <th>INTERNAL ONLY</th>
+                          <th>REMOVE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="11" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                            No records to show.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Activities Tab */}
+                {communicationActiveTab === 'activities' && (
+                  <div style={{ padding: '1.5rem' }}>
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
+                      <div>
+                        <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>VIEW</label>
+                        <select className="form-control" style={{ width: '150px' }}>
+                          <option>Default</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>STATUS</label>
+                        <select className="form-control" style={{ width: '150px' }}>
+                          <option>- All -</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>ACTIVITY TYPE</label>
+                        <select className="form-control" style={{ width: '150px' }}>
+                          <option>- All -</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                      <button className="btn-toolbar">New Task</button>
+                      <button className="btn-toolbar">Log Task</button>
+                      <button className="btn-toolbar">New Phone Call</button>
+                      <button className="btn-toolbar">Log Phone Call</button>
+                      <button className="btn-toolbar">New Event</button>
+                      <button className="btn-toolbar">Log Event</button>
+                      <button className="btn-toolbar">View History</button>
+                      <button className="btn-toolbar">Customize View</button>
+                    </div>
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th>EDIT</th>
+                          <th>TITLE</th>
+                          <th>DATE</th>
+                          <th>TIME</th>
+                          <th>OWNER</th>
+                          <th>STATUS</th>
+                          <th>ASSIGNED TO</th>
+                          <th>TYPE</th>
+                          <th>MARK</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                            No records to show.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Files Tab */}
+                {communicationActiveTab === 'files' && (
+                  <div style={{ padding: '1.5rem' }}>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>ATTACH EXISTING FILES</label>
+                      <input className="form-control" placeholder="<Type then tab>" style={{ width: '300px' }} />
+                    </div>
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                      <button className="btn-toolbar">Attach</button>
+                      <button className="btn-toolbar">New File</button>
+                    </div>
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th>ATTACHED FILES</th>
+                          <th>FOLDER</th>
+                          <th>SIZE (KB)</th>
+                          <th>LAST MODIFIED</th>
+                          <th>DOCUMENT TYPE</th>
+                          <th>REMOVE</th>
+                          <th>EDIT</th>
+                          <th>DOWNLOAD</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                            No records to show.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* User Notes Tab */}
+                {communicationActiveTab === 'user-notes' && (
+                  <div style={{ padding: '1.5rem' }}>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>VIEW</label>
+                      <select className="form-control" style={{ width: '150px' }}>
+                        <option>Default</option>
+                      </select>
+                    </div>
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                      <button className="btn-toolbar">New Note</button>
+                      <button className="btn-toolbar">View History</button>
+                      <button className="btn-toolbar">Customize View</button>
+                    </div>
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th>EDIT</th>
+                          <th>DATE</th>
+                          <th>AUTHOR</th>
+                          <th>TITLE</th>
+                          <th>MEMO</th>
+                          <th>DIRECTION</th>
+                          <th>TYPE</th>
+                          <th>REMOVE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                            No records to show.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'time-tracking' && (
+              <div style={{ padding: '1.5rem' }}>
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>TIME APPROVER</label>
+                  <div style={{ fontSize: '13px', color: '#333' }}>-</div>
+                </div>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
+                  <div>
+                    <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>VIEW</label>
+                    <select className="form-control" style={{ width: '150px' }}>
+                      <option>Default</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>STATUS</label>
+                    <select className="form-control" style={{ width: '150px' }}>
+                      <option>Either</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>APPROVED</label>
+                    <select className="form-control" style={{ width: '150px' }}>
+                      <option>- All -</option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button className="btn-toolbar">New Time</button>
+                  <button className="btn-toolbar">New Weekly Time</button>
+                  <button className="btn-toolbar">Customize View</button>
+                </div>
+                <table className="detail-items-table">
+                  <thead>
+                    <tr>
+                      <th>EDIT</th>
+                      <th>DATE</th>
+                      <th>ITEM</th>
+                      <th>DURATION</th>
+                      <th>APPROVED</th>
+                      <th>STATUS</th>
+                      <th>TYPE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                        No records to show.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             )}
           </div>

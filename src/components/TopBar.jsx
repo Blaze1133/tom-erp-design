@@ -46,7 +46,7 @@ const TopBar = ({ collapsed, setCollapsed, setCurrentPage }) => {
     { name: 'Create Commit Order Schedule', icon: 'fas fa-calendar-alt', category: 'Orders', route: 'create-commit-order-schedule' },
     { name: 'Create Community Contribution Fund', icon: 'fas fa-hands-helping', category: 'HR', route: 'create-community-contribution-fund' },
     { name: 'Create CPF Applied Age Group', icon: 'fas fa-users', category: 'HR', route: 'create-cpf-applied-age-group' },
-    { name: 'Create Custom Delivery Order', icon: 'fas fa-truck', category: 'Delivery', route: 'tom-custom-delivery-order' },
+    { name: 'Create Delivery Order', icon: 'fas fa-truck', category: 'Delivery', route: 'tom-custom-delivery-order' },
     { name: 'Create Customer', icon: 'fas fa-user-plus', category: 'Customers', route: 'create-customer' },
     { name: 'Create Employee', icon: 'fas fa-user-tie', category: 'HR', route: 'create-employee' },
     { name: 'Create Employee Exit', icon: 'fas fa-sign-out-alt', category: 'HR', route: 'create-employee-exit' },
@@ -133,8 +133,8 @@ const TopBar = ({ collapsed, setCollapsed, setCurrentPage }) => {
     // Purchase Requisitions
     { name: 'View Purchase Requisitions', icon: 'fas fa-file-alt', category: 'Purchasing', route: 'view-purchase-requisition' },
     
-    // Custom Delivery Orders
-    { name: 'View Custom Delivery Orders', icon: 'fas fa-truck', category: 'Delivery', route: 'view-tom-custom-delivery-order' },
+    // Delivery Orders
+    { name: 'View Delivery Orders', icon: 'fas fa-truck', category: 'Delivery', route: 'view-tom-custom-delivery-order' },
     
     // Journal Entries
     { name: 'View Journal Entries', icon: 'fas fa-book', category: 'Accounting', route: 'view-journal-entries' },

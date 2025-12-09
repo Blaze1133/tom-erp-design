@@ -27,6 +27,9 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   
+  // Tab state for Items section
+  const [activeTab, setActiveTab] = useState('items');
+  
   // Items state
   const [items, setItems] = useState([
     {
@@ -38,6 +41,9 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
       priceLevel: 'Custom',
       rate: 15.00,
       amount: 60.00,
+      discount: 0,
+      retention: 0,
+      retentionType: '%',
       taxCode: 'GST_SG:7%',
       taxRate: '7.0%',
       taxAmount: 4.20,
@@ -820,62 +826,21 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   <option>TOM: Sales and Marketing</option>
                 </select>
               </div>
-              <div className="detail-field">
-                <label>TAXES AND DUTIES</label>
-                <textarea 
-                  className="form-control"
-                  rows="3"
-                  placeholder="Quotation does not include any applicable foreign taxes and overhead costs such as but not limited to foreign withholding tax, international tax..."
-                  value={formData.taxesAndDuties}
-                  onChange={(e) => handleInputChange('taxesAndDuties', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>VARIATION</label>
-                <textarea 
-                  className="form-control"
-                  rows="3"
-                  placeholder="Variation to this quotation applies to the scope of work as herein specified, any additional work or incurrence of any other costs not..."
-                  value={formData.variation}
-                  onChange={(e) => handleInputChange('variation', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>APPROVAL STATUS</label>
-                <select 
-                  className="form-control"
-                  value={formData.approvalStatus}
-                  onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
-                >
-                  <option>Pending Approval</option>
-                  <option>Approved</option>
-                  <option>Rejected</option>
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>CONTACT PERSON</label>
-                <select 
-                  className="form-control"
-                  value={formData.contactPerson}
-                  onChange={(e) => handleInputChange('contactPerson', e.target.value)}
-                >
-                  <option>Select...</option>
-                  <option>John Smith</option>
-                  <option>Jane Doe</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Items Section */}
-        <div className="detail-section">
-          <div className="section-header">
-            <i className="fas fa-chevron-down"></i>
-            <h3>Items</h3>
+        {/* Items & Additional Information Tabs */}
+        <div className="detail-tabs" style={{ marginTop: '2rem' }}>
+          <div className="tabs-header">
+            <button className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`} onClick={() => setActiveTab('items')}>Items</button>
+            <button className={`tab-btn ${activeTab === 'additional' ? 'active' : ''}`} onClick={() => setActiveTab('additional')}>Additional Information</button>
           </div>
-          <div className="section-body">
-            <div className="items-table-container">
+
+          {/* Items Tab Content */}
+          {activeTab === 'items' && (
+            <div className="tab-content" style={{ padding: '1.5rem' }}>
+            <div className="items-table-container" style={{ marginBottom: '1rem' }}>
               <table className="items-table">
                 <thead>
                   <tr>
@@ -887,6 +852,8 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                     <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
                     <th style={{ minWidth: '100px' }}>RATE</th>
                     <th style={{ minWidth: '100px' }}>AMOUNT</th>
+                    <th style={{ minWidth: '100px' }}>DISCOUNT</th>
+                    <th style={{ minWidth: '180px' }}>RETENTION</th>
                     <th style={{ minWidth: '120px' }}>TAX CODE</th>
                     <th style={{ minWidth: '80px' }}>TAX RATE</th>
                     <th style={{ minWidth: '100px' }}>TAX AMT</th>
@@ -1025,6 +992,41 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                         <strong>${(item.amount || 0).toFixed(2)}</strong>
                       </td>
                       <td>
+                        <input 
+                          type="number" 
+                          className="form-control"
+                          value={item.discount || 0}
+                          onChange={(e) => updateItem(item.id, 'discount', parseFloat(e.target.value) || 0)}
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                          style={{ minWidth: '100px', height: '40px' }}
+                        />
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                          <input 
+                            type="number" 
+                            className="form-control"
+                            value={item.retention || 0}
+                            onChange={(e) => updateItem(item.id, 'retention', parseFloat(e.target.value) || 0)}
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                            style={{ minWidth: '80px', height: '40px', flex: 1 }}
+                          />
+                          <select 
+                            className="form-control"
+                            value={item.retentionType || '%'}
+                            onChange={(e) => updateItem(item.id, 'retentionType', e.target.value)}
+                            style={{ minWidth: '60px', height: '40px', width: '60px' }}
+                          >
+                            <option value="%">%</option>
+                            <option value="$">$</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
                         <select 
                           className="form-control"
                           value={item.taxCode}
@@ -1070,14 +1072,14 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
               </table>
             </div>
             
-            <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '1rem' }}>
               <button className="btn btn-primary" onClick={addItem}>
                 <i className="fas fa-plus"></i>
                 Add Item
               </button>
             </div>
 
-            <div className="summary-grid">
+            <div className="summary-grid" style={{ marginTop: '1rem' }}>
               <div className="summary-card">
                 <div className="summary-title">Subtotal</div>
                 <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
@@ -1095,7 +1097,66 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                 <div className="summary-value" style={{ color: 'var(--red-primary)' }}>${calculateTotal().toFixed(2)}</div>
               </div>
             </div>
-          </div>
+            </div>
+          )}
+
+          {/* Additional Information Tab Content */}
+          {activeTab === 'additional' && (
+            <div className="tab-content" style={{ padding: '1.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>APPROVAL STATUS</label>
+                  <select 
+                    className="form-control"
+                    value={formData.approvalStatus}
+                    onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
+                    style={{ fontSize: '13px' }}
+                  >
+                    <option>Pending Approval</option>
+                    <option>Approved</option>
+                    <option>Rejected</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>CONTACT PERSON</label>
+                  <select 
+                    className="form-control"
+                    value={formData.contactPerson}
+                    onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                    style={{ fontSize: '13px' }}
+                  >
+                    <option>Select...</option>
+                    <option>John Smith</option>
+                    <option>Jane Doe</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>TAXES AND DUTIES</label>
+                <textarea 
+                  className="form-control"
+                  rows="3"
+                  placeholder="Quotation does not include any applicable foreign taxes and overhead costs such as but not limited to foreign withholding tax, international tax..."
+                  value={formData.taxesAndDuties}
+                  onChange={(e) => handleInputChange('taxesAndDuties', e.target.value)}
+                  style={{ width: '100%', resize: 'vertical', fontSize: '13px' }}
+                />
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>VARIATION</label>
+                <textarea 
+                  className="form-control"
+                  rows="3"
+                  placeholder="Variation to this quotation applies to the scope of work as herein specified, any additional work or incurrence of any other costs not..."
+                  value={formData.variation}
+                  onChange={(e) => handleInputChange('variation', e.target.value)}
+                  style={{ width: '100%', resize: 'vertical', fontSize: '13px' }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
