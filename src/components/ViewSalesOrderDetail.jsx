@@ -178,10 +178,6 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <div className="field-value">{orderData.salesRep || '-'}</div>
               </div>
               <div className="detail-field">
-                <label>OPPORTUNITY</label>
-                <div className="field-value">{orderData.opportunity || '-'}</div>
-              </div>
-              <div className="detail-field">
                 <label>SALES EFFECTIVE DATE</label>
                 <div className="field-value">{orderData.salesEffectiveDate}</div>
               </div>

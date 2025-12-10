@@ -743,19 +743,6 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                   </select>
                 </div>
                 <div className="detail-field">
-                  <label className="form-label">Opportunity</label>
-                  <select 
-                    className="form-control"
-                    value={formData.opportunity}
-                    onChange={(e) => handleInputChange('opportunity', e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                    <option>Marine Project 2024</option>
-                    <option>Offshore Platform Build</option>
-                    <option>Ship Repair Contract</option>
-                  </select>
-                </div>
-                <div className="detail-field">
                   <label className="form-label">Sales Effective Date</label>
                   <input 
                     type="date" 

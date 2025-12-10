@@ -390,6 +390,10 @@ const InvoiceDetail = ({ setCurrentPage }) => {
           <i className="fas fa-file-invoice"></i>
           <div>
             <h1>Invoice</h1>
+            <div className="detail-subtitle">
+              <span>I22TOMDQ00001</span>
+              <span>{formData.customer || '18-0317 Sdk Consortium'}</span>
+            </div>
           </div>
         </div>
         <div className="detail-actions">
@@ -434,6 +438,16 @@ const InvoiceDetail = ({ setCurrentPage }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
+              <div className="detail-field">
+                <label>INVOICE #</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value="I22TOMDQ00001"
+                  disabled
+                  style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
+                />
+              </div>
               <div className="detail-field">
                 <label>PO NUMBER</label>
                 <input 
@@ -755,18 +769,6 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                   <option>MEP057 Mahendran S/O Minisamy</option>
                   <option>John Anderson</option>
                   <option>Sarah Chen</option>
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>OPPORTUNITY</label>
-                <select 
-                  className="form-control"
-                  value={formData.opportunity}
-                  onChange={(e) => handleInputChange('opportunity', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  <option>Marine Project 2024</option>
-                  <option>Offshore Platform Build</option>
                 </select>
               </div>
               <div className="detail-field">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
+const EditCustomDeliveryOrder = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
@@ -16,24 +16,49 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const [requestedBySearch, setRequestedBySearch] = useState('');
   const [filteredRequestedBy, setFilteredRequestedBy] = useState([]);
 
-  // Form state
+  // Form state - Pre-filled with existing data
   const [formData, setFormData] = useState({
-    documentNo: 'To Be Generated',
-    shipDate: new Date().toISOString().split('T')[0],
-    location: '',
-    warehouse: '',
+    documentNo: 'DOCTOM00145',
+    shipDate: '2024-07-01',
+    location: 'Singapore (MEP)',
+    warehouse: 'MEP Main Warehouse',
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
-    department: '',
-    class: '',
-    shipMethod: '',
-    termsOfShipment: '',
-    project: '',
-    requestedBy: '',
-    refEntity: '',
-    shippingAddress: '',
-    status: 'Pending Submit',
-    memo: '',
-    items: []
+    department: 'TOM: Logistic',
+    class: 'Material Supply',
+    shipMethod: 'Own Transport',
+    termsOfShipment: 'FOB (Free On Board)',
+    project: 'Marine Equipment Supply - Q1 2024',
+    requestedBy: 'MEP01 001 JEGANATHAN SUNDARAVELU',
+    refEntity: '109 Bintang Mas Shipping Pte Ltd',
+    shippingAddress: '2 Boon Leat Terrace, #08-02\nHarbourside Building 2, Singapore\n119844.',
+    status: 'Delivered',
+    memo: 'Urgent delivery for marine project',
+    items: [
+      {
+        id: 1,
+        itemCode: '12" Divider',
+        itemDescription: '12" Divider',
+        qty: 100,
+        unitType: 'PCS',
+        rate: 25.50,
+        amount: 2550.00,
+        retentionAmount: 255.00,
+        deliveredQty: 100,
+        memo: 'Delivered on time'
+      },
+      {
+        id: 2,
+        itemCode: '110 V Female Connector',
+        itemDescription: '110 V Female Connector',
+        qty: 200,
+        unitType: 'PCS',
+        rate: 15.00,
+        amount: 3000.00,
+        retentionAmount: 300.00,
+        deliveredQty: 200,
+        memo: ''
+      }
+    ]
   });
 
   const subsidiaries = [
@@ -168,13 +193,12 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   };
 
   const handleSave = () => {
-    showToast('Delivery Order saved successfully!', 'success');
+    showToast('Delivery Order updated successfully!', 'success');
   };
 
-  const handleCancel = () => {
-    if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Changes cancelled', 'info');
-      setCurrentPage && setCurrentPage('view-tom-custom-delivery-order');
+  const handleBack = () => {
+    if (setCurrentPage) {
+      setCurrentPage('view-tom-custom-delivery-order');
     }
   };
 
@@ -284,9 +308,9 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
         <div className="detail-title">
           <i className="fas fa-truck"></i>
           <div>
-            <h1>Delivery Order</h1>
+            <h1>Edit Delivery Order</h1>
             <div className="detail-subtitle">
-              <span>To Be Generated</span>
+              <span>{formData.documentNo}</span>
             </div>
           </div>
         </div>
@@ -298,7 +322,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
       </div>
 
       <div className="detail-toolbar">
-        <button className="btn-toolbar" onClick={handleCancel}>
+        <button className="btn-toolbar" onClick={handleBack}>
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
@@ -702,7 +726,10 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                             <button 
                               className="row-actions-btn"
                               title="Row Actions"
-                              onClick={(e) => handleMenuToggle(index, e)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMenuToggle(index, e);
+                              }}
                             >
                               <i className="fas fa-ellipsis-v"></i>
                             </button>
@@ -844,4 +871,4 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   );
 };
 
-export default CreateCustomDeliveryOrder;
+export default EditCustomDeliveryOrder;

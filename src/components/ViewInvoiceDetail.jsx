@@ -100,11 +100,8 @@ const ViewInvoiceDetail = ({ setCurrentPage }) => {
           <div>
             <h1>Invoice</h1>
             <div className="detail-subtitle">
-              <span className="doc-number">{invoiceData.documentNumber}</span>
-              <span style={{ fontSize: '0.9rem' }}>{invoiceData.title}</span>
-              <span className="status-badge" style={{ background: '#4caf50', color: 'white', padding: '4px 12px', borderRadius: '4px' }}>
-                {invoiceData.statusBadge}
-              </span>
+              <span>I22TOMDQ00001</span>
+              <span>{invoiceData.customerProject || '18-0317 Sdk Consortium'}</span>
             </div>
           </div>
         </div>
@@ -157,31 +154,47 @@ const ViewInvoiceDetail = ({ setCurrentPage }) => {
             <div className="detail-grid">
               <div className="detail-field">
                 <label>INVOICE #</label>
-                <div className="field-value">{invoiceData.invoiceNumber}</div>
+                <div className="field-value">I22TOMDQ00001</div>
               </div>
               <div className="detail-field">
-                <label>DUE DATE</label>
-                <div className="field-value">{invoiceData.dueDate}</div>
-              </div>
-              <div className="detail-field" style={{ gridColumn: '1 / -1' }}>
-                <label>CUSTOMER:PROJECT</label>
-                <div className="field-value">{invoiceData.customerProject}</div>
+                <label>PO NUMBER</label>
+                <div className="field-value">{invoiceData.poNumber || '-'}</div>
               </div>
               <div className="detail-field">
-                <label>PO #</label>
-                <div className="field-value">{invoiceData.poNumber}</div>
+                <label>POSTING PERIOD</label>
+                <div className="field-value">Nov 2025</div>
               </div>
               <div className="detail-field">
                 <label>DATE</label>
-                <div className="field-value">{invoiceData.date}</div>
+                <div className="field-value">{invoiceData.date || '-'}</div>
               </div>
               <div className="detail-field">
-                <label>MEMO</label>
-                <div className="field-value">{invoiceData.memo}</div>
+                <label>DUE DATE</label>
+                <div className="field-value">{invoiceData.dueDate || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>CUSTOMER</label>
+                <div className="field-value">18-0317 Sdk Consortium</div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT</label>
+                <div className="field-value">-</div>
               </div>
               <div className="detail-field">
                 <label>START DATE</label>
-                <div className="field-value">{invoiceData.startDate}</div>
+                <div className="field-value">{invoiceData.startDate || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>END DATE</label>
+                <div className="field-value">-</div>
+              </div>
+              <div className="detail-field">
+                <label>CONTACT PERSON</label>
+                <div className="field-value">-</div>
+              </div>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <div className="field-value">{invoiceData.memo || '-'}</div>
               </div>
             </div>
           </div>
@@ -197,15 +210,15 @@ const ViewInvoiceDetail = ({ setCurrentPage }) => {
             <div className="detail-grid">
               <div className="detail-field">
                 <label>SALES REP</label>
-                <div className="field-value">{invoiceData.salesRep}</div>
-              </div>
-              <div className="detail-field">
-                <label>OPPORTUNITY</label>
-                <div className="field-value">{invoiceData.opportunity || '-'}</div>
+                <div className="field-value">{invoiceData.salesRep || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>SALES EFFECTIVE DATE</label>
-                <div className="field-value">{invoiceData.salesEffectiveDate}</div>
+                <div className="field-value">{invoiceData.salesEffectiveDate || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>CREATED FROM</label>
+                <div className="field-value">Sales Order #S2200871</div>
               </div>
             </div>
           </div>

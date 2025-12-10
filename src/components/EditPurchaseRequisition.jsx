@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
+const EditPurchaseRequisition = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+
+  const [isSaved, setIsSaved] = useState(false);
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -16,85 +18,71 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const [requestedBySearch, setRequestedBySearch] = useState('');
   const [filteredRequestedBy, setFilteredRequestedBy] = useState([]);
 
-  // Form state
+  // Form state - Pre-filled with existing data
   const [formData, setFormData] = useState({
-    documentNo: 'To Be Generated',
-    shipDate: new Date().toISOString().split('T')[0],
-    location: '',
-    warehouse: '',
+    requisitionId: 'PR24TEA00145',
+    amount: 4250.00,
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
-    department: '',
-    class: '',
-    shipMethod: '',
-    termsOfShipment: '',
-    project: '',
-    requestedBy: '',
-    refEntity: '',
-    shippingAddress: '',
-    status: 'Pending Submit',
-    memo: '',
-    items: []
+    projectName: 'Marine Equipment Supply - Q1 2024',
+    requestedBy: 'MEP01 001 JEGANATHAN SUNDARAVELU',
+    requestedType: 'Project PR',
+    requireDate: '2024-10-30',
+    currency: 'SGD',
+    exchangeRate: 1.00,
+    date: '2024-10-15',
+    postingPeriod: 'Oct 2024',
+    memo: 'Urgent - Project Alpha Marine Equipment',
+    status: 'Pending Manager Approval',
+    approvalRejectionRemarks: '',
+    items: [
+      {
+        id: 1,
+        itemCategory: 'Mechanical',
+        itemCode: 'HYD-PUMP-500',
+        itemDescription: 'Hydraulic Pump Assembly - High Pressure 500 Bar with Control Valve',
+        unitType: 'PCS',
+        qty: 5,
+        preferredVendor: 'Pacific Marine Supplies Pte Ltd',
+        preferredSequence: '1',
+        unitPrice: 850.00,
+        amount: 4250.00,
+        bidCreated: '',
+        memo: 'Required for offshore platform installation',
+        name: 'Project Alpha - Marine Operations',
+        department: 'Engineering',
+        class: 'Material Supply',
+        poQuantity: '',
+        rclQuantity: ''
+      }
+    ]
   });
 
   const subsidiaries = [
     'Tech Onshore MEP Prefabricators Pte Ltd.',
+    'Tech Electric & Automation Pte Ltd',
     'Tech Marine Offshore (S) Pte Ltd',
-    'TOM Offshore Marine Engineering Pte Ltd',
-    'TOM Shipyard Pte Ltd',
-    'TOM Engineering & Trading Pte Ltd',
-    'TOM Industrial Services Pte Ltd'
+    'Tech Offshore Marine (DQ) Pte Ltd',
+    'Tech Offshore Marine (s) Pte Ltd',
+    'Tech Offshore Marine (SV) Pte Ltd'
   ];
 
-  const departments = [
-    'TOM: Human Resource',
-    'TOM: Finance: Internal Transfer',
-    'TOM: IT',
-    'TOM: Logistic',
-    'TOM: Operating',
-    'TOM: Purchase',
-    'TOM: Sales and Marketing',
-    'TOM: Security'
+  const statusOptions = [
+    'Pending Submit',
+    'Pending to Process PO',
+    'Rejected/Cancelled',
+    'Partial Ordered',
+    'Fully Ordered',
+    'Pending Manager Approval',
+    'Pending Logistic Approval',
+    'Delivered And Closed'
   ];
 
-  const classes = [
-    'Consumable Item',
-    'Electrical',
-    'Fabrication',
-    'Installation work',
-    'Manpower Supply',
-    'Material Supply',
-    'Module /Prefab',
-    'Piping',
-    'Project Works',
-    'Structure'
-  ];
-
-  const locations = [
-    'Hong Hang Shipyard',
-    'Mega yard',
-    'MEP MARINE CC',
-    'Shipyards/Construction',
-    'Singapore (MEP)',
-    'TOM-11',
-    'TOM External Workshop',
-    'TOM-13'
-  ];
-
-  const shipMethods = [
-    'DHL Express',
-    'FedEx International',
-    'UPS Worldwide',
-    'Singapore Post',
-    'Own Transport',
-    'Customer Pickup'
-  ];
-
-  const termsOptions = [
-    'FOB (Free On Board)',
-    'CIF (Cost, Insurance and Freight)',
-    'EXW (Ex Works)',
-    'DDP (Delivered Duty Paid)',
-    'DAP (Delivered At Place)'
+  const requestedTypes = [
+    '- New -',
+    'Project PR',
+    'Department PR',
+    'Enquiry PR',
+    'Store Requisition'
   ];
 
   const projectOptions = [
@@ -113,20 +101,11 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
     'MEP057 Mahendran S/O Minisamy'
   ];
 
-  const statuses = [
-    'Pending Submit',
-    'Pending Update Qty',
-    'Pending Delivery',
-    'Pending Receive',
-    'Delivered',
-    'Rejected'
-  ];
-
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
 
-  const handleInputChange = (field, value) => {
+  const handleFormChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -136,7 +115,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const handleProjectSearchChange = (e) => {
     const value = e.target.value;
     setProjectSearch(value);
-    handleInputChange('project', value);
+    handleFormChange('projectName', value);
     if (value) {
       setFilteredProjects(projectOptions.filter(p => p.toLowerCase().includes(value.toLowerCase())));
     } else {
@@ -145,7 +124,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   };
 
   const handleProjectSelect = (project) => {
-    handleInputChange('project', project);
+    handleFormChange('projectName', project);
     setProjectSearch(project);
     setShowProjectDropdown(false);
   };
@@ -153,7 +132,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const handleRequestedBySearchChange = (e) => {
     const value = e.target.value;
     setRequestedBySearch(value);
-    handleInputChange('requestedBy', value);
+    handleFormChange('requestedBy', value);
     if (value) {
       setFilteredRequestedBy(requestedByOptions.filter(r => r.toLowerCase().includes(value.toLowerCase())));
     } else {
@@ -162,34 +141,41 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   };
 
   const handleRequestedBySelect = (person) => {
-    handleInputChange('requestedBy', person);
+    handleFormChange('requestedBy', person);
     setRequestedBySearch(person);
     setShowRequestedByDropdown(false);
   };
 
-  const handleSave = () => {
-    showToast('Delivery Order saved successfully!', 'success');
+  const handleSaveRequisition = () => {
+    setIsSaved(true);
+    showToast('Purchase Requisition updated successfully!', 'success');
   };
 
-  const handleCancel = () => {
-    if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      showToast('Changes cancelled', 'info');
-      setCurrentPage && setCurrentPage('view-tom-custom-delivery-order');
+  const handleBack = () => {
+    if (setCurrentPage) {
+      setCurrentPage('view-purchase-requisition');
     }
   };
 
   const handleAddItem = () => {
     const newItem = {
       id: formData.items.length + 1,
+      itemCategory: '',
       itemCode: '',
       itemDescription: '',
+      unitType: 'PCS',
       qty: 0,
-      rate: 0.00,
+      preferredVendor: '',
+      preferredSequence: '1',
+      unitPrice: 0.00,
       amount: 0.00,
-      retentionAmount: 0.00,
-      deliveredQty: 0,
+      bidCreated: '',
       memo: '',
-      unitType: 'PCS'
+      name: '',
+      department: '',
+      class: '',
+      poQuantity: '',
+      rclQuantity: ''
     };
     
     setFormData(prev => ({
@@ -233,15 +219,22 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const handleInsertAbove = (index) => {
     const newItem = {
       id: Date.now(),
+      itemCategory: '',
       itemCode: '',
       itemDescription: '',
+      unitType: 'PCS',
       qty: 0,
-      rate: 0.00,
+      preferredVendor: '',
+      preferredSequence: '1',
+      unitPrice: 0.00,
       amount: 0.00,
-      retentionAmount: 0.00,
-      deliveredQty: 0,
+      bidCreated: '',
       memo: '',
-      unitType: 'PCS'
+      name: '',
+      department: '',
+      class: '',
+      poQuantity: '',
+      rclQuantity: ''
     };
     setFormData(prev => ({
       ...prev,
@@ -252,15 +245,22 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const handleInsertBelow = (index) => {
     const newItem = {
       id: Date.now(),
+      itemCategory: '',
       itemCode: '',
       itemDescription: '',
+      unitType: 'PCS',
       qty: 0,
-      rate: 0.00,
+      preferredVendor: '',
+      preferredSequence: '1',
+      unitPrice: 0.00,
       amount: 0.00,
-      retentionAmount: 0.00,
-      deliveredQty: 0,
+      bidCreated: '',
       memo: '',
-      unitType: 'PCS'
+      name: '',
+      department: '',
+      class: '',
+      poQuantity: '',
+      rclQuantity: ''
     };
     setFormData(prev => ({
       ...prev,
@@ -278,31 +278,35 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
     }
   };
 
+  const calculateSubtotal = () => {
+    return formData.items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+  };
+
   return (
     <div className="enquiry-detail">
       <div className="detail-header">
         <div className="detail-title">
-          <i className="fas fa-truck"></i>
+          <i className="fas fa-file-alt"></i>
           <div>
-            <h1>Delivery Order</h1>
+            <h1>Edit Purchase Requisition</h1>
             <div className="detail-subtitle">
-              <span>To Be Generated</span>
+              <span>{formData.requisitionId}</span>
             </div>
           </div>
         </div>
         <div className="detail-actions">
-          <button className="btn-action" onClick={() => setCurrentPage && setCurrentPage('view-tom-custom-delivery-order')}>List</button>
+          <button className="btn-action">List</button>
           <button className="btn-action">Search</button>
           <button className="btn-action">Customize</button>
         </div>
       </div>
 
       <div className="detail-toolbar">
-        <button className="btn-toolbar" onClick={handleCancel}>
+        <button className="btn-toolbar" onClick={handleBack}>
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar-primary" onClick={handleSave}>
+        <button className="btn-toolbar-primary" onClick={handleSaveRequisition}>
           <i className="fas fa-save"></i>
           Save
         </button>
@@ -319,118 +323,123 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>DOCUMENT NO</label>
+                <label>REQUISITION ID</label>
                 <input 
                   type="text" 
                   className="form-control"
-                  value={formData.documentNo}
+                  value={formData.requisitionId}
                   disabled
                   style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                 />
               </div>
               <div className="detail-field">
-                <label>SHIP DATE <span className="required">*</span></label>
-                <input 
-                  type="date" 
+                <label>CURRENCY *</label>
+                <select 
                   className="form-control"
-                  value={formData.shipDate}
-                  onChange={(e) => handleInputChange('shipDate', e.target.value)}
+                  value={formData.currency}
+                  onChange={(e) => handleFormChange('currency', e.target.value)}
+                >
+                  <option>SGD</option>
+                  <option>USD</option>
+                  <option>EUR</option>
+                  <option>GBP</option>
+                  <option>INR</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>POSTING PERIOD</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.postingPeriod}
+                  onChange={(e) => handleFormChange('postingPeriod', e.target.value)}
                 />
               </div>
               <div className="detail-field">
-                <label>LOCATION</label>
+                <label>EXCHANGE RATE *</label>
+                <input 
+                  type="number" 
+                  className="form-control"
+                  step="0.01"
+                  value={formData.exchangeRate}
+                  onChange={(e) => handleFormChange('exchangeRate', parseFloat(e.target.value) || 1.00)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>AMOUNT</label>
+                <input 
+                  type="number" 
+                  className="form-control"
+                  value={calculateSubtotal().toFixed(2)}
+                  disabled
+                />
+              </div>
+              <div className="detail-field">
+                <label>DATE *</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.date}
+                  onChange={(e) => handleFormChange('date', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>STATUS *</label>
                 <select 
                   className="form-control"
-                  value={formData.location}
-                  onChange={(e) => handleInputChange('location', e.target.value)}
+                  value={formData.status}
+                  onChange={(e) => handleFormChange('status', e.target.value)}
                 >
-                  <option value="">Select...</option>
-                  {locations.map((loc, index) => (
-                    <option key={index} value={loc}>{loc}</option>
+                  {statusOptions.map((status, index) => (
+                    <option key={index} value={status}>{status}</option>
                   ))}
                 </select>
               </div>
               <div className="detail-field">
-                <label>WAREHOUSE/LOCATION</label>
-                <input 
-                  type="text" 
+                <label>MEMO</label>
+                <textarea 
                   className="form-control"
-                  value={formData.warehouse}
-                  onChange={(e) => handleInputChange('warehouse', e.target.value)}
-                  placeholder="Warehouse fulfilling the order"
+                  rows="3"
+                  value={formData.memo}
+                  onChange={(e) => handleFormChange('memo', e.target.value)}
+                  placeholder="Enter memo"
+                  style={{ resize: 'vertical' }}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+
+        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+
+        {/* Classification */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
               <div className="detail-field">
-                <label>SUBSIDIARY <span className="required">*</span></label>
+                <label>SUBSIDIARY *</label>
                 <select 
                   className="form-control"
                   value={formData.subsidiary}
-                  onChange={(e) => handleInputChange('subsidiary', e.target.value)}
+                  onChange={(e) => handleFormChange('subsidiary', e.target.value)}
                 >
+                  <option value="">Select...</option>
                   {subsidiaries.map((sub, index) => (
                     <option key={index} value={sub}>{sub}</option>
                   ))}
                 </select>
               </div>
-              <div className="detail-field">
-                <label>DEPARTMENT</label>
-                <select 
-                  className="form-control"
-                  value={formData.department}
-                  onChange={(e) => handleInputChange('department', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  {departments.map((dept, index) => (
-                    <option key={index} value={dept}>{dept}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>CLASS</label>
-                <select 
-                  className="form-control"
-                  value={formData.class}
-                  onChange={(e) => handleInputChange('class', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  {classes.map((cls, index) => (
-                    <option key={index} value={cls}>{cls}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>SHIP METHOD</label>
-                <select 
-                  className="form-control"
-                  value={formData.shipMethod}
-                  onChange={(e) => handleInputChange('shipMethod', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  {shipMethods.map((method, index) => (
-                    <option key={index} value={method}>{method}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>TERMS OF SHIPMENT</label>
-                <select 
-                  className="form-control"
-                  value={formData.termsOfShipment}
-                  onChange={(e) => handleInputChange('termsOfShipment', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  {termsOptions.map((term, index) => (
-                    <option key={index} value={term}>{term}</option>
-                  ))}
-                </select>
-              </div>
               <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 10001 : 'auto' }}>
-                <label>PROJECT</label>
+                <label>PROJECT NAME</label>
                 <div style={{ position: 'relative' }}>
                   <input 
                     type="text"
                     className="form-control"
-                    value={formData.project}
+                    value={formData.projectName}
                     onChange={handleProjectSearchChange}
                     onFocus={() => setShowProjectDropdown(true)}
                     placeholder="<Type then tab>"
@@ -448,10 +457,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                       padding: '4px 8px',
                       fontSize: '14px'
                     }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowProjectDropdown(!showProjectDropdown);
-                    }}
+                    onClick={() => setShowProjectDropdown(!showProjectDropdown)}
                   >
                     <i className="fas fa-chevron-down"></i>
                   </button>
@@ -485,10 +491,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                         {(filteredProjects.length > 0 ? filteredProjects : projectOptions).map((project, idx) => (
                           <div 
                             key={idx}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleProjectSelect(project);
-                            }}
+                            onClick={() => handleProjectSelect(project)}
                             style={{ 
                               padding: '10px 12px', 
                               cursor: 'pointer', 
@@ -510,6 +513,15 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                     </>
                   )}
                 </div>
+              </div>
+              <div className="detail-field">
+                <label>APPROVAL REJECTION REMARKS</label>
+                <textarea 
+                  className="form-control"
+                  rows="2"
+                  value={formData.approvalRejectionRemarks}
+                  onChange={(e) => handleFormChange('approvalRejectionRemarks', e.target.value)}
+                />
               </div>
               <div className="detail-field" style={{ position: 'relative', zIndex: showRequestedByDropdown ? 10001 : 'auto' }}>
                 <label>REQUESTED BY</label>
@@ -535,10 +547,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                       padding: '4px 8px',
                       fontSize: '14px'
                     }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowRequestedByDropdown(!showRequestedByDropdown);
-                    }}
+                    onClick={() => setShowRequestedByDropdown(!showRequestedByDropdown)}
                   >
                     <i className="fas fa-chevron-down"></i>
                   </button>
@@ -572,10 +581,7 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                         {(filteredRequestedBy.length > 0 ? filteredRequestedBy : requestedByOptions).map((person, idx) => (
                           <div 
                             key={idx}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRequestedBySelect(person);
-                            }}
+                            onClick={() => handleRequestedBySelect(person)}
                             style={{ 
                               padding: '10px 12px', 
                               cursor: 'pointer', 
@@ -599,61 +605,24 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                 </div>
               </div>
               <div className="detail-field">
-                <label>REF ENTITY</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.refEntity}
-                  onChange={(e) => handleInputChange('refEntity', e.target.value)}
-                  placeholder="Reference entity"
-                />
-              </div>
-              <div className="detail-field">
-                <label>STATUS</label>
+                <label>REQUESTED TYPE</label>
                 <select 
                   className="form-control"
-                  value={formData.status}
-                  onChange={(e) => handleInputChange('status', e.target.value)}
+                  value={formData.requestedType}
+                  onChange={(e) => handleFormChange('requestedType', e.target.value)}
                 >
-                  {statuses.map((status, index) => (
-                    <option key={index} value={status}>{status}</option>
+                  {requestedTypes.map((type, index) => (
+                    <option key={index} value={type}>{type}</option>
                   ))}
                 </select>
               </div>
-              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
-                <label>MEMO</label>
-                <textarea 
+              <div className="detail-field">
+                <label>REQUIRE DATE</label>
+                <input 
+                  type="date" 
                   className="form-control"
-                  rows="3"
-                  value={formData.memo}
-                  onChange={(e) => handleInputChange('memo', e.target.value)}
-                  placeholder="Enter memo"
-                  style={{ resize: 'vertical', maxWidth: '70%' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
-        {/* Shipping Address */}
-        <div className="detail-section">
-          <div className="section-header">
-            <i className="fas fa-chevron-down"></i>
-            <h3>Shipping Address</h3>
-          </div>
-          <div className="section-body">
-            <div className="detail-grid">
-              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
-                <label>SHIPPING ADDRESS</label>
-                <textarea 
-                  className="form-control"
-                  rows="4"
-                  value={formData.shippingAddress}
-                  onChange={(e) => handleInputChange('shippingAddress', e.target.value)}
-                  placeholder="Enter shipping address"
-                  style={{ resize: 'vertical' }}
+                  value={formData.requireDate}
+                  onChange={(e) => handleFormChange('requireDate', e.target.value)}
                 />
               </div>
             </div>
@@ -666,28 +635,35 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
         <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>
-            <h3>Items</h3>
+            <h3>Lines</h3>
           </div>
           <div className="section-body">
             {formData.items.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                <p>No items added yet. Click "Add Item" to start adding items to this delivery order.</p>
+                <p>No items added yet. Click "Add Item" to start adding items to this requisition.</p>
               </div>
             ) : (
               <div style={{ overflowX: 'auto' }}>
-                <table className="detail-items-table" style={{ minWidth: '1800px' }}>
+                <table className="detail-items-table" style={{ minWidth: '2000px' }}>
                   <thead>
                     <tr>
                       <th style={{ width: '40px' }}></th>
+                      <th>ITEM CATEGORY</th>
                       <th>ITEM CODE</th>
                       <th>ITEM DESCRIPTION</th>
-                      <th>QTY</th>
                       <th>UNIT TYPE</th>
-                      <th>RATE</th>
+                      <th>QTY</th>
+                      <th>PREFERRED VENDOR</th>
+                      <th>PREFERRED SEQUENCE</th>
+                      <th>UNIT PRICE</th>
                       <th>AMOUNT</th>
-                      <th>RETENTION AMOUNT</th>
-                      <th>DELIVERED QTY</th>
+                      <th>BID CREATED</th>
                       <th>MEMO</th>
+                      <th>NAME</th>
+                      <th>DEPARTMENT</th>
+                      <th>CLASS</th>
+                      <th>PO QUANTITY</th>
+                      <th>RCL QUANTITY</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -744,6 +720,14 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                           <input 
                             type="text" 
                             className="form-control" 
+                            defaultValue={item.itemCategory} 
+                            style={{ minWidth: '150px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text" 
+                            className="form-control" 
                             defaultValue={item.itemCode} 
                             style={{ minWidth: '150px', height: '40px' }} 
                           />
@@ -754,14 +738,6 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                             defaultValue={item.itemDescription} 
                             style={{ minWidth: '250px', minHeight: '40px', resize: 'vertical' }} 
                             rows="2"
-                          />
-                        </td>
-                        <td>
-                          <input 
-                            type="number" 
-                            className="form-control" 
-                            defaultValue={item.qty} 
-                            style={{ minWidth: '80px', height: '40px' }} 
                           />
                         </td>
                         <td>
@@ -777,7 +753,31 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                           <input 
                             type="number" 
                             className="form-control" 
-                            defaultValue={item.rate} 
+                            defaultValue={item.qty} 
+                            style={{ minWidth: '80px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            defaultValue={item.preferredVendor} 
+                            style={{ minWidth: '200px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            defaultValue={item.preferredSequence} 
+                            style={{ minWidth: '100px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="number" 
+                            className="form-control" 
+                            defaultValue={item.unitPrice} 
                             step="0.01"
                             style={{ minWidth: '120px', height: '40px' }} 
                           />
@@ -793,18 +793,9 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                         </td>
                         <td>
                           <input 
-                            type="number" 
+                            type="text" 
                             className="form-control" 
-                            defaultValue={item.retentionAmount} 
-                            step="0.01"
-                            style={{ minWidth: '150px', height: '40px' }} 
-                          />
-                        </td>
-                        <td>
-                          <input 
-                            type="number" 
-                            className="form-control" 
-                            defaultValue={item.deliveredQty} 
+                            defaultValue={item.bidCreated} 
                             style={{ minWidth: '120px', height: '40px' }} 
                           />
                         </td>
@@ -814,6 +805,60 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                             defaultValue={item.memo} 
                             style={{ minWidth: '200px', minHeight: '40px', resize: 'vertical' }} 
                             rows="2"
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            defaultValue={item.name} 
+                            style={{ minWidth: '200px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            defaultValue={item.department} 
+                            style={{ minWidth: '150px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <select className="form-control" defaultValue={item.class} style={{ minWidth: '150px', height: '40px' }}>
+                            <option value="">Select...</option>
+                            <option>Consumable Item</option>
+                            <option>Course</option>
+                            <option>Cutting Works</option>
+                            <option>Electrical</option>
+                            <option>Fabrication</option>
+                            <option>Hydrotesting</option>
+                            <option>Installation work</option>
+                            <option>Manpower Supply</option>
+                            <option>Material Supply</option>
+                            <option>Module /Prefab</option>
+                            <option>Piping</option>
+                            <option>Project Works</option>
+                            <option>Refurbishment works</option>
+                            <option>Rental</option>
+                            <option>Repair & Referable</option>
+                            <option>Sale of Scrap Metal</option>
+                            <option>Structure</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            defaultValue={item.poQuantity} 
+                            style={{ minWidth: '100px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            defaultValue={item.rclQuantity} 
+                            style={{ minWidth: '100px', height: '40px' }} 
                           />
                         </td>
                       </tr>
@@ -844,4 +889,4 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   );
 };
 
-export default CreateCustomDeliveryOrder;
+export default EditPurchaseRequisition;

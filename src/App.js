@@ -41,11 +41,13 @@ import ApproveVendorReturns from './components/ApproveVendorReturns';
 import ShipVendorReturns from './components/ShipVendorReturns';
 import ViewPurchaseRequisitions from './components/ViewPurchaseRequisitions';
 import CreatePurchaseRequisition from './components/CreatePurchaseRequisition';
+import EditPurchaseRequisition from './components/EditPurchaseRequisition';
 import ViewPurchaseRequisitionDetail from './components/ViewPurchaseRequisitionDetail';
 import OrderRequisitions from './components/OrderRequisitions';
 import ViewCustomDeliveryOrders from './components/ViewCustomDeliveryOrders';
 import ViewCustomDeliveryOrderDetail from './components/ViewCustomDeliveryOrderDetail';
 import CreateCustomDeliveryOrder from './components/CreateCustomDeliveryOrder';
+import EditCustomDeliveryOrder from './components/EditCustomDeliveryOrder';
 import MakeJournalEntries from './components/MakeJournalEntries';
 import ViewJournalEntries from './components/ViewJournalEntries';
 import ViewJournalDetail from './components/ViewJournalDetail';
@@ -517,11 +519,11 @@ function App() {
           onEdit={() => setCurrentPage('edit-purchase-requisition')}
         />;
       case 'edit-purchase-requisition':
-        return <CreatePurchaseRequisition />;
+        return <EditPurchaseRequisition setCurrentPage={setCurrentPage} />;
       case 'order-requisition':
         return <OrderRequisitions />;
       case 'tom-custom-delivery-order':
-        return <CreateCustomDeliveryOrder />;
+        return <CreateCustomDeliveryOrder setCurrentPage={setCurrentPage} />;
       case 'view-tom-custom-delivery-order':
         return <ViewCustomDeliveryOrders 
           onNewClick={() => setCurrentPage('tom-custom-delivery-order')} 
@@ -534,7 +536,7 @@ function App() {
           onEdit={() => setCurrentPage('edit-tom-custom-delivery-order')}
         />;
       case 'edit-tom-custom-delivery-order':
-        return <CreateCustomDeliveryOrder />;
+        return <EditCustomDeliveryOrder setCurrentPage={setCurrentPage} />;
       case 'chart-of-accounts':
         return <div style={{ padding: '30px' }}><h1>Chart of Accounts - Coming Soon</h1></div>;
       case 'make-journal-entries':

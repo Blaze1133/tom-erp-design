@@ -12,7 +12,7 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
   const requisitionData = {
     documentNumber: 'PR24TEA00145',
     status: 'PENDING MANAGER APPROVAL',
-    entryNo: 'PR24TEA00145',
+    requisitionId: 'PR24TEA00145',
     amount: 4250.00,
     currency: 'SGD',
     exchangeRate: 1.00,
@@ -21,8 +21,8 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
     memo: 'Urgent - Project Alpha Marine Equipment',
     statusDetail: 'Pending Manager Approval',
     subsidiary: 'Tech Electric & Automation Pte Ltd',
-    refProjectNo: 'PROJ-2024-ALPHA-001',
-    requestedBy: 'John Anderson - Procurement Manager',
+    projectName: 'Marine Equipment Supply - Q1 2024',
+    requestedBy: 'MEP01 001 JEGANATHAN SUNDARAVELU',
     requestedType: 'Project PR',
     requireDate: '30/10/2024',
     approvalRejectionRemarks: '',
@@ -150,16 +150,20 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>ENTRY NO.</label>
-                <div className="field-value">{requisitionData.entryNo}</div>
+                <label>REQUISITION ID</label>
+                <div className="field-value">{requisitionData.requisitionId}</div>
+              </div>
+              <div className="detail-field">
+                <label>CURRENCY</label>
+                <div className="field-value">{requisitionData.currency}</div>
+              </div>
+              <div className="detail-field">
+                <label>POSTING PERIOD</label>
+                <div className="field-value">{requisitionData.postingPeriod || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>EXCHANGE RATE</label>
                 <div className="field-value">{requisitionData.exchangeRate.toFixed(2)}</div>
-              </div>
-              <div className="detail-field">
-                <label>MEMO</label>
-                <div className="field-value">{requisitionData.memo || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>AMOUNT</label>
@@ -174,12 +178,8 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{requisitionData.statusDetail}</div>
               </div>
               <div className="detail-field">
-                <label>CURRENCY</label>
-                <div className="field-value">{requisitionData.currency}</div>
-              </div>
-              <div className="detail-field">
-                <label>POSTING PERIOD</label>
-                <div className="field-value">{requisitionData.postingPeriod || '-'}</div>
+                <label>MEMO</label>
+                <div className="field-value">{requisitionData.memo || '-'}</div>
               </div>
             </div>
           </div>
@@ -198,8 +198,8 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{requisitionData.subsidiary}</div>
               </div>
               <div className="detail-field">
-                <label>REF PROJECT NO.</label>
-                <div className="field-value">{requisitionData.refProjectNo || '-'}</div>
+                <label>PROJECT NAME</label>
+                <div className="field-value">{requisitionData.projectName || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>APPROVAL REJECTION REMARKS</label>
