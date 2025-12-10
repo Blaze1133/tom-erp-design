@@ -25,6 +25,10 @@ import ViewInvoiceDetail from './components/ViewInvoiceDetail';
 import EnterCashSales from './components/EnterCashSales';
 import ViewCashSales from './components/ViewCashSales';
 import EditCashSale from './components/EditCashSale';
+import CreateDeliveryOrder from './components/CreateDeliveryOrder';
+import ViewDeliveryOrders from './components/ViewDeliveryOrders';
+import ViewDeliveryOrderDetail from './components/ViewDeliveryOrderDetail';
+import EditDeliveryOrder from './components/EditDeliveryOrder';
 import EnterPurchaseOrders from './components/EnterPurchaseOrders';
 import ViewPurchaseOrders from './components/ViewPurchaseOrders';
 import ViewPurchaseOrderDetail from './components/ViewPurchaseOrderDetail';
@@ -471,6 +475,14 @@ function App() {
         return <ViewCashSales setCurrentPage={setCurrentPage} />;
       case 'edit-cash-sale':
         return <EditCashSale setCurrentPage={setCurrentPage} />;
+      case 'create-delivery-order':
+        return <CreateDeliveryOrder setCurrentPage={setCurrentPage} />;
+      case 'view-delivery-orders':
+        return <ViewDeliveryOrders setCurrentPage={setCurrentPage} />;
+      case 'view-delivery-order-detail':
+        return <ViewDeliveryOrderDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-delivery-order':
+        return <EditDeliveryOrder setCurrentPage={setCurrentPage} />;
       case 'enter-purchase-orders':
         return <EnterPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'view-purchase-orders':

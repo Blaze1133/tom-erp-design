@@ -435,17 +435,14 @@ const InvoiceDetail = ({ setCurrentPage }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>CUSTOM FORM <span className="required">*</span></label>
-                <select 
+                <label>PO NUMBER</label>
+                <input 
+                  type="text" 
                   className="form-control"
-                  value={formData.customForm}
-                  onChange={(e) => handleInputChange('customForm', e.target.value)}
-                >
-                  <option>TOM Service Invoice</option>
-                  <option>TOM Debit Note</option>
-                  <option>TOM Jurong Port Service Invoice</option>
-                  <option>TOM Letterhead Invoice</option>
-                </select>
+                  value={formData.poNumber}
+                  onChange={(e) => handleInputChange('poNumber', e.target.value)}
+                  placeholder="Enter PO number"
+                />
               </div>
               <div className="detail-field">
                 <label>POSTING PERIOD <span className="required">*</span></label>
@@ -683,16 +680,6 @@ const InvoiceDetail = ({ setCurrentPage }) => {
                     </button>
                   )}
                 </div>
-              </div>
-              <div className="detail-field">
-                <label>PO NUMBER</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.poNumber}
-                  onChange={(e) => handleInputChange('poNumber', e.target.value)}
-                  placeholder="Enter PO number"
-                />
               </div>
               <div className="detail-field">
                 <label>START DATE</label>

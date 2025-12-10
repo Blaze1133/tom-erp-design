@@ -468,6 +468,24 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   <option>Expired</option>
                 </select>
               </div>
+              <div className="detail-field">
+                <label>CURRENCY</label>
+                <select 
+                  className="form-control"
+                  value={formData.currency || 'SGD'}
+                  onChange={(e) => handleInputChange('currency', e.target.value)}
+                >
+                  <option value="SGD">SGD - Singapore Dollar</option>
+                  <option value="USD">USD - US Dollar</option>
+                  <option value="EUR">EUR - Euro</option>
+                  <option value="GBP">GBP - British Pound</option>
+                  <option value="JPY">JPY - Japanese Yen</option>
+                  <option value="AUD">AUD - Australian Dollar</option>
+                  <option value="CNY">CNY - Chinese Yuan</option>
+                  <option value="MYR">MYR - Malaysian Ringgit</option>
+                  <option value="INR">INR - Indian Rupee</option>
+                </select>
+              </div>
               <div className="detail-field" style={{ position: 'relative', zIndex: showCustomerDropdown ? 10001 : 'auto' }}>
                 <label className="form-label required">Customer</label>
                 <div 
