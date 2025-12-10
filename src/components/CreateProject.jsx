@@ -46,7 +46,7 @@ const CreateProject = ({ setCurrentPage }) => {
   const [projectSearch, setProjectSearch] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
 
-  // Sales Person searchable dropdown state
+  // Sales Representative searchable dropdown state
   const [salesPersonSearch, setSalesPersonSearch] = useState('');
   const [salesPersonDropdownOpen, setSalesPersonDropdownOpen] = useState(false);
   
@@ -76,7 +76,7 @@ const CreateProject = ({ setCurrentPage }) => {
     '1005 TECH OFFSHORE MARINE (SV) PTE LTD'
   ];
 
-  // Sales Person options
+  // Sales Representative options
   const salesPersonOptions = [
     { id: 'TD0059', name: 'TD0059 Kumarasamy Madhavan Subash' },
     { id: 'TSV025', name: 'TSV025 Sasapu Venkateshwara Rao' },
@@ -108,7 +108,7 @@ const CreateProject = ({ setCurrentPage }) => {
   const priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
 
 
-  // Filter sales person options based on search
+  // Filter sales representative options based on search
   const filteredSalesPersons = salesPersonOptions.filter(person =>
     person.name.toLowerCase().includes(salesPersonSearch.toLowerCase())
   );
@@ -208,14 +208,14 @@ const CreateProject = ({ setCurrentPage }) => {
     showToast('New project added successfully!', 'success');
   };
 
-  // Handle sales person selection
+  // Handle sales representative selection
   const handleSalesPersonSelect = (person) => {
     handleFormChange('salesPerson', person.name);
     setSalesPersonSearch(person.name);
     setSalesPersonDropdownOpen(false);
   };
 
-  // Handle sales person search input
+  // Handle sales representative search input
   const handleSalesPersonSearchChange = (e) => {
     setSalesPersonSearch(e.target.value);
     setSalesPersonDropdownOpen(true);
@@ -602,9 +602,9 @@ const CreateProject = ({ setCurrentPage }) => {
                 </div>
               </div>
 
-            {/* Sales Person Searchable Dropdown */}
-            <div className="detail-field" ref={salesPersonDropdownRef}>
-              <label>SALES PERSON <span style={{ color: 'red' }}>*</span></label>
+            {/* Sales Representative Searchable Dropdown */}
+            <div className="detail-field" ref={salesPersonDropdownRef} style={{ position: 'relative', zIndex: salesPersonDropdownOpen ? 1001 : 1 }}>
+              <label>SALES REPRESENTATIVE <span style={{ color: 'red' }}>*</span></label>
               <div className="searchable-input-wrapper">
                 <input
                   type="text"
@@ -612,7 +612,7 @@ const CreateProject = ({ setCurrentPage }) => {
                   onChange={handleSalesPersonSearchChange}
                   onFocus={() => setSalesPersonDropdownOpen(true)}
                   className="form-control"
-                  placeholder="Search sales person..."
+                  placeholder="Search sales representative..."
                   required
                 />
                 <i className="fas fa-search search-icon"></i>
@@ -630,7 +630,7 @@ const CreateProject = ({ setCurrentPage }) => {
                       ))
                     ) : (
                       <div className="searchable-dropdown-item no-results">
-                        No sales person found
+                        No sales representative found
                       </div>
                     )}
                   </div>
@@ -639,7 +639,7 @@ const CreateProject = ({ setCurrentPage }) => {
             </div>
 
             {/* Project Manager Searchable Dropdown */}
-            <div className="detail-field" ref={projectManagerDropdownRef}>
+            <div className="detail-field" ref={projectManagerDropdownRef} style={{ position: 'relative', zIndex: projectManagerDropdownOpen ? 1001 : 1 }}>
               <label>PROJECT MANAGER <span style={{ color: 'red' }}>*</span></label>
               <div className="searchable-input-wrapper">
                 <input

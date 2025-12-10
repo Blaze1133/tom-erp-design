@@ -12,6 +12,9 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
   const requisitionData = {
     documentNumber: 'PR24TEA00145',
     status: 'PENDING MANAGER APPROVAL',
+    prId: 'PR24TEA00145',
+    project: 'Marine Equipment Supply - Q1 2024',
+    projectManager: 'John Tan',
     requisitionId: 'PR24TEA00145',
     amount: 4250.00,
     currency: 'SGD',
@@ -150,8 +153,16 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>REQUISITION ID</label>
-                <div className="field-value">{requisitionData.requisitionId}</div>
+                <label>PR ID</label>
+                <div className="field-value">{requisitionData.prId}</div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT</label>
+                <div className="field-value" style={{ color: 'var(--blue-accent)', cursor: 'pointer' }}>{requisitionData.project}</div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT MANAGER</label>
+                <div className="field-value">{requisitionData.projectManager}</div>
               </div>
               <div className="detail-field">
                 <label>CURRENCY</label>
@@ -198,16 +209,8 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{requisitionData.subsidiary}</div>
               </div>
               <div className="detail-field">
-                <label>PROJECT NAME</label>
-                <div className="field-value">{requisitionData.projectName || '-'}</div>
-              </div>
-              <div className="detail-field">
                 <label>APPROVAL REJECTION REMARKS</label>
                 <div className="field-value">{requisitionData.approvalRejectionRemarks || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>REQUESTED BY</label>
-                <div className="field-value">{requisitionData.requestedBy || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>REQUESTED TYPE</label>
@@ -271,13 +274,13 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
                       <th>ITEM UNIT PRICE</th>
                       <th>AMOUNT</th>
                       <th>BID CREATED</th>
-                      <th>MEMO</th>
                       <th>NAME</th>
                       <th>DEPARTMENT</th>
                       <th>CLASS</th>
                       <th>PO QUANTITY</th>
                       <th>RCL QUANTITY</th>
                       <th>HISTORY</th>
+                      <th>MEMO</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -292,7 +295,6 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
                         <td className="amount">{item.unitPrice.toFixed(2)}</td>
                         <td className="amount">{item.amount.toFixed(2)}</td>
                         <td>{item.bidCreated}</td>
-                        <td>{item.memo}</td>
                         <td>{item.name}</td>
                         <td>{item.department}</td>
                         <td>{item.class}</td>
@@ -303,6 +305,7 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
                             <button className="view-link">History</button>
                           )}
                         </td>
+                        <td>{item.memo}</td>
                       </tr>
                     ))}
                   </tbody>

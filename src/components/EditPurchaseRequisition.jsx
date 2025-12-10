@@ -20,6 +20,9 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
 
   // Form state - Pre-filled with existing data
   const [formData, setFormData] = useState({
+    prId: 'PR24TEA00145',
+    project: 'Marine Equipment Supply - Q1 2024',
+    projectManager: 'John Tan',
     requisitionId: 'PR24TEA00145',
     amount: 4250.00,
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
@@ -81,7 +84,6 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
     '- New -',
     'Project PR',
     'Department PR',
-    'Enquiry PR',
     'Store Requisition'
   ];
 
@@ -153,6 +155,12 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
 
   const handleBack = () => {
     if (setCurrentPage) {
+      setCurrentPage('view-purchase-requisition-detail');
+    }
+  };
+
+  const handleList = () => {
+    if (setCurrentPage) {
       setCurrentPage('view-purchase-requisition');
     }
   };
@@ -203,18 +211,12 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
   useEffect(() => {
     const handleClickOutside = () => {
       setActiveMenu(null);
-      if (showProjectDropdown) {
-        setShowProjectDropdown(false);
-      }
-      if (showRequestedByDropdown) {
-        setShowRequestedByDropdown(false);
-      }
     };
-    if (activeMenu !== null || showProjectDropdown || showRequestedByDropdown) {
+    if (activeMenu !== null) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
-  }, [activeMenu, showProjectDropdown, showRequestedByDropdown]);
+  }, [activeMenu]);
 
   const handleInsertAbove = (index) => {
     const newItem = {
@@ -295,9 +297,18 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
           </div>
         </div>
         <div className="detail-actions">
-          <button className="btn-action">List</button>
-          <button className="btn-action">Search</button>
-          <button className="btn-action">Customize</button>
+          <button className="btn-action" onClick={handleList}>
+            <i className="fas fa-list"></i>
+            List
+          </button>
+          <button className="btn-action">
+            <i className="fas fa-search"></i>
+            Search
+          </button>
+          <button className="btn-action">
+            <i className="fas fa-cog"></i>
+            Customize
+          </button>
         </div>
       </div>
 
@@ -323,11 +334,140 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>REQUISITION ID</label>
+                <label>PR ID *</label>
                 <input 
                   type="text" 
                   className="form-control"
-                  value={formData.requisitionId}
+                  value={formData.prId}
+                  onChange={(e) => handleFormChange('prId', e.target.value)}
+                />
+              </div>
+              <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 1001 : 1 }}>
+                <label>PROJECT *</label>
+                <div style={{ position: 'relative' }}>
+                  <input 
+                    type="text"
+                    className="form-control"
+                    value={formData.project}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleFormChange('project', value);
+                      if (value) {
+                        setFilteredProjects(projectOptions.filter(p => p.toLowerCase().includes(value.toLowerCase())));
+                        setShowProjectDropdown(true);
+                      } else {
+                        setFilteredProjects([]);
+                        setShowProjectDropdown(false);
+                      }
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (formData.project) {
+                        setFilteredProjects(projectOptions.filter(p => p.toLowerCase().includes(formData.project.toLowerCase())));
+                      }
+                      setShowProjectDropdown(true);
+                    }}
+                    onFocus={(e) => {
+                      e.stopPropagation();
+                      if (formData.project) {
+                        setFilteredProjects(projectOptions.filter(p => p.toLowerCase().includes(formData.project.toLowerCase())));
+                      }
+                      setShowProjectDropdown(true);
+                    }}
+                    placeholder="Type to search..."
+                  />
+                  <button 
+                    type="button"
+                    style={{ 
+                      position: 'absolute', 
+                      right: '8px', 
+                      top: '50%', 
+                      transform: 'translateY(-50%)', 
+                      background: 'transparent', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      padding: '4px 8px',
+                      fontSize: '14px'
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowProjectDropdown(!showProjectDropdown);
+                    }}
+                  >
+                    <i className="fas fa-chevron-down"></i>
+                  </button>
+                  {showProjectDropdown && (
+                    <>
+                      <div 
+                        style={{ 
+                          position: 'fixed', 
+                          top: 0, 
+                          left: 0, 
+                          right: 0, 
+                          bottom: 0, 
+                          zIndex: 999 
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowProjectDropdown(false);
+                        }}
+                      />
+                      <div style={{ 
+                        position: 'absolute', 
+                        top: '100%', 
+                        left: 0, 
+                        right: 0, 
+                        background: 'white', 
+                        border: '1px solid #ddd', 
+                        borderRadius: '4px', 
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                        zIndex: 10000, 
+                        marginTop: '4px',
+                        overflowY: 'auto',
+                        maxHeight: '200px'
+                      }}>
+                        {(filteredProjects.length > 0 ? filteredProjects : projectOptions).map((project, idx) => (
+                          <div 
+                            key={idx}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleFormChange('project', project);
+                              // Auto-populate project manager based on project
+                              const projectManagers = {
+                                'Marine Equipment Supply - Q1 2024': 'John Tan',
+                                'Offshore Platform Parts Delivery': 'Mary Lim',
+                                'Fabrication Services Contract': 'Subbiah',
+                                'Ship Repair Project 2024': 'JEGANATHAN SUNDARAVELU',
+                                'Piping Installation - Mega Yard': 'Mahendran S/O Minisamy'
+                              };
+                              handleFormChange('projectManager', projectManagers[project] || '');
+                              setShowProjectDropdown(false);
+                              setFilteredProjects([]);
+                            }}
+                            style={{ 
+                              padding: '10px 12px', 
+                              cursor: 'pointer', 
+                              fontSize: '13px',
+                              borderBottom: idx < (filteredProjects.length > 0 ? filteredProjects : projectOptions).length - 1 ? '1px solid #f0f0f0' : 'none',
+                              backgroundColor: 'white'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                          >
+                            {project}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT MANAGER</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.projectManager}
                   disabled
                   style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                 />
@@ -433,87 +573,6 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
                   ))}
                 </select>
               </div>
-              <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 10001 : 'auto' }}>
-                <label>PROJECT NAME</label>
-                <div style={{ position: 'relative' }}>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.projectName}
-                    onChange={handleProjectSearchChange}
-                    onFocus={() => setShowProjectDropdown(true)}
-                    placeholder="<Type then tab>"
-                  />
-                  <button 
-                    type="button"
-                    style={{ 
-                      position: 'absolute', 
-                      right: '8px', 
-                      top: '50%', 
-                      transform: 'translateY(-50%)', 
-                      background: 'transparent', 
-                      border: 'none', 
-                      cursor: 'pointer', 
-                      padding: '4px 8px',
-                      fontSize: '14px'
-                    }}
-                    onClick={() => setShowProjectDropdown(!showProjectDropdown)}
-                  >
-                    <i className="fas fa-chevron-down"></i>
-                  </button>
-                  {showProjectDropdown && (
-                    <>
-                      <div 
-                        style={{ 
-                          position: 'fixed', 
-                          top: 0, 
-                          left: 0, 
-                          right: 0, 
-                          bottom: 0, 
-                          zIndex: 9999 
-                        }}
-                        onClick={() => setShowProjectDropdown(false)}
-                      />
-                      <div style={{ 
-                        position: 'absolute', 
-                        top: '100%', 
-                        left: 0, 
-                        right: 0, 
-                        background: 'white', 
-                        border: '1px solid #ddd', 
-                        borderRadius: '4px', 
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                        zIndex: 10000, 
-                        marginTop: '4px',
-                        overflowY: 'auto',
-                        maxHeight: '200px'
-                      }}>
-                        {(filteredProjects.length > 0 ? filteredProjects : projectOptions).map((project, idx) => (
-                          <div 
-                            key={idx}
-                            onClick={() => handleProjectSelect(project)}
-                            style={{ 
-                              padding: '10px 12px', 
-                              cursor: 'pointer', 
-                              fontSize: '13px',
-                              borderBottom: '1px solid #f5f5f5'
-                            }}
-                            onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
-                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                          >
-                            {project}
-                          </div>
-                        ))}
-                        {filteredProjects.length === 0 && projectSearch && (
-                          <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
-                            No projects found
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
               <div className="detail-field">
                 <label>APPROVAL REJECTION REMARKS</label>
                 <textarea 
@@ -522,87 +581,6 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
                   value={formData.approvalRejectionRemarks}
                   onChange={(e) => handleFormChange('approvalRejectionRemarks', e.target.value)}
                 />
-              </div>
-              <div className="detail-field" style={{ position: 'relative', zIndex: showRequestedByDropdown ? 10001 : 'auto' }}>
-                <label>REQUESTED BY</label>
-                <div style={{ position: 'relative' }}>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.requestedBy}
-                    onChange={handleRequestedBySearchChange}
-                    onFocus={() => setShowRequestedByDropdown(true)}
-                    placeholder="<Type then tab>"
-                  />
-                  <button 
-                    type="button"
-                    style={{ 
-                      position: 'absolute', 
-                      right: '8px', 
-                      top: '50%', 
-                      transform: 'translateY(-50%)', 
-                      background: 'transparent', 
-                      border: 'none', 
-                      cursor: 'pointer', 
-                      padding: '4px 8px',
-                      fontSize: '14px'
-                    }}
-                    onClick={() => setShowRequestedByDropdown(!showRequestedByDropdown)}
-                  >
-                    <i className="fas fa-chevron-down"></i>
-                  </button>
-                  {showRequestedByDropdown && (
-                    <>
-                      <div 
-                        style={{ 
-                          position: 'fixed', 
-                          top: 0, 
-                          left: 0, 
-                          right: 0, 
-                          bottom: 0, 
-                          zIndex: 9999 
-                        }}
-                        onClick={() => setShowRequestedByDropdown(false)}
-                      />
-                      <div style={{ 
-                        position: 'absolute', 
-                        top: '100%', 
-                        left: 0, 
-                        right: 0, 
-                        background: 'white', 
-                        border: '1px solid #ddd', 
-                        borderRadius: '4px', 
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                        zIndex: 10000, 
-                        marginTop: '4px',
-                        overflowY: 'auto',
-                        maxHeight: '200px'
-                      }}>
-                        {(filteredRequestedBy.length > 0 ? filteredRequestedBy : requestedByOptions).map((person, idx) => (
-                          <div 
-                            key={idx}
-                            onClick={() => handleRequestedBySelect(person)}
-                            style={{ 
-                              padding: '10px 12px', 
-                              cursor: 'pointer', 
-                              fontSize: '13px',
-                              borderBottom: '1px solid #f5f5f5'
-                            }}
-                            onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
-                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                          >
-                            {person}
-                          </div>
-                        ))}
-                        {filteredRequestedBy.length === 0 && requestedBySearch && (
-                          <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
-                            No users found
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
               </div>
               <div className="detail-field">
                 <label>REQUESTED TYPE</label>
@@ -658,12 +636,12 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
                       <th>UNIT PRICE</th>
                       <th>AMOUNT</th>
                       <th>BID CREATED</th>
-                      <th>MEMO</th>
                       <th>NAME</th>
                       <th>DEPARTMENT</th>
                       <th>CLASS</th>
                       <th>PO QUANTITY</th>
                       <th>RCL QUANTITY</th>
+                      <th>MEMO</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -800,14 +778,6 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
                           />
                         </td>
                         <td>
-                          <textarea 
-                            className="form-control" 
-                            defaultValue={item.memo} 
-                            style={{ minWidth: '200px', minHeight: '40px', resize: 'vertical' }} 
-                            rows="2"
-                          />
-                        </td>
-                        <td>
                           <input 
                             type="text" 
                             className="form-control" 
@@ -859,6 +829,14 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
                             className="form-control" 
                             defaultValue={item.rclQuantity} 
                             style={{ minWidth: '100px', height: '40px' }} 
+                          />
+                        </td>
+                        <td>
+                          <textarea 
+                            className="form-control" 
+                            defaultValue={item.memo} 
+                            style={{ minWidth: '200px', minHeight: '40px', resize: 'vertical' }} 
+                            rows="2"
                           />
                         </td>
                       </tr>

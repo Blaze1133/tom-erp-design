@@ -6,14 +6,19 @@ const ViewBillPurchaseOrderDetail = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const poData = {
+    prId: 'PR-2021-0145',
+    project: 'TOM-ONSHORE-TRADING',
     poNumber: 'POTOMO0327',
     vendorName: 'CHIA HOCK HARDWARE TRADING',
     status: 'PENDING BILL',
     date: '8/7/2021',
     refPoNumber: 'POTOMO0327',
-    otherComments: 'TOM-PO-2021-1727',
+    otherComments: 'IF NOT COMPLETE OR DEFECT, INSTRUCTION PERSON CONTACT LET',
     approvalStatus: 'Approved',
-    receiveBy: 'Main',
+    customForm: 'TOM Purchase Order',
+    receiveBy: '',
+    vendorNumber: '',
+    poType: 'Main',
     refNumber: '',
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     department: 'MEP',
@@ -21,6 +26,7 @@ const ViewBillPurchaseOrderDetail = ({ setCurrentPage }) => {
     location: 'TOM -11',
     currency: 'SGD',
     purchaseType: 'Non-Critical',
+    customCreatedFrom: 'Order to Bill single Vendor',
     exchangeRate: 1.00,
     subtotal: 45.00,
     taxTotal: 3.15,
@@ -171,28 +177,48 @@ const ViewBillPurchaseOrderDetail = ({ setCurrentPage }) => {
               fontSize: '13px'
             }}>
               <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PR ID <span style={{ color: '#e53e3e' }}>*</span></div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.prId}</div>
+              </div>
+              <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PROJECT <span style={{ color: '#e53e3e' }}>*</span></div>
+                <div style={{ color: '#4a90e2', fontSize: '14px', cursor: 'pointer' }}>{poData.project}</div>
+              </div>
+              <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CUSTOM FORM <span style={{ color: '#e53e3e' }}>*</span></div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.customForm}</div>
+              </div>
+              <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>RECEIVE BY</div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.receiveBy || '-'}</div>
+              </div>
+              <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>VENDOR #</div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.vendorNumber || '-'}</div>
+              </div>
+              <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DATE <span style={{ color: '#e53e3e' }}>*</span></div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.date}</div>
+              </div>
+              <div>
                 <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>VENDOR <span style={{ color: '#e53e3e' }}>*</span></div>
                 <div style={{ color: '#4a90e2', fontSize: '14px', cursor: 'pointer' }}>{poData.vendorName}</div>
               </div>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DATE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{poData.date}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>VENDOR PO #</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>Main</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PO#</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PO #</div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.poNumber}</div>
               </div>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>REF PO NUMBER</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{poData.refNumber || '-'}</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PO TYPE</div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.poType}</div>
               </div>
               <div>
                 <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>OTHER COMMENTS OR SPECIAL INSTRUCTIONS</div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.otherComments}</div>
+              </div>
+              <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>REF PO NUMBER</div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.refNumber || '-'}</div>
               </div>
               <div>
                 <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>APPROVAL STATUS</div>
@@ -224,33 +250,37 @@ const ViewBillPurchaseOrderDetail = ({ setCurrentPage }) => {
           <div style={{ padding: '20px' }}>
             <div style={{ 
               display: 'grid', 
-              gridTemplateColumns: 'repeat(3, 1fr)', 
+              gridTemplateColumns: 'repeat(2, 1fr)', 
               gap: '30px 60px',
               fontSize: '13px'
             }}>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500' }}>SUBSIDIARY</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>SUBSIDIARY <span style={{ color: '#e53e3e' }}>*</span></div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.subsidiary}</div>
               </div>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500' }}>CLASS</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CLASS</div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.class}</div>
               </div>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500' }}>LOCATION</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>LOCATION</div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.location}</div>
               </div>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500' }}>DEPARTMENT</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DEPARTMENT</div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.department}</div>
               </div>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500' }}>CURRENCY</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CURRENCY</div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.currency}</div>
               </div>
               <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500' }}>PURCHASE TYPE</div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PURCHASE TYPE</div>
                 <div style={{ color: '#333', fontSize: '14px' }}>{poData.purchaseType}</div>
+              </div>
+              <div>
+                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CUSTOM CREATED FROM</div>
+                <div style={{ color: '#333', fontSize: '14px' }}>{poData.customCreatedFrom}</div>
               </div>
             </div>
           </div>

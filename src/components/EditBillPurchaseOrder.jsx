@@ -7,6 +7,8 @@ const EditBillPurchaseOrder = ({ setCurrentPage }) => {
 
   // Form state with pre-filled data
   const [formData, setFormData] = useState({
+    prId: 'PR-2021-0145',
+    project: 'TOM-ONSHORE-TRADING',
     poNumber: 'POTOMO0327',
     vendor: 'CHIA HOCK HARDWARE TRADING',
     status: 'PENDING BILL',
@@ -151,6 +153,31 @@ const EditBillPurchaseOrder = ({ setCurrentPage }) => {
           <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
           
           <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label required">PR ID</label>
+              <input 
+                type="text" 
+                className="form-control"
+                value={formData.prId}
+                onChange={(e) => handleFormChange('prId', e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label required">PROJECT</label>
+              <select 
+                className="form-control"
+                value={formData.project}
+                onChange={(e) => handleFormChange('project', e.target.value)}
+              >
+                <option>TOM-ONSHORE-TRADING</option>
+                <option>MEP-MARINE-PROJECT-2021</option>
+                <option>SHIPYARD-CONSTRUCTION-2021</option>
+                <option>OFFSHORE-PLATFORM-UPGRADE</option>
+                <option>PIPING-FABRICATION-PROJECT</option>
+              </select>
+            </div>
+
             <div className="form-group">
               <label className="form-label required">CUSTOM FORM</label>
               <select 
