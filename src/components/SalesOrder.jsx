@@ -32,7 +32,6 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
 
   const [formData, setFormData] = useState({
     // Primary Information
-    customForm: 'TOM Performa Invoice',
     orderNumber: isEdit ? 'SO-2024-001' : 'To Be Generated',
     customerProject: '',
     date: '',
@@ -78,8 +77,11 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
     
     // Classification
     subsidiary: '',
+    class: '',
+    location: '',
+    department: '',
     forInvoiceGrouping: false,
-    approvalStatus: 'Submit For Approval',
+    approvalStatus: 'Pending Approval',
     contactPerson: '',
     countryOfOrigin: '',
     hsCode: '',
@@ -429,16 +431,14 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
             <div className="section-body">
               <div className="detail-grid">
                 <div className="detail-field">
-                  <label>CUSTOM FORM <span className="required">*</span></label>
-                  <select 
+                  <label>ORDER #</label>
+                  <input 
+                    type="text" 
                     className="form-control"
-                    value={formData.customForm}
-                    onChange={(e) => handleInputChange('customForm', e.target.value)}
-                  >
-                    <option>TOM Performa Invoice</option>
-                    <option>Standard Sales Order</option>
-                    <option>TOM Service Order</option>
-                  </select>
+                    value={formData.orderNumber}
+                    placeholder="To Be Generated"
+                    readOnly
+                  />
                 </div>
                 <div className="detail-field">
                   <label>DATE <span className="required">*</span></label>
@@ -447,16 +447,6 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                     className="form-control"
                     value={formData.date}
                     onChange={(e) => handleInputChange('date', e.target.value)}
-                  />
-                </div>
-                <div className="detail-field">
-                  <label>ORDER #</label>
-                  <input 
-                    type="text" 
-                    className="form-control"
-                    value={formData.orderNumber}
-                    placeholder="To Be Generated"
-                    disabled
                   />
                 </div>
                 <div className="detail-field">
@@ -699,22 +689,49 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                 </div>
                 <div className="detail-field">
                   <label>PO NUMBER</label>
-                  <input 
-                    type="text" 
-                    className="form-control"
-                    value={formData.poNumber}
-                    onChange={(e) => handleInputChange('poNumber', e.target.value)}
-                    placeholder="Enter PO number"
-                  />
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <input 
+                      type="text" 
+                      className="form-control"
+                      value={formData.poNumber}
+                      onChange={(e) => handleInputChange('poNumber', e.target.value)}
+                      placeholder="Enter PO number"
+                      style={{ flex: 1 }}
+                    />
+                    <button 
+                      type="button"
+                      className="btn btn-secondary"
+                      style={{ 
+                        padding: '0.5rem', 
+                        minWidth: 'auto',
+                        height: '38px'
+                      }}
+                      onClick={() => document.getElementById('po-file-upload').click()}
+                      title="Attach file"
+                    >
+                      <i className="fas fa-paperclip"></i>
+                    </button>
+                    <input 
+                      id="po-file-upload"
+                      type="file"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        if (e.target.files.length > 0) {
+                          showToast(`File "${e.target.files[0].name}" attached successfully`, 'success');
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="detail-field">
                   <label>MEMO</label>
-                  <input 
-                    type="text" 
+                  <textarea 
                     className="form-control"
                     value={formData.memo}
                     onChange={(e) => handleInputChange('memo', e.target.value)}
                     placeholder="Enter memo"
+                    rows="3"
+                    style={{ resize: 'vertical' }}
                   />
                 </div>
               </div>
@@ -766,20 +783,60 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
             <div className="section-body">
               <div className="detail-grid">
                 <div className="detail-field">
-              <label className="form-label required">Subsidiary</label>
-              <select 
-                className="form-control"
-                value={formData.subsidiary}
-                onChange={(e) => handleInputChange('subsidiary', e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option value="TOM S">Tech Offshore Marine (S) Pte Ltd - "TOM S" (ROC 200709673M)</option>
-                <option value="DQ">Tech Offshore Marine (DQ) Pte Ltd - "DQ" (ROC 200704907R)</option>
-                <option value="TEA">Tech Electric & Automation Pte Ltd - "TEA" (ROC 198700264M)</option>
-                <option value="TMO">Tech Marine Offshore (S) Pte Ltd - "TMO" (ROC 200512260M)</option>
-                <option value="SV">Tech Offshore Marine (SV) Pte Ltd - "SV" (ROC 200608955Z)</option>
-                <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd - "TOM" (ROC 199507962E)</option>
-              </select>
+                  <label className="form-label required">Subsidiary</label>
+                  <select 
+                    className="form-control"
+                    value={formData.subsidiary}
+                    onChange={(e) => handleInputChange('subsidiary', e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                    <option value="TOM S">Tech Offshore Marine (S) Pte Ltd - "TOM S" (ROC 200709673M)</option>
+                    <option value="DQ">Tech Offshore Marine (DQ) Pte Ltd - "DQ" (ROC 200704907R)</option>
+                    <option value="TEA">Tech Electric & Automation Pte Ltd - "TEA" (ROC 198700264M)</option>
+                    <option value="TMO">Tech Marine Offshore (S) Pte Ltd - "TMO" (ROC 200512260M)</option>
+                    <option value="SV">Tech Offshore Marine (SV) Pte Ltd - "SV" (ROC 200608955Z)</option>
+                    <option value="TOM">Tech Onshore MEP Prefabricators Pte Ltd - "TOM" (ROC 199507962E)</option>
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label className="form-label">Class</label>
+                  <select 
+                    className="form-control"
+                    value={formData.class}
+                    onChange={(e) => handleInputChange('class', e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                    <option>Consumable Item</option>
+                    <option>Course</option>
+                    <option>Electrical</option>
+                    <option>Fabrication</option>
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label className="form-label">Location</label>
+                  <select 
+                    className="form-control"
+                    value={formData.location}
+                    onChange={(e) => handleInputChange('location', e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                    <option>Hong Hang Shipyard</option>
+                    <option>Mega yard</option>
+                    <option>Singapore (MEP)</option>
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label className="form-label required">Department</label>
+                  <select 
+                    className="form-control"
+                    value={formData.department}
+                    onChange={(e) => handleInputChange('department', e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                    <option>TOM: Engineering</option>
+                    <option>TOM: Production</option>
+                    <option>TOM: Sales and Marketing</option>
+                  </select>
                 </div>
                 <div className="detail-field">
                   <label className="form-label">Approval Status</label>
@@ -788,11 +845,20 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                     value={formData.approvalStatus}
                     onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
                   >
-                    <option>Submit For Approval</option>
                     <option>Pending Approval</option>
                     <option>Approved</option>
                     <option>Rejected</option>
                   </select>
+                </div>
+                <div className="detail-field">
+                  <label className="form-label">Contact Person</label>
+                  <input 
+                    type="text" 
+                    className="form-control"
+                    value={formData.contactPerson}
+                    onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                    placeholder="Enter contact person"
+                  />
                 </div>
               </div>
             </div>

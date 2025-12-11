@@ -7,24 +7,41 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
   const [activeTab, setActiveTab] = useState('items');
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
   const [classificationCollapsed, setClassificationCollapsed] = useState(false);
+  
+  // Searchable dropdown states
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [showProjectDropdown, setShowProjectDropdown] = useState(false);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState([]);
+  
+  // Options
+  const customerOptions = [
+    '612 Raise Pte Ltd',
+    'ABC Corporation',
+    'XYZ Industries',
+    'Tech Marine Solutions'
+  ];
+  
+  const projectOptions = [
+    'Marine Equipment Supply - Q1 2024',
+    'Hull Repair Project',
+    'Piping System Upgrade',
+    'Ship Repair Project 2024'
+  ];
 
   // Form state with empty initial data
   const [formData, setFormData] = useState({
     transactionNumber: '',
     customer: '',
+    project: '',
     date: new Date().toISOString().split('T')[0],
     shipDate: new Date().toISOString().split('T')[0],
     status: 'Picked',
-    createdFrom: '',
     memo: '',
     location: '',
     subsidiary: '',
     department: '',
     class: '',
-    shipMethod: '',
-    trackingNumber: '',
-    carrier: '',
-    termsOfShipment: 'FOB',
     // Shipping Address
     attention: '',
     addressee: '',
@@ -261,14 +278,215 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
           {!headerCollapsed && (
             <div className="section-body">
               <div className="detail-grid">
-                <div className="detail-field">
+                <div className="detail-field" style={{ position: 'relative', zIndex: showCustomerDropdown ? 1001 : 1 }}>
                   <label>CUSTOMER *</label>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.customer}
-                    onChange={(e) => handleFormChange('customer', e.target.value)}
-                  />
+                  <div style={{ position: 'relative' }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={formData.customer}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        handleFormChange('customer', value);
+                        if (value) {
+                          setFilteredCustomers(customerOptions.filter(c => c.toLowerCase().includes(value.toLowerCase())));
+                          setShowCustomerDropdown(true);
+                        } else {
+                          setFilteredCustomers([]);
+                          setShowCustomerDropdown(false);
+                        }
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowCustomerDropdown(true);
+                      }}
+                      onFocus={(e) => {
+                        e.stopPropagation();
+                        setShowCustomerDropdown(true);
+                      }}
+                      placeholder="Type to search..."
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowCustomerDropdown(!showCustomerDropdown);
+                      }}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {showCustomerDropdown && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 999 
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowCustomerDropdown(false);
+                          }}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 10000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredCustomers.length > 0 ? filteredCustomers : customerOptions).map((customer, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleFormChange('customer', customer);
+                                setFilteredCustomers([]);
+                                setShowCustomerDropdown(false);
+                              }}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: idx < (filteredCustomers.length > 0 ? filteredCustomers : customerOptions).length - 1 ? '1px solid #f0f0f0' : 'none',
+                                backgroundColor: 'white'
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                            >
+                              {customer}
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 1001 : 1 }}>
+                  <label>PROJECT</label>
+                  <div style={{ position: 'relative' }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={formData.project}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        handleFormChange('project', value);
+                        if (value) {
+                          setFilteredProjects(projectOptions.filter(p => p.toLowerCase().includes(value.toLowerCase())));
+                          setShowProjectDropdown(true);
+                        } else {
+                          setFilteredProjects([]);
+                          setShowProjectDropdown(false);
+                        }
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowProjectDropdown(true);
+                      }}
+                      onFocus={(e) => {
+                        e.stopPropagation();
+                        setShowProjectDropdown(true);
+                      }}
+                      placeholder="Type to search..."
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowProjectDropdown(!showProjectDropdown);
+                      }}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {showProjectDropdown && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 999 
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowProjectDropdown(false);
+                          }}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 10000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredProjects.length > 0 ? filteredProjects : projectOptions).map((project, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleFormChange('project', project);
+                                setFilteredProjects([]);
+                                setShowProjectDropdown(false);
+                              }}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: idx < (filteredProjects.length > 0 ? filteredProjects : projectOptions).length - 1 ? '1px solid #f0f0f0' : 'none',
+                                backgroundColor: 'white'
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                            >
+                              {project}
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div className="detail-field">
                   <label>DATE</label>
@@ -287,59 +505,6 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
                     value={formData.shipDate}
                     onChange={(e) => handleFormChange('shipDate', e.target.value)}
                   />
-                </div>
-                <div className="detail-field">
-                  <label>CREATED FROM</label>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.createdFrom}
-                    onChange={(e) => handleFormChange('createdFrom', e.target.value)}
-                  />
-                </div>
-                <div className="detail-field">
-                  <label>SHIP METHOD</label>
-                  <select 
-                    className="form-control"
-                    value={formData.shipMethod}
-                    onChange={(e) => handleFormChange('shipMethod', e.target.value)}
-                  >
-                    <option value="DHL">DHL</option>
-                    <option value="FedEx">FedEx</option>
-                    <option value="UPS">UPS</option>
-                    <option value="Local Courier">Local Courier</option>
-                  </select>
-                </div>
-                <div className="detail-field">
-                  <label>CARRIER</label>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.carrier}
-                    onChange={(e) => handleFormChange('carrier', e.target.value)}
-                  />
-                </div>
-                <div className="detail-field">
-                  <label>TRACKING NUMBER</label>
-                  <input 
-                    type="text"
-                    className="form-control"
-                    value={formData.trackingNumber}
-                    onChange={(e) => handleFormChange('trackingNumber', e.target.value)}
-                  />
-                </div>
-                <div className="detail-field">
-                  <label>TERMS OF SHIPMENT</label>
-                  <select 
-                    className="form-control"
-                    value={formData.termsOfShipment}
-                    onChange={(e) => handleFormChange('termsOfShipment', e.target.value)}
-                  >
-                    <option value="FOB">FOB (Free on Board)</option>
-                    <option value="CIF">CIF (Cost, Insurance & Freight)</option>
-                    <option value="CFR">CFR (Cost and Freight)</option>
-                    <option value="EXW">EXW (Ex Works)</option>
-                  </select>
                 </div>
                 <div className="detail-field">
                   <label>STATUS</label>
@@ -455,12 +620,6 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
             >
               Shipping Address
             </button>
-            <button 
-              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
-              onClick={() => setActiveTab('custom')}
-            >
-              Custom Fields
-            </button>
           </div>
 
           <div className="tabs-content">
@@ -472,18 +631,24 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
                 </button>
 
                 <div className="items-table-wrapper" style={{ overflowX: 'auto', marginBottom: '1rem' }}>
-                  <table className="detail-items-table" style={{ minWidth: '1800px' }}>
+                  <table className="detail-items-table" style={{ minWidth: '2200px' }}>
                     <thead>
                       <tr>
                         <th style={{ width: '30px' }}></th>
                         <th style={{ minWidth: '150px' }}>ITEM</th>
-                        <th style={{ minWidth: '300px' }}>DESCRIPTION</th>
-                        <th style={{ minWidth: '100px' }}>COMMITTED QTY</th>
-                        <th style={{ minWidth: '100px' }}>QUANTITY</th>
-                        <th style={{ minWidth: '100px' }}>UOM</th>
-                        <th style={{ minWidth: '120px' }}>BIN NUMBER</th>
-                        <th style={{ minWidth: '150px' }}>SERIAL/LOT NUMBER</th>
-                        <th style={{ minWidth: '100px' }}>WEIGHT (KG)</th>
+                        <th style={{ minWidth: '400px' }}>DESC</th>
+                        <th style={{ minWidth: '80px' }}>QTY</th>
+                        <th style={{ minWidth: '100px' }}>UNITS</th>
+                        <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                        <th style={{ minWidth: '100px' }}>RATE</th>
+                        <th style={{ minWidth: '100px' }}>AMT</th>
+                        <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                        <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                        <th style={{ minWidth: '150px' }}>CLASS</th>
+                        <th style={{ minWidth: '150px' }}>COST EST. TYPE</th>
+                        <th style={{ minWidth: '150px' }}>EST. EXT. COST</th>
+                        <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                        <th style={{ minWidth: '150px' }}>HS CODE</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -569,40 +734,17 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
                             <input 
                               type="number"
                               className="form-control"
-                              value={item.committedQuantity}
-                              onChange={(e) => handleItemChange(index, 'committedQuantity', e.target.value)}
+                              value={item.quantity || 0}
+                              onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value) || 0)}
                               style={{ minWidth: '100px', height: '40px' }}
                             />
-                          </td>
-                          <td>
-                            <input 
-                              type="number"
-                              className="form-control"
-                              value={item.quantity}
-                              onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                              style={{ minWidth: '100px', height: '40px' }}
-                            />
-                          </td>
-                          <td>
-                            <select 
-                              className="form-control"
-                              value={item.uom}
-                              onChange={(e) => handleItemChange(index, 'uom', e.target.value)}
-                              style={{ minWidth: '100px', height: '40px' }}
-                            >
-                              <option value="Pcs">Pcs</option>
-                              <option value="Kg">Kg</option>
-                              <option value="Ltr">Ltr</option>
-                              <option value="Box">Box</option>
-                              <option value="Set">Set</option>
-                            </select>
                           </td>
                           <td>
                             <input 
                               type="text"
                               className="form-control"
-                              value={item.binNumber}
-                              onChange={(e) => handleItemChange(index, 'binNumber', e.target.value)}
+                              value={item.units || ''}
+                              onChange={(e) => handleItemChange(index, 'units', e.target.value)}
                               style={{ minWidth: '120px', height: '40px' }}
                             />
                           </td>
@@ -610,19 +752,103 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
                             <input 
                               type="text"
                               className="form-control"
-                              value={item.serialLotNumber}
-                              onChange={(e) => handleItemChange(index, 'serialLotNumber', e.target.value)}
-                              style={{ minWidth: '150px', height: '40px' }}
+                              value={item.priceLevel || ''}
+                              onChange={(e) => handleItemChange(index, 'priceLevel', e.target.value)}
+                              style={{ minWidth: '110px', height: '40px' }}
                             />
                           </td>
                           <td>
                             <input 
                               type="number"
                               className="form-control"
-                              value={item.itemWeight}
-                              onChange={(e) => handleItemChange(index, 'itemWeight', e.target.value)}
-                              style={{ minWidth: '100px', height: '40px' }}
+                              value={item.rate || 0}
+                              onChange={(e) => handleItemChange(index, 'rate', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '120px', height: '40px' }}
                               step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number"
+                              className="form-control"
+                              value={item.amount || 0}
+                              onChange={(e) => handleItemChange(index, 'amount', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '120px', height: '40px' }}
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text"
+                              className="form-control"
+                              value={item.taxCode || ''}
+                              onChange={(e) => handleItemChange(index, 'taxCode', e.target.value)}
+                              style={{ minWidth: '110px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number"
+                              className="form-control"
+                              value={item.grossAmount || 0}
+                              onChange={(e) => handleItemChange(index, 'grossAmount', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '110px', height: '40px' }}
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <select 
+                              className="form-control"
+                              value={item.class || ''}
+                              onChange={(e) => handleItemChange(index, 'class', e.target.value)}
+                              style={{ minWidth: '180px', height: '40px' }}
+                            >
+                              <option value="">Select...</option>
+                              <option>Consumable Item</option>
+                              <option>Fabrication</option>
+                              <option>Installation work</option>
+                            </select>
+                          </td>
+                          <td>
+                            <select 
+                              className="form-control"
+                              value={item.costEstimateType || 'Fixed'}
+                              onChange={(e) => handleItemChange(index, 'costEstimateType', e.target.value)}
+                              style={{ minWidth: '180px', height: '40px' }}
+                            >
+                              <option>Fixed</option>
+                              <option>Variable</option>
+                              <option>Estimated</option>
+                            </select>
+                          </td>
+                          <td>
+                            <input 
+                              type="number"
+                              className="form-control"
+                              value={item.estimatedExtendedCost || 0}
+                              onChange={(e) => handleItemChange(index, 'estimatedExtendedCost', parseFloat(e.target.value) || 0)}
+                              style={{ minWidth: '180px', height: '40px' }}
+                              step="0.01"
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text"
+                              className="form-control"
+                              value={item.countryOfOrigin || ''}
+                              onChange={(e) => handleItemChange(index, 'countryOfOrigin', e.target.value)}
+                              placeholder="Country"
+                              style={{ minWidth: '180px', height: '40px' }}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="text"
+                              className="form-control"
+                              value={item.hsCode || ''}
+                              onChange={(e) => handleItemChange(index, 'hsCode', e.target.value)}
+                              placeholder="HS Code"
+                              style={{ minWidth: '180px', height: '40px' }}
                             />
                           </td>
                         </tr>
@@ -776,75 +1002,6 @@ const CreateDeliveryOrder = ({ setCurrentPage }) => {
               </div>
             )}
 
-            {activeTab === 'custom' && (
-              <div style={{ padding: '1.5rem' }}>
-                <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                  <div className="detail-field">
-                    <label>DELIVERY NOTE NUMBER</label>
-                    <input 
-                      type="text"
-                      className="form-control"
-                      value={formData.deliveryNoteNumber}
-                      onChange={(e) => handleFormChange('deliveryNoteNumber', e.target.value)}
-                    />
-                  </div>
-                  <div className="detail-field">
-                    <label>DELIVERY ROUTE</label>
-                    <input 
-                      type="text"
-                      className="form-control"
-                      value={formData.deliveryRoute}
-                      onChange={(e) => handleFormChange('deliveryRoute', e.target.value)}
-                    />
-                  </div>
-                  <div className="detail-field">
-                    <label>DRIVER NAME</label>
-                    <input 
-                      type="text"
-                      className="form-control"
-                      value={formData.driverName}
-                      onChange={(e) => handleFormChange('driverName', e.target.value)}
-                    />
-                  </div>
-                  <div className="detail-field">
-                    <label>VEHICLE NUMBER</label>
-                    <input 
-                      type="text"
-                      className="form-control"
-                      value={formData.vehicleNumber}
-                      onChange={(e) => handleFormChange('vehicleNumber', e.target.value)}
-                    />
-                  </div>
-                  <div className="detail-field">
-                    <label>INTERNAL DELIVERY REFERENCE</label>
-                    <input 
-                      type="text"
-                      className="form-control"
-                      value={formData.internalDeliveryReference}
-                      onChange={(e) => handleFormChange('internalDeliveryReference', e.target.value)}
-                    />
-                  </div>
-                  <div className="detail-field">
-                    <label>DELIVERY TIME IN</label>
-                    <input 
-                      type="time"
-                      className="form-control"
-                      value={formData.deliveryTimeIn}
-                      onChange={(e) => handleFormChange('deliveryTimeIn', e.target.value)}
-                    />
-                  </div>
-                  <div className="detail-field">
-                    <label>DELIVERY TIME OUT</label>
-                    <input 
-                      type="time"
-                      className="form-control"
-                      value={formData.deliveryTimeOut}
-                      onChange={(e) => handleFormChange('deliveryTimeOut', e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 

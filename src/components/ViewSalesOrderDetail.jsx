@@ -11,12 +11,14 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
     title: '20-0131 Gimi Ms Corporation : 20-0131-Gimi-Fabrication of Cargo Tank Vapour Line (Budgetary)-W',
     statusBadge: 'PENDING BILLING',
     orderNumber: 'S2100067',
-    endDate: '',
-    customerProject: '20-0131 Gimi Ms Corporation : 20-0131-Gimi-Fabrication of Cargo Tank Vapour Line (Budgetary)-W',
-    poNumber: '',
     date: '26/11/2020',
-    memo: 'Project No : 20-0131',
+    status: 'Pending Approval',
+    customer: '20-0131 Gimi Ms Corporation',
+    project: '20-0131-Gimi-Fabrication of Cargo Tank Vapour Line (Budgetary)-W',
     startDate: '',
+    endDate: '',
+    poNumber: '',
+    memo: 'Project No : 20-0131',
     salesRep: '',
     opportunity: '',
     salesEffectiveDate: '26/11/2020',
@@ -138,28 +140,36 @@ const ViewSalesOrderDetail = ({ setCurrentPage }) => {
                 <div className="field-value">{orderData.orderNumber}</div>
               </div>
               <div className="detail-field">
+                <label>DATE</label>
+                <div className="field-value">{orderData.date}</div>
+              </div>
+              <div className="detail-field">
+                <label>STATUS</label>
+                <div className="field-value">{orderData.status || 'Pending Approval'}</div>
+              </div>
+              <div className="detail-field">
+                <label>CUSTOMER</label>
+                <div className="field-value">{orderData.customer || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT</label>
+                <div className="field-value">{orderData.project || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>START DATE</label>
+                <div className="field-value">{orderData.startDate || '-'}</div>
+              </div>
+              <div className="detail-field">
                 <label>END DATE</label>
                 <div className="field-value">{orderData.endDate || '-'}</div>
-              </div>
-              <div className="detail-field" style={{ gridColumn: '1 / -1' }}>
-                <label>CUSTOMER:PROJECT</label>
-                <div className="field-value">{orderData.customerProject}</div>
               </div>
               <div className="detail-field">
                 <label>PO #</label>
                 <div className="field-value">{orderData.poNumber || '-'}</div>
               </div>
               <div className="detail-field">
-                <label>DATE</label>
-                <div className="field-value">{orderData.date}</div>
-              </div>
-              <div className="detail-field">
                 <label>MEMO</label>
                 <div className="field-value">{orderData.memo}</div>
-              </div>
-              <div className="detail-field">
-                <label>START DATE</label>
-                <div className="field-value">{orderData.startDate || '-'}</div>
               </div>
             </div>
           </div>

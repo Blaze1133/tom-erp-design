@@ -29,6 +29,13 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
     location: '',
     department: '',
     contactPerson: '',
+    validity: 'The validity of this Quotation is (30) days from the date of this Quotation. Beyond the valid date, the Project specifications may no longer be applicable, and a new quotation may be required.',
+    leadTime: '➢ Refer to the attached Annex-A',
+    gst: 'All prices are subject to GST and our normal Terms and Conditions. TOM is a GST registered company. (GST No. M90362330Y)',
+    taxes: 'The withholding tax/GST/VAT is included in this quote.',
+    payment: 'Progressive and 30 days upon presentation of invoices.',
+    variations: 'The price quoted in this quotation applies to the scope of work as herein specified, any additional work or incurrence of any other costs not mentioned will be billed as extras accordingly.',
+    signature: 'Each party represents and warrants that on this date they are duly authorized to bind their respective principles by their signatures below.',
     items: [
       {
         id: 1,
@@ -249,6 +256,12 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
             >
               Custom
             </button>
+            <button 
+              className={`tab-btn ${activeTab === 'additional' ? 'active' : ''}`}
+              onClick={() => setActiveTab('additional')}
+            >
+              Additional Information
+            </button>
           </div>
 
           <div className="tabs-content">
@@ -326,6 +339,68 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
             {activeTab === 'custom' && (
               <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>
                 <p>Custom fields section</p>
+              </div>
+            )}
+
+            {activeTab === 'additional' && (
+              <div className="tab-content" style={{ padding: '1.5rem' }}>
+                <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                  {/* Validity */}
+                  <div className="detail-field">
+                    <label>VALIDITY</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px', borderRadius: '4px', minHeight: '80px' }}>
+                      {quotationData.validity}
+                    </div>
+                  </div>
+
+                  {/* Lead Time */}
+                  <div className="detail-field">
+                    <label>LEAD TIME</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px', borderRadius: '4px', minHeight: '60px' }}>
+                      {quotationData.leadTime}
+                    </div>
+                  </div>
+
+                  {/* GST */}
+                  <div className="detail-field">
+                    <label>GST</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px', borderRadius: '4px', minHeight: '70px' }}>
+                      {quotationData.gst}
+                    </div>
+                  </div>
+
+                  {/* Taxes */}
+                  <div className="detail-field">
+                    <label>TAXES</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px', borderRadius: '4px', minHeight: '60px' }}>
+                      {quotationData.taxes}
+                    </div>
+                  </div>
+
+                  {/* Payment */}
+                  <div className="detail-field">
+                    <label>PAYMENT</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px', borderRadius: '4px', minHeight: '60px' }}>
+                      {quotationData.payment}
+                    </div>
+                  </div>
+
+                  {/* Variations */}
+                  <div className="detail-field">
+                    <label>VARIATIONS</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px', borderRadius: '4px', minHeight: '80px' }}>
+                      {quotationData.variations}
+                    </div>
+                  </div>
+
+                  {/* Signature */}
+                  <div className="detail-field">
+                    <label>SIGNATURE</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-wrap', background: '#f5f5f5', padding: '10px', borderRadius: '4px', minHeight: '60px' }}>
+                      {quotationData.signature}
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

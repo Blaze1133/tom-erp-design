@@ -30,6 +30,15 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
   // Tab state for Items section
   const [activeTab, setActiveTab] = useState('items');
   
+  // Edit states for Additional Information fields
+  const [validityEditable, setValidityEditable] = useState(false);
+  const [leadTimeEditable, setLeadTimeEditable] = useState(false);
+  const [gstEditable, setGstEditable] = useState(false);
+  const [taxesEditable, setTaxesEditable] = useState(false);
+  const [paymentEditable, setPaymentEditable] = useState(false);
+  const [variationsEditable, setVariationsEditable] = useState(false);
+  const [signatureEditable, setSignatureEditable] = useState(false);
+  
   // Items state
   const [items, setItems] = useState([
     {
@@ -42,8 +51,6 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
       rate: 15.00,
       amount: 60.00,
       discount: 0,
-      retention: 0,
-      retentionType: '%',
       taxCode: 'GST_SG:7%',
       taxRate: '7.0%',
       taxAmount: 4.20,
@@ -53,7 +60,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
 
   const [formData, setFormData] = useState({
     // Primary Information
-    customForm: 'TOM Supply Quotation',
+    customForm: 'Tom quotation',
     estimateNumber: isEdit ? 'Q-2024-001' : 'To Be Generated',
     customer: '',
     project: '',
@@ -64,6 +71,8 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     expectedClose: '3/12/2025',
     expires: '1/1/2026',
     memo: '',
+    retention: 0,
+    retentionType: '%',
     
     // Sales Information
     salesRep: '',
@@ -80,7 +89,15 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     approvalStatus: 'Pending Approval',
     contactPerson: '',
     hsCode: '',
-    countryOfOrigin: ''
+    countryOfOrigin: '',
+    // Additional Information
+    validity: 'The validity of this Quotation is (30) days from the date of this Quotation. Beyond the valid date, the Project specifications may no longer be applicable, and a new quotation may be required.',
+    leadTime: '➢ Refer to the attached Annex-A',
+    gst: 'All prices are subject to GST and our normal Terms and Conditions. TOM is a GST registered company. (GST No. M90362330Y)',
+    taxes: 'The withholding tax/GST/VAT is included in this quote.',
+    payment: 'Progressive and 30 days upon presentation of invoices.',
+    variations: 'The price quoted in this quotation applies to the scope of work as herein specified, any additional work or incurrence of any other costs not mentioned will be billed as extras accordingly.',
+    signature: 'Each party represents and warrants that on this date they are duly authorized to bind their respective principles by their signatures below.'
   });
 
   // Customer options for dropdown
@@ -440,9 +457,8 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   value={formData.customForm}
                   onChange={(e) => handleInputChange('customForm', e.target.value)}
                 >
-                  <option>TOM Supply Quotation</option>
-                  <option>DFMA Quotation</option>
-                  <option>TOM Service Quotation</option>
+                  <option>Tom quotation</option>
+                  <option>dfma quotation</option>
                 </select>
               </div>
               <div className="detail-field">
@@ -740,6 +756,30 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   }}
                 />
               </div>
+              <div className="detail-field">
+                <label>RETENTION</label>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <input 
+                    type="number" 
+                    className="form-control"
+                    value={formData.retention || 0}
+                    onChange={(e) => handleInputChange('retention', parseFloat(e.target.value) || 0)}
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    style={{ flex: 1 }}
+                  />
+                  <select 
+                    className="form-control"
+                    value={formData.retentionType || '%'}
+                    onChange={(e) => handleInputChange('retentionType', e.target.value)}
+                    style={{ width: '80px' }}
+                  >
+                    <option value="%">%</option>
+                    <option value="$">$</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -844,6 +884,30 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                   <option>TOM: Sales and Marketing</option>
                 </select>
               </div>
+              <div className="detail-field">
+                <label>APPROVAL STATUS</label>
+                <select 
+                  className="form-control"
+                  value={formData.approvalStatus}
+                  onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
+                >
+                  <option>Pending Approval</option>
+                  <option>Approved</option>
+                  <option>Rejected</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>CONTACT PERSON</label>
+                <select 
+                  className="form-control"
+                  value={formData.contactPerson}
+                  onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                >
+                  <option>Select...</option>
+                  <option>John Smith</option>
+                  <option>Jane Doe</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -871,7 +935,6 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                     <th style={{ minWidth: '100px' }}>RATE</th>
                     <th style={{ minWidth: '100px' }}>AMOUNT</th>
                     <th style={{ minWidth: '100px' }}>DISCOUNT</th>
-                    <th style={{ minWidth: '180px' }}>RETENTION</th>
                     <th style={{ minWidth: '120px' }}>TAX CODE</th>
                     <th style={{ minWidth: '80px' }}>TAX RATE</th>
                     <th style={{ minWidth: '100px' }}>TAX AMT</th>
@@ -1022,29 +1085,6 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                         />
                       </td>
                       <td>
-                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                          <input 
-                            type="number" 
-                            className="form-control"
-                            value={item.retention || 0}
-                            onChange={(e) => updateItem(item.id, 'retention', parseFloat(e.target.value) || 0)}
-                            min="0"
-                            step="0.01"
-                            placeholder="0.00"
-                            style={{ minWidth: '80px', height: '40px', flex: 1 }}
-                          />
-                          <select 
-                            className="form-control"
-                            value={item.retentionType || '%'}
-                            onChange={(e) => updateItem(item.id, 'retentionType', e.target.value)}
-                            style={{ minWidth: '60px', height: '40px', width: '60px' }}
-                          >
-                            <option value="%">%</option>
-                            <option value="$">$</option>
-                          </select>
-                        </div>
-                      </td>
-                      <td>
                         <select 
                           className="form-control"
                           value={item.taxCode}
@@ -1121,57 +1161,244 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
           {/* Additional Information Tab Content */}
           {activeTab === 'additional' && (
             <div className="tab-content" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>APPROVAL STATUS</label>
-                  <select 
+              <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                {/* Validity */}
+                <div className="detail-field">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <label>VALIDITY</label>
+                    <button
+                      type="button"
+                      onClick={() => setValidityEditable(!validityEditable)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: validityEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '0'
+                      }}
+                      title={validityEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={validityEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                    </button>
+                  </div>
+                  <textarea
                     className="form-control"
-                    value={formData.approvalStatus}
-                    onChange={(e) => handleInputChange('approvalStatus', e.target.value)}
-                    style={{ fontSize: '13px' }}
-                  >
-                    <option>Pending Approval</option>
-                    <option>Approved</option>
-                    <option>Rejected</option>
-                  </select>
+                    rows="3"
+                    value={formData.validity}
+                    onChange={(e) => handleInputChange('validity', e.target.value)}
+                    readOnly={!validityEditable}
+                    style={{ 
+                      background: validityEditable ? '#fff' : '#f5f5f5',
+                      cursor: validityEditable ? 'text' : 'not-allowed',
+                      minHeight: '80px'
+                    }}
+                  />
                 </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>CONTACT PERSON</label>
-                  <select 
-                    className="form-control"
-                    value={formData.contactPerson}
-                    onChange={(e) => handleInputChange('contactPerson', e.target.value)}
-                    style={{ fontSize: '13px' }}
-                  >
-                    <option>Select...</option>
-                    <option>John Smith</option>
-                    <option>Jane Doe</option>
-                  </select>
-                </div>
-              </div>
-
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>TAXES AND DUTIES</label>
-                <textarea 
-                  className="form-control"
-                  rows="3"
-                  placeholder="Quotation does not include any applicable foreign taxes and overhead costs such as but not limited to foreign withholding tax, international tax..."
-                  value={formData.taxesAndDuties}
-                  onChange={(e) => handleInputChange('taxesAndDuties', e.target.value)}
-                  style={{ width: '100%', resize: 'vertical', fontSize: '13px' }}
-                />
-              </div>
               
-              <div>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>VARIATION</label>
-                <textarea 
-                  className="form-control"
-                  rows="3"
-                  placeholder="Variation to this quotation applies to the scope of work as herein specified, any additional work or incurrence of any other costs not..."
-                  value={formData.variation}
-                  onChange={(e) => handleInputChange('variation', e.target.value)}
-                  style={{ width: '100%', resize: 'vertical', fontSize: '13px' }}
-                />
+                {/* Lead Time */}
+                <div className="detail-field">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <label>LEAD TIME</label>
+                    <button
+                      type="button"
+                      onClick={() => setLeadTimeEditable(!leadTimeEditable)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: leadTimeEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '0'
+                      }}
+                      title={leadTimeEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={leadTimeEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                    </button>
+                  </div>
+                  <textarea
+                    className="form-control"
+                    rows="2"
+                    value={formData.leadTime}
+                    onChange={(e) => handleInputChange('leadTime', e.target.value)}
+                    readOnly={!leadTimeEditable}
+                    style={{ 
+                      background: leadTimeEditable ? '#fff' : '#f5f5f5',
+                      cursor: leadTimeEditable ? 'text' : 'not-allowed',
+                      minHeight: '60px'
+                    }}
+                  />
+                </div>
+
+                {/* GST */}
+                <div className="detail-field">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <label>GST</label>
+                    <button
+                      type="button"
+                      onClick={() => setGstEditable(!gstEditable)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: gstEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '0'
+                      }}
+                      title={gstEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={gstEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                    </button>
+                  </div>
+                  <textarea
+                    className="form-control"
+                    rows="3"
+                    value={formData.gst}
+                    onChange={(e) => handleInputChange('gst', e.target.value)}
+                    readOnly={!gstEditable}
+                    style={{ 
+                      background: gstEditable ? '#fff' : '#f5f5f5',
+                      cursor: gstEditable ? 'text' : 'not-allowed',
+                      minHeight: '70px'
+                    }}
+                  />
+                </div>
+
+                {/* Taxes */}
+                <div className="detail-field">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <label>TAXES</label>
+                    <button
+                      type="button"
+                      onClick={() => setTaxesEditable(!taxesEditable)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: taxesEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '0'
+                      }}
+                      title={taxesEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={taxesEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                    </button>
+                  </div>
+                  <textarea
+                    className="form-control"
+                    rows="2"
+                    value={formData.taxes}
+                    onChange={(e) => handleInputChange('taxes', e.target.value)}
+                    readOnly={!taxesEditable}
+                    style={{ 
+                      background: taxesEditable ? '#fff' : '#f5f5f5',
+                      cursor: taxesEditable ? 'text' : 'not-allowed',
+                      minHeight: '60px'
+                    }}
+                  />
+                </div>
+
+                {/* Payment */}
+                <div className="detail-field">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <label>PAYMENT</label>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentEditable(!paymentEditable)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: paymentEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '0'
+                      }}
+                      title={paymentEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={paymentEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                    </button>
+                  </div>
+                  <textarea
+                    className="form-control"
+                    rows="2"
+                    value={formData.payment}
+                    onChange={(e) => handleInputChange('payment', e.target.value)}
+                    readOnly={!paymentEditable}
+                    style={{ 
+                      background: paymentEditable ? '#fff' : '#f5f5f5',
+                      cursor: paymentEditable ? 'text' : 'not-allowed',
+                      minHeight: '60px'
+                    }}
+                  />
+                </div>
+
+                {/* Variations */}
+                <div className="detail-field">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <label>VARIATIONS</label>
+                    <button
+                      type="button"
+                      onClick={() => setVariationsEditable(!variationsEditable)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: variationsEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '0'
+                      }}
+                      title={variationsEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={variationsEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                    </button>
+                  </div>
+                  <textarea
+                    className="form-control"
+                    rows="3"
+                    value={formData.variations}
+                    onChange={(e) => handleInputChange('variations', e.target.value)}
+                    readOnly={!variationsEditable}
+                    style={{ 
+                      background: variationsEditable ? '#fff' : '#f5f5f5',
+                      cursor: variationsEditable ? 'text' : 'not-allowed',
+                      minHeight: '80px'
+                    }}
+                  />
+                </div>
+
+                {/* Signature */}
+                <div className="detail-field">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <label>SIGNATURE</label>
+                    <button
+                      type="button"
+                      onClick={() => setSignatureEditable(!signatureEditable)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: signatureEditable ? '#28a745' : '#007bff',
+                        fontSize: '14px',
+                        padding: '0'
+                      }}
+                      title={signatureEditable ? 'Lock' : 'Edit'}
+                    >
+                      <i className={signatureEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                    </button>
+                  </div>
+                  <textarea
+                    className="form-control"
+                    rows="2"
+                    value={formData.signature}
+                    onChange={(e) => handleInputChange('signature', e.target.value)}
+                    readOnly={!signatureEditable}
+                    style={{ 
+                      background: signatureEditable ? '#fff' : '#f5f5f5',
+                      cursor: signatureEditable ? 'text' : 'not-allowed',
+                      minHeight: '60px'
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}

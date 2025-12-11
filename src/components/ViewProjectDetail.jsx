@@ -10,12 +10,14 @@ const ViewProjectDetail = ({ setCurrentPage }) => {
   const [classificationCollapsed, setClassificationCollapsed] = useState(false);
 
   const projectData = {
-    jobId: 'PRO-00003',
+    projectId: 'TOM-001',
+    projectDescription: 'Marine equipment supply and installation project',
     name: 'TOM Project',
     status: 'CLOSED',
     projectName: 'TOM Project',
     customer: '13 Test Arjun',
     startDate: '4/10/2021',
+    endDate: '12/31/2021',
     projectLocation: '',
     vesselName: '',
     scopeOfWork: '',
@@ -58,7 +60,7 @@ const ViewProjectDetail = ({ setCurrentPage }) => {
           <div>
             <h1>Project</h1>
             <div className="detail-subtitle">
-              <span>{projectData.jobId}</span>
+              <span>{projectData.projectId}</span>
               <span>{projectData.name}</span>
               <span className="status-badge-detail" style={{ background: '#28a745' }}>
                 {projectData.status}
@@ -115,24 +117,24 @@ const ViewProjectDetail = ({ setCurrentPage }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>JOB ID</label>
-                <div className="field-value">{projectData.jobId}</div>
+                <label>PROJECT ID</label>
+                <div className="field-value">{projectData.projectId}</div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT DESCRIPTION</label>
+                <div className="field-value">{projectData.projectDescription}</div>
               </div>
               <div className="detail-field">
                 <label>PROJECT NAME</label>
                 <div className="field-value">{projectData.projectName}</div>
               </div>
               <div className="detail-field">
-                <label>STATUS</label>
-                <div className="field-value">{projectData.status}</div>
-              </div>
-              <div className="detail-field">
-                <label>NAME</label>
-                <div className="field-value">{projectData.name}</div>
-              </div>
-              <div className="detail-field">
                 <label>CUSTOMER</label>
                 <div className="field-value">{projectData.customer}</div>
+              </div>
+              <div className="detail-field">
+                <label>STATUS</label>
+                <div className="field-value">{projectData.status}</div>
               </div>
             </div>
           </div>
@@ -146,10 +148,6 @@ const ViewProjectDetail = ({ setCurrentPage }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
-              <div className="detail-field">
-                <label>START DATE</label>
-                <div className="field-value">{projectData.startDate}</div>
-              </div>
               <div className="detail-field">
                 <label>PROJECT LOCATION</label>
                 <div className="field-value">{projectData.projectLocation || '-'}</div>
@@ -274,8 +272,16 @@ const ViewProjectDetail = ({ setCurrentPage }) => {
                   </div>
                 </div>
                 <div className="quotations-info">
-                  <h4>Quotations</h4>
+                  <h4>Financial Information</h4>
                   <div className="detail-grid">
+                    <div className="detail-field">
+                      <label>START DATE</label>
+                      <div className="field-value">{projectData.startDate}</div>
+                    </div>
+                    <div className="detail-field">
+                      <label>END DATE</label>
+                      <div className="field-value">{projectData.endDate}</div>
+                    </div>
                     <div className="detail-field">
                       <label>ESTIMATED COST</label>
                       <div className="field-value">${projectData.estimatedCost.toFixed(2)}</div>

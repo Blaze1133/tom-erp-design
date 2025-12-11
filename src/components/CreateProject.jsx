@@ -11,11 +11,11 @@ const CreateProject = ({ setCurrentPage }) => {
   const [isSaved, setIsSaved] = useState(false);
   
   const [formData, setFormData] = useState({
-    jobId: 'To Be Generated',
+    projectId: '',
+    projectDescription: '',
     projectName: '',
     secondaryProjectName: '',
     customer: '',
-    project: '',
     salesPerson: '',
     projectManager: '',
     startDate: '',
@@ -49,10 +49,6 @@ const CreateProject = ({ setCurrentPage }) => {
   // Sales Representative searchable dropdown state
   const [salesPersonSearch, setSalesPersonSearch] = useState('');
   const [salesPersonDropdownOpen, setSalesPersonDropdownOpen] = useState(false);
-  
-  // Job ID edit state
-  const [jobIdHovered, setJobIdHovered] = useState(false);
-  const [jobIdEditable, setJobIdEditable] = useState(false);
   
   // Secondary Project Name edit state
   const [secondaryProjectNameHovered, setSecondaryProjectNameHovered] = useState(false);
@@ -349,47 +345,52 @@ const CreateProject = ({ setCurrentPage }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
+              {/* Project ID */}
               <div className="detail-field">
-                <label>JOB ID <span style={{ color: 'red' }}>*</span></label>
-                <div 
-                  style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                  onMouseEnter={() => setJobIdHovered(true)}
-                  onMouseLeave={() => setJobIdHovered(false)}
-                >
-                  <input
-                    type="text"
-                    name="jobId"
-                    value={formData.jobId}
-                    className="form-control"
-                    readOnly={!jobIdEditable}
-                    onChange={(e) => setFormData({ ...formData, jobId: e.target.value })}
-                    style={{ 
-                      background: jobIdEditable ? '#fff' : '#f5f5f5', 
-                      cursor: jobIdEditable ? 'text' : 'not-allowed',
-                      flex: 1
-                    }}
-                  />
-                  {jobIdHovered && (
-                    <button
-                      type="button"
-                      onClick={() => setJobIdEditable(!jobIdEditable)}
-                      style={{
-                        position: 'absolute',
-                        right: '10px',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        color: jobIdEditable ? '#28a745' : '#007bff',
-                        fontSize: '14px',
-                        padding: '4px 8px'
-                      }}
-                      title={jobIdEditable ? 'Lock' : 'Edit'}
-                    >
-                      <i className={jobIdEditable ? 'fas fa-check' : 'fas fa-edit'}></i>
-                    </button>
-                  )}
-                </div>
+                <label>PROJECT ID <span style={{ color: 'red' }}>*</span></label>
+                <input
+                  type="text"
+                  name="projectId"
+                  value={formData.projectId}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  placeholder="e.g., TOM-001"
+                  required
+                />
               </div>
+              
+              {/* Project Description */}
+              <div className="detail-field">
+                <label>PROJECT DESCRIPTION</label>
+                <textarea
+                  name="projectDescription"
+                  value={formData.projectDescription}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  placeholder="Enter project description"
+                  rows="3"
+                  style={{ 
+                    minHeight: '60px',
+                    resize: 'both',
+                    overflow: 'auto'
+                  }}
+                />
+              </div>
+              
+              {/* Project Name */}
+              <div className="detail-field">
+                <label>PROJECT NAME <span style={{ color: 'red' }}>*</span></label>
+                <input
+                  type="text"
+                  name="projectName"
+                  value={formData.projectName}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  placeholder="Enter project name"
+                  required
+                />
+              </div>
+              
               {/* Customer Dropdown */}
               <div className="detail-field" style={{ position: 'relative', zIndex: showCustomerDropdown ? 10001 : 'auto' }}>
                 <label className="form-label required">Customer <span style={{ color: 'red' }}>*</span></label>
@@ -494,113 +495,6 @@ const CreateProject = ({ setCurrentPage }) => {
                   )}
                 </div>
               </div>
-              {/* Project Dropdown */}
-              <div className="detail-field" style={{ position: 'relative', zIndex: showProjectDropdown ? 10001 : 'auto' }}>
-                <label className="form-label">Project <span style={{ color: 'red' }}>*</span></label>
-                <div 
-                  style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
-                  onMouseEnter={() => setProjectHovered(true)}
-                  onMouseLeave={() => setProjectHovered(false)}
-                >
-                  <div style={{ position: 'relative', flex: 1 }}>
-                    <input 
-                      type="text"
-                      className="form-control"
-                      value={formData.project}
-                      onChange={handleProjectSearchChange}
-                      onFocus={() => setShowProjectDropdown(true)}
-                      placeholder="<Type then tab>"
-                    />
-                    <button 
-                      type="button"
-                      style={{ 
-                        position: 'absolute', 
-                        right: '8px', 
-                        top: '50%', 
-                        transform: 'translateY(-50%)', 
-                        background: 'transparent', 
-                        border: 'none', 
-                        cursor: 'pointer', 
-                        padding: '4px 8px',
-                        fontSize: '14px'
-                      }}
-                      onClick={() => setShowProjectDropdown(!showProjectDropdown)}
-                    >
-                      <i className="fas fa-chevron-down"></i>
-                    </button>
-                    {showProjectDropdown && (
-                      <>
-                        <div 
-                          style={{ 
-                            position: 'fixed', 
-                            top: 0, 
-                            left: 0, 
-                            right: 0, 
-                            bottom: 0, 
-                            zIndex: 9999 
-                          }}
-                          onClick={() => setShowProjectDropdown(false)}
-                        />
-                        <div style={{ 
-                          position: 'absolute', 
-                          top: '100%', 
-                          left: 0, 
-                          right: 0, 
-                          backgroundColor: '#ffffff', 
-                          border: '1px solid #ddd', 
-                          borderRadius: '4px', 
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                          zIndex: 10000, 
-                          marginTop: '4px',
-                          overflowY: 'auto',
-                          maxHeight: '200px'
-                        }}>
-                          {(filteredProjects.length > 0 ? filteredProjects : (formData.customer ? projectOptions.filter(p => p.customer === formData.customer) : projectOptions)).map((project, idx) => (
-                            <div 
-                              key={idx}
-                              onClick={() => handleProjectSelect(project)}
-                              style={{ 
-                                padding: '10px 12px', 
-                                cursor: 'pointer', 
-                                fontSize: '13px',
-                                borderBottom: '1px solid #f5f5f5',
-                                backgroundColor: '#ffffff'
-                              }}
-                              onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
-                              onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
-                            >
-                              <div style={{ fontWeight: '500' }}>{project.name}</div>
-                              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
-                                {project.jobId} • {project.customer}
-                              </div>
-                            </div>
-                          ))}
-                          {filteredProjects.length === 0 && projectSearch && (
-                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
-                              No projects found
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  {projectHovered && (
-                    <button 
-                      type="button"
-                      className="btn btn-secondary"
-                      style={{ 
-                        padding: '0.5rem', 
-                        minWidth: 'auto',
-                        transition: 'opacity 0.2s'
-                      }}
-                      onClick={handleAddNewProject}
-                      title="Add new project"
-                    >
-                      <i className="fas fa-plus"></i>
-                    </button>
-                  )}
-                </div>
-              </div>
 
             {/* Sales Representative Searchable Dropdown */}
             <div className="detail-field" ref={salesPersonDropdownRef} style={{ position: 'relative', zIndex: salesPersonDropdownOpen ? 1001 : 1 }}>
@@ -699,26 +593,6 @@ const CreateProject = ({ setCurrentPage }) => {
                   <option key={index} value={priority}>{priority}</option>
                 ))}
               </select>
-            </div>
-            <div className="detail-field">
-              <label>START DATE</label>
-              <input
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleInputChange}
-                className="form-control"
-              />
-            </div>
-            <div className="detail-field">
-              <label>END DATE</label>
-              <input
-                type="date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleInputChange}
-                className="form-control"
-              />
             </div>
             <div className="detail-field">
               <label>PROJECT LOCATION</label>
@@ -843,6 +717,26 @@ const CreateProject = ({ setCurrentPage }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
+              <div className="detail-field">
+                <label>START DATE</label>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="detail-field">
+                <label>END DATE</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
               <div className="detail-field">
                 <label>ESTIMATED COST</label>
                 <input
