@@ -124,44 +124,29 @@ const ShipVendorReturns = () => {
   // List View
   if (currentView === 'list') {
     return (
-      <div className="sales-quotation">
-        <div className="page-header" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          padding: '20px 30px',
-          borderBottom: '2px solid #e0e0e0',
-          background: '#ffffff'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <i className="fas fa-shipping-fast" style={{ fontSize: '28px', color: '#4a90e2' }}></i>
-            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600', color: '#2c3e50' }}>Ship Vendor Return Authorization</h1>
+      <div className="enquiries-list">
+        <div className="list-header">
+          <div className="list-title">
+            <i className="fas fa-shipping-fast"></i>
+            <h1>Ship Vendor Return Authorization</h1>
           </div>
         </div>
 
-        <div className="quotation-container">
+        <div style={{ padding: '1.5rem' }}>
         {/* Vendor Filter Section */}
         <div style={{ 
-          marginBottom: '25px', 
-          display: 'flex', 
-          gap: '15px',
-          alignItems: 'center',
-          padding: '15px 20px',
-          background: 'linear-gradient(to right, #f8f9fa, #ffffff)',
-          borderRadius: '8px',
+          marginBottom: '1rem', 
+          padding: '1rem',
+          background: '#fff',
+          borderRadius: '4px',
           border: '1px solid #e0e0e0'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <label style={{ fontWeight: '500', color: '#555', fontSize: '14px' }}>VENDOR:</label>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">VENDOR</label>
             <select 
               className="form-control" 
               value={selectedVendor}
               onChange={(e) => setSelectedVendor(e.target.value)}
-              style={{ 
-                minWidth: '250px',
-                borderRadius: '6px',
-                padding: '8px 12px'
-              }}
             >
               <option>- All -</option>
               <option>CHIA HOCK HARDWARE TRADING</option>
@@ -174,37 +159,11 @@ const ShipVendorReturns = () => {
 
         {/* Table Section */}
         <div style={{ 
-          background: '#ffffff',
-          borderRadius: '10px',
+          background: '#fff',
+          borderRadius: '4px',
           border: '1px solid #e0e0e0',
-          overflow: 'hidden',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+          overflow: 'hidden'
         }}>
-          <div style={{ 
-            padding: '20px', 
-            borderBottom: '1px solid #e0e0e0',
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            background: '#fafbfc'
-          }}>
-            <h3 style={{ 
-              fontSize: '16px', 
-              fontWeight: '600', 
-              color: '#2c3e50',
-              margin: 0,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <i className="fas fa-list" style={{ color: '#4a90e2' }}></i>
-              Vendor Returns to Ship
-            </h3>
-            <button className="btn btn-secondary" style={{ fontSize: '14px' }}>
-              <i className="fas fa-cog" style={{ marginRight: '6px' }}></i>
-              Customize
-            </button>
-          </div>
 
           <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
             <table className="detail-items-table" style={{ minWidth: '100%', fontSize: '14px' }}>
@@ -260,21 +219,8 @@ const ShipVendorReturns = () => {
         </div>
 
         {/* Bottom Submit Button */}
-        <div style={{ 
-          marginTop: '25px', 
-          display: 'flex', 
-          gap: '12px',
-          padding: '15px 20px',
-          background: 'linear-gradient(to right, #f8f9fa, #ffffff)',
-          borderRadius: '8px',
-          border: '1px solid #e0e0e0'
-        }}>
-          <button className="btn btn-primary" onClick={handleSubmit} style={{ 
-            boxShadow: '0 2px 4px rgba(74, 144, 226, 0.2)',
-            fontWeight: '500',
-            padding: '10px 24px'
-          }}>
-            <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
+        <div style={{ marginTop: '1rem' }}>
+          <button className="btn btn-primary" onClick={handleSubmit}>
             Submit
           </button>
         </div>
@@ -293,59 +239,48 @@ const ShipVendorReturns = () => {
   // Edit View
   if (currentView === 'edit') {
     return (
-      <div className="sales-quotation">
-        <div className="page-header" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          padding: '20px 30px',
-          borderBottom: '2px solid #e0e0e0',
-          background: '#ffffff'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <i className="fas fa-edit" style={{ fontSize: '26px', color: '#4a90e2' }}></i>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '600', color: '#2c3e50' }}>Edit Vendor Return Authorization</h1>
-              <span style={{ fontWeight: '700', color: '#4a90e2', fontSize: '18px' }}>
-                {editFormData.referenceNo}
-              </span>
-              <span style={{ color: '#666', fontSize: '16px' }}>
-                {editFormData.vendor}
-              </span>
+      <div className="enquiry-detail">
+        <div className="detail-header">
+          <div className="detail-title">
+            <i className="fas fa-shipping-fast"></i>
+            <div>
+              <h1>Edit Vendor Return Authorization</h1>
+              <div className="detail-subtitle">
+                <span>{editFormData.referenceNo}</span>
+                <span style={{ margin: '0 0.5rem', color: '#d0d0d0' }}>•</span>
+                <span>{editFormData.vendor}</span>
+              </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <button className="btn btn-secondary" onClick={() => setCurrentView('detail')} style={{ 
-              minWidth: '120px',
-              padding: '10px 20px',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}>
-              <i className="fas fa-times" style={{ marginRight: '8px' }}></i>
-              Cancel
-            </button>
-            <button className="btn btn-primary" onClick={() => { showToast('Changes saved successfully!', 'success'); setCurrentView('detail'); }} style={{ 
-              minWidth: '120px',
-              padding: '10px 20px',
-              fontSize: '14px',
-              fontWeight: '500',
-              boxShadow: '0 2px 4px rgba(74, 144, 226, 0.3)'
-            }}>
-              <i className="fas fa-save" style={{ marginRight: '8px' }}></i>
-              Save
-            </button>
+          <div className="detail-actions">
+            <button className="btn-action">List</button>
+            <button className="btn-action">Search</button>
           </div>
         </div>
 
-        <div className="quotation-container">
+        <div className="detail-toolbar">
+          <button className="btn-toolbar" onClick={() => setCurrentView('detail')}>
+            <i className="fas fa-arrow-left"></i>
+            Back
+          </button>
+          <button className="btn-toolbar" onClick={() => setCurrentView('detail')}>
+            Cancel
+          </button>
+          <button className="btn-toolbar-primary" onClick={() => { showToast('Changes saved successfully!', 'success'); setCurrentView('detail'); }}>
+            Save
+          </button>
+        </div>
+
+        <div className="detail-content">
           {/* Primary Information */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-info-circle"></i>
-              Primary Information
-            </h2>
-            <div className="form-grid">
-              <div className="form-group">
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Primary Information</h3>
+            </div>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
                 <label className="form-label">REFERENCE NO.</label>
                 <input 
                   type="text" 
@@ -354,7 +289,7 @@ const ShipVendorReturns = () => {
                   disabled
                 />
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">CURRENCY</label>
                 <select className="form-control" defaultValue={editFormData.currency}>
                   <option>SGD</option>
@@ -362,7 +297,7 @@ const ShipVendorReturns = () => {
                   <option>EUR</option>
                 </select>
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">TAX</label>
                 <input 
                   type="text" 
@@ -370,7 +305,7 @@ const ShipVendorReturns = () => {
                   defaultValue={editFormData.tax}
                 />
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">VENDOR</label>
                 <input 
                   type="text" 
@@ -379,7 +314,7 @@ const ShipVendorReturns = () => {
                   disabled
                 />
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">EXCHANGE RATE</label>
                 <input 
                   type="text" 
@@ -387,7 +322,7 @@ const ShipVendorReturns = () => {
                   defaultValue={editFormData.exchangeRate}
                 />
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">CREATED FROM</label>
                 <input 
                   type="text" 
@@ -397,7 +332,7 @@ const ShipVendorReturns = () => {
                   style={{ color: '#4a90e2' }}
                 />
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">DATE</label>
                 <input 
                   type="text" 
@@ -406,7 +341,7 @@ const ShipVendorReturns = () => {
                   disabled
                 />
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">AMOUNT</label>
                 <input 
                   type="text" 
@@ -414,27 +349,27 @@ const ShipVendorReturns = () => {
                   defaultValue={editFormData.amount}
                 />
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">MEMO</label>
                 <input 
                   type="text" 
                   className="form-control"
                   defaultValue={editFormData.memo}
                 />
+                </div>
               </div>
             </div>
           </div>
 
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
           {/* Classification */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-tags"></i>
-              Classification
-            </h2>
-            <div className="form-grid">
-              <div className="form-group">
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Classification</h3>
+            </div>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
                 <label className="form-label">SUBSIDIARY</label>
                 <select className="form-control" defaultValue={editFormData.subsidiary}>
                   <option value="">Select...</option>
@@ -446,7 +381,7 @@ const ShipVendorReturns = () => {
                   <option value="TOM" selected>Tech Onshore MEP Prefabricators Pte Ltd - "TOM" (ROC 199507962E)</option>
                 </select>
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">CLASS</label>
                 <select className="form-control" defaultValue={editFormData.class}>
                   <option value="">Select...</option>
@@ -469,7 +404,7 @@ const ShipVendorReturns = () => {
                   <option>Structure</option>
                 </select>
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">LOCATION</label>
                 <select className="form-control" defaultValue={editFormData.location}>
                   <option value="">Select...</option>
@@ -483,7 +418,7 @@ const ShipVendorReturns = () => {
                   <option>TOM – 13</option>
                 </select>
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">DEPARTMENT</label>
                 <select className="form-control" defaultValue={editFormData.department}>
                   <option value="">Select...</option>
@@ -493,7 +428,7 @@ const ShipVendorReturns = () => {
                   <option>Operations</option>
                 </select>
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">PURCHASE TYPE</label>
                 <select className="form-control" defaultValue={editFormData.purchaseType}>
                   <option value="">Select...</option>
@@ -502,7 +437,7 @@ const ShipVendorReturns = () => {
                   <option>Non Critical</option>
                 </select>
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">MATERIAL SPECIFICATION</label>
                 <select className="form-control" defaultValue={editFormData.materialSpecification}>
                   <option value="">Select...</option>
@@ -512,7 +447,7 @@ const ShipVendorReturns = () => {
                   <option>test2</option>
                 </select>
               </div>
-              <div className="form-group">
+                <div className="detail-field">
                 <label className="form-label">CUSTOM CREATED FROM</label>
                 <input 
                   type="text" 
@@ -521,26 +456,21 @@ const ShipVendorReturns = () => {
                   disabled
                   style={{ color: '#4a90e2' }}
                 />
+                </div>
               </div>
             </div>
           </div>
 
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
           {/* Expenses & Items */}
-          <div className="form-section">
-            <h2 className="section-title">
-              <i className="fas fa-receipt"></i>
-              Expenses & Items
-            </h2>
+          <div className="detail-section">
+            <div className="section-header">
+              <i className="fas fa-chevron-down"></i>
+              <h3>Expenses & Items</h3>
+            </div>
+            <div className="section-body">
 
-            <button className="add-item-btn" style={{ marginBottom: '15px' }}>
-              <i className="fas fa-plus"></i>
-              Add Item
-            </button>
-
-            <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
-              <table className="detail-items-table" style={{ minWidth: '100%', fontSize: '13px' }}>
+              <div className="items-table-container">
+                <table className="items-table">
                 <thead>
                   <tr>
                     <th style={{width: '8%'}}>ITEM</th>
@@ -593,7 +523,8 @@ const ShipVendorReturns = () => {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -610,296 +541,191 @@ const ShipVendorReturns = () => {
 
   // Detail View (Read-only)
   return (
-    <div className="sales-quotation">
-      <div className="page-header" style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        padding: '20px 30px',
-        borderBottom: '2px solid #e0e0e0',
-        background: '#ffffff'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <i className="fas fa-file-alt" style={{ fontSize: '26px', color: '#4a90e2' }}></i>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '600', color: '#2c3e50' }}>Vendor Return Authorization</h1>
-            <span style={{ fontWeight: '700', color: '#4a90e2', fontSize: '18px' }}>
-              {selectedReturn?.returnNumber || 'VRATOM00019'}
-            </span>
-            <span style={{ color: '#666', fontSize: '16px' }}>
-              {selectedReturn?.vendorName || 'CHIA HOCK HARDWARE TRADING'}
-            </span>
-            <span style={{ 
-              padding: '4px 12px', 
-              background: '#fff3cd', 
-              color: '#856404', 
-              borderRadius: '4px',
-              fontSize: '11px',
-              fontWeight: '700',
-              letterSpacing: '0.5px'
-            }}>
-              PENDING RETURN
-            </span>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-shipping-fast"></i>
+          <div>
+            <h1>Vendor Return Authorization</h1>
+            <div className="detail-subtitle">
+              <span>{selectedReturn?.returnNumber || 'VRATOM00019'}</span>
+              <span className="status-badge" style={{ background: '#fff3cd', color: '#856404' }}>PENDING RETURN</span>
+            </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <button className="btn btn-secondary" onClick={handleEdit} style={{ 
-            minWidth: '120px',
-            padding: '10px 20px',
-            fontSize: '14px',
-            fontWeight: '500'
-          }}>
-            <i className="fas fa-edit" style={{ marginRight: '8px' }}></i>
-            Edit
-          </button>
-          <button className="btn btn-secondary" onClick={handleBack} style={{ 
-            minWidth: '120px',
-            padding: '10px 20px',
-            fontSize: '14px',
-            fontWeight: '500'
-          }}>
-            <i className="fas fa-arrow-left" style={{ marginRight: '8px' }}></i>
-            Back
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">Edit</button>
+          <button className="btn-action">Print</button>
+          <button className="btn-action">More</button>
         </div>
       </div>
 
-      <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar" onClick={handleEdit}>
+          Edit
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">REFERENCE NO.</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="VRATOM00019"
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">CURRENCY</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="SGD"
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">TAX</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="20.02"
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">VENDOR</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="CHIA HOCK HARDWARE TRADING"
-                disabled
-                style={{ color: '#4a90e2', cursor: 'pointer' }}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">EXCHANGE RATE</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="1.00"
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">CREATED FROM</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="Bill #35228"
-                disabled
-                style={{ color: '#4a90e2', cursor: 'pointer' }}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">DATE</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="2/4/2022"
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">AMOUNT</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="306.02"
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">MEMO</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="INV 35228 RE UPDATE"
-                disabled
-              />
-            </div>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>REFERENCE NO.</label>
+                <div className="field-value">VRATOM00019</div>
+              </div>
+              <div className="detail-field">
+                <label>CURRENCY</label>
+                <div className="field-value">SGD</div>
+              </div>
+              <div className="detail-field">
+                <label>TAX</label>
+                <div className="field-value">20.02</div>
+              </div>
+              <div className="detail-field">
+                <label>VENDOR</label>
+                <div className="field-value" style={{ color: '#4a90e2', cursor: 'pointer' }}>CHIA HOCK HARDWARE TRADING</div>
+              </div>
+              <div className="detail-field">
+                <label>EXCHANGE RATE</label>
+                <div className="field-value">1.00</div>
+              </div>
+              <div className="detail-field">
+                <label>CREATED FROM</label>
+                <div className="field-value" style={{ color: '#4a90e2', cursor: 'pointer' }}>Bill #35228</div>
+              </div>
+              <div className="detail-field">
+                <label>DATE</label>
+                <div className="field-value">2/4/2022</div>
+              </div>
+              <div className="detail-field">
+                <label>AMOUNT</label>
+                <div className="field-value">306.02</div>
+              </div>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <div className="field-value">INV 35228 RE UPDATE</div>
+              </div>
           </div>
         </div>
 
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
         {/* Classification */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-tags"></i>
-            Classification
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">SUBSIDIARY</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="Tech Onshore MEP Prefabricators Pte Ltd"
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">CLASS</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value=""
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">LOCATION</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value=""
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">DEPARTMENT</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value=""
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">PURCHASE TYPE</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value=""
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">MATERIAL SPECIFICATION</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value=""
-                disabled
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">CUSTOM CREATED FROM</label>
-              <input 
-                type="text" 
-                className="form-control"
-                value="Purchase Requisition #PR22TOM00157"
-                disabled
-                style={{ color: '#4a90e2', cursor: 'pointer' }}
-              />
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY</label>
+                <div className="field-value">Tech Onshore MEP Prefabricators Pte Ltd</div>
+              </div>
+              <div className="detail-field">
+                <label>CLASS</label>
+                <div className="field-value">-</div>
+              </div>
+              <div className="detail-field">
+                <label>LOCATION</label>
+                <div className="field-value">-</div>
+              </div>
+              <div className="detail-field">
+                <label>DEPARTMENT</label>
+                <div className="field-value">-</div>
+              </div>
+              <div className="detail-field">
+                <label>PURCHASE TYPE</label>
+                <div className="field-value">-</div>
+              </div>
+              <div className="detail-field">
+                <label>MATERIAL SPECIFICATION</label>
+                <div className="field-value">-</div>
+              </div>
+              <div className="detail-field">
+                <label>CUSTOM CREATED FROM</label>
+                <div className="field-value" style={{ color: '#4a90e2', cursor: 'pointer' }}>Purchase Requisition #PR22TOM00157</div>
+              </div>
             </div>
           </div>
         </div>
-
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
         {/* Expenses & Items */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-receipt"></i>
-            Expenses & Items
-          </h2>
-
-          <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
-            <table className="detail-items-table" style={{ minWidth: '100%', fontSize: '13px' }}>
-              <thead>
-                <tr>
-                  <th style={{width: '8%'}}>ITEM</th>
-                  <th style={{width: '10%'}}>VENDOR NAME</th>
-                  <th style={{width: '5%'}}>QUANTITY</th>
-                  <th style={{width: '5%'}}>UNITS</th>
-                  <th style={{width: '10%'}}>DESCRIPTION</th>
-                  <th style={{width: '5%'}}>RATE</th>
-                  <th style={{width: '5%'}}>AMOUNT</th>
-                  <th style={{width: '7%'}}>TAX CODE</th>
-                  <th style={{width: '5%'}}>TAX RATE</th>
-                  <th style={{width: '5%'}}>TAX AMT</th>
-                  <th style={{width: '6%'}}>GROSS AMT</th>
-                  <th style={{width: '5%'}}>OPTIONS</th>
-                  <th style={{width: '6%'}}>DEPARTMENT</th>
-                  <th style={{width: '5%'}}>CLASS</th>
-                  <th style={{width: '6%'}}>LOCATION</th>
-                  <th style={{width: '14%'}}>CUSTOMER:PROJECT</th>
-                  <th style={{width: '4%'}}>BILLABLE</th>
-                  <th style={{width: '4%'}}>CLOSED</th>
-                  <th style={{width: '5%'}}>HISTORY</th>
-                </tr>
-              </thead>
-              <tbody>
-                {itemsData.map((item) => (
-                  <tr key={item.id}>
-                    <td style={{ padding: '8px' }}>{item.item}</td>
-                    <td style={{ padding: '8px' }}>{item.vendorName}</td>
-                    <td style={{ padding: '8px', textAlign: 'right' }}>{item.quantity}</td>
-                    <td style={{ padding: '8px' }}>{item.units}</td>
-                    <td style={{ padding: '8px' }}>{item.description}</td>
-                    <td style={{ padding: '8px', textAlign: 'right' }}>{item.rate.toFixed(2)}</td>
-                    <td style={{ padding: '8px', textAlign: 'right' }}>{item.amount.toFixed(2)}</td>
-                    <td style={{ padding: '8px' }}>{item.taxCode}</td>
-                    <td style={{ padding: '8px', textAlign: 'right' }}>{item.taxRate}%</td>
-                    <td style={{ padding: '8px', textAlign: 'right' }}>{item.taxAmt.toFixed(2)}</td>
-                    <td style={{ padding: '8px', textAlign: 'right', fontWeight: '600' }}>{item.grossAmt.toFixed(2)}</td>
-                    <td style={{ padding: '8px' }}>{item.options}</td>
-                    <td style={{ padding: '8px' }}>{item.department}</td>
-                    <td style={{ padding: '8px' }}>{item.class}</td>
-                    <td style={{ padding: '8px' }}>{item.location}</td>
-                    <td style={{ padding: '8px', fontSize: '12px' }}>{item.customerProject}</td>
-                    <td style={{ padding: '8px' }}>{item.billable}</td>
-                    <td style={{ padding: '8px' }}>{item.closed}</td>
-                    <td style={{ padding: '8px' }}>
-                      <span style={{ color: '#4a90e2', cursor: 'pointer', textDecoration: 'underline' }}>
-                        {item.history}
-                      </span>
-                    </td>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Expenses & Items</h3>
+          </div>
+          <div className="section-body">
+            <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
+              <table className="detail-items-table" style={{ minWidth: '100%', fontSize: '13px' }}>
+                <thead>
+                  <tr>
+                    <th style={{width: '8%'}}>ITEM</th>
+                    <th style={{width: '10%'}}>VENDOR NAME</th>
+                    <th style={{width: '5%'}}>QUANTITY</th>
+                    <th style={{width: '5%'}}>UNITS</th>
+                    <th style={{width: '10%'}}>DESCRIPTION</th>
+                    <th style={{width: '5%'}}>RATE</th>
+                    <th style={{width: '5%'}}>AMOUNT</th>
+                    <th style={{width: '7%'}}>TAX CODE</th>
+                    <th style={{width: '5%'}}>TAX RATE</th>
+                    <th style={{width: '5%'}}>TAX AMT</th>
+                    <th style={{width: '6%'}}>GROSS AMT</th>
+                    <th style={{width: '5%'}}>OPTIONS</th>
+                    <th style={{width: '6%'}}>DEPARTMENT</th>
+                    <th style={{width: '5%'}}>CLASS</th>
+                    <th style={{width: '6%'}}>LOCATION</th>
+                    <th style={{width: '14%'}}>CUSTOMER:PROJECT</th>
+                    <th style={{width: '4%'}}>BILLABLE</th>
+                    <th style={{width: '4%'}}>CLOSED</th>
+                    <th style={{width: '5%'}}>HISTORY</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {itemsData.map((item) => (
+                    <tr key={item.id}>
+                      <td style={{ padding: '8px' }}>{item.item}</td>
+                      <td style={{ padding: '8px' }}>{item.vendorName}</td>
+                      <td style={{ padding: '8px', textAlign: 'right' }}>{item.quantity}</td>
+                      <td style={{ padding: '8px' }}>{item.units}</td>
+                      <td style={{ padding: '8px' }}>{item.description}</td>
+                      <td style={{ padding: '8px', textAlign: 'right' }}>{item.rate.toFixed(2)}</td>
+                      <td style={{ padding: '8px', textAlign: 'right' }}>{item.amount.toFixed(2)}</td>
+                      <td style={{ padding: '8px' }}>{item.taxCode}</td>
+                      <td style={{ padding: '8px', textAlign: 'right' }}>{item.taxRate}%</td>
+                      <td style={{ padding: '8px', textAlign: 'right' }}>{item.taxAmt.toFixed(2)}</td>
+                      <td style={{ padding: '8px', textAlign: 'right', fontWeight: '600' }}>{item.grossAmt.toFixed(2)}</td>
+                      <td style={{ padding: '8px' }}>{item.options}</td>
+                      <td style={{ padding: '8px' }}>{item.department}</td>
+                      <td style={{ padding: '8px' }}>{item.class}</td>
+                      <td style={{ padding: '8px' }}>{item.location}</td>
+                      <td style={{ padding: '8px', fontSize: '12px' }}>{item.customerProject}</td>
+                      <td style={{ padding: '8px' }}>{item.billable}</td>
+                      <td style={{ padding: '8px' }}>{item.closed}</td>
+                      <td style={{ padding: '8px' }}>
+                        <span style={{ color: '#4a90e2', cursor: 'pointer', textDecoration: 'underline' }}>
+                          {item.history}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+      </div>
       </div>
 
       <Toast 

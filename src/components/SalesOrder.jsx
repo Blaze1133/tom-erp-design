@@ -53,6 +53,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
     terms: '',
     billingSchedule: '',
     refBankPrint: '',
+    paymentMethod: '',
     paymentPeriod: '',
     billingAddress: '',
     billTo: '',
@@ -911,12 +912,6 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
             >
               System Information
             </button>
-            <button 
-              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
-              onClick={() => setActiveTab('custom')}
-            >
-              Custom
-            </button>
           </div>
 
           <div className="tabs-content">
@@ -933,15 +928,15 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                 <tr>
                   <th style={{ width: '30px' }}></th>
                   <th style={{minWidth: '150px'}}>ITEM</th>
-                  <th style={{minWidth: '400px'}}>DESC</th>
+                  <th style={{minWidth: '400px'}}>DESCRIPTION</th>
                   <th style={{minWidth: '80px'}}>QTY</th>
                   <th style={{minWidth: '100px'}}>UNITS</th>
                   <th style={{minWidth: '120px'}}>PRICE LEVEL</th>
                   <th style={{minWidth: '100px'}}>RATE</th>
-                  <th style={{minWidth: '100px'}}>AMT</th>
+                  <th style={{minWidth: '100px'}}>AMOUNT</th>
                   <th style={{minWidth: '120px'}}>TAX CODE</th>
                   <th style={{minWidth: '100px'}}>GROSS AMT</th>
-                  <th style={{minWidth: '180px'}}>CLASS</th>
+                  <th style={{minWidth: '150px'}}>CLASS</th>
                   <th style={{minWidth: '150px'}}>DEPARTMENT</th>
                   <th style={{minWidth: '150px'}}>LOCATION</th>
                   <th style={{minWidth: '180px'}}>COST ESTIMATE TYPE</th>
@@ -1002,7 +997,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         </div>
                       )}
                     </td>
-                    <td><input type="text" className="form-control" value={item.item} onChange={(e) => updateItem(item.id, 'item', e.target.value)} style={{minWidth: '200px', height: '40px'}} /></td>
+                    <td><input type="text" className="form-control" value={item.item} onChange={(e) => updateItem(item.id, 'item', e.target.value)} style={{minWidth: '150px', height: '32px'}} /></td>
                     <td>
                       <textarea 
                         className="form-control"
@@ -1011,26 +1006,24 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         placeholder="Enter description"
                         style={{ 
                           minWidth: '400px', 
-                          minHeight: '60px',
-                          resize: 'both',
-                          overflow: 'auto'
+                          minHeight: '32px',
+                          resize: 'vertical',
+                          overflow: 'auto',
+                          fontSize: '13px',
+                          padding: '4px 8px'
                         }}
-                        rows="3"
-                        onInput={(e) => {
-                          e.target.style.height = 'auto';
-                          e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
-                        }}
+                        rows="1"
                       />
                     </td>
-                    <td><input type="number" className="form-control" value={item.quantity} onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)} style={{minWidth: '100px', height: '40px'}} /></td>
-                    <td><input type="text" className="form-control" value={item.units} onChange={(e) => updateItem(item.id, 'units', e.target.value)} style={{minWidth: '120px', height: '40px'}} /></td>
-                    <td><input type="text" className="form-control" value={item.priceLevel} onChange={(e) => updateItem(item.id, 'priceLevel', e.target.value)} style={{minWidth: '110px', height: '40px'}} /></td>
-                    <td><input type="number" className="form-control" value={item.rate} onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)} style={{minWidth: '120px', height: '40px'}} step="0.01" /></td>
-                    <td><input type="number" className="form-control" value={item.amount} onChange={(e) => updateItem(item.id, 'amount', parseFloat(e.target.value) || 0)} style={{minWidth: '120px', height: '40px'}} step="0.01" /></td>
-                    <td><input type="text" className="form-control" value={item.taxCode} onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)} style={{minWidth: '110px', height: '40px'}} /></td>
-                    <td><input type="number" className="form-control" value={item.grossAmount} onChange={(e) => updateItem(item.id, 'grossAmount', parseFloat(e.target.value) || 0)} style={{minWidth: '110px', height: '40px'}} step="0.01" /></td>
+                    <td><input type="number" className="form-control" value={item.quantity} onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)} style={{minWidth: '80px', height: '32px'}} /></td>
+                    <td><input type="text" className="form-control" value={item.units} onChange={(e) => updateItem(item.id, 'units', e.target.value)} style={{minWidth: '100px', height: '32px'}} /></td>
+                    <td><input type="text" className="form-control" value={item.priceLevel} onChange={(e) => updateItem(item.id, 'priceLevel', e.target.value)} style={{minWidth: '120px', height: '32px'}} /></td>
+                    <td><input type="number" className="form-control" value={item.rate} onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)} style={{minWidth: '100px', height: '32px'}} step="0.01" /></td>
+                    <td><input type="number" className="form-control" value={item.amount} onChange={(e) => updateItem(item.id, 'amount', parseFloat(e.target.value) || 0)} style={{minWidth: '100px', height: '32px'}} step="0.01" /></td>
+                    <td><input type="text" className="form-control" value={item.taxCode} onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)} style={{minWidth: '120px', height: '32px'}} /></td>
+                    <td><input type="number" className="form-control" value={item.grossAmount} onChange={(e) => updateItem(item.id, 'grossAmount', parseFloat(e.target.value) || 0)} style={{minWidth: '100px', height: '32px'}} step="0.01" /></td>
                     <td>
-                      <select className="table-input" value={item.class} onChange={(e) => updateItem(item.id, 'class', e.target.value)} style={{width: '100%'}}>
+                      <select className="table-input" value={item.class} onChange={(e) => updateItem(item.id, 'class', e.target.value)} style={{width: '100%', height: '32px'}}>
                         <option value="">Select...</option>
                         <option>Consumable Item</option>
                         <option>Course</option>
@@ -1052,7 +1045,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                       </select>
                     </td>
                     <td>
-                      <select className="table-input" value={item.department} onChange={(e) => updateItem(item.id, 'department', e.target.value)} style={{width: '100%'}}>
+                      <select className="table-input" value={item.department} onChange={(e) => updateItem(item.id, 'department', e.target.value)} style={{width: '100%', height: '32px'}}>
                         <option value="">Select...</option>
                         <option>Sales</option>
                         <option>Engineering</option>
@@ -1061,7 +1054,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                       </select>
                     </td>
                     <td>
-                      <select className="table-input" value={item.location} onChange={(e) => updateItem(item.id, 'location', e.target.value)} style={{width: '100%'}}>
+                      <select className="table-input" value={item.location} onChange={(e) => updateItem(item.id, 'location', e.target.value)} style={{width: '100%', height: '32px'}}>
                         <option value="">Select...</option>
                         <option>Singapore Yard</option>
                         <option>Johor Facility</option>
@@ -1069,13 +1062,13 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                       </select>
                     </td>
                     <td>
-                      <select className="table-input" value={item.costEstimateType} onChange={(e) => updateItem(item.id, 'costEstimateType', e.target.value)} style={{width: '100%'}}>
+                      <select className="table-input" value={item.costEstimateType} onChange={(e) => updateItem(item.id, 'costEstimateType', e.target.value)} style={{width: '100%', height: '32px'}}>
                         <option>Fixed</option>
                         <option>Variable</option>
                         <option>Estimated</option>
                       </select>
                     </td>
-                    <td><input type="number" className="form-control" value={item.estimatedExtendedCost} onChange={(e) => updateItem(item.id, 'estimatedExtendedCost', parseFloat(e.target.value) || 0)} style={{minWidth: '180px', height: '40px'}} step="0.01" /></td>
+                    <td><input type="number" className="form-control" value={item.estimatedExtendedCost} onChange={(e) => updateItem(item.id, 'estimatedExtendedCost', parseFloat(e.target.value) || 0)} style={{minWidth: '180px', height: '32px'}} step="0.01" /></td>
                     <td>
                       <input 
                         type="text" 
@@ -1083,7 +1076,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         value={item.countryOfOrigin || ''}
                         onChange={(e) => updateItem(item.id, 'countryOfOrigin', e.target.value)}
                         placeholder="Country"
-                        style={{minWidth: '180px', height: '40px'}}
+                        style={{minWidth: '150px', height: '32px'}}
                       />
                     </td>
                     <td>
@@ -1093,7 +1086,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         value={item.hsCode || ''}
                         onChange={(e) => updateItem(item.id, 'hsCode', e.target.value)}
                         placeholder="HS Code"
-                        style={{minWidth: '180px', height: '40px'}}
+                        style={{minWidth: '150px', height: '32px'}}
                       />
                     </td>
                   </tr>
@@ -1132,75 +1125,93 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
 
             {/* Shipping Tab */}
             {activeTab === 'shipping' && (
-              <div className="form-section">
-                <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-                  <div className="form-group">
-                    <label className="form-label">SHIP DATE</label>
-                    <input 
-                      type="date" 
-                      className="form-control"
-                      value={formData.shipDate}
-                      onChange={(e) => handleInputChange('shipDate', e.target.value)}
-                    />
+              <div className="tab-content" style={{ padding: '1.5rem', background: '#fafafa' }}>
+                {/* Shipping Information Section */}
+                <div className="detail-section" style={{ marginBottom: '1rem' }}>
+                  <div className="section-header" style={{ background: '#f5f5f5', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
+                    <h3 style={{ display: 'inline', fontSize: '0.9rem', fontWeight: '600', color: '#555' }}>Shipping Information</h3>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">SHIPPING CARRIER</label>
-                    <select 
-                      className="form-control"
-                      value={formData.shippingCarrier}
-                      onChange={(e) => handleInputChange('shippingCarrier', e.target.value)}
-                    >
-                      <option value="">Select...</option>
-                      <option>UPS</option>
-                      <option>More</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">SHIPPING METHOD</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={formData.shippingMethod}
-                      onChange={(e) => handleInputChange('shippingMethod', e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', paddingTop: '1.5rem' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={formData.shipComplete}
-                      onChange={(e) => handleInputChange('shipComplete', e.target.checked)}
-                      style={{ width: '18px', height: '18px' }}
-                    />
-                    <label style={{ fontWeight: '600', fontSize: '0.875rem', margin: 0 }}>SHIP COMPLETE</label>
+                  <div className="section-body" style={{ padding: '1rem', background: '#fff', borderRadius: '0 0 4px 4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Ship Date</label>
+                        <input 
+                          type="date" 
+                          className="form-control"
+                          value={formData.shipDate}
+                          onChange={(e) => handleInputChange('shipDate', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Shipping Carrier</label>
+                        <select 
+                          className="form-control"
+                          value={formData.shippingCarrier}
+                          onChange={(e) => handleInputChange('shippingCarrier', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option value="">Select...</option>
+                          <option>UPS</option>
+                          <option>More</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Shipping Method</label>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={formData.shippingMethod}
+                          onChange={(e) => handleInputChange('shippingMethod', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={formData.shipComplete}
+                        onChange={(e) => handleInputChange('shipComplete', e.target.checked)}
+                        style={{ width: '14px', height: '14px', marginRight: '0.4rem' }}
+                      />
+                      <label style={{ fontWeight: '500', fontSize: '0.8rem', margin: 0 }}>SHIP COMPLETE</label>
+                    </div>
                   </div>
                 </div>
 
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
-                <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Shipping Address</h4>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">SHIP TO <span className="required">*</span></label>
-                    <select 
-                      className="form-control"
-                      value={formData.shipTo}
-                      onChange={(e) => handleInputChange('shipTo', e.target.value)}
-                    >
-                      <option value="">- Custom -</option>
-                    </select>
+                {/* Shipping Address Section */}
+                <div className="detail-section">
+                  <div className="section-header" style={{ background: '#f5f5f5', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
+                    <h3 style={{ display: 'inline', fontSize: '0.9rem', fontWeight: '600', color: '#555' }}>Shipping Address</h3>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">SHIP TO</label>
-                    <textarea 
-                      className="form-control"
-                      rows="4"
-                      value={formData.shippingAddress}
-                      onChange={(e) => handleInputChange('shippingAddress', e.target.value)}
-                      placeholder="Enter shipping address"
-                    />
-                  </div>
-                  <div>
-                    <a href="#" style={{ color: '#4a90e2', fontSize: '0.875rem', textDecoration: 'none' }}>🗺 Map</a>
+                  <div className="section-body" style={{ padding: '1rem', background: '#fff', borderRadius: '0 0 4px 4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Ship To Select</label>
+                        <select 
+                          className="form-control"
+                          value={formData.shipTo}
+                          onChange={(e) => handleInputChange('shipTo', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option value="">- Custom -</option>
+                        </select>
+                      </div>
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Ship To</label>
+                        <textarea 
+                          className="form-control"
+                          rows="3"
+                          value={formData.shippingAddress}
+                          onChange={(e) => handleInputChange('shippingAddress', e.target.value)}
+                          placeholder="Enter shipping address"
+                          style={{ resize: 'vertical', fontSize: '0.875rem' }}
+                        />
+                        <a href="#" style={{ color: '#4a90e2', fontSize: '0.8rem', textDecoration: 'none', marginTop: '0.5rem', display: 'inline-block' }}>🗺 Map</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1208,80 +1219,128 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
 
             {/* Billing Tab */}
             {activeTab === 'billing' && (
-              <div className="form-section">
-                <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-                  <div className="form-group">
-                    <label className="form-label">TERMS</label>
-                    <select 
-                      className="form-control"
-                      value={formData.terms}
-                      onChange={(e) => handleInputChange('terms', e.target.value)}
-                    >
-                      <option value=""></option>
-                      <option>1% 10 Net 30</option>
-                      <option>2% 10 Net 30</option>
-                      <option>COD</option>
-                      <option>Due on receipt</option>
-                      <option>Immediate</option>
-                      <option>Net 10</option>
-                      <option>Net 15</option>
-                    </select>
+              <div className="tab-content" style={{ padding: '1.5rem', background: '#fafafa' }}>
+                {/* Billing Information Section */}
+                <div className="detail-section" style={{ marginBottom: '1rem' }}>
+                  <div className="section-header" style={{ background: '#f5f5f5', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
+                    <h3 style={{ display: 'inline', fontSize: '0.9rem', fontWeight: '600', color: '#555' }}>Billing Information</h3>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">BILLING SCHEDULE</label>
-                    <select 
-                      className="form-control"
-                      value={formData.billingSchedule}
-                      onChange={(e) => handleInputChange('billingSchedule', e.target.value)}
-                    >
-                      <option value=""></option>
-                      <option>- New -</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">REF BANK PRINT</label>
-                    <select 
-                      className="form-control"
-                      value={formData.refBankPrint}
-                      onChange={(e) => handleInputChange('refBankPrint', e.target.value)}
-                    >
-                      <option value=""></option>
-                      <option>- New -</option>
-                      <option>Tech Electric & Automation Pte Ltd,(DBS)</option>
-                      <option>Tech Marine Offshore(s) DBS</option>
-                      <option>Tech Offshore Marine (DQ) -DBS</option>
-                      <option>Tech Offshore Marine (s)(DBS)</option>
-                      <option>TOM MEP OCBC</option>
-                    </select>
+                  <div className="section-body" style={{ padding: '1rem', background: '#fff', borderRadius: '0 0 4px 4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Terms</label>
+                        <select 
+                          className="form-control"
+                          value={formData.terms}
+                          onChange={(e) => handleInputChange('terms', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option value="">Select...</option>
+                          <option>1% 10 Net 30</option>
+                          <option>2% 10 Net 30</option>
+                          <option>COD</option>
+                          <option>Due on receipt</option>
+                          <option>Immediate</option>
+                          <option>Net 10</option>
+                          <option>Net 15</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Billing Schedule</label>
+                        <select 
+                          className="form-control"
+                          value={formData.billingSchedule}
+                          onChange={(e) => handleInputChange('billingSchedule', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option value="">Select...</option>
+                          <option>- New -</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Ref Bank Print</label>
+                        <select 
+                          className="form-control"
+                          value={formData.refBankPrint}
+                          onChange={(e) => handleInputChange('refBankPrint', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option value="">Select...</option>
+                          <option>- New -</option>
+                          <option>Tech Electric & Automation Pte Ltd,(DBS)</option>
+                          <option>Tech Marine Offshore(s) DBS</option>
+                          <option>Tech Offshore Marine (DQ) -DBS</option>
+                          <option>Tech Offshore Marine (s)(DBS)</option>
+                          <option>TOM MEP OCBC</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+                {/* Payment Section */}
+                <div className="detail-section" style={{ marginBottom: '1rem' }}>
+                  <div className="section-header" style={{ background: '#f5f5f5', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
+                    <h3 style={{ display: 'inline', fontSize: '0.9rem', fontWeight: '600', color: '#555' }}>Payment</h3>
+                  </div>
+                  <div className="section-body" style={{ padding: '1rem', background: '#fff', borderRadius: '0 0 4px 4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Payment Method</label>
+                        <select 
+                          className="form-control"
+                          value={formData.paymentMethod || ''}
+                          onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option value="">Select...</option>
+                          <option>American Express</option>
+                          <option>Cash</option>
+                          <option>Check</option>
+                          <option>Discover</option>
+                          <option>Giro</option>
+                          <option>Master Card</option>
+                          <option>VISA</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>Billing Address</h4>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">BILL TO <span className="required">*</span></label>
-                    <select 
-                      className="form-control"
-                      value={formData.billTo}
-                      onChange={(e) => handleInputChange('billTo', e.target.value)}
-                    >
-                      <option value="">- Custom -</option>
-                    </select>
+                {/* Billing Address Section */}
+                <div className="detail-section">
+                  <div className="section-header" style={{ background: '#f5f5f5', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
+                    <h3 style={{ display: 'inline', fontSize: '0.9rem', fontWeight: '600', color: '#555' }}>Billing Address</h3>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">BILL TO</label>
-                    <textarea 
-                      className="form-control"
-                      rows="4"
-                      value={formData.billingAddress}
-                      onChange={(e) => handleInputChange('billingAddress', e.target.value)}
-                      placeholder="Enter billing address"
-                    />
-                  </div>
-                  <div>
-                    <a href="#" style={{ color: '#4a90e2', fontSize: '0.875rem', textDecoration: 'none' }}>🗺 Map</a>
+                  <div className="section-body" style={{ padding: '1rem', background: '#fff', borderRadius: '0 0 4px 4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Bill To Select</label>
+                        <select 
+                          className="form-control"
+                          value={formData.billTo}
+                          onChange={(e) => handleInputChange('billTo', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option value="">- Custom -</option>
+                        </select>
+                      </div>
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Bill To</label>
+                        <textarea 
+                          className="form-control"
+                          rows="3"
+                          value={formData.billingAddress}
+                          onChange={(e) => handleInputChange('billingAddress', e.target.value)}
+                          placeholder="Enter billing address"
+                          style={{ resize: 'vertical', fontSize: '0.875rem' }}
+                        />
+                        <a href="#" style={{ color: '#4a90e2', fontSize: '0.8rem', textDecoration: 'none', marginTop: '0.5rem', display: 'inline-block' }}>🗺 Map</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1289,76 +1348,93 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
 
             {/* Accounting Tab */}
             {activeTab === 'accounting' && (
-              <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Account Information</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-                  <div className="form-group">
-                    <label className="form-label">CURRENCY <span className="required">*</span></label>
-                    <select 
-                      className="form-control"
-                      value={formData.currency || 'SGD'}
-                      onChange={(e) => handleInputChange('currency', e.target.value)}
-                    >
-                      <option>SGD</option>
-                      <option>USD</option>
-                      <option>EUR</option>
-                      <option>MYR</option>
-                    </select>
+              <div className="tab-content" style={{ padding: '1.5rem', background: '#fafafa' }}>
+                {/* Account Information Section */}
+                <div className="detail-section" style={{ marginBottom: '1rem' }}>
+                  <div className="section-header" style={{ background: '#f5f5f5', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
+                    <h3 style={{ display: 'inline', fontSize: '0.9rem', fontWeight: '600', color: '#555' }}>Account Information</h3>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">EXCHANGE RATE <span className="required">*</span></label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={formData.exchangeRate || '1.00'}
-                      onChange={(e) => handleInputChange('exchangeRate', e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">EST. EXTENDED COST</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value="0.00"
-                      readOnly
-                      style={{ backgroundColor: '#f5f5f5' }}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">EST. GROSS PROFIT</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value="0.00"
-                      readOnly
-                      style={{ backgroundColor: '#f5f5f5' }}
-                    />
+                  <div className="section-body" style={{ padding: '1rem', background: '#fff', borderRadius: '0 0 4px 4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Currency <span className="required">*</span></label>
+                        <select 
+                          className="form-control"
+                          value={formData.currency || 'SGD'}
+                          onChange={(e) => handleInputChange('currency', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        >
+                          <option>SGD</option>
+                          <option>USD</option>
+                          <option>EUR</option>
+                          <option>MYR</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Exchange Rate <span className="required">*</span></label>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={formData.exchangeRate || '1.00'}
+                          onChange={(e) => handleInputChange('exchangeRate', e.target.value)}
+                          style={{ fontSize: '0.875rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Est. Extended Cost</label>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value="0.00"
+                          readOnly
+                          style={{ backgroundColor: '#f5f5f5', fontSize: '0.875rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Est. Gross Profit</label>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value="0.00"
+                          readOnly
+                          style={{ backgroundColor: '#f5f5f5', fontSize: '0.875rem' }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Tax Information</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                  <div className="form-group">
-                    <label className="form-label">TAX ID</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={formData.taxId || ''}
-                      onChange={(e) => handleInputChange('taxId', e.target.value)}
-                      placeholder="Enter tax ID"
-                    />
+                {/* Tax Information Section */}
+                <div className="detail-section">
+                  <div className="section-header" style={{ background: '#f5f5f5', padding: '0.75rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                    <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
+                    <h3 style={{ display: 'inline', fontSize: '0.9rem', fontWeight: '600', color: '#555' }}>Tax Information</h3>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">EST. GROSS PROFIT PERCENT</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value=""
-                      readOnly
-                      style={{ backgroundColor: '#f5f5f5' }}
-                    />
+                  <div className="section-body" style={{ padding: '1rem', background: '#fff', borderRadius: '0 0 4px 4px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Tax ID</label>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={formData.taxId || ''}
+                          onChange={(e) => handleInputChange('taxId', e.target.value)}
+                          placeholder="Enter tax ID"
+                          style={{ fontSize: '0.875rem' }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '500', color: '#666', marginBottom: '0.35rem', textTransform: 'uppercase' }}>Est. Gross Profit Percent</label>
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value=""
+                          readOnly
+                          style={{ backgroundColor: '#f5f5f5', fontSize: '0.875rem' }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1500,24 +1576,34 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
 
             {/* System Information Tab */}
             {activeTab === 'system' && (
-              <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>System Information</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '500px' }}>
-                  <div className="form-group">
-                    <label className="form-label">REF CUSTOMER</label>
+              <div className="tab-content" style={{ padding: '1.5rem' }}>
+                <h3 style={{ fontSize: '0.95rem', fontWeight: '700', marginBottom: '0.5rem', color: '#333', textTransform: 'uppercase' }}>System Information</h3>
+                <hr style={{ border: 'none', borderTop: '2px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
+                
+                <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                  <div className="detail-field">
+                    <label>REF CUSTOMER</label>
                     <div style={{ position: 'relative' }}>
                       <input 
                         type="text" 
                         className="form-control"
                         value={formData.refCustomer || ''}
                         onChange={(e) => handleInputChange('refCustomer', e.target.value)}
-                        placeholder="< Type then tab >"
+                        placeholder="<Type then tab>"
                       />
-                      <div style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', display: 'flex', gap: '0.25rem' }}>
-                        <button style={{ background: 'none', border: 'none', padding: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                      <div style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', display: 'flex', gap: '0.5rem' }}>
+                        <button 
+                          type="button"
+                          style={{ background: 'none', border: 'none', padding: '0', cursor: 'pointer', fontSize: '0.75rem', color: '#4a90e2' }}
+                          title="List"
+                        >
                           📋 List
                         </button>
-                        <button style={{ background: 'none', border: 'none', padding: '0.25rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                        <button 
+                          type="button"
+                          style={{ background: 'none', border: 'none', padding: '0', cursor: 'pointer', fontSize: '0.75rem', color: '#4a90e2' }}
+                          title="Search"
+                        >
                           🔍 Search
                         </button>
                       </div>
@@ -1527,35 +1613,65 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
               </div>
             )}
 
-            {/* Custom Tab */}
-            {activeTab === 'custom' && (
-              <div className="form-section">
-                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1.5rem', color: '#333' }}>Custom Fields</h3>
-                <div className="form-grid" style={{ gridTemplateColumns: '1fr', gap: '1.5rem', maxWidth: '600px' }}>
-                  <div className="form-group">
-                    <label className="form-label">TEST TRANSACTION FIELD</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={formData.testTransactionField || ''}
-                      onChange={(e) => handleInputChange('testTransactionField', e.target.value)}
-                      placeholder="Enter test transaction field"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">GST TYPE</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={formData.gstType || ''}
-                      onChange={(e) => handleInputChange('gstType', e.target.value)}
-                      placeholder="Enter GST type"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="form-actions" style={{ display: 'flex', gap: '0.75rem', padding: '1rem 1.5rem', borderTop: '1px solid #e0e0e0', background: '#fff' }}>
+          <button 
+            className="btn-cancel" 
+            onClick={handleCancel}
+            style={{
+              padding: '0.5rem 1.5rem',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              border: '1px solid #ddd',
+              background: '#fff',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Cancel
+          </button>
+          <button 
+            className="btn-toolbar"
+            onClick={handleCancel}
+            style={{
+              padding: '0.5rem 1.5rem',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              border: '1px solid #ddd',
+              background: '#fff',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            <i className="fas fa-arrow-left"></i>
+            Back
+          </button>
+          <button 
+            className="btn-save" 
+            onClick={handleSubmit}
+            style={{
+              padding: '0.5rem 1.5rem',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              border: 'none',
+              background: '#dc3545',
+              color: '#fff',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            <i className="fas fa-save"></i>
+            Save
+          </button>
         </div>
       </div>
 

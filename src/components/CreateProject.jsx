@@ -343,8 +343,8 @@ const CreateProject = ({ setCurrentPage }) => {
             <i className="fas fa-chevron-down"></i>
             <h3>Primary Information</h3>
           </div>
-          <div className="section-body">
-            <div className="detail-grid">
+          <div className="section-body" style={{ padding: '1rem' }}>
+            <div className="detail-grid" style={{ gap: '0.5rem' }}>
               {/* Project ID */}
               <div className="detail-field">
                 <label>PROJECT ID <span style={{ color: 'red' }}>*</span></label>
@@ -356,24 +356,6 @@ const CreateProject = ({ setCurrentPage }) => {
                   className="form-control"
                   placeholder="e.g., TOM-001"
                   required
-                />
-              </div>
-              
-              {/* Project Description */}
-              <div className="detail-field">
-                <label>PROJECT DESCRIPTION</label>
-                <textarea
-                  name="projectDescription"
-                  value={formData.projectDescription}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  placeholder="Enter project description"
-                  rows="3"
-                  style={{ 
-                    minHeight: '60px',
-                    resize: 'both',
-                    overflow: 'auto'
-                  }}
                 />
               </div>
               
@@ -607,6 +589,22 @@ const CreateProject = ({ setCurrentPage }) => {
                   <option key={index} value={location}>{location}</option>
                 ))}
               </select>
+            </div>
+            <div className="detail-field full-width">
+              <label>PROJECT DESCRIPTION</label>
+              <textarea
+                name="projectDescription"
+                value={formData.projectDescription}
+                onChange={handleInputChange}
+                className="form-control"
+                placeholder="Enter project description"
+                rows="3"
+                style={{ 
+                  minHeight: '60px',
+                  resize: 'both',
+                  overflow: 'auto'
+                }}
+              />
             </div>
             <div className="detail-field full-width">
               <label>SCOPE OF WORK</label>

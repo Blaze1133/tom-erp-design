@@ -99,35 +99,48 @@ const ItemReceipt = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-box-open" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Item Receipt</h1>
-          <span style={{ marginLeft: '10px', color: '#666', fontSize: '14px' }}>To Be Generated</span>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-box-open"></i>
+          <div>
+            <h1>Item Receipt</h1>
+            <div className="detail-subtitle">
+              <span>To Be Generated</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          Save
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label required">Custom Form</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+              <label>CUSTOM FORM *</label>
               <select 
                 className="form-control"
                 value={formData.customForm}
@@ -136,27 +149,27 @@ const ItemReceipt = ({ setCurrentPage }) => {
                 <option>TOM Item Receipt</option>
                 <option>Standard Item Receipt</option>
               </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label required">Date</label>
+              </div>
+              <div className="detail-field">
+              <label>DATE *</label>
               <input 
                 type="date" 
                 className="form-control"
                 value={formData.date}
                 onChange={(e) => handleInputChange('date', e.target.value)}
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Reference #</label>
+              </div>
+              <div className="detail-field">
+              <label>REFERENCE #</label>
               <input 
                 type="text" 
                 className="form-control"
                 value={formData.referenceNumber}
                 disabled
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Posting Period</label>
+              </div>
+              <div className="detail-field">
+              <label>POSTING PERIOD</label>
               <select 
                 className="form-control"
                 value={formData.postingPeriod}
@@ -166,18 +179,18 @@ const ItemReceipt = ({ setCurrentPage }) => {
                 <option>Dec 2025</option>
                 <option>Jan 2026</option>
               </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Vendor</label>
+              </div>
+              <div className="detail-field">
+              <label>VENDOR</label>
               <input 
                 type="text" 
                 className="form-control"
                 value={formData.vendor}
                 disabled
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Memo</label>
+              </div>
+              <div className="detail-field">
+              <label>MEMO</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -185,9 +198,9 @@ const ItemReceipt = ({ setCurrentPage }) => {
                 onChange={(e) => handleInputChange('memo', e.target.value)}
                 placeholder="Enter memo"
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Created From</label>
+              </div>
+              <div className="detail-field">
+              <label>CREATED FROM</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -195,38 +208,38 @@ const ItemReceipt = ({ setCurrentPage }) => {
                 disabled
               />
             </div>
+            </div>
           </div>
         </div>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
         {/* Classification */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-tags"></i>
-            Classification
-          </h2>
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">Subsidiary</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+              <label>SUBSIDIARY</label>
               <input 
                 type="text" 
                 className="form-control"
                 value={formData.subsidiary}
                 disabled
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Currency</label>
+              </div>
+              <div className="detail-field">
+              <label>CURRENCY</label>
               <input 
                 type="text" 
                 className="form-control"
                 value={formData.currency}
                 disabled
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Country of Origin</label>
+              </div>
+              <div className="detail-field">
+              <label>COUNTRY OF ORIGIN</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -234,9 +247,9 @@ const ItemReceipt = ({ setCurrentPage }) => {
                 onChange={(e) => handleInputChange('countryOfOrigin', e.target.value)}
                 placeholder="Enter country of origin"
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label">HS Code</label>
+              </div>
+              <div className="detail-field">
+              <label>HS CODE</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -247,8 +260,7 @@ const ItemReceipt = ({ setCurrentPage }) => {
             </div>
           </div>
         </div>
-
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
+        </div>
 
         {/* Tabbed Interface */}
         <div className="detail-tabs" style={{ marginTop: '2rem' }}>
@@ -264,75 +276,67 @@ const ItemReceipt = ({ setCurrentPage }) => {
             {/* Items & Expenses Tab */}
             {activeTab === 'items' && (
               <div className="form-section">
-                <h2 className="section-title">
-                  <i className="fas fa-boxes"></i>
-                  Items
-                </h2>
-                
-                <button className="add-item-btn" onClick={handleAddItem}>
-                  <i className="fas fa-plus"></i>
-                  Add Item
-                </button>
-                {formData.items.length > 0 ? (
-                  <div className="items-table-wrapper">
-              <table className="detail-items-table">
-                <thead>
-                  <tr>
-                    <th style={{width: '5%'}}>RECEIVE</th>
-                    <th style={{width: '10%'}}>ITEM</th>
-                    <th style={{width: '10%'}}>VENDOR NAME</th>
-                    <th style={{width: '15%'}}>DESC</th>
-                    <th style={{width: '8%'}}>TO LOCATION</th>
-                    <th style={{width: '6%'}}>ON HAND</th>
-                    <th style={{width: '7%'}}>REMAINING</th>
-                    <th style={{width: '6%'}}>QTY</th>
-                    <th style={{width: '6%'}}>UNITS</th>
-                    <th style={{width: '8%'}}>OPTIONS</th>
-                    <th style={{width: '7%'}}>RATE</th>
-                    <th style={{width: '6%'}}>CURRENCY</th>
-                    <th style={{width: '6%'}}>DO QUANTITY</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {formData.items.map((item) => (
-                    <tr key={item.id}>
-                      <td style={{textAlign: 'center'}}>
-                        <input 
-                          type="checkbox" 
-                          checked={item.receive} 
-                          onChange={(e) => handleCheckboxChange(item.id, e.target.checked)}
-                        />
-                      </td>
-                      <td><input type="text" className="table-input" defaultValue={item.item} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.vendorName} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.description} style={{width: '100%'}} /></td>
-                      <td>
-                        <select className="table-input" defaultValue={item.toLocation} style={{width: '100%'}}>
-                          <option value="">Select...</option>
-                          <option>TOM-11</option>
-                          <option>TOM-12</option>
-                          <option>Warehouse A</option>
-                          <option>Warehouse B</option>
-                        </select>
-                      </td>
-                      <td><input type="number" className="table-input" defaultValue={item.onHand} style={{width: '100%'}} disabled /></td>
-                      <td><input type="number" className="table-input" defaultValue={item.remaining} style={{width: '100%'}} disabled /></td>
-                      <td><input type="number" className="table-input" defaultValue={item.quantity} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.units} style={{width: '100%'}} /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.options} style={{width: '100%'}} /></td>
-                      <td><input type="number" className="table-input" defaultValue={item.rate} style={{width: '100%'}} step="0.01" /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.currency} style={{width: '100%'}} disabled /></td>
-                      <td><input type="text" className="table-input" defaultValue={item.doQuantity} style={{width: '100%'}} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-                ) : (
-                  <div className="empty-items-message">
-                    <p>No items added yet. Click "Add Item" to start adding items to this receipt.</p>
-                  </div>
-                )}
+                <div className="items-table-container">
+                  <table className="items-table">
+                    <thead>
+                      <tr>
+                        <th style={{minWidth: '60px'}}>RECEIVE</th>
+                        <th style={{minWidth: '150px'}}>ITEM</th>
+                        <th style={{minWidth: '400px'}}>DESCRIPTION</th>
+                        <th style={{minWidth: '150px'}}>VENDOR NAME</th>
+                        <th style={{minWidth: '150px'}}>TO LOCATION</th>
+                        <th style={{minWidth: '100px'}}>ON HAND</th>
+                        <th style={{minWidth: '100px'}}>REMAINING</th>
+                        <th style={{minWidth: '80px'}}>QTY</th>
+                        <th style={{minWidth: '80px'}}>UNITS</th>
+                        <th style={{minWidth: '150px'}}>OPTIONS</th>
+                        <th style={{minWidth: '100px'}}>RATE</th>
+                        <th style={{minWidth: '100px'}}>CURRENCY</th>
+                        <th style={{minWidth: '120px'}}>DO QUANTITY</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {formData.items.map((item) => (
+                        <tr key={item.id}>
+                          <td style={{textAlign: 'center'}}>
+                            <input 
+                              type="checkbox" 
+                              checked={item.receive} 
+                              onChange={(e) => handleCheckboxChange(item.id, e.target.checked)}
+                            />
+                          </td>
+                          <td><input type="text" className="table-input" defaultValue={item.item} /></td>
+                          <td>
+                            <textarea 
+                              className="table-input" 
+                              defaultValue={item.description}
+                              rows="2"
+                              style={{ resize: 'vertical', minHeight: '40px' }}
+                            />
+                          </td>
+                          <td><input type="text" className="table-input" defaultValue={item.vendorName} /></td>
+                          <td>
+                            <select className="table-input" defaultValue={item.toLocation}>
+                              <option value="">Select...</option>
+                              <option>TOM-11</option>
+                              <option>TOM-12</option>
+                              <option>Warehouse A</option>
+                              <option>Warehouse B</option>
+                            </select>
+                          </td>
+                          <td><input type="number" className="table-input" defaultValue={item.onHand} disabled /></td>
+                          <td><input type="number" className="table-input" defaultValue={item.remaining} disabled /></td>
+                          <td><input type="number" className="table-input" defaultValue={item.quantity} /></td>
+                          <td><input type="text" className="table-input" defaultValue={item.units} /></td>
+                          <td><input type="text" className="table-input" defaultValue={item.options} /></td>
+                          <td><input type="number" className="table-input" defaultValue={item.rate} step="0.01" /></td>
+                          <td><input type="text" className="table-input" defaultValue={item.currency} disabled /></td>
+                          <td><input type="text" className="table-input" defaultValue={item.doQuantity} /></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 

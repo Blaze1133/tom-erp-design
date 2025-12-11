@@ -28,6 +28,7 @@ const CreatePurchaseRequisition = ({ setCurrentPage }) => {
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     projectName: '',
     requestedBy: '',
+    salesRepresentative: '',
     requestedType: 'Project PR',
     requireDate: '',
     currency: 'SGD',
@@ -81,6 +82,14 @@ const CreatePurchaseRequisition = ({ setCurrentPage }) => {
     'TEA0022 John Tan',
     'TEA0023 Mary Lim',
     'MEP057 Mahendran S/O Minisamy'
+  ];
+
+  const salesRepOptions = [
+    'John Smith',
+    'Sarah Johnson',
+    'Michael Chen',
+    'Emily Wong',
+    'David Kumar'
   ];
 
   const showToast = (message, type = 'success') => {
@@ -535,6 +544,19 @@ const CreatePurchaseRequisition = ({ setCurrentPage }) => {
                 >
                   {statusOptions.map((status, index) => (
                     <option key={index} value={status}>{status}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>SALES REPRESENTATIVE</label>
+                <select 
+                  className="form-control"
+                  value={formData.salesRepresentative}
+                  onChange={(e) => handleFormChange('salesRepresentative', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  {salesRepOptions.map((rep, index) => (
+                    <option key={index} value={rep}>{rep}</option>
                   ))}
                 </select>
               </div>

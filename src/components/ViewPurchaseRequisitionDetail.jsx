@@ -26,6 +26,7 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
     subsidiary: 'Tech Electric & Automation Pte Ltd',
     projectName: 'Marine Equipment Supply - Q1 2024',
     requestedBy: 'MEP01 001 JEGANATHAN SUNDARAVELU',
+    salesRepresentative: 'John Smith',
     requestedType: 'Project PR',
     requireDate: '30/10/2024',
     approvalRejectionRemarks: '',
@@ -187,6 +188,10 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
               <div className="detail-field">
                 <label>STATUS</label>
                 <div className="field-value">{requisitionData.statusDetail}</div>
+              </div>
+              <div className="detail-field">
+                <label>SALES REPRESENTATIVE</label>
+                <div className="field-value">{requisitionData.salesRepresentative}</div>
               </div>
               <div className="detail-field">
                 <label>MEMO</label>

@@ -8,6 +8,25 @@ const OrderRequisitions = () => {
   const [department, setDepartment] = useState('');
   const [type, setType] = useState('');
   const [prOwner, setPrOwner] = useState('');
+  const [prOwnerSearch, setPrOwnerSearch] = useState('');
+  const [showPrOwnerDropdown, setShowPrOwnerDropdown] = useState(false);
+
+  const prOwners = [
+    'MEP002 Bhuiyan Manik',
+    'MEP003 Boominathan Rajeshkanna',
+    'MEP004 Peraman Ramachandran',
+    'MEP007 annamalai murugan',
+    'MEP008 RAHMAN SAIDUR',
+    'MEP0080 Karuppaiya Muthuraman',
+    'MEP009 sankar saravanan',
+    'MEP01 001 JEGANATHAN SUNDARAVELU',
+    'MEP01 002 KALIYAMOORTHY PRAKASH',
+    'MEP01 003 KARUPPU UDAIYAR'
+  ];
+
+  const filteredPrOwners = prOwners.filter(owner => 
+    owner.toLowerCase().includes(prOwnerSearch.toLowerCase())
+  );
 
   const subsidiaries = [
     'Tech Onshore MEP Prefabricators Pte Ltd.',
@@ -32,7 +51,7 @@ const OrderRequisitions = () => {
     'TOM : Piping'
   ];
 
-  const [requisitions] = useState([
+  const [requisitions, setRequisitions] = useState([
     {
       id: 1,
       select: false,
@@ -261,8 +280,39 @@ const OrderRequisitions = () => {
     showToast('Filters reset', 'info');
   };
 
-  const handleSelectAll = () => {
-    showToast('All items selected', 'info');
+  const handleSelectAll = (e) => {
+    const isChecked = e.target.checked;
+    setRequisitions(prev => prev.map(req => ({ ...req, select: isChecked })));
+    showToast(isChecked ? 'All items selected' : 'All items deselected', 'info');
+  };
+
+  const handleCheckboxChange = (id) => {
+    setRequisitions(prev => prev.map(req => 
+      req.id === id ? { ...req, select: !req.select } : req
+    ));
+  };
+
+  const handleSubmitSelected = () => {
+    const selectedItems = requisitions.filter(req => req.select);
+    if (selectedItems.length === 0) {
+      showToast('Please select at least one item to submit', 'error');
+      return;
+    }
+    showToast(`${selectedItems.length} requisition(s) submitted successfully!`, 'success');
+    // Remove submitted items from the list
+    setRequisitions(prev => prev.filter(req => !req.select));
+  };
+
+  const handleRejectSelected = () => {
+    const selectedItems = requisitions.filter(req => req.select);
+    if (selectedItems.length === 0) {
+      showToast('Please select at least one item to reject', 'error');
+      return;
+    }
+    if (window.confirm(`Are you sure you want to reject ${selectedItems.length} selected requisition(s)?`)) {
+      setRequisitions(prev => prev.filter(req => !req.select));
+      showToast(`${selectedItems.length} requisition(s) rejected successfully!`, 'success');
+    }
   };
 
   return (
@@ -278,15 +328,14 @@ const OrderRequisitions = () => {
       </div>
 
       {/* Filter Section */}
-      <div style={{ padding: '1.5rem 2rem', background: '#fff' }}>
+      <div style={{ padding: '1rem 1.5rem', background: '#fff' }}>
         <div style={{ 
           background: '#fff',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          padding: '1rem',
+          borderRadius: '4px',
           border: '1px solid #e0e0e0'
         }}>
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
             <button className="btn btn-primary" onClick={handleSubmit}>
               Submit
             </button>
@@ -295,7 +344,7 @@ const OrderRequisitions = () => {
             </button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem 1.5rem' }}>
             <div className="form-group">
               <label className="form-label">SUBSIDIARY</label>
               <select 
@@ -310,7 +359,7 @@ const OrderRequisitions = () => {
               </select>
             </div>
             <div className="form-group">
-              <label className="form-label">FILTER</label>
+              <label className="form-label">TYPE</label>
               <select 
                 className="form-control"
                 value={type}
@@ -336,26 +385,66 @@ const OrderRequisitions = () => {
                 ))}
               </select>
             </div>
-            <div className="form-group">
+            <div className="form-group" style={{ position: 'relative' }}>
               <label className="form-label">PR OWNER</label>
               <input 
                 type="text" 
                 className="form-control"
-                placeholder="<Type then Tab>"
-                value={prOwner}
-                onChange={(e) => setPrOwner(e.target.value)}
+                placeholder="Search PR Owner..."
+                value={prOwnerSearch}
+                onChange={(e) => {
+                  setPrOwnerSearch(e.target.value);
+                  setShowPrOwnerDropdown(true);
+                }}
+                onFocus={() => setShowPrOwnerDropdown(true)}
+                onBlur={() => setTimeout(() => setShowPrOwnerDropdown(false), 200)}
               />
+              {showPrOwnerDropdown && filteredPrOwners.length > 0 && (
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  right: 0,
+                  background: 'white',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  zIndex: 1000,
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                }}>
+                  {filteredPrOwners.map((owner, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setPrOwner(owner);
+                        setPrOwnerSearch(owner);
+                        setShowPrOwnerDropdown(false);
+                      }}
+                      style={{
+                        padding: '0.75rem 1rem',
+                        cursor: 'pointer',
+                        borderBottom: '1px solid #f0f0f0',
+                        fontSize: '0.875rem'
+                      }}
+                      onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                      onMouseLeave={(e) => e.target.style.background = 'white'}
+                    >
+                      {owner}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
       
       {/* Department Order Requisitions Section */}
-      <div style={{ padding: '1.5rem 2rem', background: '#f8f8f8' }}>
+      <div style={{ padding: '1rem 1.5rem', background: '#f8f8f8' }}>
         <div style={{ 
           background: '#fff',
-          borderRadius: '8px',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          borderRadius: '4px',
           border: '1px solid #e0e0e0',
           overflow: 'hidden'
         }}>
@@ -371,13 +460,15 @@ const OrderRequisitions = () => {
               <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.75rem' }}></i>
               Department Order Requisitions
             </h3>
-            <button 
-              className="btn btn-tertiary" 
-              style={{ fontSize: '0.875rem', padding: '0.4rem 1rem' }}
-              onClick={handleSelectAll}
-            >
-              SELECT ALL
-            </button>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+              <input 
+                type="checkbox" 
+                onChange={handleSelectAll}
+                checked={requisitions.length > 0 && requisitions.every(req => req.select)}
+                style={{ width: '16px', height: '16px' }}
+              />
+              <span style={{ fontSize: '0.875rem', fontWeight: '600' }}>SELECT ALL</span>
+            </label>
           </div>
 
           {/* Table */}
@@ -404,7 +495,11 @@ const OrderRequisitions = () => {
             {requisitions.map((req) => (
               <tr key={req.id}>
                 <td>
-                  <input type="checkbox" defaultChecked={req.select} />
+                  <input 
+                    type="checkbox" 
+                    checked={req.select} 
+                    onChange={() => handleCheckboxChange(req.id)}
+                  />
                 </td>
                 <td className="doc-number">{req.requestNo}</td>
                 <td>{req.prDate}</td>
@@ -422,6 +517,41 @@ const OrderRequisitions = () => {
             ))}
           </tbody>
         </table>
+          </div>
+          
+          {/* Action Buttons */}
+          <div style={{ 
+            padding: '1rem 1.5rem', 
+            background: '#f8f8f8', 
+            borderTop: '1px solid #e0e0e0',
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'flex-end'
+          }}>
+            <button 
+              className="btn btn-secondary"
+              onClick={handleRejectSelected}
+              disabled={!requisitions.some(req => req.select)}
+              style={{ 
+                padding: '0.6rem 1.5rem',
+                fontSize: '0.875rem'
+              }}
+            >
+              <i className="fas fa-times-circle"></i>
+              Reject Selected
+            </button>
+            <button 
+              className="btn btn-primary"
+              onClick={handleSubmitSelected}
+              disabled={!requisitions.some(req => req.select)}
+              style={{ 
+                padding: '0.6rem 1.5rem',
+                fontSize: '0.875rem'
+              }}
+            >
+              <i className="fas fa-check"></i>
+              Submit Selected
+            </button>
           </div>
         </div>
       </div>

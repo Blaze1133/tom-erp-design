@@ -12,6 +12,7 @@ const EnterPurchaseOrders = ({ setCurrentPage }) => {
     date: '',
     poNumber: 'To Be Generated',
     poType: 'Main',
+    project: '',
     otherComments: '',
     approvalStatus: 'Submit For Approval',
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
@@ -52,6 +53,16 @@ const EnterPurchaseOrders = ({ setCurrentPage }) => {
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
+  const projectOptions = [
+    'Marine Equipment Supply - Q1 2024',
+    'Offshore Platform Parts Delivery',
+    'Fabrication Services Contract',
+    'Ship Repair Project 2024',
+    'Piping Installation - Mega Yard',
+    '20-0131-Gimi-Fabrication of Cargo Tank Vapour Line',
+    'Project Alpha - Marine Operations'
+  ];
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -290,6 +301,19 @@ const EnterPurchaseOrders = ({ setCurrentPage }) => {
                 >
                   <option>Main</option>
                   <option>Sub</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT</label>
+                <select 
+                  className="form-control"
+                  value={formData.project}
+                  onChange={(e) => handleFormChange('project', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  {projectOptions.map((project, index) => (
+                    <option key={index} value={project}>{project}</option>
+                  ))}
                 </select>
               </div>
               <div className="detail-field">

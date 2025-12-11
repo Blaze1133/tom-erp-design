@@ -159,92 +159,52 @@ const ApproveVendorReturns = () => {
   // List View
   if (currentView === 'list') {
     return (
-      <div className="sales-quotation">
-        <div className="page-header" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          padding: '20px 30px',
-          borderBottom: '2px solid #e0e0e0',
-          background: '#ffffff'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <i className="fas fa-check-circle" style={{ fontSize: '28px', color: '#4a90e2' }}></i>
-            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '600', color: '#2c3e50' }}>Approve Vendor Return Authorizations</h1>
+      <div className="enquiries-list">
+        <div className="list-header">
+          <div className="list-title">
+            <i className="fas fa-check-circle"></i>
+            <h1>Approve Vendor Return Authorizations</h1>
           </div>
-          <div>
-            <button className="btn btn-secondary" style={{ padding: '10px 20px', fontSize: '14px' }}>
-              <i className="fas fa-ellipsis-h" style={{ marginRight: '6px' }}></i>
-              More
-            </button>
+          <div className="list-actions">
+            <button className="btn-view-option">More</button>
           </div>
         </div>
 
-        <div className="quotation-container">
+        <div style={{ padding: '1.5rem' }}>
           {/* Action Buttons */}
-          <div style={{ 
-            marginBottom: '25px', 
-            display: 'flex', 
-            gap: '12px',
-            padding: '15px 20px',
-            background: 'linear-gradient(to right, #f8f9fa, #ffffff)',
-            borderRadius: '8px',
-            border: '1px solid #e0e0e0'
-          }}>
-            <button className="btn btn-primary" onClick={handleSubmit} style={{ 
-              boxShadow: '0 2px 4px rgba(74, 144, 226, 0.2)',
-              fontWeight: '500'
-            }}>
-              <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
+          <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.75rem' }}>
+            <button className="btn btn-primary" onClick={handleSubmit}>
               Submit
             </button>
             <button className="btn btn-secondary" onClick={handleMarkAll}>
-              <i className="fas fa-check-square" style={{ marginRight: '8px' }}></i>
               Mark All
             </button>
             <button className="btn btn-secondary" onClick={handleUnmarkAll}>
-              <i className="fas fa-square" style={{ marginRight: '8px' }}></i>
               Unmark All
             </button>
           </div>
 
           {/* Filter Section */}
           <div style={{ 
-            padding: '25px', 
-            background: '#ffffff',
-            borderRadius: '10px', 
-            marginBottom: '25px',
-            border: '1px solid #e0e0e0',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            padding: '1rem', 
+            background: '#fff',
+            borderRadius: '4px', 
+            marginBottom: '1rem',
+            border: '1px solid #e0e0e0'
           }}>
-            <h3 style={{ 
-              fontSize: '16px', 
-              fontWeight: '600', 
-              color: '#2c3e50', 
-              marginBottom: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <i className="fas fa-filter" style={{ color: '#4a90e2' }}></i>
-              Filter Authorizations
-            </h3>
-            <div className="form-grid" style={{ marginBottom: '15px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem 1.5rem' }}>
               <div className="form-group">
-                <label className="form-label" style={{ fontWeight: '500', color: '#555' }}>AMOUNT</label>
+                <label className="form-label">AMOUNT</label>
                 <input 
                   type="text" 
                   className="form-control"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  style={{ borderRadius: '6px' }}
                 />
               </div>
-            </div>
-            <div className="form-grid" style={{ marginBottom: '0' }}>
               <div className="form-group">
-                <label className="form-label" style={{ fontWeight: '500', color: '#555' }}>DATE</label>
-                <select className="form-control" style={{ borderRadius: '6px' }}>
+                <label className="form-label">DATE</label>
+                <select className="form-control">
                   <option>All</option>
                   <option>Today</option>
                   <option>This Week</option>
@@ -252,23 +212,21 @@ const ApproveVendorReturns = () => {
                 </select>
               </div>
               <div className="form-group">
-                <label className="form-label" style={{ fontWeight: '500', color: '#555' }}>FROM</label>
+                <label className="form-label">FROM</label>
                 <input 
                   type="date" 
                   className="form-control"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  style={{ borderRadius: '6px' }}
                 />
               </div>
               <div className="form-group">
-                <label className="form-label" style={{ fontWeight: '500', color: '#555' }}>TO</label>
+                <label className="form-label">TO</label>
                 <input 
                   type="date" 
                   className="form-control"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  style={{ borderRadius: '6px' }}
                 />
               </div>
             </div>
@@ -276,37 +234,11 @@ const ApproveVendorReturns = () => {
 
           {/* Table Section */}
           <div style={{ 
-            background: '#ffffff',
-            borderRadius: '10px',
+            background: '#fff',
+            borderRadius: '4px',
             border: '1px solid #e0e0e0',
-            overflow: 'hidden',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            overflow: 'hidden'
           }}>
-            <div style={{ 
-              padding: '20px', 
-              borderBottom: '1px solid #e0e0e0',
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center',
-              background: '#fafbfc'
-            }}>
-              <h3 style={{ 
-                fontSize: '16px', 
-                fontWeight: '600', 
-                color: '#2c3e50',
-                margin: 0,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
-                <i className="fas fa-list" style={{ color: '#4a90e2' }}></i>
-                Pending Approvals
-              </h3>
-              <button className="btn btn-secondary" style={{ fontSize: '14px' }}>
-                <i className="fas fa-cog" style={{ marginRight: '6px' }}></i>
-                Customize
-              </button>
-            </div>
 
             <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
               <table className="detail-items-table" style={{ minWidth: '100%', fontSize: '14px' }}>
@@ -355,32 +287,6 @@ const ApproveVendorReturns = () => {
             </div>
           </div>
 
-          {/* Bottom Action Buttons */}
-          <div style={{ 
-            marginTop: '25px', 
-            display: 'flex', 
-            gap: '12px',
-            padding: '15px 20px',
-            background: 'linear-gradient(to right, #f8f9fa, #ffffff)',
-            borderRadius: '8px',
-            border: '1px solid #e0e0e0'
-          }}>
-            <button className="btn btn-primary" onClick={handleSubmit} style={{ 
-              boxShadow: '0 2px 4px rgba(74, 144, 226, 0.2)',
-              fontWeight: '500'
-            }}>
-              <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i>
-              Submit
-            </button>
-            <button className="btn btn-secondary" onClick={handleMarkAll}>
-              <i className="fas fa-check-square" style={{ marginRight: '8px' }}></i>
-              Mark All
-            </button>
-            <button className="btn btn-secondary" onClick={handleUnmarkAll}>
-              <i className="fas fa-square" style={{ marginRight: '8px' }}></i>
-              Unmark All
-            </button>
-          </div>
         </div>
 
         <Toast 

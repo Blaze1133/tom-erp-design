@@ -16,6 +16,7 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
     status: 'APPROVED',
     date: '15/01/2024',
     poType: 'Main',
+    project: 'Marine Equipment Supply - Q1 2024',
     refPoNumber: '',
     otherComments: 'Marine Equipment Purchase',
     approvalStatus: 'Approved',
@@ -170,6 +171,10 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
               <div className="detail-field">
                 <label>PO TYPE</label>
                 <div className="field-value">{poData.poType}</div>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT</label>
+                <div className="field-value">{poData.project}</div>
               </div>
               <div className="detail-field">
                 <label>VENDOR</label>

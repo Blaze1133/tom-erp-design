@@ -218,75 +218,80 @@ const BillPurchaseOrders = ({ setCurrentPage }) => {
         </div>
       </div>
 
-      <div className="list-controls" style={{ padding: '20px', background: 'white', borderBottom: '1px solid #e0e0e0' }}>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', maxWidth: '100%' }}>
-          <button className="btn btn-primary" onClick={handleSubmit} style={{ minWidth: '120px' }}>
-            <i className="fas fa-check"></i> Submit
+      <div style={{ padding: '1.5rem' }}>
+        {/* Action Buttons */}
+        <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.75rem' }}>
+          <button className="btn btn-primary" onClick={handleSubmit}>
+            Submit
           </button>
-          <button className="btn btn-secondary" onClick={handleMarkAll} style={{ minWidth: '120px' }}>
+          <button className="btn btn-secondary" onClick={handleMarkAll}>
             Mark All
           </button>
-          <button className="btn btn-secondary" onClick={handleUnmarkAll} style={{ minWidth: '120px' }}>
+          <button className="btn btn-secondary" onClick={handleUnmarkAll}>
             Unmark All
           </button>
         </div>
-      </div>
 
-      <div style={{ padding: '20px', background: 'white', borderBottom: '1px solid #e0e0e0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: '0 0 auto' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#666', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>FILTER</label>
-            <select 
-              className="form-control"
-              value={filterValue}
-              onChange={(e) => setFilterValue(e.target.value)}
-              style={{ width: '250px', fontSize: '13px' }}
-            >
-              <option value="">-- All --</option>
-              <option value="subsidiary">Subsidiary</option>
-              <option value="vendor">Vendor</option>
-              <option value="poNumber">PO Number</option>
-              <option value="status">Status</option>
-              <option value="currency">Currency</option>
-            </select>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: '0 0 auto' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#666', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>VENDOR <span style={{ color: '#e53e3e' }}>*</span></label>
-            <select 
-              className="form-control"
-              value={selectedVendor}
-              onChange={(e) => setSelectedVendor(e.target.value)}
-              style={{ width: '300px', fontSize: '13px' }}
-            >
-              <option>-- All --</option>
-              <option>CHIA HOCK HARDWARE TRADING</option>
-              <option>TRONIX WORLD LOGISTICS PTE LTD</option>
-              <option>METAL FORMS PRIVATE LIMITED</option>
-              <option>MEE DEMAG (S) PTE LTD</option>
-              <option>TAT ENG INDUSTRIES PTE LTD</option>
-              <option>SUPER GALVANISING PTE LTD</option>
-              <option>Techniques Air Conditioning & Refrigeration</option>
-              <option>EASTERN SEALAND SUPPLY PTE LTD</option>
-              <option>HOE HUAT HARDWARE (S) PTE LTD</option>
-            </select>
-          </div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: '0 0 auto' }}>
-            <input type="checkbox" />
-            <span style={{ fontSize: '12px', color: '#666', whiteSpace: 'nowrap' }}>USE BILL-TO ADDRESS FROM VENDOR</span>
-          </label>
-        </div>
-      </div>
-
-      <div style={{ padding: '15px 20px', background: '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button className="btn-customize">Customize</button>
-          <div style={{ fontSize: '13px', color: '#666' }}>
-            1 to 200 of 1372
+        {/* Filter Section */}
+        <div style={{ 
+          padding: '1rem', 
+          background: '#fff',
+          borderRadius: '4px', 
+          marginBottom: '1rem',
+          border: '1px solid #e0e0e0'
+        }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem 1.5rem' }}>
+            <div className="form-group">
+              <label className="form-label">FILTER</label>
+              <select 
+                className="form-control"
+                value={filterValue}
+                onChange={(e) => setFilterValue(e.target.value)}
+              >
+                <option value="">-- All --</option>
+                <option value="subsidiary">Subsidiary</option>
+                <option value="vendor">Vendor</option>
+                <option value="poNumber">PO Number</option>
+                <option value="status">Status</option>
+                <option value="currency">Currency</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">VENDOR</label>
+              <select 
+                className="form-control"
+                value={selectedVendor}
+                onChange={(e) => setSelectedVendor(e.target.value)}
+              >
+                <option>-- All --</option>
+                <option>CHIA HOCK HARDWARE TRADING</option>
+                <option>TRONIX WORLD LOGISTICS PTE LTD</option>
+                <option>METAL FORMS PRIVATE LIMITED</option>
+                <option>MEE DEMAG (S) PTE LTD</option>
+                <option>TAT ENG INDUSTRIES PTE LTD</option>
+                <option>SUPER GALVANISING PTE LTD</option>
+                <option>Techniques Air Conditioning & Refrigeration</option>
+                <option>EASTERN SEALAND SUPPLY PTE LTD</option>
+                <option>HOE HUAT HARDWARE (S) PTE LTD</option>
+              </select>
+            </div>
+            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <input type="checkbox" />
+                <span style={{ fontSize: '0.875rem' }}>USE BILL-TO ADDRESS FROM VENDOR</span>
+              </label>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="enquiries-table-container">
+        {/* Table Section */}
+        <div style={{ 
+          background: '#fff',
+          borderRadius: '4px',
+          border: '1px solid #e0e0e0',
+          overflow: 'hidden'
+        }}>
+        <div className="enquiries-table-container">
         <table className="enquiries-table">
           <thead>
             <tr>
@@ -335,18 +340,8 @@ const BillPurchaseOrders = ({ setCurrentPage }) => {
             )}
           </tbody>
         </table>
-      </div>
-
-      <div style={{ padding: '15px 20px', background: 'white', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '10px' }}>
-        <button className="btn btn-primary" onClick={handleSubmit}>
-          <i className="fas fa-check"></i> Submit
-        </button>
-        <button className="btn btn-secondary" onClick={handleMarkAll}>
-          Mark All
-        </button>
-        <button className="btn btn-secondary" onClick={handleUnmarkAll}>
-          Unmark All
-        </button>
+        </div>
+        </div>
       </div>
 
       <Toast 
