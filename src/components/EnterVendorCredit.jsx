@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
@@ -46,6 +46,11 @@ const EnterVendorCredit = ({ setCurrentPage }) => {
     receivedItems: []
   });
 
+  const [subTab, setSubTab] = useState('expenses');
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
   const [expenseLines, setExpenseLines] = useState([
     {
       id: 1,
@@ -61,6 +66,43 @@ const EnterVendorCredit = ({ setCurrentPage }) => {
       location: '',
       customer: '',
       billable: ''
+    }
+  ]);
+
+  const [itemLines, setItemLines] = useState([
+    {
+      id: 1,
+      item: '',
+      vendorName: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: '',
+      taxRate: '',
+      grossAmt: 0.00,
+      taxAmt: 0.00,
+      options: '',
+      department: '',
+      class: '',
+      location: '',
+      customerProject: '',
+      billable: false
+    }
+  ]);
+
+  const [applyLines, setApplyLines] = useState([
+    {
+      id: 1,
+      apply: false,
+      dateDue: '',
+      type: '',
+      refNo: '',
+      origAmt: 0.00,
+      amtDue: 0.00,
+      currency: 'SGD',
+      payment: 0.00
     }
   ]);
 
@@ -100,6 +142,176 @@ const EnterVendorCredit = ({ setCurrentPage }) => {
       line.id === id ? { ...line, [field]: value } : line
     ));
   };
+
+  const handleAddItemLine = () => {
+    setItemLines([...itemLines, {
+      id: itemLines.length + 1,
+      item: '',
+      vendorName: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: '',
+      taxRate: '',
+      grossAmt: 0.00,
+      taxAmt: 0.00,
+      options: '',
+      department: '',
+      class: '',
+      location: '',
+      customerProject: '',
+      billable: false
+    }]);
+  };
+
+  const handleRemoveItemLine = (id) => {
+    if (itemLines.length > 1) {
+      setItemLines(itemLines.filter(line => line.id !== id));
+    }
+  };
+
+  const handleItemLineChange = (id, field, value) => {
+    setItemLines(itemLines.map(line => 
+      line.id === id ? { ...line, [field]: value } : line
+    ));
+  };
+
+  const handleApplyLineChange = (id, field, value) => {
+    setApplyLines(applyLines.map(line => 
+      line.id === id ? { ...line, [field]: value } : line
+    ));
+  };
+
+  const handleMenuToggle = (index, event) => {
+    event.stopPropagation();
+    if (activeMenu === index) {
+      setActiveMenu(null);
+    } else {
+      const rect = event.currentTarget.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 5,
+        left: rect.left + (rect.width / 2) - 80
+      });
+      setActiveMenu(index);
+    }
+  };
+
+  const handleInsertAboveExpense = (index) => {
+    const newLine = {
+      id: Date.now(),
+      account: '',
+      amount: '',
+      taxCode: '',
+      taxRate: '',
+      taxAmt: '',
+      grossAmt: '',
+      memo: '',
+      department: '',
+      class: '',
+      location: '',
+      customer: '',
+      billable: ''
+    };
+    setExpenseLines([...expenseLines.slice(0, index), newLine, ...expenseLines.slice(index)]);
+    setActiveMenu(null);
+  };
+
+  const handleInsertBelowExpense = (index) => {
+    const newLine = {
+      id: Date.now(),
+      account: '',
+      amount: '',
+      taxCode: '',
+      taxRate: '',
+      taxAmt: '',
+      grossAmt: '',
+      memo: '',
+      department: '',
+      class: '',
+      location: '',
+      customer: '',
+      billable: ''
+    };
+    setExpenseLines([...expenseLines.slice(0, index + 1), newLine, ...expenseLines.slice(index + 1)]);
+    setActiveMenu(null);
+  };
+
+  const handleDeleteExpense = (index) => {
+    if (expenseLines.length > 1) {
+      setExpenseLines(expenseLines.filter((_, i) => i !== index));
+    }
+    setActiveMenu(null);
+  };
+
+  const handleInsertAboveItem = (index) => {
+    const newLine = {
+      id: Date.now(),
+      item: '',
+      vendorName: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: '',
+      taxRate: '',
+      grossAmt: 0.00,
+      taxAmt: 0.00,
+      options: '',
+      department: '',
+      class: '',
+      location: '',
+      customerProject: '',
+      billable: false
+    };
+    setItemLines([...itemLines.slice(0, index), newLine, ...itemLines.slice(index)]);
+    setActiveMenu(null);
+  };
+
+  const handleInsertBelowItem = (index) => {
+    const newLine = {
+      id: Date.now(),
+      item: '',
+      vendorName: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: '',
+      taxRate: '',
+      grossAmt: 0.00,
+      taxAmt: 0.00,
+      options: '',
+      department: '',
+      class: '',
+      location: '',
+      customerProject: '',
+      billable: false
+    };
+    setItemLines([...itemLines.slice(0, index + 1), newLine, ...itemLines.slice(index + 1)]);
+    setActiveMenu(null);
+  };
+
+  const handleDeleteItem = (index) => {
+    if (itemLines.length > 1) {
+      setItemLines(itemLines.filter((_, i) => i !== index));
+    }
+    setActiveMenu(null);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveMenu(null);
+    };
+    if (activeMenu !== null) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeMenu]);
 
   const handleSave = () => {
     showToast('Vendor credit saved successfully!', 'success');
@@ -468,206 +680,575 @@ const EnterVendorCredit = ({ setCurrentPage }) => {
           {activeTab === 'items' && (
             <div className="tab-content">
               <div className="form-section">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <div style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', fontWeight: '600' }}>
-                    <span>UNAPPLIED</span>
-                    <span>0.00</span>
-                    <span style={{ marginLeft: '2rem' }}>APPLIED</span>
-                    <span>0.00</span>
-                    <label style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <input type="checkbox" />
-                      AUTO APPLY
-                    </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '1rem', padding: '1rem', background: '#f8f9fa', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <label style={{ fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>UNAPPLIED</label>
+                    <input 
+                      type="text" 
+                      value="0.00" 
+                      readOnly 
+                      style={{ 
+                        padding: '8px 12px', 
+                        border: '1px solid #ddd', 
+                        borderRadius: '4px', 
+                        background: '#fff',
+                        fontSize: '14px',
+                        color: '#333'
+                      }} 
+                    />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <label style={{ fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>APPLIED</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <input 
+                        type="text" 
+                        value="0.00" 
+                        readOnly 
+                        style={{ 
+                          padding: '8px 12px', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          background: '#fff',
+                          fontSize: '14px',
+                          color: '#333',
+                          flex: 1
+                        }} 
+                      />
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        <input type="checkbox" />
+                        <span style={{ fontSize: '13px', fontWeight: '600' }}>AUTO APPLY</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
-                <div style={{ marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '600', color: '#333' }}>
-                  Expenses 0.00 &nbsp;&nbsp; Items 0.00 &nbsp;&nbsp; Apply 0.00 ▼
+
+                {/* Sub-tabs for Expenses, Items, Apply */}
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '0', 
+                  borderBottom: '1px solid #dee2e6', 
+                  marginBottom: '1.5rem',
+                  background: '#fff'
+                }}>
+                  <button 
+                    onClick={() => setSubTab('expenses')}
+                    style={{ 
+                      padding: '1rem 2rem', 
+                      border: 'none', 
+                      background: subTab === 'expenses' ? '#fff' : 'transparent',
+                      borderBottom: subTab === 'expenses' ? '2px solid #4a90e2' : '2px solid transparent',
+                      fontWeight: subTab === 'expenses' ? '600' : '500',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      color: subTab === 'expenses' ? '#4a90e2' : '#6c757d',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Expenses 0.00
+                  </button>
+                  <button 
+                    onClick={() => setSubTab('items')}
+                    style={{ 
+                      padding: '1rem 2rem', 
+                      border: 'none', 
+                      background: subTab === 'items' ? '#fff' : 'transparent',
+                      borderBottom: subTab === 'items' ? '2px solid #4a90e2' : '2px solid transparent',
+                      fontWeight: subTab === 'items' ? '600' : '500',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      color: subTab === 'items' ? '#4a90e2' : '#6c757d',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Items 0.00
+                  </button>
+                  <button 
+                    onClick={() => setSubTab('apply')}
+                    style={{ 
+                      padding: '1rem 2rem', 
+                      border: 'none', 
+                      background: subTab === 'apply' ? '#fff' : 'transparent',
+                      borderBottom: subTab === 'apply' ? '2px solid #4a90e2' : '2px solid transparent',
+                      fontWeight: subTab === 'apply' ? '600' : '500',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      color: subTab === 'apply' ? '#4a90e2' : '#6c757d',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Apply 0.00
+                  </button>
                 </div>
-                <button 
-                  className="btn btn-secondary"
-                  onClick={() => setExpenseLines([])}
-                  style={{ fontSize: '0.875rem', padding: '0.5rem 1rem', marginBottom: '1rem' }}
-                >
-                  Clear All Lines
-                </button>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    ACCOUNT <span style={{ color: '#e53e3e' }}>*</span>
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    AMOUNT <span style={{ color: '#e53e3e' }}>*</span>
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>TAX CODE</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>TAX RATE</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>TAX AMT</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>GROSS AMT</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>MEMO</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>DEPARTMENT</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>CLASS</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>LOCATION</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>CUSTOMER</th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>BILLABLE</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenseLines.map((line) => (
-                  <tr key={line.id} style={{ borderBottom: '1px solid #e0e0e0' }}>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="text" 
-                        className="form-control"
-                        value={line.account}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'account', e.target.value)}
-                        placeholder="<Type then tab>"
-                        style={{ minWidth: '150px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="number" 
-                        className="form-control"
-                        value={line.amount}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'amount', e.target.value)}
-                        style={{ minWidth: '100px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="text" 
-                        className="form-control"
-                        value={line.taxCode}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'taxCode', e.target.value)}
-                        style={{ minWidth: '80px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="text" 
-                        className="form-control"
-                        value={line.taxRate}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'taxRate', e.target.value)}
-                        style={{ minWidth: '80px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="number" 
-                        className="form-control"
-                        value={line.taxAmt}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'taxAmt', e.target.value)}
-                        style={{ minWidth: '80px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="number" 
-                        className="form-control"
-                        value={line.grossAmt}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'grossAmt', e.target.value)}
-                        style={{ minWidth: '100px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="text" 
-                        className="form-control"
-                        value={line.memo}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'memo', e.target.value)}
-                        style={{ minWidth: '120px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <select 
-                        className="form-control"
-                        value={line.department}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'department', e.target.value)}
-                        style={{ minWidth: '120px' }}
-                      >
-                        <option value="">Select...</option>
-                      </select>
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <select 
-                        className="form-control"
-                        value={line.class}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'class', e.target.value)}
-                        style={{ minWidth: '120px' }}
-                      >
-                        <option value="">Select...</option>
-                      </select>
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <select 
-                        className="form-control"
-                        value={line.location}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'location', e.target.value)}
-                        style={{ minWidth: '120px' }}
-                      >
-                        <option value="">Select...</option>
-                      </select>
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="text" 
-                        className="form-control"
-                        value={line.customer}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'customer', e.target.value)}
-                        style={{ minWidth: '120px' }}
-                      />
-                    </td>
-                    <td style={{ padding: '8px' }}>
-                      <input 
-                        type="text" 
-                        className="form-control"
-                        value={line.billable}
-                        onChange={(e) => handleExpenseLineChange(line.id, 'billable', e.target.value)}
-                        style={{ minWidth: '80px' }}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                {/* Expenses Table */}
+                {subTab === 'expenses' && (
+                  <>
+                    <div style={{ overflowX: 'auto', padding: '0 0 1.5rem 0' }}>
+                      <table className="detail-items-table" style={{ minWidth: '2200px', borderCollapse: 'separate', borderSpacing: 0 }}>
+                        <thead>
+                          <tr>
+                            <th style={{ width: '40px' }}></th>
+                            <th style={{ minWidth: '180px' }}>ACCOUNT <span style={{ color: '#e53e3e' }}>*</span></th>
+                            <th style={{ minWidth: '120px' }}>AMOUNT <span style={{ color: '#e53e3e' }}>*</span></th>
+                            <th style={{ minWidth: '100px' }}>TAX CODE</th>
+                            <th style={{ minWidth: '100px' }}>TAX RATE</th>
+                            <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                            <th style={{ minWidth: '120px' }}>GROSS AMT</th>
+                            <th style={{ minWidth: '250px' }}>MEMO</th>
+                            <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
+                            <th style={{ minWidth: '150px' }}>CLASS</th>
+                            <th style={{ minWidth: '150px' }}>LOCATION</th>
+                            <th style={{ minWidth: '150px' }}>CUSTOMER</th>
+                            <th style={{ minWidth: '100px' }}>BILLABLE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {expenseLines.map((line, index) => (
+                            <tr 
+                              key={line.id} 
+                              onMouseEnter={() => setHoveredRow(index)}
+                              onMouseLeave={() => setHoveredRow(null)}
+                            >
+                              <td style={{ position: 'relative' }}>
+                                {hoveredRow === index && (
+                                  <button 
+                                    className="row-actions-btn"
+                                    title="Row Actions"
+                                    onClick={(e) => handleMenuToggle(index, e)}
+                                  >
+                                    <i className="fas fa-ellipsis-v"></i>
+                                  </button>
+                                )}
+                                {activeMenu === index && (
+                                  <div 
+                                    className="row-actions-menu"
+                                    style={{
+                                      position: 'fixed',
+                                      top: `${menuPosition.top}px`,
+                                      left: `${menuPosition.left}px`,
+                                      display: 'block',
+                                      zIndex: 10000
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <button onClick={() => handleInsertAboveExpense(index)}>
+                                      <i className="fas fa-arrow-up"></i>
+                                      Insert Above
+                                    </button>
+                                    <button onClick={() => handleInsertBelowExpense(index)}>
+                                      <i className="fas fa-arrow-down"></i>
+                                      Insert Below
+                                    </button>
+                                    <button onClick={() => handleDeleteExpense(index)} className="delete-action">
+                                      <i className="fas fa-trash"></i>
+                                      Delete Row
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input 
+                                  type="text" 
+                                  className="form-control"
+                                  value={line.account}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'account', e.target.value)}
+                                  placeholder="<Type then tab>"
+                                  style={{ minWidth: '180px', height: '40px' }}
+                                />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input 
+                                  type="number" 
+                                  className="form-control"
+                                  value={line.amount}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'amount', e.target.value)}
+                                  style={{ minWidth: '100px' }}
+                                />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input 
+                                  type="text" 
+                                  className="form-control"
+                                  value={line.taxCode}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'taxCode', e.target.value)}
+                                  style={{ minWidth: '100px', height: '40px' }}
+                                />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input 
+                                  type="text" 
+                                  className="form-control"
+                                  value={line.taxRate}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'taxRate', e.target.value)}
+                                  style={{ minWidth: '100px', height: '40px' }}
+                                />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input 
+                                  type="number" 
+                                  className="form-control"
+                                  value={line.taxAmt}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'taxAmt', e.target.value)}
+                                  style={{ minWidth: '100px', height: '40px' }}
+                                />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input 
+                                  type="number" 
+                                  className="form-control"
+                                  value={line.grossAmt}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'grossAmt', e.target.value)}
+                                  style={{ minWidth: '100px' }}
+                                />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <textarea 
+                                  className="form-control"
+                                  value={line.memo}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'memo', e.target.value)}
+                                  style={{ minWidth: '250px', minHeight: '60px', resize: 'vertical' }}
+                                  rows="3"
+                                />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <select 
+                                  className="form-control"
+                                  value={line.department}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'department', e.target.value)}
+                                  style={{ minWidth: '150px', height: '40px' }}
+                                >
+                                  <option value="">Select...</option>
+                                </select>
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <select 
+                                  className="form-control"
+                                  value={line.class}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'class', e.target.value)}
+                                  style={{ minWidth: '150px', height: '40px' }}
+                                >
+                                  <option value="">Select...</option>
+                                </select>
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <select 
+                                  className="form-control"
+                                  value={line.location}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'location', e.target.value)}
+                                  style={{ minWidth: '150px', height: '40px' }}
+                                >
+                                  <option value="">Select...</option>
+                                </select>
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input 
+                                  type="text" 
+                                  className="form-control"
+                                  value={line.customer}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'customer', e.target.value)}
+                                  style={{ minWidth: '150px', height: '40px' }}
+                                />
+                              </td>
+                              <td style={{ padding: '8px', textAlign: 'center' }}>
+                                <input 
+                                  type="checkbox" 
+                                  checked={line.billable}
+                                  onChange={(e) => handleExpenseLineChange(line.id, 'billable', e.target.checked)}
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                )}
 
-          <div style={{ marginTop: '15px', display: 'flex', gap: '10px' }}>
-            <button 
-              className="btn btn-primary"
-              onClick={handleAddExpenseLine}
-              style={{ fontSize: '13px', padding: '6px 16px' }}
-            >
-              <i className="fas fa-plus"></i> Add
-            </button>
-            <button 
-              className="btn btn-secondary"
-              onClick={() => expenseLines.length > 0 && handleRemoveExpenseLine(expenseLines[expenseLines.length - 1].id)}
-              style={{ fontSize: '13px', padding: '6px 16px' }}
-            >
-              <i className="fas fa-times"></i> Cancel
-            </button>
-            <button 
-              className="btn btn-secondary"
-              style={{ fontSize: '13px', padding: '6px 16px' }}
-            >
-              <i className="fas fa-copy"></i> Copy Previous
-            </button>
-            <button 
-              className="btn btn-secondary"
-              style={{ fontSize: '13px', padding: '6px 16px' }}
-            >
-              Insert
-            </button>
-            <button 
-              className="btn btn-secondary"
-              style={{ fontSize: '13px', padding: '6px 16px' }}
-            >
-              Remove
-            </button>
-          </div>
+                {/* Items Table */}
+                {subTab === 'items' && (
+                  <>
+                    <div style={{ overflowX: 'auto', padding: '0 0 1.5rem 0' }}>
+                      <table className="detail-items-table" style={{ minWidth: '2400px', borderCollapse: 'separate', borderSpacing: 0 }}>
+                        <thead>
+                          <tr>
+                            <th style={{ width: '40px' }}></th>
+                            <th style={{ minWidth: '180px' }}>ITEM</th>
+                            <th style={{ minWidth: '300px' }}>DESCRIPTION</th>
+                            <th style={{ minWidth: '150px' }}>VENDOR NAME</th>
+                            <th style={{ minWidth: '100px' }}>QUANTITY</th>
+                            <th style={{ minWidth: '120px' }}>UNITS</th>
+                            <th style={{ minWidth: '120px' }}>RATE</th>
+                            <th style={{ minWidth: '120px' }}>AMOUNT</th>
+                            <th style={{ minWidth: '100px' }}>TAX CODE</th>
+                            <th style={{ minWidth: '100px' }}>TAX RATE</th>
+                            <th style={{ minWidth: '120px' }}>GROSS AMT</th>
+                            <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                            <th style={{ minWidth: '120px' }}>OPTIONS</th>
+                            <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
+                            <th style={{ minWidth: '150px' }}>CLASS</th>
+                            <th style={{ minWidth: '150px' }}>LOCATION</th>
+                            <th style={{ minWidth: '150px' }}>CUSTOMER:PROJECT</th>
+                            <th style={{ minWidth: '100px' }}>BILLABLE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {itemLines.map((line, index) => (
+                            <tr 
+                              key={line.id}
+                              onMouseEnter={() => setHoveredRow(index)}
+                              onMouseLeave={() => setHoveredRow(null)}
+                            >
+                              <td style={{ position: 'relative' }}>
+                                {hoveredRow === index && (
+                                  <button 
+                                    className="row-actions-btn"
+                                    title="Row Actions"
+                                    onClick={(e) => handleMenuToggle(index, e)}
+                                  >
+                                    <i className="fas fa-ellipsis-v"></i>
+                                  </button>
+                                )}
+                                {activeMenu === index && (
+                                  <div 
+                                    className="row-actions-menu"
+                                    style={{
+                                      position: 'fixed',
+                                      top: `${menuPosition.top}px`,
+                                      left: `${menuPosition.left}px`,
+                                      display: 'block',
+                                      zIndex: 10000
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <button onClick={() => handleInsertAboveItem(index)}>
+                                      <i className="fas fa-arrow-up"></i>
+                                      Insert Above
+                                    </button>
+                                    <button onClick={() => handleInsertBelowItem(index)}>
+                                      <i className="fas fa-arrow-down"></i>
+                                      Insert Below
+                                    </button>
+                                    <button onClick={() => handleDeleteItem(index)} className="delete-action">
+                                      <i className="fas fa-trash"></i>
+                                      Delete Row
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="text" className="form-control" value={line.item} onChange={(e) => handleItemLineChange(line.id, 'item', e.target.value)} placeholder="<Type then tab>" style={{ minWidth: '180px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <textarea className="form-control" value={line.description} onChange={(e) => handleItemLineChange(line.id, 'description', e.target.value)} style={{ minWidth: '300px', minHeight: '60px', resize: 'vertical' }} rows="3" />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="text" className="form-control" value={line.vendorName} onChange={(e) => handleItemLineChange(line.id, 'vendorName', e.target.value)} style={{ minWidth: '150px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="number" className="form-control" value={line.quantity} onChange={(e) => handleItemLineChange(line.id, 'quantity', e.target.value)} style={{ minWidth: '100px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <select className="form-control" value={line.units} onChange={(e) => handleItemLineChange(line.id, 'units', e.target.value)} style={{ minWidth: '120px', height: '40px' }}>
+                                  <option>Pcs</option>
+                                  <option>Set</option>
+                                  <option>Kg</option>
+                                  <option>M</option>
+                                  <option>L</option>
+                                </select>
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="number" className="form-control" value={line.rate} onChange={(e) => handleItemLineChange(line.id, 'rate', e.target.value)} step="0.01" style={{ minWidth: '120px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="number" className="form-control" value={line.amount} onChange={(e) => handleItemLineChange(line.id, 'amount', e.target.value)} step="0.01" style={{ minWidth: '120px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="text" className="form-control" value={line.taxCode} onChange={(e) => handleItemLineChange(line.id, 'taxCode', e.target.value)} style={{ minWidth: '100px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="text" className="form-control" value={line.taxRate} onChange={(e) => handleItemLineChange(line.id, 'taxRate', e.target.value)} style={{ minWidth: '100px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="number" className="form-control" value={line.grossAmt} onChange={(e) => handleItemLineChange(line.id, 'grossAmt', e.target.value)} step="0.01" style={{ minWidth: '120px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="number" className="form-control" value={line.taxAmt} onChange={(e) => handleItemLineChange(line.id, 'taxAmt', e.target.value)} step="0.01" style={{ minWidth: '100px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="text" className="form-control" value={line.options} onChange={(e) => handleItemLineChange(line.id, 'options', e.target.value)} style={{ minWidth: '120px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <select className="form-control" value={line.department} onChange={(e) => handleItemLineChange(line.id, 'department', e.target.value)} style={{ minWidth: '150px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                </select>
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <select className="form-control" value={line.class} onChange={(e) => handleItemLineChange(line.id, 'class', e.target.value)} style={{ minWidth: '150px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                </select>
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <select className="form-control" value={line.location} onChange={(e) => handleItemLineChange(line.id, 'location', e.target.value)} style={{ minWidth: '150px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                </select>
+                              </td>
+                              <td style={{ padding: '8px' }}>
+                                <input type="text" className="form-control" value={line.customerProject} onChange={(e) => handleItemLineChange(line.id, 'customerProject', e.target.value)} style={{ minWidth: '150px', height: '40px' }} />
+                              </td>
+                              <td style={{ padding: '8px', textAlign: 'center' }}>
+                                <input type="checkbox" checked={line.billable} onChange={(e) => handleItemLineChange(line.id, 'billable', e.target.checked)} />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                )}
+
+                {/* Apply Table */}
+                {subTab === 'apply' && (
+                  <>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <input 
+                        type="text" 
+                        placeholder="SELECT ITEM"
+                        className="form-control"
+                        style={{ maxWidth: '300px', marginBottom: '1rem' }}
+                      />
+                      <div style={{ display: 'flex', gap: '10px', marginBottom: '1rem' }}>
+                        <button className="btn btn-primary" style={{ fontSize: '13px', padding: '6px 16px' }}>
+                          Pay All
+                        </button>
+                        <button className="btn btn-secondary" style={{ fontSize: '13px', padding: '6px 16px' }}>
+                          Auto Apply
+                        </button>
+                        <button className="btn btn-secondary" style={{ fontSize: '13px', padding: '6px 16px' }}>
+                          Clear
+                        </button>
+                        <button className="btn btn-secondary" style={{ fontSize: '13px', padding: '6px 16px' }}>
+                          Customize
+                        </button>
+                        <button className="btn btn-secondary" style={{ fontSize: '13px', padding: '6px 16px' }}>
+                          Clear All Lines
+                        </button>
+                      </div>
+                    </div>
+
+                    <div style={{ overflowX: 'auto' }}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                        <thead>
+                          <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>APPLY</th>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>DATE DUE</th>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>TYPE</th>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>REF NO.</th>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>ORIG. AMT.</th>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>AMT. DUE</th>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>CURRENCY</th>
+                            <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>PAYMENT</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {applyLines.length === 0 ? (
+                            <tr>
+                              <td colSpan="8" style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
+                                No records to show.
+                              </td>
+                            </tr>
+                          ) : (
+                            applyLines.map((line) => (
+                              <tr key={line.id} style={{ borderBottom: '1px solid #e0e0e0' }}>
+                                <td style={{ padding: '8px' }}>
+                                  <input 
+                                    type="checkbox" 
+                                    checked={line.apply} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'apply', e.target.checked)} 
+                                  />
+                                </td>
+                                <td style={{ padding: '8px' }}>
+                                  <input 
+                                    type="date" 
+                                    className="form-control" 
+                                    value={line.dateDue} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'dateDue', e.target.value)} 
+                                    style={{ minWidth: '120px' }} 
+                                  />
+                                </td>
+                                <td style={{ padding: '8px' }}>
+                                  <input 
+                                    type="text" 
+                                    className="form-control" 
+                                    value={line.type} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'type', e.target.value)} 
+                                    style={{ minWidth: '100px' }} 
+                                  />
+                                </td>
+                                <td style={{ padding: '8px' }}>
+                                  <input 
+                                    type="text" 
+                                    className="form-control" 
+                                    value={line.refNo} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'refNo', e.target.value)} 
+                                    style={{ minWidth: '120px' }} 
+                                  />
+                                </td>
+                                <td style={{ padding: '8px' }}>
+                                  <input 
+                                    type="number" 
+                                    className="form-control" 
+                                    value={line.origAmt} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'origAmt', e.target.value)} 
+                                    step="0.01" 
+                                    style={{ minWidth: '100px' }} 
+                                  />
+                                </td>
+                                <td style={{ padding: '8px' }}>
+                                  <input 
+                                    type="number" 
+                                    className="form-control" 
+                                    value={line.amtDue} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'amtDue', e.target.value)} 
+                                    step="0.01" 
+                                    style={{ minWidth: '100px' }} 
+                                  />
+                                </td>
+                                <td style={{ padding: '8px' }}>
+                                  <select 
+                                    className="form-control" 
+                                    value={line.currency} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'currency', e.target.value)} 
+                                    style={{ minWidth: '100px', height: '40px' }}
+                                  >
+                                    <option>SGD</option>
+                                    <option>USD</option>
+                                    <option>EUR</option>
+                                    <option>GBP</option>
+                                  </select>
+                                </td>
+                                <td style={{ padding: '8px' }}>
+                                  <input 
+                                    type="number" 
+                                    className="form-control" 
+                                    value={line.payment} 
+                                    onChange={(e) => handleApplyLineChange(line.id, 'payment', e.target.value)} 
+                                    step="0.01" 
+                                    style={{ minWidth: '100px' }} 
+                                  />
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div style={{ marginTop: '1rem', textAlign: 'right', fontSize: '13px', color: '#666' }}>
+                      <span>1 to 100 of 512</span>
+                    </div>
+                  </>
+                )}
+
               </div>
             </div>
           )}

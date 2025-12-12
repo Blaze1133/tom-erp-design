@@ -7,25 +7,22 @@ const OrderRequisitions = () => {
   const [subsidiary, setSubsidiary] = useState('');
   const [department, setDepartment] = useState('');
   const [type, setType] = useState('');
-  const [prOwner, setPrOwner] = useState('');
-  const [prOwnerSearch, setPrOwnerSearch] = useState('');
-  const [showPrOwnerDropdown, setShowPrOwnerDropdown] = useState(false);
+  const [prNumber, setPrNumber] = useState('');
+  const [prNumberSearch, setPrNumberSearch] = useState('');
+  const [showPrNumberDropdown, setShowPrNumberDropdown] = useState(false);
 
-  const prOwners = [
-    'MEP002 Bhuiyan Manik',
-    'MEP003 Boominathan Rajeshkanna',
-    'MEP004 Peraman Ramachandran',
-    'MEP007 annamalai murugan',
-    'MEP008 RAHMAN SAIDUR',
-    'MEP0080 Karuppaiya Muthuraman',
-    'MEP009 sankar saravanan',
-    'MEP01 001 JEGANATHAN SUNDARAVELU',
-    'MEP01 002 KALIYAMOORTHY PRAKASH',
-    'MEP01 003 KARUPPU UDAIYAR'
+  const prNumbers = [
+    'PR22TOM00165',
+    'PR22TOM00110',
+    'PR22TOM00146',
+    'PR22TOM00147',
+    'PR22TOM00169',
+    'PR22TOM500005',
+    'PR22TOM00177'
   ];
 
-  const filteredPrOwners = prOwners.filter(owner => 
-    owner.toLowerCase().includes(prOwnerSearch.toLowerCase())
+  const filteredPrNumbers = prNumbers.filter(number => 
+    number.toLowerCase().includes(prNumberSearch.toLowerCase())
   );
 
   const subsidiaries = [
@@ -276,7 +273,8 @@ const OrderRequisitions = () => {
     setSubsidiary('');
     setDepartment('');
     setType('');
-    setPrOwner('');
+    setPrNumber('');
+    setPrNumberSearch('');
     showToast('Filters reset', 'info');
   };
 
@@ -292,8 +290,21 @@ const OrderRequisitions = () => {
     ));
   };
 
+  // Filter requisitions based on selected filters
+  const filteredRequisitions = requisitions.filter(req => {
+    if (prNumber && req.requestNo !== prNumber) return false;
+    if (subsidiary && !req.supplier.includes(subsidiary)) return false;
+    if (type) {
+      // Map type values to requisition types
+      if (type === 'project' && !req.project) return false;
+      if (type === 'department' && req.project) return false;
+    }
+    if (department && !req.project.includes(department)) return false;
+    return true;
+  });
+
   const handleSubmitSelected = () => {
-    const selectedItems = requisitions.filter(req => req.select);
+    const selectedItems = filteredRequisitions.filter(req => req.select);
     if (selectedItems.length === 0) {
       showToast('Please select at least one item to submit', 'error');
       return;
@@ -386,26 +397,26 @@ const OrderRequisitions = () => {
               </select>
             </div>
             <div className="form-group" style={{ position: 'relative' }}>
-              <label className="form-label">PR OWNER</label>
+              <label className="form-label">PR NUMBER</label>
               <input 
                 type="text" 
                 className="form-control"
-                placeholder="Search PR Owner..."
-                value={prOwnerSearch}
+                placeholder="Search PR Number..."
+                value={prNumberSearch}
                 onChange={(e) => {
-                  setPrOwnerSearch(e.target.value);
-                  setShowPrOwnerDropdown(true);
+                  setPrNumberSearch(e.target.value);
+                  setShowPrNumberDropdown(true);
                 }}
-                onFocus={() => setShowPrOwnerDropdown(true)}
-                onBlur={() => setTimeout(() => setShowPrOwnerDropdown(false), 200)}
+                onFocus={() => setShowPrNumberDropdown(true)}
+                onBlur={() => setTimeout(() => setShowPrNumberDropdown(false), 200)}
               />
-              {showPrOwnerDropdown && filteredPrOwners.length > 0 && (
+              {showPrNumberDropdown && filteredPrNumbers.length > 0 && (
                 <div style={{
                   position: 'absolute',
                   top: '100%',
                   left: 0,
                   right: 0,
-                  background: 'white',
+                  backgroundColor: 'white',
                   border: '1px solid #ddd',
                   borderRadius: '4px',
                   maxHeight: '200px',
@@ -413,24 +424,23 @@ const OrderRequisitions = () => {
                   zIndex: 1000,
                   boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
                 }}>
-                  {filteredPrOwners.map((owner, index) => (
+                  {filteredPrNumbers.map((number, index) => (
                     <div
                       key={index}
                       onClick={() => {
-                        setPrOwner(owner);
-                        setPrOwnerSearch(owner);
-                        setShowPrOwnerDropdown(false);
+                        setPrNumber(number);
+                        setPrNumberSearch(number);
+                        setShowPrNumberDropdown(false);
                       }}
                       style={{
                         padding: '0.75rem 1rem',
                         cursor: 'pointer',
-                        borderBottom: '1px solid #f0f0f0',
-                        fontSize: '0.875rem'
+                        borderBottom: index < filteredPrNumbers.length - 1 ? '1px solid #f0f0f0' : 'none'
                       }}
                       onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
                       onMouseLeave={(e) => e.target.style.background = 'white'}
                     >
-                      {owner}
+                      {number}
                     </div>
                   ))}
                 </div>
@@ -492,7 +502,7 @@ const OrderRequisitions = () => {
             </tr>
           </thead>
           <tbody>
-            {requisitions.map((req) => (
+            {filteredRequisitions.map((req) => (
               <tr key={req.id}>
                 <td>
                   <input 

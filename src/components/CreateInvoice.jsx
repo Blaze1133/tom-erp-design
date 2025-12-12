@@ -4,7 +4,7 @@ import AddProjectForm from './AddProjectForm';
 import AddCustomerForm from './AddCustomerForm';
 import './Enquiries.css';
 
-const CreateInvoice = ({ setCurrentPage }) => {
+const CreateInvoice = ({ setCurrentPage, isEdit = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [isSaved, setIsSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('items');
@@ -30,10 +30,9 @@ const CreateInvoice = ({ setCurrentPage }) => {
   
   const [formData, setFormData] = useState({
     // Primary Information
-    customForm: 'TOM Service Invoice',
-    invoiceNumber: 'To Be Generated',
+    invoiceNumber: isEdit ? 'I22TOMDQ00001' : 'To Be Generated',
     postingPeriod: 'Nov 2025',
-    customer: '',
+    customer: isEdit ? 'Pacific Shipping Ltd' : '',
     project: '',
     dueDate: '',
     poNumber: '',
@@ -364,6 +363,10 @@ const CreateInvoice = ({ setCurrentPage }) => {
           <i className="fas fa-file-invoice"></i>
           <div>
             <h1>Invoice</h1>
+            <div className="detail-subtitle">
+              <span>{formData.invoiceNumber}</span>
+              {formData.customer && <span>{formData.customer}</span>}
+            </div>
           </div>
         </div>
         <div className="detail-actions">
@@ -409,17 +412,23 @@ const CreateInvoice = ({ setCurrentPage }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>CUSTOM FORM <span className="required">*</span></label>
-                <select 
+                <label>INVOICE #</label>
+                <input 
+                  type="text" 
                   className="form-control"
-                  value={formData.customForm}
-                  onChange={(e) => handleInputChange('customForm', e.target.value)}
-                >
-                  <option>TOM Service Invoice</option>
-                  <option>TOM Debit Note</option>
-                  <option>TOM Jurong Port Service Invoice</option>
-                  <option>TOM Letterhead Invoice</option>
-                </select>
+                  value={formData.invoiceNumber}
+                  disabled
+                />
+              </div>
+              <div className="detail-field">
+                <label>PO NUMBER</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.poNumber}
+                  onChange={(e) => handleInputChange('poNumber', e.target.value)}
+                  placeholder="Enter PO number"
+                />
               </div>
               <div className="detail-field">
                 <label>POSTING PERIOD <span className="required">*</span></label>
@@ -434,15 +443,6 @@ const CreateInvoice = ({ setCurrentPage }) => {
                 </select>
               </div>
               <div className="detail-field">
-                <label>INVOICE #</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.invoiceNumber}
-                  disabled
-                />
-              </div>
-              <div className="detail-field">
                 <label>DATE <span className="required">*</span></label>
                 <input 
                   type="date" 
@@ -451,8 +451,17 @@ const CreateInvoice = ({ setCurrentPage }) => {
                   onChange={(e) => handleInputChange('date', e.target.value)}
                 />
               </div>
+              <div className="detail-field">
+                <label>DUE DATE</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.dueDate}
+                  onChange={(e) => handleInputChange('dueDate', e.target.value)}
+                />
+              </div>
               <div className="detail-field" style={{ position: 'relative', zIndex: showCustomerDropdown ? 10001 : 'auto' }}>
-                <label className="form-label required">Customer</label>
+                <label className="form-label required">CUSTOMER</label>
                 <div 
                   style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
                   onMouseEnter={() => setCustomerHovered(true)}
@@ -659,25 +668,6 @@ const CreateInvoice = ({ setCurrentPage }) => {
                 </div>
               </div>
               <div className="detail-field">
-                <label>DUE DATE</label>
-                <input 
-                  type="date" 
-                  className="form-control"
-                  value={formData.dueDate}
-                  onChange={(e) => handleInputChange('dueDate', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>PO NUMBER</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.poNumber}
-                  onChange={(e) => handleInputChange('poNumber', e.target.value)}
-                  placeholder="Enter PO number"
-                />
-              </div>
-              <div className="detail-field">
                 <label>START DATE</label>
                 <input 
                   type="date" 
@@ -748,6 +738,16 @@ const CreateInvoice = ({ setCurrentPage }) => {
                   className="form-control"
                   value={formData.salesEffectiveDate}
                   onChange={(e) => handleInputChange('salesEffectiveDate', e.target.value)}
+                />
+              </div>
+              <div className="detail-field">
+                <label>CREATED FROM</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.createdFrom || ''}
+                  onChange={(e) => handleInputChange('createdFrom', e.target.value)}
+                  placeholder="Sales Order #"
                 />
               </div>
             </div>

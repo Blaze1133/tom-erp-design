@@ -268,7 +268,7 @@ const ViewVendorCreditDetail = ({ setCurrentPage }) => {
                 padding: '12px 24px', 
                 cursor: 'pointer',
                 fontSize: '14px',
-                fontWeight: '600',
+                fontWeight: activeTab === 'items' ? '600' : '400',
                 color: activeTab === 'items' ? '#333' : 'white',
                 borderRadius: '4px 4px 0 0'
               }}
@@ -278,12 +278,14 @@ const ViewVendorCreditDetail = ({ setCurrentPage }) => {
             <button 
               onClick={() => setActiveTab('billing')}
               style={{ 
-                background: 'transparent', 
+                background: activeTab === 'billing' ? 'white' : 'transparent', 
                 border: 'none', 
                 padding: '12px 24px', 
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: 'white'
+                fontWeight: activeTab === 'billing' ? '600' : '400',
+                color: activeTab === 'billing' ? '#333' : 'white',
+                borderRadius: '4px 4px 0 0'
               }}
             >
               Billing
@@ -291,59 +293,178 @@ const ViewVendorCreditDetail = ({ setCurrentPage }) => {
             <button 
               onClick={() => setActiveTab('relationships')}
               style={{ 
-                background: 'transparent', 
+                background: activeTab === 'relationships' ? 'white' : 'transparent', 
                 border: 'none', 
                 padding: '12px 24px', 
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: 'white'
+                fontWeight: activeTab === 'relationships' ? '600' : '400',
+                color: activeTab === 'relationships' ? '#333' : 'white',
+                borderRadius: '4px 4px 0 0'
               }}
             >
               Relationships
             </button>
+            <button 
+              onClick={() => setActiveTab('communication')}
+              style={{ 
+                background: activeTab === 'communication' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'communication' ? '600' : '400',
+                color: activeTab === 'communication' ? '#333' : 'white',
+                borderRadius: '4px 4px 0 0'
+              }}
+            >
+              Communication
+            </button>
+            <button 
+              onClick={() => setActiveTab('custom')}
+              style={{ 
+                background: activeTab === 'custom' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'custom' ? '600' : '400',
+                color: activeTab === 'custom' ? '#333' : 'white',
+                borderRadius: '4px 4px 0 0'
+              }}
+            >
+              Custom
+            </button>
+            <button 
+              onClick={() => setActiveTab('taxReporting')}
+              style={{ 
+                background: activeTab === 'taxReporting' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'taxReporting' ? '600' : '400',
+                color: activeTab === 'taxReporting' ? '#333' : 'white',
+                borderRadius: '4px 4px 0 0'
+              }}
+            >
+              Tax Reporting
+            </button>
+            <button 
+              onClick={() => setActiveTab('supplierReceived')}
+              style={{ 
+                background: activeTab === 'supplierReceived' ? 'white' : 'transparent', 
+                border: 'none', 
+                padding: '12px 24px', 
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'supplierReceived' ? '600' : '400',
+                color: activeTab === 'supplierReceived' ? '#333' : 'white',
+                borderRadius: '4px 4px 0 0'
+              }}
+            >
+              Supplier Received Items
+            </button>
           </div>
 
           <div style={{ padding: '20px' }}>
-            <div style={{ marginBottom: '15px' }}>
-              <strong style={{ fontSize: '14px' }}>UNAPPLIED</strong>
-              <div style={{ fontSize: '14px', color: '#333' }}>0.00</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '1.5rem', padding: '1rem', background: '#f8f9fa', alignItems: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <label style={{ fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>UNAPPLIED</label>
+                <div style={{ 
+                  padding: '8px 12px', 
+                  border: '1px solid #ddd', 
+                  borderRadius: '4px', 
+                  background: '#fff',
+                  fontSize: '14px',
+                  color: '#333'
+                }}>0.00</div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <label style={{ fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>APPLIED</label>
+                <div style={{ 
+                  padding: '8px 12px', 
+                  border: '1px solid #ddd', 
+                  borderRadius: '4px', 
+                  background: '#fff',
+                  fontSize: '14px',
+                  color: '#333'
+                }}>29.47</div>
+              </div>
             </div>
 
-            <div style={{ marginBottom: '15px' }}>
-              <strong style={{ fontSize: '14px' }}>APPLIED</strong>
-              <div style={{ fontSize: '14px', color: '#333' }}>29.47</div>
-            </div>
-
+            {/* Sub-tabs for Expenses, Items, Apply */}
             <div style={{ 
-              background: '#f8f9fa', 
-              padding: '12px 20px', 
-              marginBottom: '15px',
-              borderRadius: '4px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
+              display: 'flex', 
+              gap: '0', 
+              borderBottom: '1px solid #dee2e6', 
+              marginBottom: '1.5rem',
+              background: '#fff'
             }}>
-              <strong style={{ fontSize: '14px' }}>Expenses 29.47 ▼</strong>
-              <span style={{ fontSize: '13px', color: '#666' }}>Items 0.00 &nbsp; Apply 29.47 ▼</span>
+              <button 
+                style={{ 
+                  padding: '1rem 2rem', 
+                  border: 'none', 
+                  background: '#fff',
+                  borderBottom: '2px solid #4a90e2',
+                  fontWeight: '600',
+                  fontSize: '0.875rem',
+                  cursor: 'pointer',
+                  color: '#4a90e2',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                Expenses 29.47
+              </button>
+              <button 
+                style={{ 
+                  padding: '1rem 2rem', 
+                  border: 'none', 
+                  background: 'transparent',
+                  borderBottom: '2px solid transparent',
+                  fontWeight: '500',
+                  fontSize: '0.875rem',
+                  cursor: 'pointer',
+                  color: '#6c757d',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                Items 0.00
+              </button>
+              <button 
+                style={{ 
+                  padding: '1rem 2rem', 
+                  border: 'none', 
+                  background: 'transparent',
+                  borderBottom: '2px solid transparent',
+                  fontWeight: '500',
+                  fontSize: '0.875rem',
+                  cursor: 'pointer',
+                  color: '#6c757d',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                Apply 29.47
+              </button>
             </div>
 
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <div style={{ overflowX: 'auto', padding: '0 0 1.5rem 0' }}>
+              <table className="detail-items-table" style={{ minWidth: '2200px', borderCollapse: 'separate', borderSpacing: 0 }}>
                 <thead>
-                  <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>ACCOUNT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>AMOUNT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>TAX CODE</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>TAX RATE</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>TAX AMT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>GROSS AMT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>MEMO</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>DEPARTMENT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>CLASS</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>LOCATION</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>CUSTOMER</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>BILLABLE</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>HISTORY</th>
+                  <tr>
+                    <th style={{ minWidth: '180px' }}>ACCOUNT</th>
+                    <th style={{ minWidth: '120px' }}>AMOUNT</th>
+                    <th style={{ minWidth: '100px' }}>TAX CODE</th>
+                    <th style={{ minWidth: '100px' }}>TAX RATE</th>
+                    <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                    <th style={{ minWidth: '120px' }}>GROSS AMT</th>
+                    <th style={{ minWidth: '250px' }}>MEMO</th>
+                    <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
+                    <th style={{ minWidth: '150px' }}>CLASS</th>
+                    <th style={{ minWidth: '150px' }}>LOCATION</th>
+                    <th style={{ minWidth: '150px' }}>CUSTOMER</th>
+                    <th style={{ minWidth: '100px' }}>BILLABLE</th>
+                    <th style={{ minWidth: '100px' }}>HISTORY</th>
                   </tr>
                 </thead>
                 <tbody>

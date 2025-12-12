@@ -19,17 +19,15 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   // Form state
   const [formData, setFormData] = useState({
     documentNo: 'To Be Generated',
+    referenceNo: 'REF-2024-001',
     shipDate: new Date().toISOString().split('T')[0],
     location: '',
     warehouse: '',
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     department: '',
     class: '',
-    shipMethod: '',
-    termsOfShipment: '',
     project: '',
     requestedBy: '',
-    refEntity: '',
     shippingAddress: '',
     status: 'Pending Submit',
     memo: '',
@@ -181,15 +179,20 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const handleAddItem = () => {
     const newItem = {
       id: formData.items.length + 1,
-      itemCode: '',
-      itemDescription: '',
-      qty: 0,
-      rate: 0.00,
-      amount: 0.00,
-      retentionAmount: 0.00,
-      deliveredQty: 0,
-      memo: '',
-      unitType: 'PCS'
+      item: '',
+      description: '',
+      quantity: 0,
+      units: 'Pcs',
+      priceLevel: '',
+      rate: 0,
+      amount: 0,
+      taxCode: '',
+      grossAmount: 0,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0,
+      countryOfOrigin: '',
+      hsCode: ''
     };
     
     setFormData(prev => ({
@@ -233,15 +236,20 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const handleInsertAbove = (index) => {
     const newItem = {
       id: Date.now(),
-      itemCode: '',
-      itemDescription: '',
-      qty: 0,
-      rate: 0.00,
-      amount: 0.00,
-      retentionAmount: 0.00,
-      deliveredQty: 0,
-      memo: '',
-      unitType: 'PCS'
+      item: '',
+      description: '',
+      quantity: 0,
+      units: 'Pcs',
+      priceLevel: '',
+      rate: 0,
+      amount: 0,
+      taxCode: '',
+      grossAmount: 0,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0,
+      countryOfOrigin: '',
+      hsCode: ''
     };
     setFormData(prev => ({
       ...prev,
@@ -252,15 +260,20 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
   const handleInsertBelow = (index) => {
     const newItem = {
       id: Date.now(),
-      itemCode: '',
-      itemDescription: '',
-      qty: 0,
-      rate: 0.00,
-      amount: 0.00,
-      retentionAmount: 0.00,
-      deliveredQty: 0,
-      memo: '',
-      unitType: 'PCS'
+      item: '',
+      description: '',
+      quantity: 0,
+      units: 'Pcs',
+      priceLevel: '',
+      rate: 0,
+      amount: 0,
+      taxCode: '',
+      grossAmount: 0,
+      class: '',
+      costEstimateType: 'Fixed',
+      estimatedExtendedCost: 0,
+      countryOfOrigin: '',
+      hsCode: ''
     };
     setFormData(prev => ({
       ...prev,
@@ -276,6 +289,15 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
       }));
       setActiveMenu(null);
     }
+  };
+
+  const handleItemChange = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      items: prev.items.map((item, i) => 
+        i === index ? { ...item, [field]: value } : item
+      )
+    }));
   };
 
   return (
@@ -324,6 +346,16 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                   type="text" 
                   className="form-control"
                   value={formData.documentNo}
+                  disabled
+                  style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
+                />
+              </div>
+              <div className="detail-field">
+                <label>REFERENCE NO</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.referenceNo}
                   disabled
                   style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                 />
@@ -395,32 +427,6 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                   <option value="">Select...</option>
                   {classes.map((cls, index) => (
                     <option key={index} value={cls}>{cls}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>SHIP METHOD</label>
-                <select 
-                  className="form-control"
-                  value={formData.shipMethod}
-                  onChange={(e) => handleInputChange('shipMethod', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  {shipMethods.map((method, index) => (
-                    <option key={index} value={method}>{method}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>TERMS OF SHIPMENT</label>
-                <select 
-                  className="form-control"
-                  value={formData.termsOfShipment}
-                  onChange={(e) => handleInputChange('termsOfShipment', e.target.value)}
-                >
-                  <option value="">Select...</option>
-                  {termsOptions.map((term, index) => (
-                    <option key={index} value={term}>{term}</option>
                   ))}
                 </select>
               </div>
@@ -599,16 +605,6 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                 </div>
               </div>
               <div className="detail-field">
-                <label>REF ENTITY</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.refEntity}
-                  onChange={(e) => handleInputChange('refEntity', e.target.value)}
-                  placeholder="Reference entity"
-                />
-              </div>
-              <div className="detail-field">
                 <label>STATUS</label>
                 <select 
                   className="form-control"
@@ -675,19 +671,24 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
               </div>
             ) : (
               <div style={{ overflowX: 'auto' }}>
-                <table className="detail-items-table" style={{ minWidth: '1800px' }}>
+                <table className="detail-items-table" style={{ minWidth: '2200px' }}>
                   <thead>
                     <tr>
-                      <th style={{ width: '40px' }}></th>
-                      <th>ITEM CODE</th>
-                      <th>ITEM DESCRIPTION</th>
-                      <th>QTY</th>
-                      <th>UNIT TYPE</th>
-                      <th>RATE</th>
-                      <th>AMOUNT</th>
-                      <th>RETENTION AMOUNT</th>
-                      <th>DELIVERED QTY</th>
-                      <th>MEMO</th>
+                      <th style={{ width: '30px' }}></th>
+                      <th style={{ minWidth: '150px' }}>ITEM</th>
+                      <th style={{ minWidth: '400px' }}>DESC</th>
+                      <th style={{ minWidth: '80px' }}>QTY</th>
+                      <th style={{ minWidth: '100px' }}>UNITS</th>
+                      <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                      <th style={{ minWidth: '100px' }}>RATE</th>
+                      <th style={{ minWidth: '100px' }}>AMT</th>
+                      <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                      <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                      <th style={{ minWidth: '150px' }}>CLASS</th>
+                      <th style={{ minWidth: '150px' }}>COST EST. TYPE</th>
+                      <th style={{ minWidth: '150px' }}>EST. EXT. COST</th>
+                      <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                      <th style={{ minWidth: '150px' }}>HS CODE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -713,8 +714,11 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                               style={{
                                 position: 'fixed',
                                 top: `${menuPosition.top}px`,
-                                left: `${menuPosition.left}px`
+                                left: `${menuPosition.left}px`,
+                                display: 'block',
+                                zIndex: 10000
                               }}
+                              onClick={(e) => e.stopPropagation()}
                             >
                               <button onClick={() => {
                                 handleInsertAbove(index);
@@ -742,78 +746,150 @@ const CreateCustomDeliveryOrder = ({ setCurrentPage }) => {
                         </td>
                         <td>
                           <input 
-                            type="text" 
-                            className="form-control" 
-                            defaultValue={item.itemCode} 
-                            style={{ minWidth: '150px', height: '40px' }} 
+                            type="text"
+                            className="form-control"
+                            value={item.item}
+                            onChange={(e) => handleItemChange(index, 'item', e.target.value)}
+                            style={{ minWidth: '200px', height: '40px' }}
                           />
                         </td>
                         <td>
                           <textarea 
-                            className="form-control" 
-                            defaultValue={item.itemDescription} 
-                            style={{ minWidth: '250px', minHeight: '40px', resize: 'vertical' }} 
+                            className="form-control"
+                            value={item.description}
+                            onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                            style={{ 
+                              minWidth: '300px', 
+                              minHeight: '60px',
+                              resize: 'both',
+                              overflow: 'auto'
+                            }}
                             rows="2"
+                            onInput={(e) => {
+                              e.target.style.height = 'auto';
+                              e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                            }}
                           />
                         </td>
                         <td>
                           <input 
-                            type="number" 
-                            className="form-control" 
-                            defaultValue={item.qty} 
-                            style={{ minWidth: '80px', height: '40px' }} 
+                            type="number"
+                            className="form-control"
+                            value={item.quantity || 0}
+                            onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value) || 0)}
+                            style={{ minWidth: '100px', height: '40px' }}
                           />
                         </td>
                         <td>
-                          <select className="form-control" defaultValue={item.unitType} style={{ minWidth: '100px', height: '40px' }}>
-                            <option>PCS</option>
-                            <option>SET</option>
-                            <option>KG</option>
-                            <option>M</option>
-                            <option>L</option>
+                          <input 
+                            type="text"
+                            className="form-control"
+                            value={item.units || ''}
+                            onChange={(e) => handleItemChange(index, 'units', e.target.value)}
+                            style={{ minWidth: '120px', height: '40px' }}
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text"
+                            className="form-control"
+                            value={item.priceLevel || ''}
+                            onChange={(e) => handleItemChange(index, 'priceLevel', e.target.value)}
+                            style={{ minWidth: '110px', height: '40px' }}
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="number"
+                            className="form-control"
+                            value={item.rate || 0}
+                            onChange={(e) => handleItemChange(index, 'rate', parseFloat(e.target.value) || 0)}
+                            style={{ minWidth: '120px', height: '40px' }}
+                            step="0.01"
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="number"
+                            className="form-control"
+                            value={item.amount || 0}
+                            onChange={(e) => handleItemChange(index, 'amount', parseFloat(e.target.value) || 0)}
+                            style={{ minWidth: '120px', height: '40px' }}
+                            step="0.01"
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="text"
+                            className="form-control"
+                            value={item.taxCode || ''}
+                            onChange={(e) => handleItemChange(index, 'taxCode', e.target.value)}
+                            style={{ minWidth: '110px', height: '40px' }}
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            type="number"
+                            className="form-control"
+                            value={item.grossAmount || 0}
+                            onChange={(e) => handleItemChange(index, 'grossAmount', parseFloat(e.target.value) || 0)}
+                            style={{ minWidth: '110px', height: '40px' }}
+                            step="0.01"
+                          />
+                        </td>
+                        <td>
+                          <select 
+                            className="form-control"
+                            value={item.class || ''}
+                            onChange={(e) => handleItemChange(index, 'class', e.target.value)}
+                            style={{ minWidth: '180px', height: '40px' }}
+                          >
+                            <option value="">Select...</option>
+                            <option>Consumable Item</option>
+                            <option>Fabrication</option>
+                            <option>Installation work</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select 
+                            className="form-control"
+                            value={item.costEstimateType || 'Fixed'}
+                            onChange={(e) => handleItemChange(index, 'costEstimateType', e.target.value)}
+                            style={{ minWidth: '180px', height: '40px' }}
+                          >
+                            <option>Fixed</option>
+                            <option>Variable</option>
+                            <option>Estimated</option>
                           </select>
                         </td>
                         <td>
                           <input 
-                            type="number" 
-                            className="form-control" 
-                            defaultValue={item.rate} 
+                            type="number"
+                            className="form-control"
+                            value={item.estimatedExtendedCost || 0}
+                            onChange={(e) => handleItemChange(index, 'estimatedExtendedCost', parseFloat(e.target.value) || 0)}
+                            style={{ minWidth: '180px', height: '40px' }}
                             step="0.01"
-                            style={{ minWidth: '120px', height: '40px' }} 
                           />
                         </td>
                         <td>
                           <input 
-                            type="number" 
-                            className="form-control" 
-                            defaultValue={item.amount} 
-                            step="0.01"
-                            style={{ minWidth: '120px', height: '40px' }} 
+                            type="text"
+                            className="form-control"
+                            value={item.countryOfOrigin || ''}
+                            onChange={(e) => handleItemChange(index, 'countryOfOrigin', e.target.value)}
+                            placeholder="Country"
+                            style={{ minWidth: '180px', height: '40px' }}
                           />
                         </td>
                         <td>
                           <input 
-                            type="number" 
-                            className="form-control" 
-                            defaultValue={item.retentionAmount} 
-                            step="0.01"
-                            style={{ minWidth: '150px', height: '40px' }} 
-                          />
-                        </td>
-                        <td>
-                          <input 
-                            type="number" 
-                            className="form-control" 
-                            defaultValue={item.deliveredQty} 
-                            style={{ minWidth: '120px', height: '40px' }} 
-                          />
-                        </td>
-                        <td>
-                          <textarea 
-                            className="form-control" 
-                            defaultValue={item.memo} 
-                            style={{ minWidth: '200px', minHeight: '40px', resize: 'vertical' }} 
-                            rows="2"
+                            type="text"
+                            className="form-control"
+                            value={item.hsCode || ''}
+                            onChange={(e) => handleItemChange(index, 'hsCode', e.target.value)}
+                            placeholder="HS Code"
+                            style={{ minWidth: '180px', height: '40px' }}
                           />
                         </td>
                       </tr>

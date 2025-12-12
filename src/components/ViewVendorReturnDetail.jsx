@@ -5,6 +5,9 @@ import './Enquiries.css';
 const ViewVendorReturnDetail = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('expenses');
+  const [itemsSubTab, setItemsSubTab] = useState('items');
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [selectedItemHistory, setSelectedItemHistory] = useState(null);
 
   const returnData = {
     returnNumber: 'VRATMOS00002',
@@ -28,26 +31,31 @@ const ViewVendorReturnDetail = ({ setCurrentPage }) => {
     customCreatedFrom: 'Purchase Requisition: #PR23TM0S00076'
   };
 
-  const expenseItems = [
+  const expenseItems = [];
+
+  const itemsData = [
     {
-      item: 'Non Inventoried - Insurance',
-      vendorName: 'Foreign Workers Bond',
-      quantity: '1 pors',
-      units: '',
-      description: 'Non All Motorised (GR1180/F)',
+      id: 1,
+      item: 'Bond Recruitment : Insurance',
+      vendorName: '',
+      quantity: 1,
+      units: 'pers',
+      description: 'Foreign Workers Bond\n\nNur Ali Mohammad (G8110637T)',
       rate: 45.00,
       amount: 45.00,
-      taxCode: 'GST-SGD-%',
+      taxCode: 'GST_SG:0%',
       taxRate: '0.0%',
       taxAmt: 0.00,
       grossAmt: 45.00,
-      options: 'TOM - Human Insurance',
-      department: 'TOM : TOM INTERNALS : TOM HR',
+      options: '',
+      department: 'TOM : Human Resource',
       class: '',
       location: '',
-      customerProject: '',
-      billable: '',
-      closed: ''
+      customer: '',
+      project: '884-1 TOM INTERNALS : TOM HR',
+      billable: 'Yes',
+      closed: '',
+      statisticalProcedure: ''
     }
   ];
 
@@ -425,77 +433,144 @@ const ViewVendorReturnDetail = ({ setCurrentPage }) => {
           </div>
 
           <div style={{ padding: '20px' }}>
-            {/* Expenses & Items Tab */}
+            {/* Expenses Tab */}
             {activeTab === 'expenses' && (
               <>
-                <div style={{ 
-                  background: '#f8f9fa', 
-                  padding: '12px 20px', 
-                  marginBottom: '15px',
-                  borderRadius: '4px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                  <strong style={{ fontSize: '14px' }}>Expenses 0.00 &nbsp;&nbsp; Items 45.00 ▼</strong>
+                {/* Sub-tabs for Expenses and Items */}
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', borderBottom: '2px solid #e0e0e0' }}>
+                  <button
+                    onClick={() => setItemsSubTab('expenses')}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: itemsSubTab === 'expenses' ? '3px solid #4a90e2' : '3px solid transparent',
+                      padding: '0.5rem 1rem',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: itemsSubTab === 'expenses' ? '600' : '500',
+                      color: itemsSubTab === 'expenses' ? '#4a90e2' : '#666'
+                    }}
+                  >
+                    Expenses 0.00
+                  </button>
+                  <button
+                    onClick={() => setItemsSubTab('items')}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: itemsSubTab === 'items' ? '3px solid #4a90e2' : '3px solid transparent',
+                      padding: '0.5rem 1rem',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: itemsSubTab === 'items' ? '600' : '500',
+                      color: itemsSubTab === 'items' ? '#4a90e2' : '#666'
+                    }}
+                  >
+                    Items 45.00
+                  </button>
                 </div>
 
-                <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
-                <thead>
-                  <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>ITEM</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>VENDOR NAME</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>QUANTITY</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>UNITS</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>DESCRIPTION</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'right', fontSize: '10px', fontWeight: '600', color: '#666' }}>RATE</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'right', fontSize: '10px', fontWeight: '600', color: '#666' }}>AMOUNT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>TAX CODE</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>TAX RATE</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'right', fontSize: '10px', fontWeight: '600', color: '#666' }}>TAX AMT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'right', fontSize: '10px', fontWeight: '600', color: '#666' }}>GROSS AMT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>OPTIONS</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>DEPARTMENT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>CLASS</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>LOCATION</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>CUSTOMER/PROJECT</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>BILLABLE</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>CLOSED</th>
-                    <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '10px', fontWeight: '600', color: '#666' }}>HISTORY</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expenseItems.map((item, index) => (
-                    <tr key={index} style={{ borderBottom: '1px solid #e0e0e0' }}>
-                      <td style={{ padding: '10px 8px' }}>{item.item}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.vendorName}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.quantity}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.units || '-'}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.description}</td>
-                      <td style={{ padding: '10px 8px', textAlign: 'right' }}>{item.rate.toFixed(2)}</td>
-                      <td style={{ padding: '10px 8px', textAlign: 'right' }}>{item.amount.toFixed(2)}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.taxCode}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.taxRate}</td>
-                      <td style={{ padding: '10px 8px', textAlign: 'right' }}>{item.taxAmt.toFixed(2)}</td>
-                      <td style={{ padding: '10px 8px', textAlign: 'right' }}>{item.grossAmt.toFixed(2)}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.options}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.department}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.class || '-'}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.location || '-'}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.customerProject || '-'}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.billable || '-'}</td>
-                      <td style={{ padding: '10px 8px' }}>{item.closed || '-'}</td>
-                      <td style={{ padding: '10px 8px' }}>
-                        <button style={{ color: '#4a90e2', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>
-                          History
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-                </div>
+                {/* Expenses Sub-tab */}
+                {itemsSubTab === 'expenses' && (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table className="detail-items-table" style={{ width: '100%' }}>
+                      <thead>
+                        <tr>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>ACCOUNT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>AMOUNT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>TAX CODE</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>TAX RATE</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>TAX AMT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>GROSS AMT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>MEMO</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>DEPARTMENT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>CLASS</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>LOCATION</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>CUSTOMER</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>BILLABLE</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>HISTORY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="13" style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>
+                            No records to show.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Items Sub-tab */}
+                {itemsSubTab === 'items' && (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table className="detail-items-table" style={{ width: '100%' }}>
+                      <thead>
+                        <tr>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>ITEM</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>VENDOR NAME</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>QUANTITY</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>UNITS</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>RATE</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>AMOUNT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>TAX CODE</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>TAX RATE</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>TAX AMT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>GROSS AMT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>OPTIONS</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>DEPARTMENT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>CLASS</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>LOCATION</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>CUSTOMER</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>PROJECT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>BILLABLE</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>CLOSED</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '180px' }}>STATISTICAL PROCEDURE FOR PURCHASES</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>HISTORY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {itemsData.map((item) => (
+                          <tr key={item.id}>
+                            <td style={{ padding: '10px 12px' }}>{item.item}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.vendorName || '-'}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.quantity}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.units}</td>
+                            <td style={{ padding: '10px 12px', whiteSpace: 'pre-line' }}>{item.description}</td>
+                            <td style={{ padding: '10px 12px', textAlign: 'right' }}>{item.rate.toFixed(2)}</td>
+                            <td style={{ padding: '10px 12px', textAlign: 'right' }}>{item.amount.toFixed(2)}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.taxCode}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.taxRate}</td>
+                            <td style={{ padding: '10px 12px', textAlign: 'right' }}>{item.taxAmt.toFixed(2)}</td>
+                            <td style={{ padding: '10px 12px', textAlign: 'right' }}>{item.grossAmt.toFixed(2)}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.options || '-'}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.department}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.class || '-'}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.location || '-'}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.customer || '-'}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.project}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.billable}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.closed || '-'}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.statisticalProcedure || '-'}</td>
+                            <td style={{ padding: '10px 12px', textAlign: 'center' }}>
+                              <button 
+                                className="view-link"
+                                onClick={() => {
+                                  setSelectedItemHistory(item);
+                                  setShowHistoryModal(true);
+                                }}
+                              >
+                                History
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </>
             )}
 
@@ -781,12 +856,121 @@ const ViewVendorReturnDetail = ({ setCurrentPage }) => {
         </div>
       </div>
 
-      <Toast 
-        message={toast.message} 
-        type={toast.type} 
-        show={toast.show} 
-        onClose={() => setToast({ ...toast, show: false })} 
-      />
+      {toast.show && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast({ show: false, message: '', type: 'success' })} 
+        />
+      )}
+
+      {/* Item History Modal */}
+      {showHistoryModal && selectedItemHistory && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000
+          }}
+          onClick={() => setShowHistoryModal(false)}
+        >
+          <div 
+            style={{
+              background: 'white',
+              borderRadius: '8px',
+              padding: '2rem',
+              maxWidth: '900px',
+              width: '90%',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#333' }}>
+                <i className="fas fa-history" style={{ marginRight: '0.5rem', color: '#4a90e2' }}></i>
+                Item History
+              </h2>
+              <button 
+                onClick={() => setShowHistoryModal(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: '#999',
+                  padding: '0.25rem 0.5rem'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f8f9fa', borderRadius: '4px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <strong style={{ color: '#666', fontSize: '0.85rem' }}>ITEM:</strong>
+                  <div style={{ fontSize: '1rem', color: '#333', marginTop: '0.25rem' }}>{selectedItemHistory.item}</div>
+                </div>
+                <div>
+                  <strong style={{ color: '#666', fontSize: '0.85rem' }}>DESCRIPTION:</strong>
+                  <div style={{ fontSize: '1rem', color: '#333', marginTop: '0.25rem' }}>{selectedItemHistory.description}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ overflowX: 'auto' }}>
+              <table className="detail-items-table" style={{ width: '100%' }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>ITEM</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>PRICE</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>UNITS</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>QUANTITY</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>DATE</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>DOCUMENT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.item}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.description}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.rate.toFixed(2)}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.units}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.quantity}</td>
+                    <td style={{ padding: '10px 12px' }}>{new Date().toLocaleDateString()}</td>
+                    <td style={{ padding: '10px 12px' }}>Current VRA</td>
+                  </tr>
+                  <tr>
+                    <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.9rem' }}>
+                      No previous history records found
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+              <button 
+                className="btn-toolbar"
+                onClick={() => setShowHistoryModal(false)}
+                style={{ padding: '0.5rem 1.5rem' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

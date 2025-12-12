@@ -58,6 +58,10 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     }
   ]);
 
+  // Discount state
+  const [discount, setDiscount] = useState('');
+  const [confirmedDiscount, setConfirmedDiscount] = useState(0);
+
   const [formData, setFormData] = useState({
     // Primary Information
     customForm: 'Tom quotation',
@@ -385,7 +389,12 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
   };
 
   const calculateTotal = () => {
-    return calculateSubtotal() + calculateTaxTotal();
+    return calculateSubtotal() - confirmedDiscount + calculateTaxTotal();
+  };
+
+  const handleConfirmDiscount = () => {
+    const discountValue = parseFloat(discount) || 0;
+    setConfirmedDiscount(discountValue);
   };
 
   return (
@@ -1143,12 +1152,62 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                 <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
               </div>
               <div className="summary-card">
-                <div className="summary-title">Tax (7%)</div>
-                <div className="summary-value">${calculateTaxTotal().toFixed(2)}</div>
+                <div className="summary-title">Discount</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <input 
+                    type="number" 
+                    className="summary-value"
+                    value={discount}
+                    onChange={(e) => setDiscount(e.target.value)}
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    style={{ 
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '4px',
+                      padding: '4px 8px',
+                      textAlign: 'right',
+                      fontSize: '1.25rem',
+                      fontWeight: '600',
+                      flex: 1,
+                      background: '#fff'
+                    }}
+                  />
+                  <button
+                    onClick={handleConfirmDiscount}
+                    style={{
+                      background: '#28a745',
+                      border: 'none',
+                      borderRadius: '4px',
+                      color: 'white',
+                      cursor: 'pointer',
+                      padding: '6px 10px',
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minWidth: '32px',
+                      height: '32px'
+                    }}
+                    title="Confirm discount"
+                  >
+                    <i className="fas fa-check"></i>
+                  </button>
+                </div>
+                {confirmedDiscount > 0 && (
+                  <div style={{ 
+                    fontSize: '0.9rem', 
+                    color: '#28a745', 
+                    marginTop: '4px',
+                    fontWeight: '500'
+                  }}>
+                    Applied: ${confirmedDiscount.toFixed(2)}
+                  </div>
+                )}
               </div>
               <div className="summary-card">
-                <div className="summary-title">Discount</div>
-                <div className="summary-value">$0.00</div>
+                <div className="summary-title">Tax (7%)</div>
+                <div className="summary-value">${calculateTaxTotal().toFixed(2)}</div>
               </div>
               <div className="summary-card" style={{ background: 'var(--gray-ultralight)' }}>
                 <div className="summary-title">Total Amount</div>

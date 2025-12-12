@@ -53,6 +53,7 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
       }
     ],
     subtotal: 60.00,
+    discount: 0.00,
     taxTotal: 4.20,
     total: 64.20
   };
@@ -309,12 +310,12 @@ const ViewQuotationDetail = ({ setCurrentPage }) => {
                     <div className="summary-value">${quotationData.subtotal.toFixed(2)}</div>
                   </div>
                   <div className="summary-card">
-                    <div className="summary-title">TAX AMOUNT</div>
-                    <div className="summary-value">${quotationData.taxTotal.toFixed(2)}</div>
+                    <div className="summary-title">DISCOUNT</div>
+                    <div className="summary-value">${quotationData.discount.toFixed(2)}</div>
                   </div>
                   <div className="summary-card">
-                    <div className="summary-title">DISCOUNT</div>
-                    <div className="summary-value">$0.00</div>
+                    <div className="summary-title">TAX (7%)</div>
+                    <div className="summary-value">${quotationData.taxTotal.toFixed(2)}</div>
                   </div>
                   <div className="summary-card" style={{ background: '#f8f9fa' }}>
                     <div className="summary-title">TOTAL AMOUNT</div>

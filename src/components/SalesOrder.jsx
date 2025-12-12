@@ -10,6 +10,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [isSaved, setIsSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('items');
+  const [relatedRecordsSubTab, setRelatedRecordsSubTab] = useState('customer');
 
   // Customer dropdown states
   const [customerHovered, setCustomerHovered] = useState(false);
@@ -895,6 +896,12 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
               Accounting
             </button>
             <button 
+              className={`tab-btn ${activeTab === 'relatedRecords' ? 'active' : ''}`}
+              onClick={() => setActiveTab('relatedRecords')}
+            >
+              Related Records
+            </button>
+            <button 
               className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`}
               onClick={() => setActiveTab('relationships')}
             >
@@ -1437,6 +1444,280 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Related Records Tab */}
+            {activeTab === 'relatedRecords' && (
+              <div className="form-section" style={{ padding: '1.5rem' }}>
+                <h2 className="section-title">
+                  <i className="fas fa-link"></i>
+                  Related Records
+                </h2>
+
+                {/* Sub-tabs for Customer, Project, Vendors */}
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '0', 
+                  borderBottom: '1px solid #dee2e6', 
+                  marginBottom: '1.5rem',
+                  background: '#fff'
+                }}>
+                  <button 
+                    onClick={() => setRelatedRecordsSubTab('customer')}
+                    style={{ 
+                      padding: '1rem 2rem', 
+                      border: 'none', 
+                      background: relatedRecordsSubTab === 'customer' ? '#fff' : 'transparent',
+                      borderBottom: relatedRecordsSubTab === 'customer' ? '2px solid #4a90e2' : '2px solid transparent',
+                      fontWeight: relatedRecordsSubTab === 'customer' ? '600' : '500',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      color: relatedRecordsSubTab === 'customer' ? '#4a90e2' : '#6c757d',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Customer
+                  </button>
+                  <button 
+                    onClick={() => setRelatedRecordsSubTab('project')}
+                    style={{ 
+                      padding: '1rem 2rem', 
+                      border: 'none', 
+                      background: relatedRecordsSubTab === 'project' ? '#fff' : 'transparent',
+                      borderBottom: relatedRecordsSubTab === 'project' ? '2px solid #4a90e2' : '2px solid transparent',
+                      fontWeight: relatedRecordsSubTab === 'project' ? '600' : '500',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      color: relatedRecordsSubTab === 'project' ? '#4a90e2' : '#6c757d',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Project
+                  </button>
+                  <button 
+                    onClick={() => setRelatedRecordsSubTab('vendors')}
+                    style={{ 
+                      padding: '1rem 2rem', 
+                      border: 'none', 
+                      background: relatedRecordsSubTab === 'vendors' ? '#fff' : 'transparent',
+                      borderBottom: relatedRecordsSubTab === 'vendors' ? '2px solid #4a90e2' : '2px solid transparent',
+                      fontWeight: relatedRecordsSubTab === 'vendors' ? '600' : '500',
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      color: relatedRecordsSubTab === 'vendors' ? '#4a90e2' : '#6c757d',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Vendors
+                  </button>
+                </div>
+
+                {/* Customer Sub-table */}
+                {relatedRecordsSubTab === 'customer' && (
+                  <div style={{ overflowX: 'auto', padding: '0 0 1.5rem 0' }}>
+                    <table className="detail-items-table" style={{ minWidth: '1400px', borderCollapse: 'separate', borderSpacing: 0 }}>
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '150px' }}>DATE</th>
+                          <th style={{ minWidth: '180px' }}>DOCUMENT NUMBER</th>
+                          <th style={{ minWidth: '150px' }}>TYPE</th>
+                          <th style={{ minWidth: '250px' }}>CUSTOMER</th>
+                          <th style={{ minWidth: '200px' }}>PROJECT</th>
+                          <th style={{ minWidth: '150px' }}>STATUS</th>
+                          <th style={{ minWidth: '120px' }}>AMOUNT</th>
+                          <th style={{ minWidth: '120px' }}>BALANCE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>26/11/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>S2100067</td>
+                          <td style={{ padding: '10px 8px' }}>Sales Order</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131 Gimi Ms Corporation</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#ff9800', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Pending Billing
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>168,000.00</td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>168,000.00</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>15/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>INV-2100234</td>
+                          <td style={{ padding: '10px 8px' }}>Sales Invoice</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131 Gimi Ms Corporation</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#4caf50', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Paid
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>84,000.00</td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>0.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Project Sub-table */}
+                {relatedRecordsSubTab === 'project' && (
+                  <div style={{ overflowX: 'auto', padding: '0 0 1.5rem 0' }}>
+                    <table className="detail-items-table" style={{ minWidth: '1600px', borderCollapse: 'separate', borderSpacing: 0 }}>
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '150px' }}>DATE</th>
+                          <th style={{ minWidth: '180px' }}>DOCUMENT NUMBER</th>
+                          <th style={{ minWidth: '150px' }}>TYPE</th>
+                          <th style={{ minWidth: '250px' }}>ENTITY</th>
+                          <th style={{ minWidth: '200px' }}>PROJECT</th>
+                          <th style={{ minWidth: '150px' }}>CATEGORY</th>
+                          <th style={{ minWidth: '150px' }}>STATUS</th>
+                          <th style={{ minWidth: '120px' }}>AMOUNT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>26/11/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>S2100067</td>
+                          <td style={{ padding: '10px 8px' }}>Sales Order</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131 Gimi Ms Corporation</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>Sales</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#ff9800', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Pending Billing
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>168,000.00</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>15/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>INV-2100234</td>
+                          <td style={{ padding: '10px 8px' }}>Sales Invoice</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131 Gimi Ms Corporation</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>Sales</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#4caf50', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Paid
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>84,000.00</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>10/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>PO-2100156</td>
+                          <td style={{ padding: '10px 8px' }}>Purchase Order</td>
+                          <td style={{ padding: '10px 8px' }}>Steel Suppliers Pte Ltd</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>Purchase</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#2196f3', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Approved
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>45,000.00</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>18/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>BILL-2100089</td>
+                          <td style={{ padding: '10px 8px' }}>Vendor Bill</td>
+                          <td style={{ padding: '10px 8px' }}>Steel Suppliers Pte Ltd</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>Purchase</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#f44336', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Pending Payment
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>45,000.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Vendors Sub-table */}
+                {relatedRecordsSubTab === 'vendors' && (
+                  <div style={{ overflowX: 'auto', padding: '0 0 1.5rem 0' }}>
+                    <table className="detail-items-table" style={{ minWidth: '1500px', borderCollapse: 'separate', borderSpacing: 0 }}>
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '150px' }}>DATE</th>
+                          <th style={{ minWidth: '180px' }}>DOCUMENT NUMBER</th>
+                          <th style={{ minWidth: '150px' }}>TYPE</th>
+                          <th style={{ minWidth: '250px' }}>VENDOR</th>
+                          <th style={{ minWidth: '200px' }}>PROJECT</th>
+                          <th style={{ minWidth: '150px' }}>STATUS</th>
+                          <th style={{ minWidth: '120px' }}>AMOUNT</th>
+                          <th style={{ minWidth: '120px' }}>BALANCE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>10/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>PO-2100156</td>
+                          <td style={{ padding: '10px 8px' }}>Purchase Order</td>
+                          <td style={{ padding: '10px 8px' }}>Steel Suppliers Pte Ltd</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#2196f3', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Approved
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>45,000.00</td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>45,000.00</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>18/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>BILL-2100089</td>
+                          <td style={{ padding: '10px 8px' }}>Vendor Bill</td>
+                          <td style={{ padding: '10px 8px' }}>Steel Suppliers Pte Ltd</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#f44336', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Pending Payment
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>45,000.00</td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>45,000.00</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>22/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>PAY-2100045</td>
+                          <td style={{ padding: '10px 8px' }}>Payment Voucher</td>
+                          <td style={{ padding: '10px 8px' }}>Steel Suppliers Pte Ltd</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#4caf50', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Completed
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>22,500.00</td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>0.00</td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '10px 8px' }}>05/12/2020</td>
+                          <td style={{ padding: '10px 8px', color: '#4a90e2', cursor: 'pointer' }}>PO-2100148</td>
+                          <td style={{ padding: '10px 8px' }}>Purchase Order</td>
+                          <td style={{ padding: '10px 8px' }}>Marine Equipment Co</td>
+                          <td style={{ padding: '10px 8px' }}>20-0131-Gimi-Fabrication of Cargo Tank Vapour Line</td>
+                          <td style={{ padding: '10px 8px' }}>
+                            <span style={{ background: '#2196f3', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                              Approved
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>12,800.00</td>
+                          <td style={{ padding: '10px 8px', textAlign: 'right' }}>12,800.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             )}
 

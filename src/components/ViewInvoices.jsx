@@ -184,7 +184,7 @@ const ViewInvoices = ({ setCurrentPage }) => {
           </select>
           <button className="btn-edit-view">Edit View</button>
         </div>
-        <button className="btn-new-enquiry" onClick={() => showToast('Opening new invoice form...', 'info')}>
+        <button className="btn-new-enquiry" onClick={() => setCurrentPage('create-invoice')}>
           <i className="fas fa-plus"></i>
           New Transaction
         </button>

@@ -482,48 +482,6 @@ const EditPurchaseRequisition = ({ setCurrentPage }) => {
                 />
               </div>
               <div className="detail-field">
-                <label>CURRENCY *</label>
-                <select 
-                  className="form-control"
-                  value={formData.currency}
-                  onChange={(e) => handleFormChange('currency', e.target.value)}
-                >
-                  <option>SGD</option>
-                  <option>USD</option>
-                  <option>EUR</option>
-                  <option>GBP</option>
-                  <option>INR</option>
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>POSTING PERIOD</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.postingPeriod}
-                  onChange={(e) => handleFormChange('postingPeriod', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>EXCHANGE RATE *</label>
-                <input 
-                  type="number" 
-                  className="form-control"
-                  step="0.01"
-                  value={formData.exchangeRate}
-                  onChange={(e) => handleFormChange('exchangeRate', parseFloat(e.target.value) || 1.00)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>AMOUNT</label>
-                <input 
-                  type="number" 
-                  className="form-control"
-                  value={calculateSubtotal().toFixed(2)}
-                  disabled
-                />
-              </div>
-              <div className="detail-field">
                 <label>DATE *</label>
                 <input 
                   type="date" 

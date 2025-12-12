@@ -10,7 +10,6 @@ const ViewInvoiceDetail = ({ setCurrentPage }) => {
     documentNumber: 'INV-2024-001',
     title: 'Pacific Shipping Ltd : Marine Equipment Supply - Q1 2024',
     statusBadge: 'PAID IN FULL',
-    customForm: 'TOM Service Invoice',
     invoiceNumber: 'INV-2024-001',
     postingPeriod: 'Jan 2024',
     customerProject: 'Pacific Shipping Ltd : Marine Equipment Supply - Q1 2024',
@@ -189,10 +188,6 @@ const ViewInvoiceDetail = ({ setCurrentPage }) => {
                 <div className="field-value">-</div>
               </div>
               <div className="detail-field">
-                <label>CONTACT PERSON</label>
-                <div className="field-value">-</div>
-              </div>
-              <div className="detail-field">
                 <label>MEMO</label>
                 <div className="field-value">{invoiceData.memo || '-'}</div>
               </div>
@@ -218,7 +213,7 @@ const ViewInvoiceDetail = ({ setCurrentPage }) => {
               </div>
               <div className="detail-field">
                 <label>CREATED FROM</label>
-                <div className="field-value">Sales Order #S2200871</div>
+                <div className="field-value">{invoiceData.createdFrom || 'Sales Order #S2200871'}</div>
               </div>
             </div>
           </div>
@@ -247,6 +242,10 @@ const ViewInvoiceDetail = ({ setCurrentPage }) => {
               <div className="detail-field">
                 <label>DEPARTMENT</label>
                 <div className="field-value">{invoiceData.department}</div>
+              </div>
+              <div className="detail-field">
+                <label>CONTACT PERSON</label>
+                <div className="field-value">{invoiceData.contactPerson || '-'}</div>
               </div>
             </div>
           </div>

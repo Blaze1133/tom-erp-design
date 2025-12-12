@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
@@ -22,16 +22,33 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     purchaseType: 'High',
     materialSpecification: '',
+    items: [],
     expenses: []
   });
 
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [selectedItemHistory, setSelectedItemHistory] = useState(null);
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (activeMenu !== null) {
+        setActiveMenu(null);
+      }
+    };
+    
+    if (activeMenu !== null) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeMenu]);
 
   const handleFormChange = (field, value) => {
     setFormData(prev => ({
@@ -59,6 +76,35 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
     }
   };
 
+  const handleAddItem = () => {
+    const newItem = {
+      id: formData.items.length + 1,
+      item: '',
+      vendorName: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: '',
+      taxRate: '',
+      taxAmount: 0.00,
+      grossAmount: 0.00,
+      options: '',
+      department: '',
+      class: '',
+      location: '',
+      customerProject: '',
+      billable: false,
+      closed: false,
+      statisticalProcedure: ''
+    };
+    setFormData(prev => ({
+      ...prev,
+      items: [...prev.items, newItem]
+    }));
+  };
+
   const handleAddExpense = () => {
     const newExpense = {
       id: formData.expenses.length + 1,
@@ -69,12 +115,9 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
       taxAmount: 0.00,
       grossAmount: 0.00,
       memo: '',
-      project: '',
       department: '',
       class: '',
-      location: '',
-      customer: '',
-      billable: false
+      location: ''
     };
     setFormData(prev => ({
       ...prev,
@@ -136,6 +179,79 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
       }));
       showToast('Row deleted successfully', 'success');
     }
+    setActiveMenu(null);
+  };
+
+  // Items table handlers
+  const handleInsertAboveItem = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      vendorName: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: '',
+      taxRate: '',
+      taxAmount: 0.00,
+      grossAmount: 0.00,
+      options: '',
+      department: '',
+      class: '',
+      location: '',
+      customerProject: '',
+      billable: false,
+      closed: false,
+      statisticalProcedure: ''
+    };
+    setFormData(prev => ({
+      ...prev,
+      items: [...prev.items.slice(0, index), newItem, ...prev.items.slice(index)]
+    }));
+    setActiveMenu(null);
+  };
+
+  const handleInsertBelowItem = (index) => {
+    const newItem = {
+      id: Date.now(),
+      item: '',
+      vendorName: '',
+      quantity: 0,
+      units: 'Pcs',
+      description: '',
+      rate: 0.00,
+      amount: 0.00,
+      taxCode: '',
+      taxRate: '',
+      taxAmount: 0.00,
+      grossAmount: 0.00,
+      options: '',
+      department: '',
+      class: '',
+      location: '',
+      customerProject: '',
+      billable: false,
+      closed: false,
+      statisticalProcedure: ''
+    };
+    setFormData(prev => ({
+      ...prev,
+      items: [...prev.items.slice(0, index + 1), newItem, ...prev.items.slice(index + 1)]
+    }));
+    setActiveMenu(null);
+  };
+
+  const handleDeleteItem = (index) => {
+    if (window.confirm('Are you sure you want to delete this row?')) {
+      setFormData(prev => ({
+        ...prev,
+        items: prev.items.filter((_, i) => i !== index)
+      }));
+      showToast('Row deleted successfully', 'success');
+    }
+    setActiveMenu(null);
   };
 
   const handleMenuToggle = (index, event) => {
@@ -145,8 +261,8 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
     } else {
       const rect = event.currentTarget.getBoundingClientRect();
       setMenuPosition({
-        top: rect.bottom + window.scrollY,
-        left: rect.left + window.scrollX
+        top: rect.bottom + 5,
+        left: rect.left + (rect.width / 2) - 80
       });
       setActiveMenu(index);
     }
@@ -398,7 +514,13 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
               className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`}
               onClick={() => setActiveTab('expenses')}
             >
-              Expenses & Items
+              Expenses
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`}
+              onClick={() => setActiveTab('items')}
+            >
+              Items
             </button>
             <button 
               className={`tab-btn ${activeTab === 'billing' ? 'active' : ''}`}
@@ -433,9 +555,9 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
           </div>
 
           <div className="tabs-content">
-            {/* Expenses & Items Tab */}
+            {/* Expenses Tab */}
             {activeTab === 'expenses' && (
-              <div className="form-section">
+              <div className="form-section" style={{ padding: '1.5rem' }}>
                 <div className="detail-grid" style={{ gridTemplateColumns: '1fr', marginBottom: '1.5rem', maxWidth: '400px' }}>
                   <div className="detail-field">
                     <label>EXCHANGE RATE <span className="required">*</span></label>
@@ -450,23 +572,24 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                 </div>
 
                 {formData.expenses.length > 0 ? (
-                  <div className="items-table-wrapper" style={{ marginTop: '0' }}>
-                    <table className="detail-items-table" style={{ minWidth: '2000px' }}>
+                  <div className="items-table-container" style={{ marginBottom: '1rem' }}>
+                    <table className="items-table">
                       <thead>
                         <tr>
                           <th style={{ width: '30px' }}></th>
-                          <th style={{ minWidth: '200px' }}>ACCOUNT *</th>
-                          <th style={{ minWidth: '120px' }}>AMOUNT *</th>
-                          <th style={{ minWidth: '150px' }}>TAX CODE *</th>
+                          <th style={{ minWidth: '150px' }}>ACCOUNT</th>
+                          <th style={{ minWidth: '100px' }}>AMOUNT</th>
+                          <th style={{ minWidth: '120px' }}>TAX CODE</th>
                           <th style={{ minWidth: '100px' }}>TAX RATE</th>
-                          <th style={{ minWidth: '120px' }}>TAX AMT</th>
-                          <th style={{ minWidth: '120px' }}>GROSS AMT</th>
+                          <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                          <th style={{ minWidth: '100px' }}>GROSS AMT</th>
                           <th style={{ minWidth: '200px' }}>MEMO</th>
-                          <th style={{ minWidth: '150px' }}>DEPARTMENT *</th>
+                          <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
                           <th style={{ minWidth: '150px' }}>CLASS</th>
                           <th style={{ minWidth: '150px' }}>LOCATION</th>
                           <th style={{ minWidth: '150px' }}>CUSTOMER</th>
                           <th style={{ minWidth: '100px' }}>BILLABLE</th>
+                          <th style={{ minWidth: '100px' }}>HISTORY</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -491,9 +614,11 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                                 <div 
                                   className="row-actions-menu" 
                                   style={{ 
+                                    position: 'fixed',
                                     top: `${menuPosition.top}px`, 
                                     left: `${menuPosition.left}px`,
-                                    display: 'block'
+                                    display: 'block',
+                                    zIndex: 10000
                                   }}
                                   onClick={(e) => e.stopPropagation()}
                                 >
@@ -527,10 +652,11 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                                 defaultValue={expense.account} 
                                 style={{ minWidth: '200px', height: '40px' }}
                               >
-                                <option value="">{'<Type then tab>'}</option>
+                                <option value="">Select...</option>
                                 <option>Cost of Goods Sold</option>
                                 <option>Operating Expenses</option>
                                 <option>Materials</option>
+                                <option>30301 Equity : Opening Balance</option>
                               </select>
                             </td>
                             <td>
@@ -538,26 +664,29 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                                 type="number" 
                                 className="form-control" 
                                 defaultValue={expense.amount} 
-                                style={{ minWidth: '120px', height: '40px' }} 
+                                min="0"
+                                style={{ minWidth: '100px', height: '40px', textAlign: 'right' }} 
                                 step="0.01"
                               />
                             </td>
                             <td>
-                              <input 
-                                type="text" 
+                              <select 
                                 className="form-control" 
                                 defaultValue={expense.taxCode} 
-                                placeholder="Tax Code" 
-                                style={{ minWidth: '150px', height: '40px' }} 
-                              />
+                                style={{ minWidth: '120px', height: '40px' }}
+                              >
+                                <option value="">Select...</option>
+                                <option>GST_SG-7%</option>
+                                <option>GST_SG-0%</option>
+                              </select>
                             </td>
                             <td>
                               <input 
                                 type="text" 
                                 className="form-control" 
                                 defaultValue={expense.taxRate} 
-                                placeholder="Rate" 
-                                style={{ minWidth: '100px', height: '40px' }} 
+                                readOnly
+                                style={{ minWidth: '80px', height: '40px', textAlign: 'center' }} 
                               />
                             </td>
                             <td>
@@ -565,7 +694,8 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                                 type="number" 
                                 className="form-control" 
                                 defaultValue={expense.taxAmount} 
-                                style={{ minWidth: '120px', height: '40px' }} 
+                                readOnly
+                                style={{ minWidth: '100px', height: '40px', textAlign: 'right' }} 
                                 step="0.01"
                               />
                             </td>
@@ -574,7 +704,8 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                                 type="number" 
                                 className="form-control" 
                                 defaultValue={expense.grossAmount} 
-                                style={{ minWidth: '120px', height: '40px' }} 
+                                readOnly
+                                style={{ minWidth: '100px', height: '40px', textAlign: 'right' }} 
                                 step="0.01"
                               />
                             </td>
@@ -583,8 +714,8 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                                 type="text" 
                                 className="form-control" 
                                 defaultValue={expense.memo} 
-                                placeholder="Memo" 
-                                style={{ minWidth: '200px', height: '40px' }} 
+                                placeholder="Enter memo" 
+                                style={{ minWidth: '250px', height: '40px' }} 
                               />
                             </td>
                             <td>
@@ -629,21 +760,25 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                                 <option>TOM-13</option>
                               </select>
                             </td>
-                            <td>
-                              <input 
-                                type="text" 
-                                className="form-control" 
-                                defaultValue={expense.customer} 
-                                placeholder="Customer" 
-                                style={{ minWidth: '150px', height: '40px' }} 
-                              />
-                            </td>
                             <td style={{ textAlign: 'center' }}>
                               <input 
                                 type="checkbox" 
                                 defaultChecked={expense.billable}
                                 style={{ width: '18px', height: '18px' }}
                               />
+                            </td>
+                            <td style={{ textAlign: 'center' }}>
+                              <button 
+                                type="button"
+                                className="view-link"
+                                onClick={() => {
+                                  setSelectedItemHistory(expense);
+                                  setShowHistoryModal(true);
+                                }}
+                                title="View expense history"
+                              >
+                                History
+                              </button>
                             </td>
                           </tr>
                         ))}
@@ -665,12 +800,234 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
                   </div>
                 )}
 
-                <button className="btn btn-primary" onClick={handleAddExpense} style={{ marginBottom: '1.5rem' }}>
+                <button className="btn btn-primary" onClick={handleAddExpense} style={{ marginTop: '1rem' }}>
                   <i className="fas fa-plus"></i>
                   Add Expense
                 </button>
 
+                {/* Summary Section */}
                 {formData.expenses.length > 0 && (
+                  <div className="summary-grid">
+                    <div className="summary-card">
+                      <div className="summary-title">SUBTOTAL</div>
+                      <div className="summary-value">${calculateSubtotal().toFixed(2)}</div>
+                    </div>
+                    <div className="summary-card">
+                      <div className="summary-title">TAX AMOUNT</div>
+                      <div className="summary-value">${calculateTaxAmount().toFixed(2)}</div>
+                    </div>
+                    <div className="summary-card">
+                      <div className="summary-title">DISCOUNT</div>
+                      <div className="summary-value">$0.00</div>
+                    </div>
+                    <div className="summary-card" style={{ background: '#f8f9fa' }}>
+                      <div className="summary-title">TOTAL AMOUNT</div>
+                      <div className="summary-value" style={{ color: '#4a90e2' }}>${calculateTotal().toFixed(2)}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Items Tab */}
+            {activeTab === 'items' && (
+              <div className="form-section" style={{ padding: '1.5rem' }}>
+                <div className="detail-grid" style={{ gridTemplateColumns: '1fr', marginBottom: '1.5rem', maxWidth: '400px' }}>
+                  <div className="detail-field">
+                    <label>EXCHANGE RATE <span className="required">*</span></label>
+                    <input 
+                      type="number" 
+                      className="form-control"
+                      step="0.01"
+                      value={formData.exchangeRate}
+                      onChange={(e) => handleFormChange('exchangeRate', parseFloat(e.target.value) || 1.00)}
+                    />
+                  </div>
+                </div>
+
+                {formData.items.length > 0 ? (
+                  <div className="items-table-container" style={{ marginBottom: '1rem' }}>
+                    <table className="items-table">
+                      <thead>
+                        <tr>
+                          <th style={{ width: '30px' }}></th>
+                          <th style={{ minWidth: '150px' }}>ITEM</th>
+                          <th style={{ minWidth: '400px' }}>DESCRIPTION</th>
+                          <th style={{ minWidth: '150px' }}>VENDOR NAME</th>
+                          <th style={{ minWidth: '80px' }}>QUANTITY</th>
+                          <th style={{ minWidth: '100px' }}>UNITS</th>
+                          <th style={{ minWidth: '100px' }}>RATE</th>
+                          <th style={{ minWidth: '100px' }}>AMOUNT</th>
+                          <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                          <th style={{ minWidth: '80px' }}>TAX RATE</th>
+                          <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                          <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                          <th style={{ minWidth: '150px' }}>OPTIONS</th>
+                          <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
+                          <th style={{ minWidth: '150px' }}>CLASS</th>
+                          <th style={{ minWidth: '150px' }}>LOCATION</th>
+                          <th style={{ minWidth: '150px' }}>CUSTOMER</th>
+                          <th style={{ minWidth: '150px' }}>PROJECT</th>
+                          <th style={{ minWidth: '80px' }}>BILLABLE</th>
+                          <th style={{ minWidth: '80px' }}>CLOSED</th>
+                          <th style={{ minWidth: '200px' }}>STATISTICAL PROCEDURE</th>
+                          <th style={{ minWidth: '100px' }}>HISTORY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {formData.items.map((item, index) => (
+                          <tr 
+                            key={item.id}
+                            className={`table-row-with-actions ${hoveredRow === index ? 'hovered' : ''}`}
+                            onMouseEnter={() => setHoveredRow(index)}
+                            onMouseLeave={() => setHoveredRow(null)}
+                          >
+                            <td style={{ textAlign: 'center', position: 'relative' }}>
+                              {hoveredRow === index && (
+                                <button 
+                                  className="row-actions-btn"
+                                  title="Row Actions"
+                                  onClick={(e) => handleMenuToggle(index, e)}
+                                >
+                                  <i className="fas fa-ellipsis-v"></i>
+                                </button>
+                              )}
+                              {activeMenu === index && (
+                                <div 
+                                  className="row-actions-menu"
+                                  style={{
+                                    position: 'fixed',
+                                    top: `${menuPosition.top}px`,
+                                    left: `${menuPosition.left}px`,
+                                    display: 'block',
+                                    zIndex: 10000
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <button onClick={() => handleInsertAboveItem(index)}>
+                                    <i className="fas fa-arrow-up"></i>
+                                    Insert Above
+                                  </button>
+                                  <button onClick={() => handleInsertBelowItem(index)}>
+                                    <i className="fas fa-arrow-down"></i>
+                                    Insert Below
+                                  </button>
+                                  <button onClick={() => handleDeleteItem(index)} className="delete-action">
+                                    <i className="fas fa-trash"></i>
+                                    Delete Row
+                                  </button>
+                                </div>
+                              )}
+                            </td>
+                            <td>
+                              <input 
+                                type="text" 
+                                className="form-control" 
+                                defaultValue={item.item} 
+                                placeholder="Enter item" 
+                                style={{ minWidth: '150px', height: '40px' }} 
+                              />
+                            </td>
+                            <td>
+                              <textarea 
+                                className="form-control"
+                                defaultValue={item.description}
+                                placeholder="Enter description"
+                                style={{ 
+                                  minWidth: '400px', 
+                                  minHeight: '60px',
+                                  resize: 'both',
+                                  overflow: 'auto'
+                                }}
+                                rows="3"
+                                onInput={(e) => {
+                                  e.target.style.height = 'auto';
+                                  e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                                }}
+                              />
+                            </td>
+                            <td><input type="text" className="form-control" defaultValue={item.vendorName} style={{ minWidth: '150px', height: '40px' }} /></td>
+                            <td><input type="number" className="form-control" defaultValue={item.quantity} min="0" step="0.01" style={{ minWidth: '80px', height: '40px' }} /></td>
+                            <td>
+                              <select className="form-control" defaultValue={item.units} style={{ minWidth: '100px', height: '40px' }}>
+                                <option>Pcs</option>
+                                <option>Kgs</option>
+                                <option>Meters</option>
+                                <option>Hours</option>
+                              </select>
+                            </td>
+                            <td><input type="number" className="form-control" defaultValue={item.rate} min="0" step="0.01" style={{ minWidth: '100px', height: '40px' }} /></td>
+                            <td><input type="number" className="form-control" defaultValue={item.amount} min="0" step="0.01" style={{ minWidth: '100px', height: '40px' }} /></td>
+                            <td>
+                              <select className="form-control" defaultValue={item.taxCode} style={{ minWidth: '120px', height: '40px' }}>
+                                <option value="">Select...</option>
+                                <option>GST_SG-7%</option>
+                                <option>GST_SG-0%</option>
+                              </select>
+                            </td>
+                            <td><input type="text" className="form-control" defaultValue={item.taxRate} readOnly style={{ minWidth: '80px', height: '40px', textAlign: 'center' }} /></td>
+                            <td><input type="number" className="form-control" defaultValue={item.taxAmount} readOnly step="0.01" style={{ minWidth: '100px', height: '40px' }} /></td>
+                            <td><input type="number" className="form-control" defaultValue={item.grossAmount} readOnly step="0.01" style={{ minWidth: '100px', height: '40px' }} /></td>
+                            <td><input type="text" className="form-control" defaultValue={item.options} style={{ minWidth: '150px', height: '40px' }} /></td>
+                            <td>
+                              <select className="form-control" defaultValue={item.department} style={{ minWidth: '150px', height: '40px' }}>
+                                <option value="">Select...</option>
+                                <option>TOM: Engineering</option>
+                                <option>TOM: Production</option>
+                                <option>TOM: Sales and Marketing</option>
+                              </select>
+                            </td>
+                            <td>
+                              <select className="form-control" defaultValue={item.class} style={{ minWidth: '150px', height: '40px' }}>
+                                <option value="">Select...</option>
+                                <option>Consumable Item</option>
+                                <option>Fabrication</option>
+                                <option>Material Supply</option>
+                              </select>
+                            </td>
+                            <td>
+                              <select className="form-control" defaultValue={item.location} style={{ minWidth: '150px', height: '40px' }}>
+                                <option value="">Select...</option>
+                                <option>Singapore (MEP)</option>
+                                <option>TOM-11</option>
+                                <option>TOM-13</option>
+                                <option>Mega yard</option>
+                              </select>
+                            </td>
+                            <td><input type="text" className="form-control" defaultValue={item.customerProject} placeholder="Customer:Project" style={{ minWidth: '200px', height: '40px' }} /></td>
+                            <td style={{ textAlign: 'center' }}><input type="checkbox" defaultChecked={item.billable} style={{ width: '18px', height: '18px' }} /></td>
+                            <td style={{ textAlign: 'center' }}><input type="checkbox" defaultChecked={item.closed} style={{ width: '18px', height: '18px' }} /></td>
+                            <td><input type="text" className="form-control" defaultValue={item.statisticalProcedure} placeholder="<Type then tab>" style={{ minWidth: '200px', height: '40px' }} /></td>
+                            <td style={{ textAlign: 'center' }}>
+                              <button 
+                                type="button"
+                                className="view-link"
+                                onClick={() => {
+                                  setSelectedItemHistory(item);
+                                  setShowHistoryModal(true);
+                                }}
+                                title="View item history"
+                              >
+                                History
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                    ) : (
+                      <div style={{ padding: '2rem', textAlign: 'center', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '8px', marginBottom: '1rem' }}>
+                        <p style={{ color: '#6b7280', margin: 0 }}>No items added yet. Click "Add Item" to start.</p>
+                      </div>
+                    )}
+                <button className="btn btn-primary" onClick={handleAddItem} style={{ marginTop: '1rem' }}>
+                  <i className="fas fa-plus"></i>
+                  Add Item
+                </button>
+
+                {/* Summary Section */}
+                {formData.items.length > 0 && (
                   <div className="summary-grid">
                     <div className="summary-card">
                       <div className="summary-title">SUBTOTAL</div>
@@ -861,12 +1218,119 @@ const EnterVendorReturnAuthorizations = ({ setCurrentPage }) => {
         </div>
       </div>
 
-      <Toast 
-        message={toast.message} 
-        type={toast.type} 
-        show={toast.show} 
-        onClose={() => setToast({ ...toast, show: false })} 
-      />
+      {toast.show && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast({ show: false, message: '', type: 'success' })} 
+        />
+      )}
+
+      {/* Item/Expense History Modal */}
+      {showHistoryModal && selectedItemHistory && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000
+          }}
+          onClick={() => setShowHistoryModal(false)}
+        >
+          <div 
+            style={{
+              background: 'white',
+              borderRadius: '8px',
+              padding: '2rem',
+              maxWidth: '900px',
+              width: '90%',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#333' }}>
+                <i className="fas fa-history" style={{ marginRight: '0.5rem', color: '#4a90e2' }}></i>
+                {selectedItemHistory.item ? 'Item History' : 'Expense History'}
+              </h2>
+              <button 
+                onClick={() => setShowHistoryModal(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: '#999',
+                  padding: '0.25rem 0.5rem'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f8f9fa', borderRadius: '4px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <strong style={{ color: '#666', fontSize: '0.85rem' }}>{selectedItemHistory.item ? 'ITEM:' : 'ACCOUNT:'}</strong>
+                  <div style={{ fontSize: '1rem', color: '#333', marginTop: '0.25rem' }}>{selectedItemHistory.item || selectedItemHistory.account || '-'}</div>
+                </div>
+                <div>
+                  <strong style={{ color: '#666', fontSize: '0.85rem' }}>AMOUNT:</strong>
+                  <div style={{ fontSize: '1rem', color: '#333', marginTop: '0.25rem' }}>{selectedItemHistory.amount ? selectedItemHistory.amount.toFixed(2) : '0.00'}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ overflowX: 'auto' }}>
+              <table className="detail-items-table" style={{ width: '100%' }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>{selectedItemHistory.item ? 'ITEM' : 'ACCOUNT'}</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>AMOUNT</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>QUANTITY</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>DATE</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>DOCUMENT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.item || selectedItemHistory.account || '-'}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.description || selectedItemHistory.memo || '-'}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.amount ? selectedItemHistory.amount.toFixed(2) : '0.00'}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.quantity || '-'}</td>
+                    <td style={{ padding: '10px 12px' }}>{new Date().toLocaleDateString()}</td>
+                    <td style={{ padding: '10px 12px' }}>Current VRA</td>
+                  </tr>
+                  <tr>
+                    <td colSpan="6" style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.9rem' }}>
+                      No previous history records found
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+              <button 
+                className="btn-toolbar"
+                onClick={() => setShowHistoryModal(false)}
+                style={{ padding: '0.5rem 1.5rem' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

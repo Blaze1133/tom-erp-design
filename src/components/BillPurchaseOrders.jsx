@@ -207,150 +207,147 @@ const BillPurchaseOrders = ({ setCurrentPage }) => {
   });
 
   return (
-    <div className="enquiries-list">
-      <div className="list-header">
-        <div className="list-title">
-          <i className="fas fa-file-invoice"></i>
-          <h1>Bill Purchase Order</h1>
-        </div>
-        <div className="list-actions">
-          <button className="btn-view-option">More</button>
-        </div>
+  <div className="enquiries-list">
+    <div className="page-header">
+      <div className="page-title">
+        <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+        <h1>Bill Purchase Order</h1>
       </div>
+      <div className="page-actions">
+        <button className="btn-view-option active">List</button>
+        <button className="btn-view-option">Search</button>
+        <button className="btn-view-option">Audit Trail</button>
+      </div>
+    </div>
 
-      <div style={{ padding: '1.5rem' }}>
-        {/* Action Buttons */}
-        <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.75rem' }}>
-          <button className="btn btn-primary" onClick={handleSubmit}>
-            Submit
-          </button>
-          <button className="btn btn-secondary" onClick={handleMarkAll}>
-            Mark All
-          </button>
-          <button className="btn btn-secondary" onClick={handleUnmarkAll}>
-            Unmark All
-          </button>
-        </div>
+    <div className="list-controls">
+      <div className="view-filter">
+        <label>VIEW:</label>
+        <select 
+          className="form-control"
+          value={filterValue}
+          onChange={(e) => setFilterValue(e.target.value)}
+        >
+          <option value="">All Purchase Orders</option>
+          <option value="subsidiary">By Subsidiary</option>
+          <option value="vendor">By Vendor</option>
+          <option value="poNumber">By PO Number</option>
+          <option value="status">By Status</option>
+          <option value="currency">By Currency</option>
+        </select>
+      </div>
+      <button className="btn-new-transaction" onClick={handleSubmit}>
+        <i className="fas fa-check"></i> Submit
+      </button>
+    </div>
 
-        {/* Filter Section */}
-        <div style={{ 
-          padding: '1rem', 
-          background: '#fff',
-          borderRadius: '4px', 
-          marginBottom: '1rem',
-          border: '1px solid #e0e0e0'
-        }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem 1.5rem' }}>
-            <div className="form-group">
-              <label className="form-label">FILTER</label>
-              <select 
-                className="form-control"
-                value={filterValue}
-                onChange={(e) => setFilterValue(e.target.value)}
-              >
-                <option value="">-- All --</option>
-                <option value="subsidiary">Subsidiary</option>
-                <option value="vendor">Vendor</option>
-                <option value="poNumber">PO Number</option>
-                <option value="status">Status</option>
-                <option value="currency">Currency</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">VENDOR</label>
-              <select 
-                className="form-control"
-                value={selectedVendor}
-                onChange={(e) => setSelectedVendor(e.target.value)}
-              >
-                <option>-- All --</option>
-                <option>CHIA HOCK HARDWARE TRADING</option>
-                <option>TRONIX WORLD LOGISTICS PTE LTD</option>
-                <option>METAL FORMS PRIVATE LIMITED</option>
-                <option>MEE DEMAG (S) PTE LTD</option>
-                <option>TAT ENG INDUSTRIES PTE LTD</option>
-                <option>SUPER GALVANISING PTE LTD</option>
-                <option>Techniques Air Conditioning & Refrigeration</option>
-                <option>EASTERN SEALAND SUPPLY PTE LTD</option>
-                <option>HOE HUAT HARDWARE (S) PTE LTD</option>
-              </select>
-            </div>
-            <div className="form-group" style={{ gridColumn: 'span 2' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input type="checkbox" />
-                <span style={{ fontSize: '0.875rem' }}>USE BILL-TO ADDRESS FROM VENDOR</span>
-              </label>
-            </div>
-          </div>
-        </div>
+    <div className="list-filters">
+      <div className="list-toolbar">
+        <button className="toolbar-btn" onClick={handleMarkAll} title="Mark All">
+          <i className="fas fa-check-square"></i> MARK ALL
+        </button>
+        <button className="toolbar-btn" onClick={handleUnmarkAll} title="Unmark All">
+          <i className="fas fa-square"></i> UNMARK ALL
+        </button>
+        <button className="toolbar-btn" title="Print">
+          <i className="fas fa-print"></i>
+        </button>
+        <button className="toolbar-btn" title="Export">
+          <i className="fas fa-file-export"></i>
+        </button>
+      </div>
+      <div className="list-sort">
+        <label>VENDOR:</label>
+        <select 
+          className="form-control"
+          value={selectedVendor}
+          onChange={(e) => setSelectedVendor(e.target.value)}
+        >
+          <option>-- All --</option>
+          <option>CHIA HOCK HARDWARE TRADING</option>
+          <option>TRONIX WORLD LOGISTICS PTE LTD</option>
+          <option>METAL FORMS PRIVATE LIMITED</option>
+          <option>MEE DEMAG (S) PTE LTD</option>
+          <option>TAT ENG INDUSTRIES PTE LTD</option>
+          <option>SUPER GALVANISING PTE LTD</option>
+          <option>Techniques Air Conditioning & Refrigeration</option>
+          <option>EASTERN SEALAND SUPPLY PTE LTD</option>
+          <option>HOE HUAT HARDWARE (S) PTE LTD</option>
+        </select>
+      </div>
+      <div className="list-total">
+        TOTAL: {filteredPurchaseOrders.length}
+      </div>
+    </div>
 
-        {/* Table Section */}
-        <div style={{ 
-          background: '#fff',
-          borderRadius: '4px',
-          border: '1px solid #e0e0e0',
-          overflow: 'hidden'
-        }}>
-        <div className="enquiries-table-container">
-        <table className="enquiries-table">
-          <thead>
-            <tr>
-              <th style={{ width: '40px' }}></th>
-              <th style={{ width: '100px' }}>DATE ▲</th>
-              <th style={{ width: '120px' }}>PO #</th>
-              <th style={{ width: '200px' }}>VENDOR NAME</th>
-              <th style={{ width: '180px' }}>SUBSIDIARY</th>
-              <th style={{ width: '250px' }}>BILL TO</th>
-              <th style={{ width: '150px' }}>MEMO</th>
-              <th style={{ width: '100px', textAlign: 'right' }}>ORDER TOTAL</th>
-              <th style={{ width: '80px' }}>CURRENCY</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredPurchaseOrders.length > 0 ? (
-              filteredPurchaseOrders.map((po) => (
-                <tr key={po.id}>
+    <div className="enquiries-table-container">
+      <table className="enquiries-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>EDIT | VIEW</th>
+            <th>DATE</th>
+            <th>PO #</th>
+            <th>VENDOR NAME</th>
+            <th>SUBSIDIARY</th>
+            <th>BILL TO</th>
+            <th>MEMO</th>
+            <th>ORDER TOTAL</th>
+            <th>CURRENCY</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredPurchaseOrders.length > 0 ? (
+            filteredPurchaseOrders.map((po) => (
+              <tr key={po.id}>
                 <td>
                   <input type="checkbox" />
                 </td>
                 <td>
-                  <button 
-                    className="view-link"
-                    onClick={() => handleViewPO(po)}
-                    style={{ color: '#4a90e2', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                  >
-                    {po.date}
-                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <button 
+                      className="view-link"
+                      onClick={() => handleViewPO(po)}
+                    >
+                      Edit
+                    </button>
+                    <span style={{ color: '#999' }}>|</span>
+                    <button 
+                      className="view-link"
+                      onClick={() => handleViewPO(po)}
+                    >
+                      View
+                    </button>
+                  </div>
                 </td>
+                <td>{po.date}</td>
                 <td className="doc-number">{po.poNumber}</td>
                 <td>{po.vendorName}</td>
                 <td>{po.subsidiary}</td>
                 <td style={{ fontSize: '12px' }}>{po.billTo}</td>
                 <td>{po.memo}</td>
-                <td className="amount" style={{ textAlign: 'right' }}>{po.orderTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td className="amount">{po.orderTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                 <td>{po.currency}</td>
               </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
-                  No purchase orders found matching the selected filter
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        </div>
-        </div>
-      </div>
-
-      <Toast 
-        message={toast.message} 
-        type={toast.type} 
-        show={toast.show} 
-        onClose={() => setToast({ ...toast, show: false })} 
-      />
+            ))
+          ) : (
+            <tr>
+              <td colSpan="10" style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
+                No purchase orders found matching the selected filter
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
+
+    <Toast 
+      message={toast.message} 
+      type={toast.type} 
+      show={toast.show} 
+      onClose={() => setToast({ ...toast, show: false })} 
+    />
+  </div>
   );
 };
 

@@ -18,49 +18,62 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     department: 'TOM: Logistic',
     class: 'Material Supply',
-    shipMethod: 'Own Transport',
-    termsOfShipment: 'FOB (Free On Board)',
+    referenceNo: 'REF-2024-001',
     project: 'Marine Equipment Supply - Q1 2024',
     requestedBy: 'MEP01 001 JEGANATHAN SUNDARAVELU',
-    refEntity: '109 Bintang Mas Shipping Pte Ltd',
     shippingAddress: '2 Boon Leat Terrace, #08-02\nHarbourside Building 2, Singapore\n119844.',
     memo: 'Urgent delivery for marine project',
     items: [
       {
         id: 1,
-        itemCode: '12" Divider',
-        itemDescription: '12" Divider',
-        qty: 100,
-        unitType: 'PCS',
+        item: '12" Divider',
+        description: '12" Divider',
+        quantity: 100,
+        units: 'Pcs',
+        priceLevel: '',
         rate: 25.50,
         amount: 2550.00,
-        retentionAmount: 255.00,
-        deliveredQty: 100,
-        memo: 'Delivered on time'
+        taxCode: '',
+        grossAmount: 2550.00,
+        class: '',
+        costEstimateType: 'Fixed',
+        estimatedExtendedCost: 0,
+        countryOfOrigin: '',
+        hsCode: ''
       },
       {
         id: 2,
-        itemCode: '110 V Female Connector',
-        itemDescription: '110 V Female Connector',
-        qty: 200,
-        unitType: 'PCS',
+        item: '110 V Female Connector',
+        description: '110 V Female Connector',
+        quantity: 200,
+        units: 'Pcs',
+        priceLevel: '',
         rate: 15.00,
         amount: 3000.00,
-        retentionAmount: 300.00,
-        deliveredQty: 200,
-        memo: ''
+        taxCode: '',
+        grossAmount: 3000.00,
+        class: '',
+        costEstimateType: 'Fixed',
+        estimatedExtendedCost: 0,
+        countryOfOrigin: '',
+        hsCode: ''
       },
       {
         id: 3,
-        itemCode: 'Cable Gland M20',
-        itemDescription: 'Cable Gland M20 - Brass',
-        qty: 150,
-        unitType: 'PCS',
+        item: 'Cable Gland M20',
+        description: 'Cable Gland M20 - Brass',
+        quantity: 150,
+        units: 'Pcs',
+        priceLevel: '',
         rate: 8.50,
         amount: 1275.00,
-        retentionAmount: 127.50,
-        deliveredQty: 150,
-        memo: ''
+        taxCode: '',
+        grossAmount: 1275.00,
+        class: '',
+        costEstimateType: 'Fixed',
+        estimatedExtendedCost: 0,
+        countryOfOrigin: '',
+        hsCode: ''
       }
     ]
   };
@@ -157,6 +170,10 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{deliveryOrderData.documentNo}</div>
               </div>
               <div className="detail-field">
+                <label>REFERENCE NO</label>
+                <div className="field-value">{deliveryOrderData.referenceNo || '-'}</div>
+              </div>
+              <div className="detail-field">
                 <label>SHIP DATE</label>
                 <div className="field-value">{deliveryOrderData.shipDate}</div>
               </div>
@@ -181,24 +198,12 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{deliveryOrderData.class || '-'}</div>
               </div>
               <div className="detail-field">
-                <label>SHIP METHOD</label>
-                <div className="field-value">{deliveryOrderData.shipMethod || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>TERMS OF SHIPMENT</label>
-                <div className="field-value">{deliveryOrderData.termsOfShipment || '-'}</div>
-              </div>
-              <div className="detail-field">
                 <label>PROJECT</label>
                 <div className="field-value">{deliveryOrderData.project || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>REQUESTED BY</label>
                 <div className="field-value">{deliveryOrderData.requestedBy || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>REF ENTITY</label>
-                <div className="field-value">{deliveryOrderData.refEntity || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>STATUS</label>
@@ -238,34 +243,44 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
           </div>
           <div className="section-body">
             <div style={{ overflowX: 'auto' }}>
-              <table className="detail-items-table">
+              <table className="detail-items-table" style={{ minWidth: '2200px' }}>
                 <thead>
                   <tr>
-                    <th style={{ width: '3%' }}>#</th>
-                    <th style={{ width: '12%' }}>ITEM CODE</th>
-                    <th style={{ width: '18%' }}>ITEM DESCRIPTION</th>
-                    <th style={{ width: '8%' }}>QTY</th>
-                    <th style={{ width: '8%' }}>UNIT TYPE</th>
-                    <th style={{ width: '10%' }}>RATE</th>
-                    <th style={{ width: '10%' }}>AMOUNT</th>
-                    <th style={{ width: '12%' }}>RETENTION AMOUNT</th>
-                    <th style={{ width: '10%' }}>DELIVERED QTY</th>
-                    <th style={{ width: '15%' }}>MEMO</th>
+                    <th style={{ minWidth: '50px' }}>#</th>
+                    <th style={{ minWidth: '150px' }}>ITEM</th>
+                    <th style={{ minWidth: '400px' }}>DESC</th>
+                    <th style={{ minWidth: '80px' }}>QTY</th>
+                    <th style={{ minWidth: '100px' }}>UNITS</th>
+                    <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                    <th style={{ minWidth: '100px' }}>RATE</th>
+                    <th style={{ minWidth: '100px' }}>AMT</th>
+                    <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                    <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                    <th style={{ minWidth: '150px' }}>CLASS</th>
+                    <th style={{ minWidth: '150px' }}>COST EST. TYPE</th>
+                    <th style={{ minWidth: '150px' }}>EST. EXT. COST</th>
+                    <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                    <th style={{ minWidth: '150px' }}>HS CODE</th>
                   </tr>
                 </thead>
                 <tbody>
                   {deliveryOrderData.items.map((item, index) => (
                     <tr key={item.id}>
                       <td>{index + 1}</td>
-                      <td>{item.itemCode}</td>
-                      <td>{item.itemDescription}</td>
-                      <td>{item.qty}</td>
-                      <td>{item.unitType || '-'}</td>
-                      <td>{item.rate ? item.rate.toFixed(2) : '-'}</td>
-                      <td>{item.amount ? item.amount.toFixed(2) : '-'}</td>
-                      <td>{item.retentionAmount ? item.retentionAmount.toFixed(2) : '-'}</td>
-                      <td>{item.deliveredQty || '-'}</td>
-                      <td>{item.memo || '-'}</td>
+                      <td>{item.item}</td>
+                      <td style={{ whiteSpace: 'pre-line' }}>{item.description}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.units || '-'}</td>
+                      <td>{item.priceLevel || '-'}</td>
+                      <td style={{ textAlign: 'right' }}>{item.rate ? item.rate.toFixed(2) : '-'}</td>
+                      <td style={{ textAlign: 'right' }}>{item.amount ? item.amount.toFixed(2) : '-'}</td>
+                      <td>{item.taxCode || '-'}</td>
+                      <td style={{ textAlign: 'right' }}>{item.grossAmount ? item.grossAmount.toFixed(2) : '-'}</td>
+                      <td>{item.class || '-'}</td>
+                      <td>{item.costEstimateType || '-'}</td>
+                      <td style={{ textAlign: 'right' }}>{item.estimatedExtendedCost ? item.estimatedExtendedCost.toFixed(2) : '-'}</td>
+                      <td>{item.countryOfOrigin || '-'}</td>
+                      <td>{item.hsCode || '-'}</td>
                     </tr>
                   ))}
                 </tbody>

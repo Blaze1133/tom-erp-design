@@ -166,22 +166,6 @@ const ViewPurchaseRequisitionDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{requisitionData.projectManager}</div>
               </div>
               <div className="detail-field">
-                <label>CURRENCY</label>
-                <div className="field-value">{requisitionData.currency}</div>
-              </div>
-              <div className="detail-field">
-                <label>POSTING PERIOD</label>
-                <div className="field-value">{requisitionData.postingPeriod || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>EXCHANGE RATE</label>
-                <div className="field-value">{requisitionData.exchangeRate.toFixed(2)}</div>
-              </div>
-              <div className="detail-field">
-                <label>AMOUNT</label>
-                <div className="field-value">{requisitionData.amount.toFixed(2)}</div>
-              </div>
-              <div className="detail-field">
                 <label>DATE</label>
                 <div className="field-value">{requisitionData.date}</div>
               </div>

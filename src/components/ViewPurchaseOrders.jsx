@@ -111,6 +111,7 @@ const ViewPurchaseOrders = ({ setCurrentPage }) => {
 
   const handleEdit = (order) => {
     if (setCurrentPage) {
+      sessionStorage.setItem('editPurchaseOrder', JSON.stringify(order));
       setCurrentPage('enter-purchase-orders');
     }
   };

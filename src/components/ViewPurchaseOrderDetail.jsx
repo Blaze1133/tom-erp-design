@@ -9,6 +9,8 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
   const [classificationCollapsed, setClassificationCollapsed] = useState(false);
   const [shippingCollapsed, setShippingCollapsed] = useState(false);
   const [billingCollapsed, setBillingCollapsed] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [selectedItemHistory, setSelectedItemHistory] = useState(null);
 
   const poData = {
     poNumber: 'PO-2024-001',
@@ -173,28 +175,16 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                 <div className="field-value">{poData.poType}</div>
               </div>
               <div className="detail-field">
-                <label>PROJECT</label>
-                <div className="field-value">{poData.project}</div>
-              </div>
-              <div className="detail-field">
                 <label>VENDOR</label>
                 <div className="field-value" style={{ color: '#4a90e2', cursor: 'pointer' }}>{poData.vendorName}</div>
               </div>
               <div className="detail-field">
-                <label>RECEIVE BY</label>
-                <div className="field-value">{poData.receiveBy}</div>
-              </div>
-              <div className="detail-field">
-                <label>REF PO NUMBER</label>
-                <div className="field-value">{poData.refNumber || '-'}</div>
+                <label>APPROVAL STATUS</label>
+                <div className="field-value">{poData.approvalStatus}</div>
               </div>
               <div className="detail-field">
                 <label>OTHER COMMENTS</label>
                 <div className="field-value">{poData.otherComments}</div>
-              </div>
-              <div className="detail-field">
-                <label>APPROVAL STATUS</label>
-                <div className="field-value">{poData.approvalStatus}</div>
               </div>
             </div>
           </div>
@@ -307,13 +297,13 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                       <thead>
                         <tr>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>ITEM</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>VENDOR NAME</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>RECEIVED</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>BILLED</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>ON HAND</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>QUANTITY</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '60px' }}>UNITS</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>DESCRIPTION</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>RATE</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>TAX CODE</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '90px' }}>AMOUNT</th>
@@ -321,7 +311,8 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '90px' }}>GROSS AMT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>TAX AMT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>OPTIONS</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>CUSTOMER:PROJECT</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>CUSTOMER</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>PROJECT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>DEPARTMENT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>CLASS</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>BILLABLE</th>
@@ -329,28 +320,27 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '140px' }}>EXPECTED RECEIPT DATE</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>CLOSED</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>DO QUANTITY</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>HISTORY</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '140px' }}>JOB ADMIN CHARGES</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>ADMIN CHARGES</th>
+                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>HISTORY</th>
                         </tr>
                       </thead>
                       <tbody>
                         {poData.items.map((item) => (
                           <tr key={item.id}>
                             <td style={{ padding: '10px 12px' }}>{item.item}</td>
+                            <td style={{ padding: '10px 12px' }}>{item.description}</td>
                             <td style={{ padding: '10px 12px' }}>{item.vendorName}</td>
                             <td style={{ padding: '10px 12px' }}>{item.received}</td>
                             <td style={{ padding: '10px 12px' }}>{item.billed}</td>
                             <td style={{ padding: '10px 12px' }}>{item.onHand}</td>
                             <td style={{ padding: '10px 12px' }}>{item.quantity}</td>
                             <td style={{ padding: '10px 12px' }}>{item.units}</td>
-                            <td style={{ padding: '10px 12px' }}>{item.description}</td>
                             <td style={{ padding: '10px 12px' }}>{item.rate.toFixed(2)}</td>
                             <td style={{ padding: '10px 12px' }}>{item.taxCode}</td>
                             <td style={{ padding: '10px 12px' }}>{item.amount.toFixed(2)}</td>
                             <td style={{ padding: '10px 12px' }}>{item.taxRate}</td>
                             <td style={{ padding: '10px 12px' }}>{item.grossAmt.toFixed(2)}</td>
                             <td style={{ padding: '10px 12px' }}>{item.taxAmt.toFixed(2)}</td>
+                            <td style={{ padding: '10px 12px' }}>-</td>
                             <td style={{ padding: '10px 12px' }}>-</td>
                             <td style={{ padding: '10px 12px' }}>-</td>
                             <td style={{ padding: '10px 12px' }}>TOM : Human Resource</td>
@@ -360,9 +350,17 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                             <td style={{ padding: '10px 12px' }}>10/1/2022</td>
                             <td style={{ padding: '10px 12px' }}>-</td>
                             <td style={{ padding: '10px 12px' }}>-</td>
-                            <td style={{ padding: '10px 12px' }}><button className="view-link">History</button></td>
-                            <td style={{ padding: '10px 12px' }}>-</td>
-                            <td style={{ padding: '10px 12px' }}>-</td>
+                            <td style={{ padding: '10px 12px', textAlign: 'center' }}>
+                              <button 
+                                className="view-link"
+                                onClick={() => {
+                                  setSelectedItemHistory(item);
+                                  setShowHistoryModal(true);
+                                }}
+                              >
+                                History
+                              </button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -680,12 +678,121 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
         </div>
       </div>
 
-      <Toast 
-        message={toast.message} 
-        type={toast.type} 
-        show={toast.show} 
-        onClose={() => setToast({ ...toast, show: false })} 
-      />
+      {toast.show && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast({ show: false, message: '', type: 'success' })} 
+        />
+      )}
+
+      {/* Item History Modal */}
+      {showHistoryModal && selectedItemHistory && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000
+          }}
+          onClick={() => setShowHistoryModal(false)}
+        >
+          <div 
+            style={{
+              background: 'white',
+              borderRadius: '8px',
+              padding: '2rem',
+              maxWidth: '900px',
+              width: '90%',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#333' }}>
+                <i className="fas fa-history" style={{ marginRight: '0.5rem', color: '#4a90e2' }}></i>
+                Item History
+              </h2>
+              <button 
+                onClick={() => setShowHistoryModal(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: '#999',
+                  padding: '0.25rem 0.5rem'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f8f9fa', borderRadius: '4px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <strong style={{ color: '#666', fontSize: '0.85rem' }}>ITEM:</strong>
+                  <div style={{ fontSize: '1rem', color: '#333', marginTop: '0.25rem' }}>{selectedItemHistory.item}</div>
+                </div>
+                <div>
+                  <strong style={{ color: '#666', fontSize: '0.85rem' }}>DESCRIPTION:</strong>
+                  <div style={{ fontSize: '1rem', color: '#333', marginTop: '0.25rem' }}>{selectedItemHistory.description}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ overflowX: 'auto' }}>
+              <table className="detail-items-table" style={{ width: '100%' }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>ITEM</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>PRICE</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>UNITS</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>QUANTITY</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>DATE</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>DOCUMENT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.item}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.description}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.rate.toFixed(2)}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.units}</td>
+                    <td style={{ padding: '10px 12px' }}>{selectedItemHistory.quantity}</td>
+                    <td style={{ padding: '10px 12px' }}>{new Date().toLocaleDateString()}</td>
+                    <td style={{ padding: '10px 12px' }}>Current PO</td>
+                  </tr>
+                  <tr>
+                    <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.9rem' }}>
+                      No previous history records found
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+              <button 
+                className="btn-toolbar"
+                onClick={() => setShowHistoryModal(false)}
+                style={{ padding: '0.5rem 1.5rem' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
