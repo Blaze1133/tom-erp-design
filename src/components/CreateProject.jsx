@@ -26,8 +26,8 @@ const CreateProject = ({ setCurrentPage }) => {
     department: '',
     class: '',
     customerProjectNo: '',
-    estimatedCost: '',
-    estimatedRevenue: '',
+    budgetValue: '',
+    projectValue: '',
     status: 'Planning',
     priority: 'Medium'
   });
@@ -736,23 +736,23 @@ const CreateProject = ({ setCurrentPage }) => {
                 />
               </div>
               <div className="detail-field">
-                <label>ESTIMATED COST</label>
+                <label>BUDGET VALUE</label>
                 <input
                   type="number"
                   step="0.01"
-                  name="estimatedCost"
-                  value={formData.estimatedCost}
+                  name="budgetValue"
+                  value={formData.budgetValue}
                   onChange={handleInputChange}
                   className="form-control"
                 />
               </div>
               <div className="detail-field">
-                <label>ESTIMATED REVENUE</label>
+                <label>PROJECT VALUE</label>
                 <input
                   type="number"
                   step="0.01"
-                  name="estimatedRevenue"
-                  value={formData.estimatedRevenue}
+                  name="projectValue"
+                  value={formData.projectValue}
                   onChange={handleInputChange}
                   className="form-control"
                 />

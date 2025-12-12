@@ -11,6 +11,8 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
   // Sample data
   const deliveryOrderData = {
     documentNo: 'DOCTOM00145',
+    vendor: 'ABC Manufacturing Ltd',
+    poNumber: 'PO-2024-001',
     status: 'DELIVERED',
     shipDate: '01/07/2024',
     location: 'Singapore (MEP)',
@@ -172,6 +174,14 @@ const ViewCustomDeliveryOrderDetail = ({ onBack, onEdit }) => {
               <div className="detail-field">
                 <label>REFERENCE NO</label>
                 <div className="field-value">{deliveryOrderData.referenceNo || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>VENDOR</label>
+                <div className="field-value">{deliveryOrderData.vendor}</div>
+              </div>
+              <div className="detail-field">
+                <label>PO NUMBER</label>
+                <div className="field-value">{deliveryOrderData.poNumber || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>SHIP DATE</label>

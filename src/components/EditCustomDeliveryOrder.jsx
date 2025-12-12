@@ -15,10 +15,15 @@ const EditCustomDeliveryOrder = ({ setCurrentPage }) => {
   const [showRequestedByDropdown, setShowRequestedByDropdown] = useState(false);
   const [requestedBySearch, setRequestedBySearch] = useState('');
   const [filteredRequestedBy, setFilteredRequestedBy] = useState([]);
+  const [showVendorDropdown, setShowVendorDropdown] = useState(false);
+  const [vendorSearch, setVendorSearch] = useState('');
+  const [filteredVendors, setFilteredVendors] = useState([]);
 
   // Form state - Pre-filled with existing data
   const [formData, setFormData] = useState({
     documentNo: 'DOCTOM00145',
+    vendor: 'ABC Manufacturing Ltd',
+    poNumber: 'PO-2024-001',
     shipDate: '2024-07-01',
     location: 'Singapore (MEP)',
     warehouse: 'MEP Main Warehouse',
@@ -128,6 +133,14 @@ const EditCustomDeliveryOrder = ({ setCurrentPage }) => {
     'EXW (Ex Works)',
     'DDP (Delivered Duty Paid)',
     'DAP (Delivered At Place)'
+  ];
+
+  const vendorOptions = [
+    'ABC Manufacturing Ltd',
+    'Global Supplies Inc',
+    'Marine Parts Supplier',
+    'Tech Equipment Co',
+    'Industrial Solutions Pte Ltd'
   ];
 
   const projectOptions = [
@@ -392,6 +405,121 @@ const EditCustomDeliveryOrder = ({ setCurrentPage }) => {
                   value={formData.referenceNo}
                   disabled
                   style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
+                />
+              </div>
+              <div className="detail-field" style={{ position: 'relative', zIndex: showVendorDropdown ? 1001 : 1 }}>
+                <label>VENDOR <span className="required">*</span></label>
+                <div style={{ position: 'relative' }}>
+                  <input 
+                    type="text"
+                    className="form-control"
+                    value={formData.vendor}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleInputChange('vendor', value);
+                      setVendorSearch(value);
+                      if (value) {
+                        setFilteredVendors(vendorOptions.filter(v => v.toLowerCase().includes(value.toLowerCase())));
+                        setShowVendorDropdown(true);
+                      } else {
+                        setFilteredVendors([]);
+                        setShowVendorDropdown(false);
+                      }
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowVendorDropdown(true);
+                      setFilteredVendors(vendorOptions);
+                    }}
+                    placeholder="Type to search vendor..."
+                  />
+                  <button 
+                    type="button"
+                    style={{ 
+                      position: 'absolute', 
+                      right: '8px', 
+                      top: '50%', 
+                      transform: 'translateY(-50%)', 
+                      background: 'transparent', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      padding: '4px 8px',
+                      fontSize: '14px'
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowVendorDropdown(!showVendorDropdown);
+                      setFilteredVendors(vendorOptions);
+                    }}
+                  >
+                    <i className="fas fa-chevron-down"></i>
+                  </button>
+                  {showVendorDropdown && (
+                    <>
+                      <div 
+                        style={{ 
+                          position: 'fixed', 
+                          top: 0, 
+                          left: 0, 
+                          right: 0, 
+                          bottom: 0, 
+                          zIndex: 999 
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowVendorDropdown(false);
+                        }}
+                      />
+                      <div style={{ 
+                        position: 'absolute', 
+                        top: '100%', 
+                        left: 0, 
+                        right: 0, 
+                        background: 'white', 
+                        border: '1px solid #ddd', 
+                        borderRadius: '4px', 
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                        zIndex: 10000, 
+                        marginTop: '4px',
+                        overflowY: 'auto',
+                        maxHeight: '200px'
+                      }}>
+                        {(filteredVendors.length > 0 ? filteredVendors : vendorOptions).map((vendor, idx) => (
+                          <div 
+                            key={idx}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleInputChange('vendor', vendor);
+                              setVendorSearch(vendor);
+                              setFilteredVendors([]);
+                              setShowVendorDropdown(false);
+                            }}
+                            style={{ 
+                              padding: '10px 12px', 
+                              cursor: 'pointer', 
+                              fontSize: '13px',
+                              borderBottom: idx < (filteredVendors.length > 0 ? filteredVendors : vendorOptions).length - 1 ? '1px solid #f0f0f0' : 'none',
+                              backgroundColor: 'white'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                          >
+                            {vendor}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="detail-field">
+                <label>PO NUMBER</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.poNumber}
+                  onChange={(e) => handleInputChange('poNumber', e.target.value)}
+                  placeholder="Enter PO Number"
                 />
               </div>
               <div className="detail-field">

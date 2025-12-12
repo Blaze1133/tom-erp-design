@@ -13,37 +13,25 @@ const ViewDeliveryOrderDetail = ({ setCurrentPage, onBack, onEdit }) => {
   const deliveryOrderData = {
     transactionNumber: 'DO-000123',
     customer: 'ACME Corporation',
+    project: 'Marine Equipment Supply - Q1 2024',
     date: '02/15/2024',
     shipDate: '02/15/2024',
     status: 'Picked',
-    createdFrom: 'SO-2024-001',
     memo: 'Urgent delivery required for marine equipment',
     location: 'Main Warehouse',
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
     department: 'TOM: Sales and Marketing',
     class: 'Fabrication',
-    shipMethod: 'DHL',
-    trackingNumber: '1234567890',
-    carrier: 'Perdybee',
-    termsOfShipment: 'FOB',
     // Shipping Address
     attention: 'Jane Smith',
     addressee: 'ACME Corporation',
     address1: '123 Main St',
-    address2: 'Anytown',
-    city: 'CA',
-    state: '90210',
-    postalCode: 'United States',
-    country: 'United States',
+    address2: 'Suite 100',
+    city: 'Singapore',
+    state: 'Singapore',
+    postalCode: '90210',
+    country: 'Singapore',
     phone: '555-555-5555',
-    // Custom Fields
-    deliveryNoteNumber: '######',
-    deliveryRoute: 'Route 1',
-    driverName: 'John Doe',
-    vehicleNumber: 'ABC-1234',
-    internalDeliveryReference: 'INT-REF-001',
-    deliveryTimeIn: '09:00',
-    deliveryTimeOut: '17:00',
     // Package Details
     packageCount: 5,
     packageWeight: 150.5,
@@ -56,23 +44,35 @@ const ViewDeliveryOrderDetail = ({ setCurrentPage, onBack, onEdit }) => {
         id: 1,
         item: 'Marine Pump Assembly',
         description: 'High-pressure marine pump with mounting bracket',
-        committedQuantity: 10,
         quantity: 10,
-        uom: 'Pcs',
-        binNumber: 'A-01-05',
-        serialLotNumber: 'SN-2024-001',
-        itemWeight: 15.5
+        units: 'Pcs',
+        priceLevel: '',
+        rate: 150.00,
+        amount: 1500.00,
+        taxCode: '',
+        grossAmount: 1500.00,
+        class: '',
+        costEstimateType: 'Fixed',
+        estimatedExtendedCost: 0,
+        countryOfOrigin: '',
+        hsCode: ''
       },
       {
         id: 2,
         item: 'Hydraulic Valve',
         description: 'Industrial hydraulic control valve',
-        committedQuantity: 20,
         quantity: 20,
-        uom: 'Pcs',
-        binNumber: 'B-02-10',
-        serialLotNumber: 'SN-2024-002',
-        itemWeight: 5.2
+        units: 'Pcs',
+        priceLevel: '',
+        rate: 75.00,
+        amount: 1500.00,
+        taxCode: '',
+        grossAmount: 1500.00,
+        class: '',
+        costEstimateType: 'Fixed',
+        estimatedExtendedCost: 0,
+        countryOfOrigin: '',
+        hsCode: ''
       }
     ]
   };
@@ -207,6 +207,10 @@ const ViewDeliveryOrderDetail = ({ setCurrentPage, onBack, onEdit }) => {
                   <div className="field-value">{deliveryOrderData.customer}</div>
                 </div>
                 <div className="detail-field">
+                  <label>PROJECT</label>
+                  <div className="field-value">{deliveryOrderData.project || '-'}</div>
+                </div>
+                <div className="detail-field">
                   <label>DATE</label>
                   <div className="field-value">{deliveryOrderData.date}</div>
                 </div>
@@ -215,26 +219,18 @@ const ViewDeliveryOrderDetail = ({ setCurrentPage, onBack, onEdit }) => {
                   <div className="field-value">{deliveryOrderData.shipDate}</div>
                 </div>
                 <div className="detail-field">
-                  <label>CREATED FROM</label>
-                  <div className="field-value" style={{ color: '#4a90e2', cursor: 'pointer' }}>
-                    {deliveryOrderData.createdFrom}
+                  <label>STATUS</label>
+                  <div className="field-value">
+                    <span style={{ 
+                      background: '#ff9800', 
+                      color: 'white', 
+                      padding: '4px 8px', 
+                      borderRadius: '4px', 
+                      fontSize: '11px' 
+                    }}>
+                      {deliveryOrderData.status}
+                    </span>
                   </div>
-                </div>
-                <div className="detail-field">
-                  <label>SHIP METHOD</label>
-                  <div className="field-value">{deliveryOrderData.shipMethod}</div>
-                </div>
-                <div className="detail-field">
-                  <label>CARRIER</label>
-                  <div className="field-value">{deliveryOrderData.carrier}</div>
-                </div>
-                <div className="detail-field">
-                  <label>TRACKING NUMBER</label>
-                  <div className="field-value">{deliveryOrderData.trackingNumber}</div>
-                </div>
-                <div className="detail-field">
-                  <label>TERMS OF SHIPMENT</label>
-                  <div className="field-value">{deliveryOrderData.termsOfShipment}</div>
                 </div>
                 <div className="detail-field" style={{ gridColumn: 'span 2' }}>
                   <label>MEMO</label>
@@ -301,34 +297,28 @@ const ViewDeliveryOrderDetail = ({ setCurrentPage, onBack, onEdit }) => {
             >
               Shipping Address
             </button>
-            <button 
-              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
-              onClick={() => setActiveTab('custom')}
-            >
-              Custom Fields
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'system' ? 'active' : ''}`}
-              onClick={() => setActiveTab('system')}
-            >
-              System Information
-            </button>
           </div>
 
           <div className="tabs-content">
             {activeTab === 'items' && (
               <div className="items-table-wrapper" style={{ padding: '1.5rem' }}>
-                <table className="detail-items-table">
+                <table className="detail-items-table" style={{ minWidth: '2200px' }}>
                   <thead>
                     <tr>
-                      <th>Item</th>
-                      <th>Description</th>
-                      <th>Committed Qty</th>
-                      <th>Quantity</th>
-                      <th>UOM</th>
-                      <th>Bin Number</th>
-                      <th>Serial/Lot Number</th>
-                      <th>Weight (kg)</th>
+                      <th style={{ minWidth: '150px' }}>ITEM</th>
+                      <th style={{ minWidth: '400px' }}>DESCRIPTION</th>
+                      <th style={{ minWidth: '80px' }}>QTY</th>
+                      <th style={{ minWidth: '100px' }}>UNITS</th>
+                      <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                      <th style={{ minWidth: '100px' }}>RATE</th>
+                      <th style={{ minWidth: '100px' }}>AMOUNT</th>
+                      <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                      <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                      <th style={{ minWidth: '150px' }}>CLASS</th>
+                      <th style={{ minWidth: '150px' }}>COST EST. TYPE</th>
+                      <th style={{ minWidth: '150px' }}>EST. EXT. COST</th>
+                      <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                      <th style={{ minWidth: '150px' }}>HS CODE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -336,12 +326,18 @@ const ViewDeliveryOrderDetail = ({ setCurrentPage, onBack, onEdit }) => {
                       <tr key={item.id}>
                         <td>{item.item}</td>
                         <td>{item.description}</td>
-                        <td>{item.committedQuantity}</td>
                         <td><strong>{item.quantity}</strong></td>
-                        <td>{item.uom}</td>
-                        <td>{item.binNumber}</td>
-                        <td>{item.serialLotNumber}</td>
-                        <td>{item.itemWeight}</td>
+                        <td>{item.units}</td>
+                        <td>{item.priceLevel || '-'}</td>
+                        <td>${item.rate.toFixed(2)}</td>
+                        <td>${item.amount.toFixed(2)}</td>
+                        <td>{item.taxCode || '-'}</td>
+                        <td>${item.grossAmount.toFixed(2)}</td>
+                        <td>{item.class || '-'}</td>
+                        <td>{item.costEstimateType}</td>
+                        <td>${item.estimatedExtendedCost.toFixed(2)}</td>
+                        <td>{item.countryOfOrigin || '-'}</td>
+                        <td>{item.hsCode || '-'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -401,35 +397,6 @@ const ViewDeliveryOrderDetail = ({ setCurrentPage, onBack, onEdit }) => {
                       <td>{deliveryOrderData.postalCode}</td>
                       <td>{deliveryOrderData.country}</td>
                       <td>{deliveryOrderData.phone}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            {activeTab === 'custom' && (
-              <div className="items-table-wrapper" style={{ padding: '1.5rem' }}>
-                <table className="detail-items-table">
-                  <thead>
-                    <tr>
-                      <th>Delivery Note Number</th>
-                      <th>Delivery Route</th>
-                      <th>Driver Name</th>
-                      <th>Vehicle Number</th>
-                      <th>Internal Delivery Reference</th>
-                      <th>Delivery Time In</th>
-                      <th>Delivery Time Out</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{deliveryOrderData.deliveryNoteNumber}</td>
-                      <td>{deliveryOrderData.deliveryRoute}</td>
-                      <td>{deliveryOrderData.driverName}</td>
-                      <td>{deliveryOrderData.vehicleNumber}</td>
-                      <td>{deliveryOrderData.internalDeliveryReference}</td>
-                      <td>{deliveryOrderData.deliveryTimeIn}</td>
-                      <td>{deliveryOrderData.deliveryTimeOut}</td>
                     </tr>
                   </tbody>
                 </table>

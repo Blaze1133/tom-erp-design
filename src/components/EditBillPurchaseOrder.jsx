@@ -113,46 +113,51 @@ const EditBillPurchaseOrder = ({ setCurrentPage }) => {
   const total = subtotal + taxTotal;
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Purchase Order</h1>
-          <span style={{ fontSize: '18px', color: '#666', marginLeft: '10px' }}>{formData.poNumber}</span>
-          <span style={{ 
-            padding: '4px 12px', 
-            background: '#ffc107', 
-            color: '#333', 
-            borderRadius: '3px', 
-            fontSize: '12px',
-            fontWeight: '600',
-            marginLeft: '15px'
-          }}>
-            {formData.status}
-          </span>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-file-invoice"></i>
+          <div>
+            <h1>Bill Purchase Order</h1>
+            <div className="detail-subtitle">
+              <span>{formData.poNumber}</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={() => setCurrentPage && setCurrentPage('bill-purchase-orders')}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-print"></i>
+          Print
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid">
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
             <div className="form-group">
               <label className="form-label required">PR ID</label>
               <input 
@@ -289,17 +294,17 @@ const EditBillPurchaseOrder = ({ setCurrentPage }) => {
               </select>
             </div>
           </div>
+          </div>
         </div>
 
         {/* Classification */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title">
-            <i className="fas fa-tags"></i>
-            Classification
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid">
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
             <div className="form-group">
               <label className="form-label required">SUBSIDIARY</label>
               <select 
@@ -411,15 +416,16 @@ const EditBillPurchaseOrder = ({ setCurrentPage }) => {
               </select>
             </div>
           </div>
+          </div>
         </div>
 
         {/* Items Section */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title">
-            <i className="fas fa-list"></i>
-            Items
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Items</h3>
+          </div>
+          <div className="section-body">
 
           <div style={{ marginBottom: '15px', display: 'flex', gap: '10px', alignItems: 'center' }}>
             <label style={{ fontSize: '12px', fontWeight: '600' }}>EXCHANGE RATE</label>
@@ -750,22 +756,6 @@ const EditBillPurchaseOrder = ({ setCurrentPage }) => {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <div>
-            <button className="btn btn-secondary">
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-            <button className="btn btn-primary" onClick={handleSave}>
-              <i className="fas fa-check"></i>
-              Submit
-            </button>
           </div>
         </div>
       </div>

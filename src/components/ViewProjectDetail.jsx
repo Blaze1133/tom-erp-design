@@ -29,8 +29,8 @@ const ViewProjectDetail = ({ setCurrentPage }) => {
     phone: '',
     fax: '',
     address: 'Test Arjun\nSingapore Map',
-    estimatedCost: 0.00,
-    estimatedRevenue: 0.00,
+    budgetValue: 0.00,
+    projectValue: 0.00,
     revRecOverridePercent: 0.00,
     primaryCurrency: 'SGD',
     keyRecOverridePercent: 0.00
@@ -283,12 +283,12 @@ const ViewProjectDetail = ({ setCurrentPage }) => {
                       <div className="field-value">{projectData.endDate}</div>
                     </div>
                     <div className="detail-field">
-                      <label>ESTIMATED COST</label>
-                      <div className="field-value">${projectData.estimatedCost.toFixed(2)}</div>
+                      <label>BUDGET VALUE</label>
+                      <div className="field-value">${projectData.budgetValue.toFixed(2)}</div>
                     </div>
                     <div className="detail-field">
-                      <label>ESTIMATED REVENUE</label>
-                      <div className="field-value">${projectData.estimatedRevenue.toFixed(2)}</div>
+                      <label>PROJECT VALUE</label>
+                      <div className="field-value">${projectData.projectValue.toFixed(2)}</div>
                     </div>
                   </div>
                 </div>
