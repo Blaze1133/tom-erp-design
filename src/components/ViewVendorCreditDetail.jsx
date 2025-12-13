@@ -58,55 +58,41 @@ const ViewVendorCreditDetail = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      {/* Top Header */}
-      <div style={{ 
-        background: '#f8f9fa', 
-        padding: '12px 20px', 
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-file-invoice"></i>
           <div>
-            <div style={{ fontSize: '16px', fontWeight: '600', color: '#333', marginBottom: '4px' }}>Bill Credit</div>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span style={{ fontSize: '16px', fontWeight: '600', color: '#333' }}>{creditData.referenceNo}</span>
-              <span style={{ fontSize: '14px', color: '#666' }}>{creditData.vendor}</span>
+            <h1>Bill Credit</h1>
+            <div className="detail-subtitle">
+              <span>{creditData.referenceNo}</span>
+              <span style={{ color: '#666', fontSize: '13px', marginLeft: '10px' }}>{creditData.vendor}</span>
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>List</button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>Search</button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>Customize</button>
+        <div className="detail-actions">
+          <button className="btn-action" onClick={handleBack}>List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      {/* Action Buttons Bar */}
-      <div style={{ 
-        background: 'white', 
-        padding: '12px 20px', 
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="btn btn-primary" onClick={handleEdit} style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-edit"></i> Edit
-          </button>
-          <button className="btn btn-secondary" onClick={handleBack} style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-arrow-left"></i> Back
-          </button>
-        </div>
-        <div>
-          <button className="btn btn-secondary" style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-cog"></i> Actions
-          </button>
-        </div>
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleEdit}>
+          <i className="fas fa-edit"></i>
+          Edit
+        </button>
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar">
+          Apply
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-print"></i>
+          Print
+        </button>
       </div>
 
       <div className="quotation-container" style={{ background: '#f8f9fa', padding: '20px' }}>

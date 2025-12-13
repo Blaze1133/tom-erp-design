@@ -146,14 +146,13 @@ import EditBillPurchaseOrder from './components/EditBillPurchaseOrder';
 import EnterBills from './components/EnterBills';
 import ViewBills from './components/ViewBills';
 import ViewBillDetail from './components/ViewBillDetail';
-import PayBills from './components/PayBills';
+import PayBillsUnified from './components/PayBillsUnified';
 import ApproveVendorPayments from './components/ApproveVendorPayments';
 import ViewItems from './components/ViewItems';
 import CreateItem from './components/CreateItem';
 import ViewItemDetail from './components/ViewItemDetail';
 import ViewBillPaymentDetail from './components/ViewBillPaymentDetail';
 import EditBillPayment from './components/EditBillPayment';
-import PaySingleVendor from './components/PaySingleVendor';
 import ViewVendorPayments from './components/ViewVendorPayments';
 import ViewVendorPaymentDetail from './components/ViewVendorPaymentDetail';
 import EnterVendorPrepayment from './components/EnterVendorPrepayment';
@@ -710,7 +709,7 @@ function App() {
       case 'view-bill-detail':
         return <ViewBillDetail setCurrentPage={setCurrentPage} />;
       case 'pay-bills':
-        return <PayBills setCurrentPage={setCurrentPage} />;
+        return <PayBillsUnified setCurrentPage={setCurrentPage} />;
       case 'approve-vendor-payments':
         return <ApproveVendorPayments setCurrentPage={setCurrentPage} />;
       case 'view-items':
@@ -724,7 +723,7 @@ function App() {
       case 'edit-bill-payment':
         return <EditBillPayment setCurrentPage={setCurrentPage} />;
       case 'pay-single-vendor':
-        return <PaySingleVendor setCurrentPage={setCurrentPage} />;
+        return <PayBillsUnified setCurrentPage={setCurrentPage} />;
       case 'view-vendor-payments':
         return <ViewVendorPayments setCurrentPage={setCurrentPage} />;
       case 'view-vendor-payment-detail':

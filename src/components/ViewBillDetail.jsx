@@ -5,17 +5,14 @@ import './Enquiries.css';
 const ViewBillDetail = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('expenses');
+  const [expensesSubTab, setExpensesSubTab] = useState('expenses');
 
   const billData = {
     transactionNumber: 'VENDOR2714',
     referenceNo: 'BALANCE B/F-A1',
     vendor: 'A1 ENGINEERING SERVICES PTE LTD',
-    account: '20010 Accounts Payable : Trade Creditors',
-    amount: 1802.95,
     currency: 'SGD',
     exchangeRate: 1.00,
-    vatRegistration: '',
-    tax: 0.00,
     dueDate: '1/1/2021',
     date: '1/1/2021',
     postingPeriod: 'Jan 2021',
@@ -37,10 +34,16 @@ const ViewBillDetail = ({ setCurrentPage }) => {
         department: '',
         class: '',
         location: '',
-        customerProject: '',
+        customer: '',
+        project: '',
         billable: false
       }
-    ]
+    ],
+    items: [],
+    terms: '',
+    incoterm: '',
+    vendorSelect: '- Custom -',
+    printingPreference: 'TO BE PRINTED'
   };
 
   const handleBack = () => {
@@ -63,15 +66,16 @@ const ViewBillDetail = ({ setCurrentPage }) => {
           <div>
             <h1>Bill</h1>
             <div className="detail-subtitle">
-              <span className="doc-number">{billData.transactionNumber}</span>
-              <span className="status-badge" style={{ background: '#48bb78', color: 'white', padding: '4px 12px', borderRadius: '4px' }}>
+              <span>{billData.transactionNumber}</span>
+              <span style={{ color: '#666', fontSize: '13px', marginLeft: '10px' }}>{billData.vendor}</span>
+              <span className="status-badge" style={{ background: '#48bb78', color: 'white', padding: '4px 8px', borderRadius: '4px', marginLeft: '10px', fontSize: '11px', fontWeight: '600' }}>
                 PAID IN FULL
               </span>
             </div>
           </div>
         </div>
         <div className="detail-actions">
-          <button className="btn-action">List</button>
+          <button className="btn-action" onClick={handleBack}>List</button>
           <button className="btn-action">Search</button>
           <button className="btn-action">Customize</button>
         </div>
@@ -111,114 +115,64 @@ const ViewBillDetail = ({ setCurrentPage }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
+                <label>VENDOR</label>
+                <div className="field-value" style={{ color: '#4a90e2', cursor: 'pointer' }}>{billData.vendor}</div>
+              </div>
+              <div className="detail-field">
                 <label>TRANSACTION NUMBER</label>
-                <div className="detail-value">{billData.transactionNumber}</div>
+                <div className="field-value">{billData.transactionNumber}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>EXCHANGE RATE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.exchangeRate.toFixed(2)}</div>
+              <div className="detail-field">
+                <label>DATE</label>
+                <div className="field-value">{billData.date}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DUE DATE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.dueDate}</div>
+              <div className="detail-field">
+                <label>DUE DATE</label>
+                <div className="field-value">{billData.dueDate}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>REFERENCE NO.</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.referenceNo}</div>
+              <div className="detail-field">
+                <label>REFERENCE NO</label>
+                <div className="field-value">{billData.referenceNo}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>VAT REGISTRATION</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.vatRegistration || '-'}</div>
+              <div className="detail-field">
+                <label>POSTING PERIOD</label>
+                <div className="field-value">{billData.postingPeriod}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DATE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.date}</div>
+              <div className="detail-field">
+                <label>CURRENCY</label>
+                <div className="field-value">{billData.currency}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>VENDOR</div>
-                <div style={{ color: '#4a90e2', fontSize: '14px', cursor: 'pointer' }}>{billData.vendor}</div>
+              <div className="detail-field">
+                <label>EXCHANGE RATE</label>
+                <div className="field-value">{billData.exchangeRate.toFixed(2)}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>TAX</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.tax.toFixed(2)}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>POSTING PERIOD</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.postingPeriod}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>ACCOUNT</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.account}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>MEMO</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.memo}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>APPROVAL STATUS</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.approvalStatus}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>AMOUNT</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.amount.toFixed(2)}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DISC. DATE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>-</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>APPROVAL STATUS</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.approvalStatus}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CURRENCY</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.currency}</div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input type="checkbox" disabled />
-                <span style={{ fontSize: '13px', color: '#666' }}>PAYMENT HOLD</span>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>NEXT APPROVER</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>-</div>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <div className="field-value">{billData.memo}</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Classification */}
-        <div style={{ 
-          background: 'white', 
-          borderRadius: '4px', 
-          marginBottom: '20px',
-          border: '1px solid #e0e0e0'
-        }}>
-          <div style={{ 
-            padding: '15px 20px',
-            borderBottom: '1px solid #e0e0e0',
-            background: '#f8f9fa',
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '8px',
-            cursor: 'pointer'
-          }}>
-            <i className="fas fa-chevron-down" style={{ fontSize: '11px', color: '#666' }}></i>
-            <h3 style={{ fontSize: '13px', fontWeight: '600', margin: 0, color: '#333' }}>Classification</h3>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
           </div>
-          <div style={{ padding: '20px' }}>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(3, 1fr)', 
-              gap: '30px 60px',
-              fontSize: '13px'
-            }}>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>SUBSIDIARY</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.subsidiary}</div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY</label>
+                <div className="field-value">{billData.subsidiary}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PURCHASE TYPE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{billData.purchaseType}</div>
+              <div className="detail-field">
+                <label>PURCHASE TYPE</label>
+                <div className="field-value">{billData.purchaseType}</div>
+              </div>
+              <div className="detail-field">
+                <label>APPROVAL STATUS</label>
+                <div className="field-value">{billData.approvalStatus}</div>
               </div>
             </div>
           </div>
@@ -227,107 +181,185 @@ const ViewBillDetail = ({ setCurrentPage }) => {
         {/* Tabbed Interface */}
         <div className="detail-tabs">
           <div className="tabs-header">
-            <button className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`} onClick={() => setActiveTab('expenses')}>Expenses</button>
-            <button className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`} onClick={() => setActiveTab('items')}>Items</button>
+            <button className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`} onClick={() => setActiveTab('expenses')}>Expenses and Items</button>
             <button className={`tab-btn ${activeTab === 'billing' ? 'active' : ''}`} onClick={() => setActiveTab('billing')}>Billing</button>
             <button className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`} onClick={() => setActiveTab('relationships')}>Relationships</button>
             <button className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`} onClick={() => setActiveTab('communication')}>Communication</button>
+            <button className={`tab-btn ${activeTab === 'related' ? 'active' : ''}`} onClick={() => setActiveTab('related')}>Related Records</button>
+            <button className={`tab-btn ${activeTab === 'system' ? 'active' : ''}`} onClick={() => setActiveTab('system')}>System Information</button>
+            <button className={`tab-btn ${activeTab === 'glimpact' ? 'active' : ''}`} onClick={() => setActiveTab('glimpact')}>GL Impact</button>
             <button className={`tab-btn ${activeTab === 'supplier' ? 'active' : ''}`} onClick={() => setActiveTab('supplier')}>Supplier Received Items</button>
           </div>
 
-          {/* Expenses Tab */}
+          {/* Expenses and Items Tab */}
           {activeTab === 'expenses' && (
-            <div className="form-section" style={{ padding: '1.5rem' }}>
-              <div style={{ marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '600', color: '#333' }}>
-                Expenses {billData.amount.toFixed(2)}
+            <div className="tab-content">
+              {/* Sub-tabs for Expenses and Items */}
+              <div className="sub-tabs-header" style={{ borderBottom: '1px solid #e0e0e0', padding: '0 1.5rem', background: '#f8f9fa' }}>
+                <button 
+                  className={`sub-tab-btn ${expensesSubTab === 'expenses' ? 'active' : ''}`}
+                  onClick={() => setExpensesSubTab('expenses')}
+                  style={{
+                    padding: '12px 20px',
+                    border: 'none',
+                    background: expensesSubTab === 'expenses' ? '#fff' : 'transparent',
+                    borderBottom: expensesSubTab === 'expenses' ? '2px solid #dc2626' : '2px solid transparent',
+                    cursor: 'pointer',
+                    fontWeight: expensesSubTab === 'expenses' ? '600' : '400',
+                    color: expensesSubTab === 'expenses' ? '#dc2626' : '#666',
+                    fontSize: '13px'
+                  }}
+                >
+                  Expenses
+                </button>
+                <button 
+                  className={`sub-tab-btn ${expensesSubTab === 'items' ? 'active' : ''}`}
+                  onClick={() => setExpensesSubTab('items')}
+                  style={{
+                    padding: '12px 20px',
+                    border: 'none',
+                    background: expensesSubTab === 'items' ? '#fff' : 'transparent',
+                    borderBottom: expensesSubTab === 'items' ? '2px solid #dc2626' : '2px solid transparent',
+                    cursor: 'pointer',
+                    fontWeight: expensesSubTab === 'items' ? '600' : '400',
+                    color: expensesSubTab === 'items' ? '#dc2626' : '#666',
+                    fontSize: '13px'
+                  }}
+                >
+                  Items
+                </button>
               </div>
-              <div className="items-table-container">
-            <table className="items-table">
-              <thead>
-                <tr>
-                  <th style={{ minWidth: '200px' }}>CATEGORY</th>
-                  <th style={{ minWidth: '200px' }}>ACCOUNT</th>
-                  <th style={{ minWidth: '120px' }}>AMOUNT</th>
-                  <th style={{ minWidth: '150px' }}>TAX CODE</th>
-                  <th style={{ minWidth: '100px' }}>TAX RATE</th>
-                  <th style={{ minWidth: '100px' }}>TAX AMT</th>
-                  <th style={{ minWidth: '120px' }}>GROSS AMT</th>
-                  <th style={{ minWidth: '250px' }}>MEMO</th>
-                  <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
-                  <th style={{ minWidth: '150px' }}>CLASS</th>
-                  <th style={{ minWidth: '150px' }}>LOCATION</th>
-                  <th style={{ minWidth: '150px' }}>CUSTOMER</th>
-                  <th style={{ minWidth: '150px' }}>PROJECT</th>
-                  <th style={{ minWidth: '80px' }}>BILLABLE</th>
-                </tr>
-              </thead>
-              <tbody>
-                {billData.expenses.map((expense) => (
-                  <tr key={expense.id}>
-                    <td>{expense.category}</td>
-                    <td>{expense.account || '-'}</td>
-                    <td style={{ textAlign: 'right' }}>{expense.amount.toFixed(2)}</td>
-                    <td>{expense.taxCode}</td>
-                    <td style={{ textAlign: 'center' }}>{expense.taxRate}</td>
-                    <td style={{ textAlign: 'right' }}>{expense.taxAmt.toFixed(2)}</td>
-                    <td style={{ textAlign: 'right' }}>{expense.grossAmt.toFixed(2)}</td>
-                    <td>{expense.memo}</td>
-                    <td>{expense.department || '-'}</td>
-                    <td>{expense.class || '-'}</td>
-                    <td>{expense.location || '-'}</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td style={{ textAlign: 'center' }}>{expense.billable ? '✓' : '-'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+
+              {/* Expenses Sub-tab Content */}
+              {expensesSubTab === 'expenses' && (
+                <div className="form-section" style={{ padding: '1.5rem' }}>
+                  <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#333', margin: 0 }}>Expenses</h3>
+                    <span style={{ fontSize: '13px', color: '#666' }}>0.00</span>
+                  </div>
+                  <div className="items-table-container">
+                    <table className="items-table">
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '200px' }}>CATEGORY</th>
+                          <th style={{ minWidth: '200px' }}>ACCOUNT</th>
+                          <th style={{ minWidth: '120px' }}>AMOUNT</th>
+                          <th style={{ minWidth: '150px' }}>TAX CODE</th>
+                          <th style={{ minWidth: '100px' }}>TAX RATE</th>
+                          <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                          <th style={{ minWidth: '120px' }}>GROSS AMT</th>
+                          <th style={{ minWidth: '250px' }}>MEMO</th>
+                          <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
+                          <th style={{ minWidth: '150px' }}>CLASS</th>
+                          <th style={{ minWidth: '150px' }}>LOCATION</th>
+                          <th style={{ minWidth: '200px' }}>CUSTOMER:PROJECT</th>
+                          <th style={{ minWidth: '80px' }}>BILLABLE</th>
+                          <th style={{ minWidth: '100px' }}>HISTORY</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {billData.expenses.length === 0 ? (
+                          <tr>
+                            <td colSpan="14" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                              No records to show.
+                            </td>
+                          </tr>
+                        ) : (
+                          billData.expenses.map((expense) => (
+                            <tr key={expense.id}>
+                              <td>{expense.category}</td>
+                              <td>{expense.account || '-'}</td>
+                              <td style={{ textAlign: 'right' }}>{expense.amount.toFixed(2)}</td>
+                              <td>{expense.taxCode}</td>
+                              <td style={{ textAlign: 'center' }}>{expense.taxRate}</td>
+                              <td style={{ textAlign: 'right' }}>{expense.taxAmt.toFixed(2)}</td>
+                              <td style={{ textAlign: 'right' }}>{expense.grossAmt.toFixed(2)}</td>
+                              <td>{expense.memo}</td>
+                              <td>{expense.department || '-'}</td>
+                              <td>{expense.class || '-'}</td>
+                              <td>{expense.location || '-'}</td>
+                              <td>{expense.customer && expense.project ? `${expense.customer}:${expense.project}` : '-'}</td>
+                              <td style={{ textAlign: 'center' }}>{expense.billable ? '✓' : '-'}</td>
+                              <td style={{ textAlign: 'center' }}>-</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Items Sub-tab Content */}
+              {expensesSubTab === 'items' && (
+                <div className="form-section" style={{ padding: '1.5rem' }}>
+                  <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#333', margin: 0 }}>Items</h3>
+                    <span style={{ fontSize: '13px', color: '#666' }}>0.00</span>
+                  </div>
+                  <div className="items-table-container">
+                    <table className="items-table">
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '150px' }}>ITEM</th>
+                          <th style={{ minWidth: '400px' }}>DESCRIPTION</th>
+                          <th style={{ minWidth: '150px' }}>VENDOR NAME</th>
+                          <th style={{ minWidth: '80px' }}>QUANTITY</th>
+                          <th style={{ minWidth: '100px' }}>UNITS</th>
+                          <th style={{ minWidth: '100px' }}>RATE</th>
+                          <th style={{ minWidth: '100px' }}>AMOUNT</th>
+                          <th style={{ minWidth: '150px' }}>TAX CODE</th>
+                          <th style={{ minWidth: '100px' }}>TAX RATE</th>
+                          <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                          <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                          <th style={{ minWidth: '100px' }}>OPTIONS</th>
+                          <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
+                          <th style={{ minWidth: '150px' }}>CLASS</th>
+                          <th style={{ minWidth: '150px' }}>LOCATION</th>
+                          <th style={{ minWidth: '200px' }}>CUSTOMER:PROJECT</th>
+                          <th style={{ minWidth: '80px' }}>BILLABLE</th>
+                          <th style={{ minWidth: '100px' }}>RECEIPTS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {billData.items.length === 0 ? (
+                          <tr>
+                            <td colSpan="18" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                              No records to show.
+                            </td>
+                          </tr>
+                        ) : (
+                          billData.items.map((item) => (
+                            <tr key={item.id}>
+                              <td>{item.item}</td>
+                              <td>{item.description}</td>
+                              <td>{item.vendorName || '-'}</td>
+                              <td style={{ textAlign: 'center' }}>{item.quantity}</td>
+                              <td>{item.units}</td>
+                              <td style={{ textAlign: 'right' }}>{item.rate.toFixed(2)}</td>
+                              <td style={{ textAlign: 'right' }}>{item.amount.toFixed(2)}</td>
+                              <td>{item.taxCode}</td>
+                              <td style={{ textAlign: 'center' }}>{item.taxRate}</td>
+                              <td style={{ textAlign: 'right' }}>{item.grossAmt.toFixed(2)}</td>
+                              <td style={{ textAlign: 'right' }}>{item.taxAmt.toFixed(2)}</td>
+                              <td>-</td>
+                              <td>{item.department || '-'}</td>
+                              <td>{item.class || '-'}</td>
+                              <td>{item.location || '-'}</td>
+                              <td>{item.customer && item.project ? `${item.customer}:${item.project}` : '-'}</td>
+                              <td style={{ textAlign: 'center' }}>{item.billable ? '✓' : '-'}</td>
+                              <td>-</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Items Tab */}
-          {activeTab === 'items' && (
-            <div className="form-section" style={{ padding: '1.5rem' }}>
-              <div style={{ marginBottom: '1rem', fontSize: '0.875rem', fontWeight: '600', color: '#333' }}>
-                Items 0.00
-              </div>
-              <div className="items-table-container">
-                <table className="items-table">
-                  <thead>
-                    <tr>
-                      <th style={{ minWidth: '150px' }}>ITEM</th>
-                      <th style={{ minWidth: '400px' }}>DESCRIPTION</th>
-                      <th style={{ minWidth: '150px' }}>VENDOR NAME</th>
-                      <th style={{ minWidth: '80px' }}>QUANTITY</th>
-                      <th style={{ minWidth: '100px' }}>UNITS</th>
-                      <th style={{ minWidth: '100px' }}>RATE</th>
-                      <th style={{ minWidth: '100px' }}>AMOUNT</th>
-                      <th style={{ minWidth: '150px' }}>TAX CODE</th>
-                      <th style={{ minWidth: '100px' }}>TAX RATE</th>
-                      <th style={{ minWidth: '100px' }}>GROSS AMT</th>
-                      <th style={{ minWidth: '100px' }}>TAX AMT</th>
-                      <th style={{ minWidth: '100px' }}>OPTIONS</th>
-                      <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
-                      <th style={{ minWidth: '150px' }}>CLASS</th>
-                      <th style={{ minWidth: '150px' }}>LOCATION</th>
-                      <th style={{ minWidth: '150px' }}>CUSTOMER</th>
-                      <th style={{ minWidth: '150px' }}>PROJECT</th>
-                      <th style={{ minWidth: '80px' }}>BILLABLE</th>
-                      <th style={{ minWidth: '100px' }}>RECEIPTS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colSpan="19" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                        No records to show.
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
 
           {/* Billing Tab */}
           {activeTab === 'billing' && (
@@ -341,15 +373,15 @@ const ViewBillDetail = ({ setCurrentPage }) => {
                   <div className="detail-grid">
                     <div className="detail-field">
                       <label>TERMS</label>
-                      <div className="detail-value">-</div>
+                      <div className="field-value">{billData.terms || '-'}</div>
                     </div>
                     <div className="detail-field">
                       <label>INCOTERM</label>
-                      <div className="detail-value">-</div>
+                      <div className="field-value">{billData.incoterm || '-'}</div>
                     </div>
                     <div className="detail-field">
                       <label>VENDOR SELECT</label>
-                      <div className="detail-value">- Custom -</div>
+                      <div className="field-value">{billData.vendorSelect}</div>
                     </div>
                   </div>
                 </div>
@@ -383,9 +415,84 @@ const ViewBillDetail = ({ setCurrentPage }) => {
                 <div className="section-body">
                   <div className="detail-field">
                     <label>TO BE PRINTED</label>
-                    <div className="detail-value">TO BE PRINTED</div>
+                    <div className="field-value">{billData.printingPreference}</div>
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Related Records Tab */}
+          {activeTab === 'related' && (
+            <div className="form-section" style={{ padding: '1.5rem' }}>
+              <div className="items-table-container">
+                <table className="items-table">
+                  <thead>
+                    <tr>
+                      <th style={{ minWidth: '150px' }}>TYPE</th>
+                      <th style={{ minWidth: '150px' }}>DOCUMENT NUMBER</th>
+                      <th style={{ minWidth: '150px' }}>DATE</th>
+                      <th style={{ minWidth: '150px' }}>AMOUNT</th>
+                      <th style={{ minWidth: '200px' }}>MEMO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                        No records to show.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* System Information Tab */}
+          {activeTab === 'system' && (
+            <div className="form-section" style={{ padding: '1.5rem' }}>
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>CREATED BY</label>
+                  <div className="field-value">System Administrator</div>
+                </div>
+                <div className="detail-field">
+                  <label>DATE CREATED</label>
+                  <div className="field-value">1/1/2021 12:00 AM</div>
+                </div>
+                <div className="detail-field">
+                  <label>LAST MODIFIED BY</label>
+                  <div className="field-value">System Administrator</div>
+                </div>
+                <div className="detail-field">
+                  <label>DATE LAST MODIFIED</label>
+                  <div className="field-value">1/1/2021 12:00 AM</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* GL Impact Tab */}
+          {activeTab === 'glimpact' && (
+            <div className="form-section" style={{ padding: '1.5rem' }}>
+              <div className="items-table-container">
+                <table className="items-table">
+                  <thead>
+                    <tr>
+                      <th style={{ minWidth: '200px' }}>ACCOUNT</th>
+                      <th style={{ minWidth: '120px' }}>DEBIT</th>
+                      <th style={{ minWidth: '120px' }}>CREDIT</th>
+                      <th style={{ minWidth: '250px' }}>MEMO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                        No records to show.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           )}

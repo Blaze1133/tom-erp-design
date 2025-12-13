@@ -410,16 +410,26 @@ const EnterBills = ({ setCurrentPage }) => {
       </div>
 
       <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
         <button className="btn-toolbar" onClick={handleCancel}>
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar" onClick={handleCancel}>
-          Cancel
+        <button className="btn-toolbar">
+          Credit
         </button>
-        <button className="btn-toolbar-primary" onClick={handleSave}>
-          <i className="fas fa-save"></i>
-          Save
+        <button className="btn-toolbar">
+          Authorize Return
+        </button>
+        <button className="btn-toolbar">
+          Make Payment
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-print"></i>
+          Print
         </button>
       </div>
 

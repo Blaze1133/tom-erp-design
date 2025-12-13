@@ -22,55 +22,73 @@ const ApproveVendorPayments = ({ setCurrentPage }) => {
 
   return (
     <div className="enquiries-list">
-      <div className="list-header">
-        <div className="list-title">
-          <i className="fas fa-check-circle"></i>
+      <div className="page-header">
+        <div className="page-title">
+          <i className="fas fa-check-circle" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
           <h1>Approve Vendor Payment</h1>
         </div>
-        <div className="list-actions">
-          <button className="btn-view-option">More</button>
+        <div className="page-actions">
+          <button className="btn-view-option active">List</button>
+          <button className="btn-view-option">Search</button>
+          <button className="btn-view-option">Audit Trail</button>
         </div>
       </div>
 
-      {/* View and Action Dropdowns */}
-      <div style={{ padding: '1.5rem 2rem', background: '#fff', borderBottom: '1px solid #e0e0e0' }}>
-        <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-          <div style={{ flex: '0 0 400px' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#666', textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>VIEW</label>
-            <select 
-              className="form-control"
-              value={selectedView}
-              onChange={(e) => setSelectedView(e.target.value)}
-              style={{ fontSize: '13px' }}
-            >
-              <option>Vendor Payments for Approval</option>
-              <option>TOM Vendor Payments for Approval</option>
-            </select>
-          </div>
-          <div style={{ flex: '0 0 400px' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#666', textTransform: 'uppercase', marginBottom: '0.5rem', display: 'block' }}>ACTION</label>
-            <select 
-              className="form-control"
-              value={selectedAction}
-              onChange={(e) => handleAction(e.target.value)}
-              style={{ fontSize: '13px' }}
-            >
-              <option value="">Select Action...</option>
-              <option value="approve">Pending for CEO Approval → Approve (Vendor Bill Payment Process)</option>
-              <option value="reject">Pending for CEO Approval → Reject (Vendor Bill Payment Process)</option>
-              <option value="submit">Submit Vendor Bill → Submit Approval (Vendor Bill Payment Process)</option>
-            </select>
-          </div>
+      <div className="list-controls">
+        <div className="view-filter">
+          <label>VIEW:</label>
+          <select 
+            className="form-control"
+            value={selectedView}
+            onChange={(e) => setSelectedView(e.target.value)}
+          >
+            <option>Vendor Payments for Approval</option>
+            <option>TOM Vendor Payments for Approval</option>
+          </select>
+        </div>
+        <div className="view-filter" style={{ marginLeft: '1rem' }}>
+          <label>ACTION:</label>
+          <select 
+            className="form-control"
+            value={selectedAction}
+            onChange={(e) => handleAction(e.target.value)}
+            style={{ minWidth: '400px' }}
+          >
+            <option value="">Select Action...</option>
+            <option value="approve">Pending for CEO Approval → Approve (Vendor Bill Payment Process)</option>
+            <option value="reject">Pending for CEO Approval → Reject (Vendor Bill Payment Process)</option>
+            <option value="submit">Submit Vendor Bill → Submit Approval (Vendor Bill Payment Process)</option>
+          </select>
         </div>
       </div>
 
-      {/* Customize bar */}
-      <div style={{ padding: '15px 20px', background: '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button className="btn-customize">Customize</button>
-          <div style={{ fontSize: '13px', color: '#666' }}>
-            0 records
-          </div>
+      <div className="list-filters">
+        <div className="list-toolbar">
+          <button className="toolbar-btn" title="Edit">
+            <i className="fas fa-edit"></i> EDIT
+          </button>
+          <button className="toolbar-btn" title="Delete">
+            <i className="fas fa-times"></i>
+          </button>
+          <button className="toolbar-btn" title="Attach">
+            <i className="fas fa-paperclip"></i>
+          </button>
+          <button className="toolbar-btn" title="Print">
+            <i className="fas fa-print"></i>
+          </button>
+        </div>
+        <div className="list-sort">
+          <label>QUICK SORT:</label>
+          <select className="form-control">
+            <option>Date</option>
+            <option>Document Number</option>
+            <option>Name</option>
+            <option>Amount</option>
+            <option>Status</option>
+          </select>
+        </div>
+        <div className="list-total">
+          TOTAL: {payments.length}
         </div>
       </div>
 

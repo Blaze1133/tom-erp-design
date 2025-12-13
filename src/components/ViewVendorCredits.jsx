@@ -103,12 +103,12 @@ const ViewVendorCredits = ({ setCurrentPage }) => {
 
   return (
     <div className="enquiries-list">
-      <div className="list-header">
-        <div className="list-title">
-          <i className="fas fa-file-invoice"></i>
+      <div className="page-header">
+        <div className="page-title">
+          <i className="fas fa-file-invoice" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
           <h1>Bill Credits</h1>
         </div>
-        <div className="list-actions">
+        <div className="page-actions">
           <button className="btn-view-option active">List</button>
           <button className="btn-view-option">Search</button>
           <button className="btn-view-option">Audit Trail</button>

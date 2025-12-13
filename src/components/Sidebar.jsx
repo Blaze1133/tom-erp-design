@@ -385,14 +385,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hideArrow: true
     },
     { 
-      id: 'pay-single-vendor',
-      label: 'Pay Single Vendor',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-vendor-payments', label: 'List' }
-      ]
-    },
-    { 
       id: 'enter-vendor-prepayment',
       label: 'Enter Vendor Prepayment',
       hasSubmenu: true,
