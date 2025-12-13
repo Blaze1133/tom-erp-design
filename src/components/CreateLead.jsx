@@ -21,7 +21,9 @@ const CreateLead = ({ onBack }) => {
     companySize: '',
     annualRevenue: '',
     description: '',
-    notes: ''
+    notes: '',
+    followUpDate: '',
+    followUpNotes: ''
   });
 
   const industries = [
@@ -123,261 +125,312 @@ const CreateLead = ({ onBack }) => {
     }
     showToast('Lead converted to opportunity successfully!', 'success');
     setTimeout(() => {
-      // Navigate to opportunity creation or list
       if (onBack) onBack();
     }, 2000);
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-user-plus" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Create New Lead</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-user-plus"></i>
+          <div>
+            <h1>Create New Lead</h1>
+            <div className="detail-subtitle">
+              <span>New Lead Entry</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-secondary" onClick={handleCancel}>
-            <i className="fas fa-arrow-left"></i>
-            Back
-          </button>
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-sync"></i>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
+        </div>
+      </div>
+
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar" onClick={handleConvertToOpportunity}>
+          <i className="fas fa-exchange-alt"></i>
+          Convert to Opportunity
+        </button>
+        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
+          <button className="btn-toolbar">
+            <i className="fas fa-cog"></i>
             Actions
+            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
           </button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">COMPANY NAME <span className="required">*</span></label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.companyName}
-                onChange={(e) => handleInputChange('companyName', e.target.value)}
-                placeholder="Enter company name"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">CONTACT PERSON <span className="required">*</span></label>
-              <input 
-                type="text" 
-                className="form-control"
-                value={formData.contactPerson}
-                onChange={(e) => handleInputChange('contactPerson', e.target.value)}
-                placeholder="Enter contact person name"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">PHONE</label>
-              <input 
-                type="tel" 
-                className="form-control"
-                value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                placeholder="+65 XXXX XXXX"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">EMAIL <span className="required">*</span></label>
-              <input 
-                type="email" 
-                className="form-control"
-                value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="contact@company.com"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">INDUSTRY</label>
-              <select 
-                className="form-control"
-                value={formData.industry}
-                onChange={(e) => handleInputChange('industry', e.target.value)}
-              >
-                <option value="">Select Industry</option>
-                {industries.map((industry, index) => (
-                  <option key={index} value={industry}>{industry}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">PROJECT TYPE</label>
-              <select 
-                className="form-control"
-                value={formData.interest}
-                onChange={(e) => handleInputChange('interest', e.target.value)}
-              >
-                <option value="">Select Project Type</option>
-                {projectTypes.map((type, index) => (
-                  <option key={index} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">LEAD SOURCE</label>
-              <select 
-                className="form-control"
-                value={formData.source}
-                onChange={(e) => handleInputChange('source', e.target.value)}
-              >
-                <option value="">Select Source</option>
-                {leadSources.map((source, index) => (
-                  <option key={index} value={source}>{source}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">ASSIGNED TO</label>
-              <select 
-                className="form-control"
-                value={formData.assignedTo}
-                onChange={(e) => handleInputChange('assignedTo', e.target.value)}
-              >
-                <option value="">Select Sales Person</option>
-                {salesPersons.map((person, index) => (
-                  <option key={index} value={person}>{person}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">SUBSIDIARY <span className="required">*</span></label>
-              <select 
-                className="form-control"
-                value={formData.subsidiary}
-                onChange={(e) => handleInputChange('subsidiary', e.target.value)}
-              >
-                <option value="">Select Subsidiary</option>
-                {subsidiaries.map((subsidiary, index) => (
-                  <option key={index} value={subsidiary}>{subsidiary}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">WEBSITE</label>
-              <input 
-                type="url" 
-                className="form-control"
-                value={formData.website}
-                onChange={(e) => handleInputChange('website', e.target.value)}
-                placeholder="https://www.company.com"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">COMPANY SIZE</label>
-              <select 
-                className="form-control"
-                value={formData.companySize}
-                onChange={(e) => handleInputChange('companySize', e.target.value)}
-              >
-                <option value="">Select Size</option>
-                {companySizes.map((size, index) => (
-                  <option key={index} value={size}>{size}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">ANNUAL REVENUE</label>
-              <select 
-                className="form-control"
-                value={formData.annualRevenue}
-                onChange={(e) => handleInputChange('annualRevenue', e.target.value)}
-              >
-                <option value="">Select Range</option>
-                {revenueRanges.map((range, index) => (
-                  <option key={index} value={range}>{range}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">ADDRESS</label>
-              <textarea 
-                className="form-control"
-                value={formData.address}
-                onChange={(e) => handleInputChange('address', e.target.value)}
-                placeholder="Enter company address"
-                rows="3"
-              />
+      <div className="detail-content">
+        {/* Primary Information Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>COMPANY NAME <span style={{ color: '#dc2626' }}>*</span></label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.companyName}
+                  onChange={(e) => handleInputChange('companyName', e.target.value)}
+                  placeholder="Enter company name"
+                />
+              </div>
+              <div className="detail-field">
+                <label>CONTACT PERSON <span style={{ color: '#dc2626' }}>*</span></label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.contactPerson}
+                  onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                  placeholder="Enter contact person name"
+                />
+              </div>
+              <div className="detail-field">
+                <label>PHONE</label>
+                <input 
+                  type="tel" 
+                  className="form-control"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  placeholder="+65 XXXX XXXX"
+                />
+              </div>
+              <div className="detail-field">
+                <label>EMAIL <span style={{ color: '#dc2626' }}>*</span></label>
+                <input 
+                  type="email" 
+                  className="form-control"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="contact@company.com"
+                />
+              </div>
+              <div className="detail-field">
+                <label>INDUSTRY</label>
+                <select 
+                  className="form-control"
+                  value={formData.industry}
+                  onChange={(e) => handleInputChange('industry', e.target.value)}
+                >
+                  <option value="">Select Industry</option>
+                  {industries.map((industry, index) => (
+                    <option key={index} value={industry}>{industry}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>PROJECT TYPE</label>
+                <select 
+                  className="form-control"
+                  value={formData.interest}
+                  onChange={(e) => handleInputChange('interest', e.target.value)}
+                >
+                  <option value="">Select Project Type</option>
+                  {projectTypes.map((type, index) => (
+                    <option key={index} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>LEAD SOURCE</label>
+                <select 
+                  className="form-control"
+                  value={formData.source}
+                  onChange={(e) => handleInputChange('source', e.target.value)}
+                >
+                  <option value="">Select Source</option>
+                  {leadSources.map((source, index) => (
+                    <option key={index} value={source}>{source}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>STATUS</label>
+                <select 
+                  className="form-control"
+                  value={formData.status}
+                  onChange={(e) => handleInputChange('status', e.target.value)}
+                >
+                  <option value="New">New</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Converted">Converted</option>
+                  <option value="Disqualified">Disqualified</option>
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>ASSIGNED TO</label>
+                <select 
+                  className="form-control"
+                  value={formData.assignedTo}
+                  onChange={(e) => handleInputChange('assignedTo', e.target.value)}
+                >
+                  <option value="">Select Sales Person</option>
+                  {salesPersons.map((person, index) => (
+                    <option key={index} value={person}>{person}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>WEBSITE</label>
+                <input 
+                  type="url" 
+                  className="form-control"
+                  value={formData.website}
+                  onChange={(e) => handleInputChange('website', e.target.value)}
+                  placeholder="https://www.company.com"
+                />
+              </div>
+              <div className="detail-field">
+                <label>COMPANY SIZE</label>
+                <select 
+                  className="form-control"
+                  value={formData.companySize}
+                  onChange={(e) => handleInputChange('companySize', e.target.value)}
+                >
+                  <option value="">Select Size</option>
+                  {companySizes.map((size, index) => (
+                    <option key={index} value={size}>{size}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="detail-field">
+                <label>ANNUAL REVENUE</label>
+                <select 
+                  className="form-control"
+                  value={formData.annualRevenue}
+                  onChange={(e) => handleInputChange('annualRevenue', e.target.value)}
+                >
+                  <option value="">Select Range</option>
+                  {revenueRanges.map((range, index) => (
+                    <option key={index} value={range}>{range}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
-
-        {/* Additional Information */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-sticky-note"></i>
-            Additional Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">PROJECT DESCRIPTION</label>
-              <textarea 
-                className="form-control"
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                placeholder="Describe the project requirements and scope..."
-                rows="4"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">NOTES</label>
-              <textarea 
-                className="form-control"
-                value={formData.notes}
-                onChange={(e) => handleInputChange('notes', e.target.value)}
-                placeholder="Add any additional notes or comments..."
-                rows="4"
-              />
+        {/* Classification Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY <span style={{ color: '#dc2626' }}>*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.subsidiary}
+                  onChange={(e) => handleInputChange('subsidiary', e.target.value)}
+                >
+                  <option value="">Select Subsidiary</option>
+                  {subsidiaries.map((subsidiary, index) => (
+                    <option key={index} value={subsidiary}>{subsidiary}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Convert to Opportunity Section */}
-        <div style={{ 
-          marginTop: '2rem', 
-          padding: '1.5rem', 
-          backgroundColor: '#f8f9fa', 
-          borderRadius: '8px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <div>
-            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '16px', fontWeight: '600' }}>
-              <i className="fas fa-lightbulb" style={{ marginRight: '8px', color: '#ffc107' }}></i>
-              Ready to Convert?
-            </h3>
-            <p style={{ margin: 0, fontSize: '14px', color: '#6c757d' }}>
-              Convert this lead to an opportunity to track the sales pipeline and create quotations.
-            </p>
+        {/* Follow-Up Information Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Follow-Up Information</h3>
           </div>
-          <button 
-            className="btn btn-primary" 
-            onClick={handleConvertToOpportunity}
-            style={{ 
-              padding: '12px 24px',
-              fontSize: '15px',
-              fontWeight: '600',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <i className="fas fa-arrow-right" style={{ marginRight: '8px' }}></i>
-            Convert to Opportunity
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>FOLLOW-UP DATE</label>
+                <input 
+                  type="date" 
+                  className="form-control"
+                  value={formData.followUpDate}
+                  onChange={(e) => handleInputChange('followUpDate', e.target.value)}
+                />
+              </div>
+              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                <label>FOLLOW-UP NOTES</label>
+                <textarea 
+                  className="form-control"
+                  value={formData.followUpNotes}
+                  onChange={(e) => handleInputChange('followUpNotes', e.target.value)}
+                  placeholder="e.g., Call back after 7 days, Send proposal, Schedule meeting..."
+                  rows="3"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Information Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Additional Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                <label>ADDRESS</label>
+                <textarea 
+                  className="form-control"
+                  value={formData.address}
+                  onChange={(e) => handleInputChange('address', e.target.value)}
+                  placeholder="Enter company address"
+                  rows="3"
+                />
+              </div>
+              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                <label>PROJECT DESCRIPTION</label>
+                <textarea 
+                  className="form-control"
+                  value={formData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  placeholder="Describe the project requirements and scope..."
+                  rows="4"
+                />
+              </div>
+              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                <label>NOTES</label>
+                <textarea 
+                  className="form-control"
+                  value={formData.notes}
+                  onChange={(e) => handleInputChange('notes', e.target.value)}
+                  placeholder="Add any additional notes or comments..."
+                  rows="4"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Actions */}
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-times"></i>
+            Cancel
+          </button>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-save"></i>
+            Save
           </button>
         </div>
       </div>

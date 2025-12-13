@@ -25,7 +25,9 @@ const ViewLeads = ({ onNewClick, onViewClick, onEditClick }) => {
       assignedTo: 'Sarah Lee',
       subsidiary: 'TOM Offshore Marine Engineering Pte Ltd',
       createdDate: '2024-11-25',
-      lastContact: '2024-11-25'
+      lastContact: '2024-11-25',
+      followUpDate: '2024-12-02',
+      followUpNotes: 'Call back after 7 days to discuss project requirements'
     },
     {
       id: 'LD-002',
@@ -40,7 +42,9 @@ const ViewLeads = ({ onNewClick, onViewClick, onEditClick }) => {
       assignedTo: 'David Chen',
       subsidiary: 'TOM Shipyard Pte Ltd',
       createdDate: '2024-11-20',
-      lastContact: '2024-11-23'
+      lastContact: '2024-11-23',
+      followUpDate: '2024-11-30',
+      followUpNotes: 'Send detailed quotation and schedule site visit'
     },
     {
       id: 'LD-003',
@@ -55,7 +59,9 @@ const ViewLeads = ({ onNewClick, onViewClick, onEditClick }) => {
       assignedTo: 'Sarah Lee',
       subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
       createdDate: '2024-11-15',
-      lastContact: '2024-11-24'
+      lastContact: '2024-11-24',
+      followUpDate: '2024-12-05',
+      followUpNotes: 'Follow up on technical specifications and timeline'
     },
     {
       id: 'LD-004',
@@ -70,7 +76,9 @@ const ViewLeads = ({ onNewClick, onViewClick, onEditClick }) => {
       assignedTo: 'David Chen',
       subsidiary: 'TOM Engineering & Trading Pte Ltd',
       createdDate: '2024-11-10',
-      lastContact: '2024-11-22'
+      lastContact: '2024-11-22',
+      followUpDate: '',
+      followUpNotes: ''
     },
     {
       id: 'LD-005',
@@ -85,7 +93,9 @@ const ViewLeads = ({ onNewClick, onViewClick, onEditClick }) => {
       assignedTo: 'Sarah Lee',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
       createdDate: '2024-11-08',
-      lastContact: '2024-11-18'
+      lastContact: '2024-11-18',
+      followUpDate: '',
+      followUpNotes: ''
     }
   ]);
 
@@ -223,17 +233,19 @@ const ViewLeads = ({ onNewClick, onViewClick, onEditClick }) => {
         <table className="enquiries-table">
           <thead>
             <tr>
-              <th style={{ width: '7%' }}>EDIT | VIEW</th>
-              <th style={{ width: '7%' }}>LEAD ID</th>
-              <th style={{ width: '12%' }}>COMPANY NAME</th>
-              <th style={{ width: '10%' }}>CONTACT PERSON</th>
-              <th style={{ width: '9%' }}>PHONE</th>
-              <th style={{ width: '12%' }}>EMAIL</th>
-              <th style={{ width: '8%' }}>INDUSTRY</th>
-              <th style={{ width: '7%' }}>STATUS</th>
-              <th style={{ width: '7%' }}>SOURCE</th>
-              <th style={{ width: '8%' }}>ASSIGNED TO</th>
-              <th style={{ width: '13%' }}>SUBSIDIARY</th>
+              <th style={{ width: '5%' }}>EDIT | VIEW</th>
+              <th style={{ width: '5%' }}>LEAD ID</th>
+              <th style={{ width: '10%' }}>COMPANY NAME</th>
+              <th style={{ width: '8%' }}>CONTACT PERSON</th>
+              <th style={{ width: '7%' }}>PHONE</th>
+              <th style={{ width: '10%' }}>EMAIL</th>
+              <th style={{ width: '6%' }}>INDUSTRY</th>
+              <th style={{ width: '5%' }}>STATUS</th>
+              <th style={{ width: '5%' }}>SOURCE</th>
+              <th style={{ width: '6%' }}>ASSIGNED TO</th>
+              <th style={{ width: '6%' }}>FOLLOW-UP DATE</th>
+              <th style={{ width: '15%' }}>FOLLOW-UP NOTES</th>
+              <th style={{ width: '12%' }}>SUBSIDIARY</th>
             </tr>
           </thead>
           <tbody>
@@ -277,6 +289,24 @@ const ViewLeads = ({ onNewClick, onViewClick, onEditClick }) => {
                 </td>
                 <td>{lead.source}</td>
                 <td>{lead.assignedTo}</td>
+                <td>
+                  {lead.followUpDate ? (
+                    <span style={{ color: new Date(lead.followUpDate) < new Date() ? '#dc2626' : '#333' }}>
+                      {new Date(lead.followUpDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </span>
+                  ) : '-'}
+                </td>
+                <td>
+                  <div style={{ 
+                    maxWidth: '200px', 
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis', 
+                    whiteSpace: 'nowrap',
+                    fontSize: '13px'
+                  }} title={lead.followUpNotes}>
+                    {lead.followUpNotes || '-'}
+                  </div>
+                </td>
                 <td>{lead.subsidiary}</td>
               </tr>
             ))}
