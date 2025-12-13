@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
 import AddProjectForm from './AddProjectForm';
-import AddCustomerForm from './AddCustomerForm';
+import AddCustomerModal from './AddCustomerModal';
 import './Enquiries.css';
 
 const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
@@ -939,27 +939,25 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
             <i className="fas fa-boxes"></i>
             Items
           </h2>
-          <div className="items-table-wrapper">
-            <table className="detail-items-table">
+          <div className="items-table-container" style={{ marginBottom: '1rem' }}>
+            <table className="items-table">
               <thead>
                 <tr>
                   <th style={{ width: '30px' }}></th>
-                  <th style={{minWidth: '150px'}}>ITEM</th>
-                  <th style={{minWidth: '400px'}}>DESCRIPTION</th>
-                  <th style={{minWidth: '80px'}}>QTY</th>
-                  <th style={{minWidth: '100px'}}>UNITS</th>
-                  <th style={{minWidth: '120px'}}>PRICE LEVEL</th>
-                  <th style={{minWidth: '100px'}}>RATE</th>
-                  <th style={{minWidth: '100px'}}>AMOUNT</th>
-                  <th style={{minWidth: '120px'}}>TAX CODE</th>
-                  <th style={{minWidth: '100px'}}>GROSS AMT</th>
-                  <th style={{minWidth: '150px'}}>CLASS</th>
-                  <th style={{minWidth: '150px'}}>DEPARTMENT</th>
-                  <th style={{minWidth: '150px'}}>LOCATION</th>
-                  <th style={{minWidth: '180px'}}>COST ESTIMATE TYPE</th>
-                  <th style={{minWidth: '180px'}}>EST. EXTENDED COST</th>
-                  <th style={{minWidth: '150px'}}>COUNTRY OF ORIGIN</th>
-                  <th style={{minWidth: '150px'}}>HS CODE</th>
+                  <th style={{ minWidth: '150px' }}>ITEM</th>
+                  <th style={{ minWidth: '400px' }}>DESCRIPTION</th>
+                  <th style={{ minWidth: '80px' }}>QTY</th>
+                  <th style={{ minWidth: '100px' }}>UNITS</th>
+                  <th style={{ minWidth: '120px' }}>PRICE LEVEL</th>
+                  <th style={{ minWidth: '100px' }}>RATE</th>
+                  <th style={{ minWidth: '100px' }}>AMOUNT</th>
+                  <th style={{ minWidth: '100px' }}>DISCOUNT</th>
+                  <th style={{ minWidth: '120px' }}>TAX CODE</th>
+                  <th style={{ minWidth: '80px' }}>TAX RATE</th>
+                  <th style={{ minWidth: '100px' }}>TAX AMT</th>
+                  <th style={{ minWidth: '100px' }}>GROSS AMT</th>
+                  <th style={{ minWidth: '150px' }}>COUNTRY OF ORIGIN</th>
+                  <th style={{ minWidth: '150px' }}>HS CODE</th>
                 </tr>
               </thead>
               <tbody>
@@ -1014,7 +1012,16 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         </div>
                       )}
                     </td>
-                    <td><input type="text" className="form-control" value={item.item} onChange={(e) => updateItem(item.id, 'item', e.target.value)} style={{minWidth: '150px', height: '32px'}} /></td>
+                    <td>
+                      <input 
+                        type="text" 
+                        className="form-control"
+                        value={item.item}
+                        onChange={(e) => updateItem(item.id, 'item', e.target.value)}
+                        placeholder="Enter item"
+                        style={{ minWidth: '200px', height: '40px' }}
+                      />
+                    </td>
                     <td>
                       <textarea 
                         className="form-control"
@@ -1023,69 +1030,97 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         placeholder="Enter description"
                         style={{ 
                           minWidth: '400px', 
-                          minHeight: '32px',
-                          resize: 'vertical',
-                          overflow: 'auto',
-                          fontSize: '13px',
-                          padding: '4px 8px'
+                          minHeight: '60px',
+                          resize: 'both',
+                          overflow: 'auto'
                         }}
-                        rows="1"
+                        rows="3"
+                        onInput={(e) => {
+                          e.target.style.height = 'auto';
+                          e.target.style.height = Math.max(60, e.target.scrollHeight) + 'px';
+                        }}
                       />
                     </td>
-                    <td><input type="number" className="form-control" value={item.quantity} onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)} style={{minWidth: '80px', height: '32px'}} /></td>
-                    <td><input type="text" className="form-control" value={item.units} onChange={(e) => updateItem(item.id, 'units', e.target.value)} style={{minWidth: '100px', height: '32px'}} /></td>
-                    <td><input type="text" className="form-control" value={item.priceLevel} onChange={(e) => updateItem(item.id, 'priceLevel', e.target.value)} style={{minWidth: '120px', height: '32px'}} /></td>
-                    <td><input type="number" className="form-control" value={item.rate} onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)} style={{minWidth: '100px', height: '32px'}} step="0.01" /></td>
-                    <td><input type="number" className="form-control" value={item.amount} onChange={(e) => updateItem(item.id, 'amount', parseFloat(e.target.value) || 0)} style={{minWidth: '100px', height: '32px'}} step="0.01" /></td>
-                    <td><input type="text" className="form-control" value={item.taxCode} onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)} style={{minWidth: '120px', height: '32px'}} /></td>
-                    <td><input type="number" className="form-control" value={item.grossAmount} onChange={(e) => updateItem(item.id, 'grossAmount', parseFloat(e.target.value) || 0)} style={{minWidth: '100px', height: '32px'}} step="0.01" /></td>
                     <td>
-                      <select className="table-input" value={item.class} onChange={(e) => updateItem(item.id, 'class', e.target.value)} style={{width: '100%', height: '32px'}}>
-                        <option value="">Select...</option>
-                        <option>Consumable Item</option>
-                        <option>Course</option>
-                        <option>Cutting Works</option>
-                        <option>Electrical</option>
-                        <option>Fabrication</option>
-                        <option>Hydrotesting</option>
-                        <option>Installation work</option>
-                        <option>Manpower Supply</option>
-                        <option>Material Supply</option>
-                        <option>Module /Prefab</option>
-                        <option>Piping</option>
-                        <option>Project Works</option>
-                        <option>Refurbishment works</option>
-                        <option>Rental</option>
-                        <option>Repair & Referable</option>
-                        <option>Sale of Scrap Metal</option>
-                        <option>Structure</option>
+                      <input 
+                        type="number" 
+                        className="form-control"
+                        value={item.quantity}
+                        onChange={(e) => updateItem(item.id, 'quantity', parseFloat(e.target.value) || 0)}
+                        min="0"
+                        step="0.01"
+                        style={{ minWidth: '100px', height: '40px' }}
+                      />
+                    </td>
+                    <td>
+                      <select 
+                        className="form-control"
+                        value={item.units}
+                        onChange={(e) => updateItem(item.id, 'units', e.target.value)}
+                        style={{ minWidth: '120px', height: '40px' }}
+                      >
+                        <option>Kgs</option>
+                        <option>Pcs</option>
+                        <option>Meters</option>
+                        <option>Hours</option>
                       </select>
                     </td>
                     <td>
-                      <select className="table-input" value={item.department} onChange={(e) => updateItem(item.id, 'department', e.target.value)} style={{width: '100%', height: '32px'}}>
-                        <option value="">Select...</option>
-                        <option>Sales</option>
-                        <option>Engineering</option>
-                        <option>Operations</option>
-                        <option>MEP</option>
+                      <select 
+                        className="form-control"
+                        value={item.priceLevel}
+                        onChange={(e) => updateItem(item.id, 'priceLevel', e.target.value)}
+                      >
+                        <option>Custom</option>
+                        <option>Standard</option>
+                        <option>Premium</option>
                       </select>
                     </td>
                     <td>
-                      <select className="table-input" value={item.location} onChange={(e) => updateItem(item.id, 'location', e.target.value)} style={{width: '100%', height: '32px'}}>
-                        <option value="">Select...</option>
-                        <option>Singapore Yard</option>
-                        <option>Johor Facility</option>
-                        <option>Batam Workshop</option>
+                      <input 
+                        type="number" 
+                        className="form-control"
+                        value={item.rate}
+                        onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                        min="0"
+                        step="0.01"
+                      />
+                    </td>
+                    <td>
+                      <strong>${(item.amount || 0).toFixed(2)}</strong>
+                    </td>
+                    <td>
+                      <input 
+                        type="number" 
+                        className="form-control"
+                        value={item.discount || 0}
+                        onChange={(e) => updateItem(item.id, 'discount', parseFloat(e.target.value) || 0)}
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        style={{ minWidth: '100px', height: '40px' }}
+                      />
+                    </td>
+                    <td>
+                      <select 
+                        className="form-control"
+                        value={item.taxCode}
+                        onChange={(e) => updateItem(item.id, 'taxCode', e.target.value)}
+                      >
+                        <option>GST_SG:7%</option>
+                        <option>GST_SG:9%</option>
+                        <option>No Tax</option>
                       </select>
                     </td>
                     <td>
-                      <select className="table-input" value={item.costEstimateType} onChange={(e) => updateItem(item.id, 'costEstimateType', e.target.value)} style={{width: '100%', height: '32px'}}>
-                        <option>Fixed</option>
-                        <option>Variable</option>
-                        <option>Estimated</option>
-                      </select>
+                      <span>{item.taxRate || '7.0%'}</span>
                     </td>
-                    <td><input type="number" className="form-control" value={item.estimatedExtendedCost} onChange={(e) => updateItem(item.id, 'estimatedExtendedCost', parseFloat(e.target.value) || 0)} style={{minWidth: '180px', height: '32px'}} step="0.01" /></td>
+                    <td>
+                      <strong>${(item.taxAmount || 0).toFixed(2)}</strong>
+                    </td>
+                    <td>
+                      <strong>${(item.grossAmount || 0).toFixed(2)}</strong>
+                    </td>
                     <td>
                       <input 
                         type="text" 
@@ -1093,7 +1128,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         value={item.countryOfOrigin || ''}
                         onChange={(e) => updateItem(item.id, 'countryOfOrigin', e.target.value)}
                         placeholder="Country"
-                        style={{minWidth: '150px', height: '32px'}}
+                        style={{ minWidth: '180px', height: '40px' }}
                       />
                     </td>
                     <td>
@@ -1103,7 +1138,7 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
                         value={item.hsCode || ''}
                         onChange={(e) => updateItem(item.id, 'hsCode', e.target.value)}
                         placeholder="HS Code"
-                        style={{minWidth: '150px', height: '32px'}}
+                        style={{ minWidth: '180px', height: '40px' }}
                       />
                     </td>
                   </tr>
@@ -1111,10 +1146,12 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
               </tbody>
             </table>
           </div>
-          <button className="add-item-btn" onClick={addItem}>
-            <i className="fas fa-plus"></i>
-            Add Item
-          </button>
+          <div style={{ marginBottom: '1rem' }}>
+            <button className="btn btn-primary" onClick={addItem}>
+              <i className="fas fa-plus"></i>
+              Add Item
+            </button>
+          </div>
 
           {/* Summary Grid */}
           {items.length > 0 && (
@@ -2017,25 +2054,11 @@ const SalesOrder = ({ setCurrentPage, isEdit = false }) => {
       </div>
 
       {/* Add Customer Modal */}
-      {showAddCustomer && (
-        <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
-          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
-              <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                ×
-              </button>
-            </div>
-            
-            <div className="modal-body" style={{ padding: '2rem' }}>
-              <AddCustomerForm 
-                onSave={handleSaveNewCustomer}
-                onCancel={() => setShowAddCustomer(false)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <AddCustomerModal 
+        show={showAddCustomer}
+        onClose={() => setShowAddCustomer(false)}
+        onSave={handleSaveNewCustomer}
+      />
 
       {/* Add Project Modal */}
       {showAddProject && (

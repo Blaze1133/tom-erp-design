@@ -266,19 +266,19 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       ]
     },
     { 
-      id: 'enter-sales-orders',
-      label: 'Enter Sales Order',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-sales-orders', label: 'List' }
-      ]
-    },
-    { 
       id: 'create-project',
       label: 'Project',
       hasSubmenu: true,
       submenu: [
         { id: 'view-projects', label: 'List' }
+      ]
+    },
+    { 
+      id: 'enter-sales-orders',
+      label: 'Enter Sales Order',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-sales-orders', label: 'List' }
       ]
     },
     { id: 'invoice-sales-orders', label: 'Invoice Sales Orders' },
@@ -288,6 +288,14 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'view-invoices', label: 'List' }
+      ]
+    },
+    { 
+      id: 'issue-credit-memos',
+      label: 'Issue Credit Memos',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-credit-memos', label: 'List' }
       ]
     },
     { 
@@ -615,14 +623,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'view-returned-orders', label: 'List' }
-      ]
-    },
-    { 
-      id: 'issue-credit-memos',
-      label: 'Issue Credit Memos',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-credit-memos', label: 'List' }
       ]
     },
     { 

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Toast from './Toast';
+import AddCustomerModal from './AddCustomerModal';
 import './Enquiries.css';
 
 const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
@@ -185,6 +186,14 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
     setIsSaved(true);
   };
 
+  const handleConvertToQuotation = () => {
+    showToast('Converting to Quotation...', 'success');
+    setTimeout(() => {
+      showToast('Successfully converted to Quotation!', 'success');
+      setCurrentPage('view-enquiries');
+    }, 500);
+  };
+
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to close this transaction? Any unsaved changes will be lost.')) {
       showToast('Transaction cancelled', 'info');
@@ -319,23 +328,24 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
         <button className="btn-toolbar" onClick={handleCancel}>
           Cancel
         </button>
-        <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
-          <i className="fas fa-save"></i>
-          Save
-        </button>
-        {isSaved && (
+        {!isSaved ? (
+          <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
+            <i className="fas fa-save"></i>
+            Save
+          </button>
+        ) : (
           <>
-            <button className="btn-toolbar">
-              <i className="fas fa-copy"></i>
-              Copy
-            </button>
             <button className="btn-toolbar">
               <i className="fas fa-print"></i>
               Print
             </button>
             <button className="btn-toolbar">
+              <i className="fas fa-copy"></i>
+              Copy
+            </button>
+            <button className="btn-toolbar-primary" onClick={handleConvertToQuotation}>
               <i className="fas fa-exchange-alt"></i>
-              Convert to Order
+              Convert to Quotation
             </button>
           </>
         )}
@@ -508,98 +518,15 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     disabled
                   />
                 </div>
-                <div className="detail-field" style={{ position: 'relative', zIndex: salesRepDropdownOpen ? 10001 : 'auto' }}>
-                  <label className="form-label">Sales Rep</label>
-                  <div style={{ position: 'relative', flex: 1 }}>
-                    <input 
-                      type="text"
-                      className="form-control"
-                      value={salesRepSearch || formData.salesRep}
-                      onChange={(e) => {
-                        setSalesRepSearch(e.target.value);
-                        handleFormChange('salesRep', e.target.value);
-                        setSalesRepDropdownOpen(true);
-                      }}
-                      onFocus={() => {
-                        setSalesRepDropdownOpen(true);
-                      }}
-                      placeholder="<Type then tab>"
-                    />
-                    <button 
-                      type="button"
-                      style={{ 
-                        position: 'absolute', 
-                        right: '8px', 
-                        top: '50%', 
-                        transform: 'translateY(-50%)', 
-                        background: 'transparent', 
-                        border: 'none', 
-                        cursor: 'pointer', 
-                        padding: '4px 8px',
-                        fontSize: '14px'
-                      }}
-                      onClick={() => {
-                        setSalesRepDropdownOpen(!salesRepDropdownOpen);
-                      }}
-                    >
-                      <i className="fas fa-chevron-down"></i>
-                    </button>
-                    {salesRepDropdownOpen && (
-                      <>
-                        <div 
-                          style={{ 
-                            position: 'fixed', 
-                            top: 0, 
-                            left: 0, 
-                            right: 0, 
-                            bottom: 0, 
-                            zIndex: 9999 
-                          }}
-                          onClick={() => setSalesRepDropdownOpen(false)}
-                        />
-                        <div style={{ 
-                          position: 'absolute', 
-                          top: '100%', 
-                          left: 0, 
-                          right: 0, 
-                          background: 'white', 
-                          border: '1px solid #ddd', 
-                          borderRadius: '4px', 
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
-                          zIndex: 1000, 
-                          marginTop: '4px',
-                          overflowY: 'auto',
-                          maxHeight: '200px'
-                        }}>
-                          {(filteredSalesReps.length > 0 ? filteredSalesReps : salesRepOptions).map((rep, idx) => (
-                            <div 
-                              key={idx}
-                              onClick={() => {
-                                handleFormChange('salesRep', rep.name);
-                                setSalesRepSearch(rep.name);
-                                setSalesRepDropdownOpen(false);
-                              }}
-                              style={{ 
-                                padding: '10px 12px', 
-                                cursor: 'pointer', 
-                                fontSize: '13px',
-                                borderBottom: '1px solid #f5f5f5'
-                              }}
-                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
-                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                            >
-                              {rep.name}
-                            </div>
-                          ))}
-                          {filteredSalesReps.length === 0 && salesRepSearch && (
-                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
-                              No sales reps found
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
+                <div className="detail-field">
+                  <label>CONTACT PERSON</label>
+                  <select 
+                    className="form-control"
+                    value={formData.contactPerson}
+                    onChange={(e) => handleFormChange('contactPerson', e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                  </select>
                 </div>
                 <div className="detail-field">
                   <label>EXPECTED CLOSE *</label>
@@ -795,15 +722,98 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
                     disabled
                   />
                 </div>
-                <div className="detail-field">
-                  <label>CONTACT PERSON</label>
-                  <select 
-                    className="form-control"
-                    value={formData.contactPerson}
-                    onChange={(e) => handleFormChange('contactPerson', e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                  </select>
+                <div className="detail-field" style={{ position: 'relative', zIndex: salesRepDropdownOpen ? 10001 : 'auto' }}>
+                  <label className="form-label">SALES REP</label>
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <input 
+                      type="text"
+                      className="form-control"
+                      value={salesRepSearch || formData.salesRep}
+                      onChange={(e) => {
+                        setSalesRepSearch(e.target.value);
+                        handleFormChange('salesRep', e.target.value);
+                        setSalesRepDropdownOpen(true);
+                      }}
+                      onFocus={() => {
+                        setSalesRepDropdownOpen(true);
+                      }}
+                      placeholder="<Type then tab>"
+                    />
+                    <button 
+                      type="button"
+                      style={{ 
+                        position: 'absolute', 
+                        right: '8px', 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        background: 'transparent', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        padding: '4px 8px',
+                        fontSize: '14px'
+                      }}
+                      onClick={() => {
+                        setSalesRepDropdownOpen(!salesRepDropdownOpen);
+                      }}
+                    >
+                      <i className="fas fa-chevron-down"></i>
+                    </button>
+                    {salesRepDropdownOpen && (
+                      <>
+                        <div 
+                          style={{ 
+                            position: 'fixed', 
+                            top: 0, 
+                            left: 0, 
+                            right: 0, 
+                            bottom: 0, 
+                            zIndex: 9999 
+                          }}
+                          onClick={() => setSalesRepDropdownOpen(false)}
+                        />
+                        <div style={{ 
+                          position: 'absolute', 
+                          top: '100%', 
+                          left: 0, 
+                          right: 0, 
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 1000, 
+                          marginTop: '4px',
+                          overflowY: 'auto',
+                          maxHeight: '200px'
+                        }}>
+                          {(filteredSalesReps.length > 0 ? filteredSalesReps : salesRepOptions).map((rep, idx) => (
+                            <div 
+                              key={idx}
+                              onClick={() => {
+                                handleFormChange('salesRep', rep.name);
+                                setSalesRepSearch(rep.name);
+                                setSalesRepDropdownOpen(false);
+                              }}
+                              style={{ 
+                                padding: '10px 12px', 
+                                cursor: 'pointer', 
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f5f5f5'
+                              }}
+                              onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
+                              onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                            >
+                              {rep.name}
+                            </div>
+                          ))}
+                          {filteredSalesReps.length === 0 && salesRepSearch && (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999', fontSize: '13px' }}>
+                              No sales reps found
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div className="detail-field">
                   <label>LAST SALES ACTIVITY</label>
@@ -1146,226 +1156,29 @@ const CreateEnquiries = ({ setCurrentPage, headerTitle = "Enquiry" }) => {
               <i className="fas fa-times"></i>
               Cancel
             </button>
-            <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-          </div>
-        </div>
-
-      {/* Add Company Modal */}
-      {showAddCompanyModal && (
-        <div className="modal-overlay" onClick={() => setShowAddCompanyModal(false)}>
-          <div className="modal-content" style={{ maxWidth: '600px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Company</h2>
-              <button className="modal-close-btn" onClick={() => setShowAddCompanyModal(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                ×
-              </button>
-            </div>
-            <div className="modal-body" style={{ padding: '2rem' }}>
-              {/* Primary Information */}
-              <div className="form-section">
-                <h2 className="section-title">
-                  <i className="fas fa-info-circle"></i>
-                  Primary Information
-                </h2>
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label className="form-label">CUSTOMER ID <span className="required">*</span></label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <input 
-                        type="text" 
-                        className="form-control"
-                        placeholder="To Be Generated"
-                        disabled
-                        style={{ flex: 1 }}
-                      />
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
-                        <input type="checkbox" defaultChecked />
-                        AUTO
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">TYPE</label>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input type="radio" name="companyType" value="company" defaultChecked />
-                        COMPANY
-                      </label>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input type="radio" name="companyType" value="individual" />
-                        INDIVIDUAL
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">COMPANY NAME <span className="required">*</span></label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      placeholder="Enter company name"
-                      value={companySearch}
-                      onChange={(e) => setCompanySearch(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">PARENT COMPANY</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      placeholder="<Type then tab>"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">SALES REP</label>
-                    <select className="form-control">
-                      <option value="">Select...</option>
-                      {salesRepOptions.map(rep => (
-                        <option key={rep.id} value={rep.name}>{rep.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">WEB ADDRESS</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      placeholder="Enter web address"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">CATEGORY</label>
-                    <select className="form-control">
-                      <option value="">Select...</option>
-                      <option>Customer</option>
-                      <option>Vendor</option>
-                      <option>Partner</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">DEFAULT ORDER PRIORITY</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      placeholder="Enter priority"
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              {/* Email | Phone | Address */}
-              <div className="form-section">
-                <h2 className="section-title">
-                  <i className="fas fa-envelope"></i>
-                  Email | Phone | Address
-                </h2>
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label className="form-label">EMAIL</label>
-                    <input 
-                      type="email" 
-                      className="form-control"
-                      placeholder="Enter email address"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">PHONE</label>
-                    <input 
-                      type="tel" 
-                      className="form-control"
-                      placeholder="Enter phone number"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">ALT. PHONE</label>
-                    <input 
-                      type="tel" 
-                      className="form-control"
-                      placeholder="Enter alternate phone"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">FAX</label>
-                    <input 
-                      type="tel" 
-                      className="form-control"
-                      placeholder="Enter fax number"
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              {/* Classification */}
-              <div className="form-section">
-                <h2 className="section-title">
-                  <i className="fas fa-tags"></i>
-                  Classification
-                </h2>
-                <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0 1.5rem 0' }} />
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label className="form-label">PRIMARY SUBSIDIARY <span className="required">*</span></label>
-                    <select className="form-control">
-                      <option value="">Select...</option>
-                      <option>Tech Onshore MEP Prefabricators Pte Ltd.</option>
-                      <option>Tech Marine Offshore (S) Pte Ltd</option>
-                      <option>Tech Electric Automation Pte Ltd</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">DEFAULT DISCOUNT</label>
-                    <select className="form-control">
-                      <option value="">Select...</option>
-                      <option>5%</option>
-                      <option>10%</option>
-                      <option>15%</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input type="checkbox" />
-                        TRANSACTIONS NEED APPROVAL
-                      </label>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input type="checkbox" />
-                        STOP SENDING SMS
-                      </label>
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">LAST SALES ACTIVITY</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      disabled
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="modal-footer" style={{ padding: '1.5rem 2rem', borderTop: '1px solid #e0e0e0', display: 'flex', gap: '1rem', justifyContent: 'flex-end', background: '#f8f9fa' }}>
-              <button className="btn btn-secondary" onClick={() => setShowAddCompanyModal(false)} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
-                Cancel
-              </button>
-              <button className="btn-new-transaction" onClick={() => {
-                if (companySearch.trim()) {
-                  handleFormChange('company', companySearch);
-                  setShowAddCompanyModal(false);
-                  showToast('New company added successfully!', 'success');
-                }
-              }} style={{ padding: '0.65rem 1.5rem', fontSize: '0.875rem' }}>
+            {!isSaved ? (
+              <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
                 <i className="fas fa-save"></i>
                 Save
               </button>
-            </div>
+            ) : (
+              <button className="btn-toolbar-primary" onClick={handleConvertToQuotation}>
+                <i className="fas fa-exchange-alt"></i>
+                Convert to Quotation
+              </button>
+            )}
           </div>
         </div>
-      )}
+
+      {/* Add Customer Modal */}
+      <AddCustomerModal 
+        show={showAddCompanyModal}
+        onClose={() => setShowAddCompanyModal(false)}
+        onSave={(customerData) => {
+          handleFormChange('company', customerData.companyName || customerData.name);
+          showToast('New customer added successfully!', 'success');
+        }}
+      />
 
       <Toast 
         message={toast.message} 

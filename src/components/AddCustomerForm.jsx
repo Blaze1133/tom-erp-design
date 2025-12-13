@@ -10,6 +10,10 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
     webAddress: '',
     category: '',
     defaultOrderPriority: '',
+    // Individual-specific fields
+    salutation: '',
+    name: '',
+    jobTitle: '',
     email: '',
     phone: '',
     altPhone: '',
@@ -83,57 +87,118 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
               </label>
             </div>
           </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
-              COMPANY NAME <span style={{ color: '#e53e3e' }}>*</span>
-            </label>
-            <input 
-              type="text" 
-              className="form-control"
-              value={customerData.companyName}
-              onChange={(e) => handleInputChange('companyName', e.target.value)}
-              placeholder="Enter company name"
-              required
-            />
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
-              PARENT COMPANY
-            </label>
-            <select 
-              className="form-control"
-              value={customerData.parentCompany}
-              onChange={(e) => handleInputChange('parentCompany', e.target.value)}
-            >
-              <option value="">&lt;Type then tab&gt;</option>
-            </select>
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
-              SALES REP
-            </label>
-            <select 
-              className="form-control"
-              value={customerData.salesRep}
-              onChange={(e) => handleInputChange('salesRep', e.target.value)}
-            >
-              <option value="">Select...</option>
-              <option>John Doe</option>
-              <option>Jane Smith</option>
-            </select>
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
-              WEB ADDRESS
-            </label>
-            <input 
-              type="url" 
-              className="form-control"
-              value={customerData.webAddress}
-              onChange={(e) => handleInputChange('webAddress', e.target.value)}
-              placeholder="https://"
-            />
-          </div>
+          {/* Conditional fields based on TYPE */}
+          {customerData.type === 'INDIVIDUAL' ? (
+            <>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  MR./MS.
+                </label>
+                <select 
+                  className="form-control"
+                  value={customerData.salutation}
+                  onChange={(e) => handleInputChange('salutation', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Ms.">Ms.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Dr.">Dr.</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  NAME <span style={{ color: '#e53e3e' }}>*</span>
+                </label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={customerData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  placeholder="Enter full name"
+                  required
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  JOB TITLE
+                </label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={customerData.jobTitle}
+                  onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                  placeholder="Enter job title"
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  COMPANY NAME
+                </label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={customerData.companyName}
+                  onChange={(e) => handleInputChange('companyName', e.target.value)}
+                  placeholder="Enter company name"
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  COMPANY NAME <span style={{ color: '#e53e3e' }}>*</span>
+                </label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={customerData.companyName}
+                  onChange={(e) => handleInputChange('companyName', e.target.value)}
+                  placeholder="Enter company name"
+                  required
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  PARENT COMPANY
+                </label>
+                <select 
+                  className="form-control"
+                  value={customerData.parentCompany}
+                  onChange={(e) => handleInputChange('parentCompany', e.target.value)}
+                >
+                  <option value="">&lt;Type then tab&gt;</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  SALES REP
+                </label>
+                <select 
+                  className="form-control"
+                  value={customerData.salesRep}
+                  onChange={(e) => handleInputChange('salesRep', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>John Doe</option>
+                  <option>Jane Smith</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+                  WEB ADDRESS
+                </label>
+                <input 
+                  type="url" 
+                  className="form-control"
+                  value={customerData.webAddress}
+                  onChange={(e) => handleInputChange('webAddress', e.target.value)}
+                  placeholder="https://"
+                />
+              </div>
+            </>
+          )}
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
               CATEGORY
@@ -187,18 +252,6 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
           </div>
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
-              PHONE
-            </label>
-            <input 
-              type="tel" 
-              className="form-control"
-              value={customerData.phone}
-              onChange={(e) => handleInputChange('phone', e.target.value)}
-              placeholder="Enter phone number"
-            />
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
               ALT. PHONE
             </label>
             <input 
@@ -207,6 +260,18 @@ const AddCustomerForm = ({ onSave, onCancel }) => {
               value={customerData.altPhone}
               onChange={(e) => handleInputChange('altPhone', e.target.value)}
               placeholder="Enter alternate phone"
+            />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: '500', color: '#666', textTransform: 'uppercase' }}>
+              PHONE
+            </label>
+            <input 
+              type="tel" 
+              className="form-control"
+              value={customerData.phone}
+              onChange={(e) => handleInputChange('phone', e.target.value)}
+              placeholder="Enter phone number"
             />
           </div>
           <div>

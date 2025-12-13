@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
 import AddProjectForm from './AddProjectForm';
-import AddCustomerForm from './AddCustomerForm';
+import AddCustomerModal from './AddCustomerModal';
 import './Enquiries.css';
 
 const CreateInvoice = ({ setCurrentPage, isEdit = false }) => {
@@ -1453,25 +1453,11 @@ const CreateInvoice = ({ setCurrentPage, isEdit = false }) => {
       </div>
 
       {/* Add Customer Modal */}
-      {showAddCustomer && (
-        <div className="modal-overlay" onClick={() => setShowAddCustomer(false)}>
-          <div className="modal-content" style={{ maxWidth: '900px', width: '90%', maxHeight: '85vh', overflow: 'auto' }} onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#333' }}>Add New Customer</h2>
-              <button className="modal-close-btn" onClick={() => setShowAddCustomer(false)} style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#666', padding: '0', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                ×
-              </button>
-            </div>
-            
-            <div className="modal-body" style={{ padding: '2rem' }}>
-              <AddCustomerForm 
-                onSave={handleSaveNewCustomer}
-                onCancel={() => setShowAddCustomer(false)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <AddCustomerModal 
+        show={showAddCustomer}
+        onClose={() => setShowAddCustomer(false)}
+        onSave={handleSaveNewCustomer}
+      />
 
       {/* Add Project Modal */}
       {showAddProject && (

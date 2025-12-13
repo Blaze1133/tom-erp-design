@@ -11,6 +11,7 @@ const ViewCreditMemoDetail = ({ setCurrentPage }) => {
 
   const memoData = {
     credit: 'CN21TOMHQ00002',
+    originalInvoiceNumber: 'INV-2024-001',
     customerProject: '845 Mazars Doubtful Debts',
     date: '1/1/2021',
     postingPeriod: 'Jan 2021',
@@ -147,13 +148,17 @@ const ViewCreditMemoDetail = ({ setCurrentPage }) => {
         <div className={`detail-section ${primaryInfoCollapsed ? 'collapsed' : ''}`}>
           <div className="section-header" onClick={() => setPrimaryInfoCollapsed(!primaryInfoCollapsed)}>
             <i className="fas fa-chevron-down"></i>
-            <h3>Primary Information</h3>
+            <h3><i className="fas fa-info-circle"></i> Primary Information</h3>
           </div>
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
                 <label>CREDIT #</label>
                 <div className="field-value">{memoData.credit}</div>
+              </div>
+              <div className="detail-field">
+                <label>ORIGINAL INVOICE NUMBER</label>
+                <div className="field-value">{memoData.originalInvoiceNumber}</div>
               </div>
               <div className="detail-field">
                 <label>PO #</label>
@@ -183,7 +188,7 @@ const ViewCreditMemoDetail = ({ setCurrentPage }) => {
         <div className={`detail-section ${salesInfoCollapsed ? 'collapsed' : ''}`}>
           <div className="section-header" onClick={() => setSalesInfoCollapsed(!salesInfoCollapsed)}>
             <i className="fas fa-chevron-down"></i>
-            <h3>Sales Information</h3>
+            <h3><i className="fas fa-chart-line"></i> Sales Information</h3>
           </div>
           <div className="section-body">
             <div className="detail-grid">
@@ -203,7 +208,7 @@ const ViewCreditMemoDetail = ({ setCurrentPage }) => {
         <div className={`detail-section ${classificationCollapsed ? 'collapsed' : ''}`}>
           <div className="section-header" onClick={() => setClassificationCollapsed(!classificationCollapsed)}>
             <i className="fas fa-chevron-down"></i>
-            <h3>Classification</h3>
+            <h3><i className="fas fa-tags"></i> Classification</h3>
           </div>
           <div className="section-body">
             <div className="detail-grid">

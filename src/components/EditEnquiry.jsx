@@ -4,6 +4,7 @@ import './Enquiries.css';
 
 const EditEnquiry = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isSaved, setIsSaved] = useState(false);
 
   // Form state with pre-filled data
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const EditEnquiry = ({ setCurrentPage }) => {
     customForm: 'TOM Supply Enquiry',
     company: 'TOM22-00733',
     salesRep: '',
+    contactPerson: '',
     title: 'Test Enquiry',
     status: 'Proposal',
     probability: '50.0%',
@@ -25,7 +27,6 @@ const EditEnquiry = ({ setCurrentPage }) => {
     location: 'Singapore(MEP)',
     department: 'MEP',
     taxTotal: 0.00,
-    contactPerson: '',
     lastSalesActivity: '',
     countryOfOrigin: 'Singapore',
     hsCode: '',
@@ -98,11 +99,17 @@ const EditEnquiry = ({ setCurrentPage }) => {
 
   const handleSaveEnquiry = () => {
     showToast('Enquiry updated successfully!', 'success');
+    setIsSaved(true);
+  };
+
+  const handleConvertToQuotation = () => {
+    showToast('Converting to Quotation...', 'success');
     setTimeout(() => {
+      showToast('Successfully converted to Quotation!', 'success');
       if (setCurrentPage) {
         setCurrentPage('view-enquiries');
       }
-    }, 1500);
+    }, 500);
   };
 
   const handleCancel = () => {
@@ -145,10 +152,27 @@ const EditEnquiry = ({ setCurrentPage }) => {
         <button className="btn-toolbar" onClick={handleCancel}>
           Cancel
         </button>
-        <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
-          <i className="fas fa-save"></i>
-          Save
-        </button>
+        {!isSaved ? (
+          <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
+            <i className="fas fa-save"></i>
+            Save
+          </button>
+        ) : (
+          <>
+            <button className="btn-toolbar">
+              <i className="fas fa-print"></i>
+              Print
+            </button>
+            <button className="btn-toolbar">
+              <i className="fas fa-copy"></i>
+              Copy
+            </button>
+            <button className="btn-toolbar-primary" onClick={handleConvertToQuotation}>
+              <i className="fas fa-exchange-alt"></i>
+              Convert to Quotation
+            </button>
+          </>
+        )}
       </div>
 
       <div className="detail-content">
@@ -191,13 +215,14 @@ const EditEnquiry = ({ setCurrentPage }) => {
                 </select>
               </div>
               <div className="detail-field">
-                <label>SALES REP</label>
-                <input 
-                  type="text" 
+                <label>CONTACT PERSON</label>
+                <select 
                   className="form-control"
-                  value={formData.salesRep}
-                  onChange={(e) => handleFormChange('salesRep', e.target.value)}
-                />
+                  value={formData.contactPerson}
+                  onChange={(e) => handleFormChange('contactPerson', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                </select>
               </div>
               <div className="detail-field">
                 <label>STATUS *</label>
@@ -333,6 +358,16 @@ const EditEnquiry = ({ setCurrentPage }) => {
                   <option>Bok Seng Yard</option>
                   <option>Hong Hang Shipyard</option>
                 </select>
+              </div>
+              <div className="detail-field">
+                <label>SALES REP</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.salesRep}
+                  onChange={(e) => handleFormChange('salesRep', e.target.value)}
+                  placeholder="<Type then tab>"
+                />
               </div>
             </div>
           </div>
@@ -560,10 +595,17 @@ const EditEnquiry = ({ setCurrentPage }) => {
             <i className="fas fa-times"></i>
             Cancel
           </button>
-          <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
+          {!isSaved ? (
+            <button className="btn-toolbar-primary" onClick={handleSaveEnquiry}>
+              <i className="fas fa-save"></i>
+              Save
+            </button>
+          ) : (
+            <button className="btn-toolbar-primary" onClick={handleConvertToQuotation}>
+              <i className="fas fa-exchange-alt"></i>
+              Convert to Quotation
+            </button>
+          )}
         </div>
       </div>
 

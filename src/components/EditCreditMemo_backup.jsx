@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const EditCreditMemo = ({ setCurrentPage }) => {
+const IssueCreditMemo = ({ onBack }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [expandedSections, setExpandedSections] = useState({
     primary: true,
@@ -16,46 +16,46 @@ const EditCreditMemo = ({ setCurrentPage }) => {
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
   const [formData, setFormData] = useState({
-    credit: 'CN21TOMHQ00002',
-    originalInvoiceNumber: 'INV-2024-001',
-    customer: '845 Mazars Doubtful Debts',
+    credit: 'To Be Generated',
+    customer: '',
     project: '',
-    date: '2021-01-01',
+    date: new Date().toLocaleDateString('en-GB'),
     dueDate: '',
-    postingPeriod: 'Jan 2021',
+    postingPeriod: '',
     po: '',
     memo: '',
     salesRep: '',
-    salesEffectiveDate: '2021-01-01',
-    subsidiary: 'Tech Offshore Marine (DQ) Pte Ltd',
+    salesEffectiveDate: '',
+    subsidiary: '',
     class: '',
-    location: 'Singapore (TDQ)',
+    location: '',
     department: '',
     paymentTerms: '',
     contactPerson: '',
     submissionId: '',
+    hsCode: '',
     countryOfOrigin: ''
   });
 
   const [items, setItems] = useState([
     {
       id: 1,
-      item: 'Opening A/R Balance',
-      quantity: '1',
+      item: '',
+      quantity: '',
       units: '',
-      description: 'Opening Old A/R Balance',
-      priceLevel: 'Custom',
-      rate: '4,266.00',
-      amount: '4,266.00',
-      taxCode: 'GST_SG-9%',
-      taxRate: '0.0%',
-      grossAmt: '4,266.00',
-      taxAmt: '0.00',
+      description: '',
+      priceLevel: '',
+      rate: '',
+      amount: '',
+      taxCode: '',
+      taxRate: '',
+      grossAmt: '',
+      taxAmt: '',
       options: '',
-      costEstimate: 'Item Defined Cost',
-      estExtendedCost: '0.00',
-      estGrossProfit: '4,266.00',
-      estGrossProfitPercent: '100.0%',
+      costEstimate: '',
+      estExtendedCost: '',
+      estGrossProfit: '',
+      estGrossProfitPercent: '',
       itemCountryOfOrigin: '',
       hsCode: ''
     }
@@ -65,7 +65,6 @@ const EditCreditMemo = ({ setCurrentPage }) => {
     '100 Baroid Surface Solutions, Halliburton Energy Services Inc',
     '1000 TEAM LEAD CONSTRUCTION PTE LTD',
     '1001 TECH ONSHORE MEP-PREFABRICATORS PTE LTD',
-    '845 Mazars Doubtful Debts',
     'ABC Manufacturing Ltd',
     'Global Supplies Inc',
     'Marine Parts Supplier'
@@ -304,18 +303,18 @@ const EditCreditMemo = ({ setCurrentPage }) => {
       showToast('Please select a customer', 'error');
       return;
     }
-    showToast('Credit Memo updated successfully!', 'success');
-    setCurrentPage('view-credit-memos');
+    showToast('Credit Memo saved successfully!', 'success');
+    if (onBack) onBack();
   };
 
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      setCurrentPage('view-credit-memos');
+      if (onBack) onBack();
     }
   };
 
   const handleBack = () => {
-    setCurrentPage('view-credit-memos');
+    if (onBack) onBack();
   };
 
   // Close menu when clicking outside
@@ -365,7 +364,7 @@ const EditCreditMemo = ({ setCurrentPage }) => {
         <div className="detail-title">
           <i className="fas fa-file-minus"></i>
           <div>
-            <h1>Edit Credit Memo</h1>
+            <h1>Credit Memo</h1>
             <div className="detail-subtitle">
               <span>{formData.credit}</span>
             </div>
@@ -399,7 +398,7 @@ const EditCreditMemo = ({ setCurrentPage }) => {
         <div className={`detail-section ${expandedSections.primary ? '' : 'collapsed'}`}>
           <div className="section-header" onClick={() => toggleSection('primary')}>
             <i className="fas fa-chevron-down"></i>
-            <h3><i className="fas fa-info-circle"></i> Primary Information</h3>
+            <h3>Primary Information</h3>
           </div>
           {expandedSections.primary && (
             <div className="section-body">
@@ -407,11 +406,6 @@ const EditCreditMemo = ({ setCurrentPage }) => {
                 <div className="detail-field">
                   <label>CREDIT # <span className="required">*</span></label>
                   <input type="text" className="form-control" value={formData.credit} disabled />
-                </div>
-
-                <div className="detail-field">
-                  <label>ORIGINAL INVOICE NUMBER</label>
-                  <input type="text" className="form-control" value={formData.originalInvoiceNumber} disabled style={{ backgroundColor: '#f5f5f5' }} />
                 </div>
 
                 <div className="detail-field">
@@ -504,7 +498,7 @@ const EditCreditMemo = ({ setCurrentPage }) => {
         <div className={`detail-section ${expandedSections.sales ? '' : 'collapsed'}`}>
           <div className="section-header" onClick={() => toggleSection('sales')}>
             <i className="fas fa-chevron-down"></i>
-            <h3><i className="fas fa-chart-line"></i> Sales Information</h3>
+            <h3>Sales Information</h3>
           </div>
           {expandedSections.sales && (
             <div className="section-body">
@@ -540,7 +534,7 @@ const EditCreditMemo = ({ setCurrentPage }) => {
         <div className={`detail-section ${expandedSections.classification ? '' : 'collapsed'}`}>
           <div className="section-header" onClick={() => toggleSection('classification')}>
             <i className="fas fa-chevron-down"></i>
-            <h3><i className="fas fa-tags"></i> Classification</h3>
+            <h3>Classification</h3>
           </div>
           {expandedSections.classification && (
             <div className="section-body">
@@ -688,7 +682,7 @@ const EditCreditMemo = ({ setCurrentPage }) => {
                   </div>
                   <div style={{ flex: 1 }}>
                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '600', color: '#666', marginBottom: '0.5rem', textTransform: 'uppercase' }}>APPLIED</label>
-                    <input type="text" className="form-control" value="4266.00" readOnly style={{ width: '100%', backgroundColor: '#f5f5f5' }} />
+                    <input type="text" className="form-control" value="0.00" readOnly style={{ width: '100%', backgroundColor: '#f5f5f5' }} />
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', paddingBottom: '0.5rem' }}>
                     <input type="checkbox" id="autoApply" style={{ width: '16px', height: '16px' }} />
@@ -992,8 +986,12 @@ const EditCreditMemo = ({ setCurrentPage }) => {
                 </div>
                 <div className="section-body">
                   <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-                    <button className="btn-toolbar">Remove all</button>
-                    <button className="btn-toolbar">Clear All Lines</button>
+                    <button className="btn-toolbar">
+                      Remove all
+                    </button>
+                    <button className="btn-toolbar">
+                      Clear All Lines
+                    </button>
                   </div>
                   <div className="items-table-container" style={{ overflowX: 'auto' }}>
                     <table className="items-table">
@@ -1160,4 +1158,4 @@ const EditCreditMemo = ({ setCurrentPage }) => {
   );
 };
 
-export default EditCreditMemo;
+export default IssueCreditMemo;

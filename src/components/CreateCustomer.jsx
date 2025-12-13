@@ -28,6 +28,12 @@ const CreateCustomer = ({ isEdit = false, onSave, onCancel }) => {
     category: '',
     defaultOrderPriority: '',
     comments: '',
+    // Individual-specific fields
+    salutation: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    jobTitle: '',
     
     // Contact Information
     email: '',
@@ -447,28 +453,6 @@ const CreateCustomer = ({ isEdit = false, onSave, onCancel }) => {
                 />
               </div>
               <div className="detail-field">
-                <label>NAME</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>SALES REP</label>
-                <select
-                  className="form-control"
-                  value={formData.salesRep}
-                  onChange={(e) => handleInputChange('salesRep', e.target.value)}
-                >
-                  <option value=""></option>
-                  {salesReps.map(rep => (
-                    <option key={rep} value={rep}>{rep}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="detail-field">
                 <label>TYPE</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
@@ -495,24 +479,108 @@ const CreateCustomer = ({ isEdit = false, onSave, onCancel }) => {
                 </div>
               </div>
               <div className="detail-field">
-                <label>WEB ADDRESS</label>
-                <input
-                  type="url"
+                <label>SALES REP</label>
+                <select
                   className="form-control"
-                  value={formData.webAddress}
-                  onChange={(e) => handleInputChange('webAddress', e.target.value)}
-                />
+                  value={formData.salesRep}
+                  onChange={(e) => handleInputChange('salesRep', e.target.value)}
+                >
+                  <option value=""></option>
+                  {salesReps.map(rep => (
+                    <option key={rep} value={rep}>{rep}</option>
+                  ))}
+                </select>
               </div>
               <div className="detail-field">
-                <label>COMPANY NAME <span style={{color: 'orange'}}>*</span></label>
-                <input
-                  type="text"
+                <label>COMMENTS</label>
+                <textarea
                   className="form-control"
-                  value={formData.companyName}
-                  onChange={(e) => handleInputChange('companyName', e.target.value)}
+                  value={formData.comments}
+                  onChange={(e) => handleInputChange('comments', e.target.value)}
+                  rows="3"
                 />
               </div>
-              <div className="detail-field">
+
+              {/* Conditional fields based on TYPE */}
+              {formData.type === 'Individual' ? (
+                <>
+                  {/* Individual-specific fields */}
+                  <div className="detail-field">
+                    <label>MR./MS.</label>
+                    <select
+                      className="form-control"
+                      value={formData.salutation}
+                      onChange={(e) => handleInputChange('salutation', e.target.value)}
+                    >
+                      <option value="">Select...</option>
+                      <option value="Mr.">Mr.</option>
+                      <option value="Ms.">Ms.</option>
+                      <option value="Mrs.">Mrs.</option>
+                      <option value="Dr.">Dr.</option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>NAME <span style={{color: 'orange'}}>*</span></label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter full name"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>JOB TITLE</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.jobTitle}
+                      onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>COMPANY NAME</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.companyName}
+                      onChange={(e) => handleInputChange('companyName', e.target.value)}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Company-specific fields */}
+                  <div className="detail-field">
+                    <label>NAME</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>WEB ADDRESS</label>
+                    <input
+                      type="url"
+                      className="form-control"
+                      value={formData.webAddress}
+                      onChange={(e) => handleInputChange('webAddress', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>COMPANY NAME <span style={{color: 'orange'}}>*</span></label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.companyName}
+                      onChange={(e) => handleInputChange('companyName', e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+              <div className="detail-field" style={{ display: 'none' }}>
                 <label>COMMENTS</label>
                 <textarea
                   className="form-control"

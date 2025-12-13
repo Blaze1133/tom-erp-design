@@ -14,11 +14,14 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
     name: 'Pirtek Asia Pte Ltd',
     customerId: 'Client001',
     status: 'CUSTOMER-Closed Won',
+    type: 'Company',
     salesRep: '',
     webAddress: '',
     category: '',
     defaultOrderPriority: '',
     comments: '',
+    salutation: '',
+    jobTitle: '',
     email: '',
     phone: '',
     altPhone: '',
@@ -120,6 +123,10 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{customerData.id}</div>
               </div>
               <div className="detail-field">
+                <label>CATEGORY</label>
+                <div className="field-value">{customerData.category || '-'}</div>
+              </div>
+              <div className="detail-field">
                 <label>STATUS</label>
                 <div className="field-value">{customerData.status}</div>
               </div>
@@ -128,8 +135,8 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{customerData.defaultOrderPriority || '-'}</div>
               </div>
               <div className="detail-field">
-                <label>NAME</label>
-                <div className="field-value">{customerData.name}</div>
+                <label>TYPE</label>
+                <div className="field-value">{customerData.type}</div>
               </div>
               <div className="detail-field">
                 <label>SALES REP</label>
@@ -139,18 +146,43 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                 <label>COMMENTS</label>
                 <div className="field-value">{customerData.comments || '-'}</div>
               </div>
-              <div className="detail-field">
-                <label>TYPE</label>
-                <div className="field-value">Company</div>
-              </div>
-              <div className="detail-field">
-                <label>WEB ADDRESS</label>
-                <div className="field-value">{customerData.webAddress || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>CATEGORY</label>
-                <div className="field-value">{customerData.category || '-'}</div>
-              </div>
+
+              {/* Conditional fields based on TYPE */}
+              {customerData.type === 'Individual' ? (
+                <>
+                  <div className="detail-field">
+                    <label>MR./MS.</label>
+                    <div className="field-value">{customerData.salutation || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>NAME</label>
+                    <div className="field-value">{customerData.name}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>JOB TITLE</label>
+                    <div className="field-value">{customerData.jobTitle || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>COMPANY NAME</label>
+                    <div className="field-value">{customerData.company || '-'}</div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="detail-field">
+                    <label>NAME</label>
+                    <div className="field-value">{customerData.name}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>WEB ADDRESS</label>
+                    <div className="field-value">{customerData.webAddress || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>COMPANY NAME</label>
+                    <div className="field-value">{customerData.company}</div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

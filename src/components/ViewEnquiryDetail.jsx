@@ -54,16 +54,26 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
     setToast({ show: true, message, type });
   };
 
+  const handleEdit = () => {
+    if (setCurrentPage) {
+      setCurrentPage('edit-enquiry');
+    }
+  };
+
   const handleBack = () => {
     if (setCurrentPage) {
       setCurrentPage('view-enquiries');
     }
   };
 
-  const handleEdit = () => {
-    if (setCurrentPage) {
-      setCurrentPage('edit-enquiry');
-    }
+  const handleConvertToQuotation = () => {
+    showToast('Converting to Quotation...', 'success');
+    setTimeout(() => {
+      showToast('Successfully converted to Quotation!', 'success');
+      if (setCurrentPage) {
+        setCurrentPage('view-enquiries');
+      }
+    }, 500);
   };
 
   return (
@@ -96,7 +106,11 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
       </div>
 
       <div className="detail-toolbar">
-        <button className="btn-toolbar-primary" onClick={handleEdit}>
+        <button className="btn-toolbar-primary" onClick={handleConvertToQuotation}>
+          <i className="fas fa-exchange-alt"></i>
+          Convert to Quotation
+        </button>
+        <button className="btn-toolbar" onClick={handleEdit}>
           <i className="fas fa-edit"></i>
           Edit
         </button>
@@ -135,8 +149,8 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
                 <div className="field-value">{enquiryData.opportunity}</div>
               </div>
               <div className="detail-field">
-                <label>SALES REP</label>
-                <div className="field-value">{enquiryData.salesRep || '-'}</div>
+                <label>CONTACT PERSON</label>
+                <div className="field-value">{enquiryData.contactPerson || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>EXPECTED CLOSE</label>
@@ -227,8 +241,8 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
                 <div className="field-value">${enquiryData.taxTotal.toFixed(2)}</div>
               </div>
               <div className="detail-field">
-                <label>CONTACT PERSON</label>
-                <div className="field-value">{enquiryData.contactPerson || '-'}</div>
+                <label>SALES REP</label>
+                <div className="field-value">{enquiryData.salesRep || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>LAST SALES ACTIVITY</label>
