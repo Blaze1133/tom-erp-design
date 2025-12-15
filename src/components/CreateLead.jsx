@@ -21,9 +21,34 @@ const CreateLead = ({ onBack }) => {
     companySize: '',
     annualRevenue: '',
     description: '',
-    notes: '',
-    followUpDate: '',
-    followUpNotes: ''
+    notes: ''
+  });
+
+  const [followUps, setFollowUps] = useState([
+    {
+      id: 1,
+      date: '2024-11-20',
+      remarks: 'Initial contact made via email',
+      nextFollowUpDate: '2024-11-27',
+      status: 'Completed',
+      attachment: null
+    },
+    {
+      id: 2,
+      date: '2024-11-27',
+      remarks: 'Follow-up call scheduled',
+      nextFollowUpDate: '2024-12-05',
+      status: 'Pending',
+      attachment: null
+    }
+  ]);
+
+  const [newFollowUp, setNewFollowUp] = useState({
+    date: '',
+    remarks: '',
+    nextFollowUpDate: '',
+    status: 'Pending',
+    attachment: null
   });
 
   const industries = [
@@ -127,6 +152,44 @@ const CreateLead = ({ onBack }) => {
     setTimeout(() => {
       if (onBack) onBack();
     }, 2000);
+  };
+
+  const handleAddFollowUp = () => {
+    if (!newFollowUp.date || !newFollowUp.remarks) {
+      showToast('Please fill in Date and Remarks for the follow-up', 'error');
+      return;
+    }
+    const followUp = {
+      id: followUps.length + 1,
+      ...newFollowUp
+    };
+    setFollowUps([...followUps, followUp]);
+    setNewFollowUp({
+      date: '',
+      remarks: '',
+      nextFollowUpDate: '',
+      status: 'Pending',
+      attachment: null
+    });
+    showToast('Follow-up added successfully!', 'success');
+  };
+
+  const handleDeleteFollowUp = (id) => {
+    if (window.confirm('Are you sure you want to delete this follow-up?')) {
+      setFollowUps(followUps.filter(f => f.id !== id));
+      showToast('Follow-up deleted successfully!', 'success');
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewFollowUp(prev => ({
+        ...prev,
+        attachment: file.name
+      }));
+      showToast('File attached successfully!', 'success');
+    }
   };
 
   return (
@@ -356,25 +419,152 @@ const CreateLead = ({ onBack }) => {
             <h3>Follow-Up Information</h3>
           </div>
           <div className="section-body">
-            <div className="detail-grid">
-              <div className="detail-field">
-                <label>FOLLOW-UP DATE</label>
-                <input 
-                  type="date" 
-                  className="form-control"
-                  value={formData.followUpDate}
-                  onChange={(e) => handleInputChange('followUpDate', e.target.value)}
-                />
+            {/* Add New Follow-Up Form */}
+            <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                <i className="fas fa-plus-circle" style={{ marginRight: '8px', color: '#dc2626' }}></i>
+                Add New Follow-Up
+              </h4>
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>DATE <span style={{ color: '#dc2626' }}>*</span></label>
+                  <input 
+                    type="date" 
+                    className="form-control"
+                    value={newFollowUp.date}
+                    onChange={(e) => setNewFollowUp({...newFollowUp, date: e.target.value})}
+                  />
+                </div>
+                <div className="detail-field">
+                  <label>NEXT FOLLOW-UP DATE</label>
+                  <input 
+                    type="date" 
+                    className="form-control"
+                    value={newFollowUp.nextFollowUpDate}
+                    onChange={(e) => setNewFollowUp({...newFollowUp, nextFollowUpDate: e.target.value})}
+                  />
+                </div>
+                <div className="detail-field">
+                  <label>STATUS</label>
+                  <select 
+                    className="form-control"
+                    value={newFollowUp.status}
+                    onChange={(e) => setNewFollowUp({...newFollowUp, status: e.target.value})}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                  <label>REMARKS <span style={{ color: '#dc2626' }}>*</span></label>
+                  <textarea 
+                    className="form-control"
+                    value={newFollowUp.remarks}
+                    onChange={(e) => setNewFollowUp({...newFollowUp, remarks: e.target.value})}
+                    placeholder="Enter follow-up details, what was discussed, client feedback, etc."
+                    rows="2"
+                  />
+                </div>
+                <div className="detail-field">
+                  <label>ATTACHMENT</label>
+                  <input 
+                    type="file" 
+                    className="form-control"
+                    onChange={handleFileChange}
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                  />
+                  {newFollowUp.attachment && (
+                    <small style={{ color: '#28a745', marginTop: '4px', display: 'block' }}>
+                      <i className="fas fa-check-circle"></i> {newFollowUp.attachment}
+                    </small>
+                  )}
+                </div>
               </div>
-              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
-                <label>FOLLOW-UP NOTES</label>
-                <textarea 
-                  className="form-control"
-                  value={formData.followUpNotes}
-                  onChange={(e) => handleInputChange('followUpNotes', e.target.value)}
-                  placeholder="e.g., Call back after 7 days, Send proposal, Schedule meeting..."
-                  rows="3"
-                />
+              <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+                <button 
+                  className="btn-toolbar-primary" 
+                  onClick={handleAddFollowUp}
+                  style={{ padding: '8px 16px' }}
+                >
+                  <i className="fas fa-plus"></i>
+                  Add Follow-Up
+                </button>
+              </div>
+            </div>
+
+            {/* Follow-Up History Table */}
+            <div style={{ marginTop: '1.5rem' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                <i className="fas fa-history" style={{ marginRight: '8px', color: '#4a90e2' }}></i>
+                Follow-Up History
+              </h4>
+              <div className="enquiries-table-container">
+                <table className="enquiries-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '12%' }}>DATE</th>
+                      <th style={{ width: '35%' }}>REMARKS</th>
+                      <th style={{ width: '12%' }}>NEXT FOLLOW-UP</th>
+                      <th style={{ width: '10%' }}>STATUS</th>
+                      <th style={{ width: '15%' }}>ATTACHMENT</th>
+                      <th style={{ width: '8%' }}>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {followUps.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
+                          <i className="fas fa-inbox" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}></i>
+                          No follow-ups recorded yet
+                        </td>
+                      </tr>
+                    ) : (
+                      followUps.map((followUp) => (
+                        <tr key={followUp.id}>
+                          <td>{followUp.date}</td>
+                          <td>{followUp.remarks}</td>
+                          <td>{followUp.nextFollowUpDate || '-'}</td>
+                          <td>
+                            <span 
+                              className="badge"
+                              style={{
+                                backgroundColor: followUp.status === 'Completed' ? '#e8f5e9' : 
+                                                followUp.status === 'Pending' ? '#fff3e0' : '#ffebee',
+                                color: followUp.status === 'Completed' ? '#2e7d32' : 
+                                       followUp.status === 'Pending' ? '#f57c00' : '#c62828',
+                                padding: '4px 12px',
+                                borderRadius: '4px',
+                                fontSize: '12px',
+                                fontWeight: '500'
+                              }}
+                            >
+                              {followUp.status}
+                            </span>
+                          </td>
+                          <td>
+                            {followUp.attachment ? (
+                              <a href="#" style={{ color: '#4a90e2', textDecoration: 'none' }}>
+                                <i className="fas fa-paperclip"></i> {followUp.attachment}
+                              </a>
+                            ) : (
+                              <span style={{ color: '#999' }}>No attachment</span>
+                            )}
+                          </td>
+                          <td>
+                            <button 
+                              className="view-link" 
+                              onClick={() => handleDeleteFollowUp(followUp.id)}
+                              style={{ color: '#dc2626' }}
+                            >
+                              <i className="fas fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

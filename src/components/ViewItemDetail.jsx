@@ -38,182 +38,115 @@ const ViewItemDetail = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      {/* Top Header */}
-      <div style={{ 
-        background: '#f8f9fa', 
-        padding: '12px 20px', 
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <i className="fas fa-box" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-box"></i>
           <div>
-            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333', marginBottom: '4px' }}>Non-inventory Item for Purchase</div>
-            <div style={{ fontSize: '16px', fontWeight: '600', color: '#333' }}>{itemData.itemName}</div>
+            <h1>Non-inventory Item for Purchase</h1>
+            <div className="detail-subtitle">
+              <span>{itemData.itemName}</span>
+            </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>List</button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>Search</button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>Customize</button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>More</button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      {/* Action Buttons Bar */}
-      <div style={{ 
-        background: 'white', 
-        padding: '12px 20px', 
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="btn btn-primary" onClick={handleEdit} style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-edit"></i> Edit
-          </button>
-          <button className="btn btn-secondary" onClick={handleBack} style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-arrow-left"></i> Back
-          </button>
-        </div>
-        <div>
-          <button className="btn btn-secondary" style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-cog"></i> Actions
-          </button>
-        </div>
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleEdit}>
+          <i className="fas fa-edit"></i>
+          Edit
+        </button>
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
       </div>
 
-      <div className="quotation-container" style={{ background: '#f8f9fa', padding: '20px' }}>
+      <div className="detail-content">
         {/* Primary Information */}
-        <div style={{ 
-          background: 'white', 
-          borderRadius: '4px', 
-          marginBottom: '20px',
-          border: '1px solid #e0e0e0'
-        }}>
-          <div style={{ 
-            padding: '15px 20px',
-            borderBottom: '1px solid #e0e0e0',
-            background: '#f8f9fa',
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '8px',
-            cursor: 'pointer'
-          }}>
-            <i className="fas fa-chevron-down" style={{ fontSize: '11px', color: '#666' }}></i>
-            <h3 style={{ fontSize: '13px', fontWeight: '600', margin: 0, color: '#333' }}>Primary Information</h3>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
           </div>
-          <div style={{ padding: '20px' }}>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(3, 1fr)', 
-              gap: '30px 60px',
-              fontSize: '13px'
-            }}>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>ITEM NAME/NUMBER</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.itemName}</div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>ITEM NAME/NUMBER</label>
+                <div className="field-value">{itemData.itemName}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>VENDOR NAME/CODE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.vendorName || '-'}</div>
+              <div className="detail-field">
+                <label>VENDOR NAME/CODE</label>
+                <div className="field-value">{itemData.vendorName || '-'}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PRIMARY PURCHASE UNIT</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.primaryPurchaseUnit}</div>
+              <div className="detail-field">
+                <label>PRIMARY PURCHASE UNIT</label>
+                <div className="field-value">{itemData.primaryPurchaseUnit}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DISPLAY NAME/CODE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.displayName || '-'}</div>
+              <div className="detail-field">
+                <label>DISPLAY NAME/CODE</label>
+                <div className="field-value">{itemData.displayName || '-'}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PRIMARY UNITS TYPE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>General UOM</div>
+              <div className="detail-field">
+                <label>PRIMARY UNITS TYPE</label>
+                <div className="field-value">General UOM</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>SUBITEM OF</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.subitemOf || '-'}</div>
+              <div className="detail-field">
+                <label>SUBITEM OF</label>
+                <div className="field-value">{itemData.subitemOf || '-'}</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Classification */}
-        <div style={{ 
-          background: 'white', 
-          borderRadius: '4px', 
-          marginBottom: '20px',
-          border: '1px solid #e0e0e0'
-        }}>
-          <div style={{ 
-            padding: '15px 20px',
-            borderBottom: '1px solid #e0e0e0',
-            background: '#f8f9fa',
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '8px',
-            cursor: 'pointer'
-          }}>
-            <i className="fas fa-chevron-down" style={{ fontSize: '11px', color: '#666' }}></i>
-            <h3 style={{ fontSize: '13px', fontWeight: '600', margin: 0, color: '#333' }}>Classification</h3>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
           </div>
-          <div style={{ padding: '20px' }}>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(2, 1fr)', 
-              gap: '30px 60px',
-              fontSize: '13px'
-            }}>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>SUBSIDIARY</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.subsidiary}</div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY</label>
+                <div className="field-value">{itemData.subsidiary}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CLASS</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.class || '-'}</div>
+              <div className="detail-field">
+                <label>CLASS</label>
+                <div className="field-value">{itemData.class || '-'}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>DEPARTMENT</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.department}</div>
+              <div className="detail-field">
+                <label>DEPARTMENT</label>
+                <div className="field-value">{itemData.department}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>LOCATION</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.location || '-'}</div>
+              <div className="detail-field">
+                <label>LOCATION</label>
+                <div className="field-value">{itemData.location || '-'}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>UPC CODE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.upcCode || '-'}</div>
+              <div className="detail-field">
+                <label>UPC CODE</label>
+                <div className="field-value">{itemData.upcCode || '-'}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>ITEM CATEGORY1</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.itemCategory}</div>
+              <div className="detail-field">
+                <label>ITEM CATEGORY1</label>
+                <div className="field-value">{itemData.itemCategory}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PRIMARY BASE UNIT</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{itemData.primaryBaseUnit}</div>
+              <div className="detail-field">
+                <label>PRIMARY BASE UNIT</label>
+                <div className="field-value">{itemData.primaryBaseUnit}</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tabs Section */}
-        <div style={{ 
-          background: 'white', 
-          borderRadius: '4px', 
-          marginBottom: '20px',
-          border: '1px solid #e0e0e0'
-        }}>
-          <div style={{ 
-            background: '#5a6c7d', 
-            padding: '0',
-            display: 'flex',
-            borderRadius: '4px 4px 0 0',
-            overflowX: 'auto'
-          }}>
+        <div className="detail-section">
+          <div className="tabs-container">
             {['purchasing', 'accounting', 'relatedRecords', 'communication', 'preferences', 'systemInfo', 'custom'].map(tab => (
               <button 
                 key={tab}
@@ -236,7 +169,7 @@ const ViewItemDetail = ({ setCurrentPage }) => {
             ))}
           </div>
 
-          <div style={{ padding: '20px' }}>
+          <div className="section-body">
             {/* Purchasing Tab */}
             {activeTab === 'purchasing' && (
               <div>
@@ -244,14 +177,14 @@ const ViewItemDetail = ({ setCurrentPage }) => {
                   <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
                   Item / Cost Detail
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px 60px', marginBottom: '2rem' }}>
-                  <div>
-                    <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PURCHASE PRICE</div>
-                    <div style={{ color: '#333', fontSize: '14px' }}>{itemData.purchasePrice || '-'} per Pcs</div>
+                <div className="detail-grid" style={{ marginBottom: '2rem' }}>
+                  <div className="detail-field">
+                    <label>PURCHASE PRICE</label>
+                    <div className="field-value">{itemData.purchasePrice || '-'} per Pcs</div>
                   </div>
-                  <div>
-                    <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>PURCHASE DESCRIPTION</div>
-                    <div style={{ color: '#333', fontSize: '14px' }}>-</div>
+                  <div className="detail-field">
+                    <label>PURCHASE DESCRIPTION</label>
+                    <div className="field-value">-</div>
                   </div>
                 </div>
 
@@ -283,14 +216,14 @@ const ViewItemDetail = ({ setCurrentPage }) => {
                   <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
                   Accounts
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '30px 60px', marginBottom: '2rem' }}>
-                  <div>
-                    <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CURRENCY</div>
-                    <div style={{ color: '#333', fontSize: '14px' }}>{itemData.currency}</div>
+                <div className="detail-grid" style={{ marginBottom: '2rem' }}>
+                  <div className="detail-field">
+                    <label>CURRENCY</label>
+                    <div className="field-value">{itemData.currency}</div>
                   </div>
-                  <div>
-                    <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>EXPENSE ACCOUNT</div>
-                    <div style={{ color: '#4a90e2', fontSize: '14px', cursor: 'pointer' }}>{itemData.expenseAccount}</div>
+                  <div className="detail-field">
+                    <label>EXPENSE ACCOUNT</label>
+                    <div className="field-value" style={{ color: '#4a90e2', cursor: 'pointer' }}>{itemData.expenseAccount}</div>
                   </div>
                 </div>
 
@@ -298,10 +231,10 @@ const ViewItemDetail = ({ setCurrentPage }) => {
                   <i className="fas fa-chevron-down" style={{ marginRight: '0.5rem', fontSize: '0.875rem' }}></i>
                   Tax / Tariff
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px 60px' }}>
-                  <div>
-                    <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>TAX SCHEDULE</div>
-                    <div style={{ color: '#333', fontSize: '14px' }}>{itemData.taxSchedule}</div>
+                <div className="detail-grid">
+                  <div className="detail-field">
+                    <label>TAX SCHEDULE</label>
+                    <div className="field-value">{itemData.taxSchedule}</div>
                   </div>
                 </div>
               </div>
@@ -316,21 +249,16 @@ const ViewItemDetail = ({ setCurrentPage }) => {
           </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-secondary" onClick={handleBack}>
+        {/* Footer Actions */}
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <div>
-            <button className="btn btn-primary" onClick={handleEdit}>
-              <i className="fas fa-edit"></i>
-              Edit
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-cog"></i>
-              Actions
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleEdit}>
+            <i className="fas fa-edit"></i>
+            Edit
+          </button>
         </div>
       </div>
 

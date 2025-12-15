@@ -31,6 +31,12 @@ const CreditVendorReturns = ({ setCurrentPage }) => {
     showToast('Vendor return authorization submitted successfully!', 'success');
   };
 
+  const handleCancel = () => {
+    if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+      showToast('Changes cancelled', 'info');
+    }
+  };
+
   const handleDateClick = (returnItem) => {
     if (setCurrentPage) {
       setCurrentPage('view-vendor-return-detail');
@@ -42,135 +48,108 @@ const CreditVendorReturns = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-undo" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Refund Vendor Return Authorization</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-undo"></i>
+          <div>
+            <h1>Refund Vendor Return Authorization</h1>
+            <div className="detail-subtitle">
+              <span>Process Vendor Returns</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-secondary">
-            More
-          </button>
+        <div className="detail-actions">
         </div>
       </div>
 
-      <div className="quotation-container">
-        <div style={{ 
-          background: 'white', 
-          borderRadius: '8px', 
-          padding: '24px',
-          marginBottom: '20px',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-        }}>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', fontSize: '11px', color: '#666', marginBottom: '8px', textTransform: 'uppercase', fontWeight: '600' }}>
-              VENDOR
-            </label>
-            <select 
-              className="form-control"
-              value={vendor}
-              onChange={(e) => setVendor(e.target.value)}
-              style={{ maxWidth: '300px' }}
-            >
-              <option value="">Select...</option>
-              <option>TOKIO MARINE INSURANCE SINGAPORE LTD.</option>
-              <option>HALCYON TECHNOLOGY SINGAPORE PTE LTD.</option>
-              <option>SMRT AUTOMOTIVE SERVICES PTE LTD</option>
-            </select>
+      <div className="detail-content">
+        {/* Vendor Selection Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Vendor Selection</h3>
           </div>
-
-          <button 
-            className="btn btn-primary" 
-            onClick={handleSubmit}
-            style={{ marginBottom: '20px' }}
-          >
-            Submit
-          </button>
-
-          <div style={{ 
-            background: '#f8f9fa', 
-            padding: '12px 16px',
-            marginBottom: '15px',
-            borderRadius: '4px',
-            fontSize: '13px',
-            fontWeight: '600',
-            color: '#333'
-          }}>
-            Customize
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>VENDOR</label>
+                <select 
+                  className="form-control"
+                  value={vendor}
+                  onChange={(e) => setVendor(e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>TOKIO MARINE INSURANCE SINGAPORE LTD.</option>
+                  <option>HALCYON TECHNOLOGY SINGAPORE PTE LTD.</option>
+                  <option>SMRT AUTOMOTIVE SERVICES PTE LTD</option>
+                </select>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #e0e0e0' }}>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    CREATED/MODIFIED
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    DATE ▼
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    RETURN #
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    VENDOR NAME
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    MEMO
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'right', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    RETURN TOTAL
-                  </th>
-                  <th style={{ padding: '10px 8px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#666' }}>
-                    CURRENCY
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {returns.map((returnItem) => (
-                  <tr key={returnItem.id} style={{ borderBottom: '1px solid #e0e0e0' }}>
-                    <td style={{ padding: '10px 8px' }}>
-                      <input 
-                        type="checkbox"
-                        checked={selectedReturn?.id === returnItem.id}
-                        onChange={() => setSelectedReturn(returnItem)}
-                      />
-                    </td>
-                    <td style={{ padding: '10px 8px' }}>
-                      <button 
-                        onClick={() => handleDateClick(returnItem)}
-                        style={{ 
-                          background: 'none', 
-                          border: 'none', 
-                          color: '#4a90e2', 
-                          cursor: 'pointer',
-                          textDecoration: 'underline',
-                          padding: 0,
-                          fontSize: '13px'
-                        }}
-                      >
-                        {returnItem.date}
-                      </button>
-                    </td>
-                    <td style={{ padding: '10px 8px' }}>{returnItem.returnNumber}</td>
-                    <td style={{ padding: '10px 8px' }}>{returnItem.vendorName}</td>
-                    <td style={{ padding: '10px 8px' }}>{returnItem.memo}</td>
-                    <td style={{ padding: '10px 8px', textAlign: 'right' }}>
-                      {returnItem.returnTotal.toFixed(2)}
-                    </td>
-                    <td style={{ padding: '10px 8px' }}>{returnItem.currency}</td>
+        {/* Available Returns Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Available Returns</h3>
+          </div>
+          <div className="section-body">
+            <div className="items-table-container">
+              <table className="items-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '8%' }}>CREATED/MODIFIED</th>
+                    <th style={{ width: '12%' }}>DATE ▼</th>
+                    <th style={{ width: '15%' }}>RETURN #</th>
+                    <th style={{ width: '25%' }}>VENDOR NAME</th>
+                    <th style={{ width: '25%' }}>MEMO</th>
+                    <th style={{ width: '10%' }}>RETURN TOTAL</th>
+                    <th style={{ width: '5%' }}>CURRENCY</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {returns.map((returnItem) => (
+                    <tr key={returnItem.id}>
+                      <td>
+                        <input 
+                          type="checkbox"
+                          checked={selectedReturn?.id === returnItem.id}
+                          onChange={() => setSelectedReturn(returnItem)}
+                        />
+                      </td>
+                      <td>
+                        <button 
+                          onClick={() => handleDateClick(returnItem)}
+                          className="view-link"
+                        >
+                          {returnItem.date}
+                        </button>
+                      </td>
+                      <td>{returnItem.returnNumber}</td>
+                      <td>{returnItem.vendorName}</td>
+                      <td>{returnItem.memo}</td>
+                      <td style={{ textAlign: 'right' }}>
+                        {returnItem.returnTotal.toFixed(2)}
+                      </td>
+                      <td>{returnItem.currency}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
+        </div>
 
-          <button 
-            className="btn btn-primary" 
-            onClick={handleSubmit}
-            style={{ marginTop: '20px' }}
-          >
+        {/* Footer Actions */}
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-times"></i>
+            Cancel
+          </button>
+          <button className="btn-toolbar-primary" onClick={handleSubmit}>
+            <i className="fas fa-save"></i>
             Submit
           </button>
         </div>

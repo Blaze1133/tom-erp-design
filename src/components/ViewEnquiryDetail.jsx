@@ -47,6 +47,24 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
         costEstimateType: 'Fixed',
         estimatedExtendedCost: 800.00
       }
+    ],
+    followUps: [
+      {
+        id: 1,
+        date: '2024-11-25',
+        remarks: 'Initial enquiry discussion with client',
+        nextFollowUpDate: '2024-12-02',
+        status: 'Completed',
+        attachment: null
+      },
+      {
+        id: 2,
+        date: '2024-12-02',
+        remarks: 'Awaiting quotation approval from client',
+        nextFollowUpDate: '2024-12-10',
+        status: 'Pending',
+        attachment: null
+      }
     ]
   };
 
@@ -254,30 +272,18 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
 
         {/* Tabs Section */}
         <div className="detail-tabs">
-          <div className="tabs-header">
+          <div className="enquiry-tabs-navigation">
             <button 
-              className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`}
+              className={`enquiry-tab-btn ${activeTab === 'items' ? 'active' : ''}`}
               onClick={() => setActiveTab('items')}
             >
               Items
             </button>
             <button 
-              className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`}
-              onClick={() => setActiveTab('communication')}
+              className={`enquiry-tab-btn ${activeTab === 'followup' ? 'active' : ''}`}
+              onClick={() => setActiveTab('followup')}
             >
-              Communication
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'system-info' ? 'active' : ''}`}
-              onClick={() => setActiveTab('system-info')}
-            >
-              System Information
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'custom' ? 'active' : ''}`}
-              onClick={() => setActiveTab('custom')}
-            >
-              Custom
+              Follow-Up
             </button>
           </div>
 
@@ -323,21 +329,69 @@ const ViewEnquiryDetail = ({ setCurrentPage }) => {
               </div>
             )}
 
-            {activeTab === 'communication' && (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>
-                <p>No communication records</p>
-              </div>
-            )}
-
-            {activeTab === 'system-info' && (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>
-                <p>System information section</p>
-              </div>
-            )}
-
-            {activeTab === 'custom' && (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>
-                <p>Custom fields section</p>
+            {activeTab === 'followup' && (
+              <div style={{ padding: '1.5rem' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '1rem', color: '#333' }}>
+                  <i className="fas fa-history" style={{ marginRight: '8px', color: '#4a90e2' }}></i>
+                  Follow-Up History
+                </h4>
+                <div className="enquiries-table-container">
+                  <table className="enquiries-table">
+                    <thead>
+                      <tr>
+                        <th style={{ width: '12%' }}>DATE</th>
+                        <th style={{ width: '40%' }}>REMARKS</th>
+                        <th style={{ width: '12%' }}>NEXT FOLLOW-UP</th>
+                        <th style={{ width: '10%' }}>STATUS</th>
+                        <th style={{ width: '18%' }}>ATTACHMENT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {enquiryData.followUps && enquiryData.followUps.length === 0 ? (
+                        <tr>
+                          <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
+                            <i className="fas fa-inbox" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}></i>
+                            No follow-ups recorded yet
+                          </td>
+                        </tr>
+                      ) : (
+                        enquiryData.followUps && enquiryData.followUps.map((followUp) => (
+                          <tr key={followUp.id}>
+                            <td>{followUp.date}</td>
+                            <td>{followUp.remarks}</td>
+                            <td>{followUp.nextFollowUpDate || '-'}</td>
+                            <td>
+                              <span 
+                                className="badge"
+                                style={{
+                                  backgroundColor: followUp.status === 'Completed' ? '#e8f5e9' : 
+                                                  followUp.status === 'Pending' ? '#fff3e0' : '#ffebee',
+                                  color: followUp.status === 'Completed' ? '#2e7d32' : 
+                                         followUp.status === 'Pending' ? '#f57c00' : '#c62828',
+                                  padding: '4px 12px',
+                                  borderRadius: '4px',
+                                  fontSize: '12px',
+                                  fontWeight: '500'
+                                }}
+                              >
+                                {followUp.status}
+                              </span>
+                            </td>
+                            <td>
+                              {followUp.attachment ? (
+                                <a href="#" style={{ color: '#4a90e2', textDecoration: 'none' }}>
+                                  <i className="fas fa-paperclip"></i> {followUp.attachment}
+                                </a>
+                              ) : (
+                                <span style={{ color: '#999' }}>No attachment</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>

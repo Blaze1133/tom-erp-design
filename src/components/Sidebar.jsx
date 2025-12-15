@@ -343,6 +343,12 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       ]
     },
     { 
+      id: 'create-debit-note',
+      label: 'Debit Note',
+      hasSubmenu: false,
+      hideArrow: true
+    },
+    { 
       id: 'vendor-returns',
       label: 'Vendor Returns',
       hasSubmenu: true,
@@ -379,18 +385,24 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hideArrow: true
     },
     { 
-      id: 'approve-vendor-payments',
-      label: 'Approve Vendor Payments',
-      hasSubmenu: false,
-      hideArrow: true
-    },
-    { 
       id: 'enter-vendor-prepayment',
       label: 'Enter Vendor Prepayment',
       hasSubmenu: true,
       submenu: [
         { id: 'view-vendor-prepayments', label: 'List' }
       ]
+    },
+    { 
+      id: 'approve-vendor-payments',
+      label: 'Approve Vendor Payments',
+      hasSubmenu: false,
+      hideArrow: true
+    },
+    { 
+      id: 'post-vendor-bill-variances',
+      label: 'Post Vendor Bill Variances',
+      hasSubmenu: false,
+      hideArrow: true
     },
     { 
       id: 'enter-vendor-credits',
@@ -407,6 +419,32 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { 
       id: 'view-items',
       label: 'Items',
+      hasSubmenu: false,
+      hideArrow: true
+    },
+    { 
+      id: 'view-equipment-masters',
+      label: 'Equipment Masters',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-equipment-masters', label: 'List' }
+      ]
+    },
+    { 
+      id: 'view-stock-ledger',
+      label: 'Stock Ledger',
+      hasSubmenu: false,
+      hideArrow: true
+    },
+    { 
+      id: 'replenish-location-by-inventory-transfer',
+      label: 'Replenish Location By Inventory Transfer',
+      hasSubmenu: false,
+      hideArrow: true
+    },
+    { 
+      id: 'review-negative-inventory',
+      label: 'Review Negative Inventory',
       hasSubmenu: false,
       hideArrow: true
     },

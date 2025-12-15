@@ -143,14 +143,27 @@ import CreateProject from './components/CreateProject';
 import BillPurchaseOrders from './components/BillPurchaseOrders';
 import ViewBillPurchaseOrderDetail from './components/ViewBillPurchaseOrderDetail';
 import EditBillPurchaseOrder from './components/EditBillPurchaseOrder';
+import DebitNote from './components/DebitNote';
+import ViewDebitNotes from './components/ViewDebitNotes';
+import ViewDebitNoteDetail from './components/ViewDebitNoteDetail';
+import EditDebitNote from './components/EditDebitNote';
 import EnterBills from './components/EnterBills';
 import ViewBills from './components/ViewBills';
 import ViewBillDetail from './components/ViewBillDetail';
 import PayBillsUnified from './components/PayBillsUnified';
+import PostVendorBillVariances from './components/PostVendorBillVariances';
 import ApproveVendorPayments from './components/ApproveVendorPayments';
 import ViewItems from './components/ViewItems';
 import CreateItem from './components/CreateItem';
 import ViewItemDetail from './components/ViewItemDetail';
+import EquipmentMasters from './components/EquipmentMasters';
+import ViewEquipmentMasters from './components/ViewEquipmentMasters';
+import ViewEquipmentMasterDetail from './components/ViewEquipmentMasterDetail';
+import EditEquipmentMaster from './components/EditEquipmentMaster';
+import ViewStockLedger from './components/ViewStockLedger';
+import ViewStockLedgerDetail from './components/ViewStockLedgerDetail';
+import ReplenishLocationByInventoryTransfer from './components/ReplenishLocationByInventoryTransfer';
+import ReviewNegativeInventory from './components/ReviewNegativeInventory';
 import ViewBillPaymentDetail from './components/ViewBillPaymentDetail';
 import EditBillPayment from './components/EditBillPayment';
 import ViewVendorPayments from './components/ViewVendorPayments';
@@ -488,6 +501,14 @@ function App() {
         return <EnterPurchaseOrders setCurrentPage={setCurrentPage} />;
       case 'view-purchase-orders':
         return <ViewPurchaseOrders setCurrentPage={setCurrentPage} />;
+      case 'create-debit-note':
+        return <DebitNote setCurrentPage={setCurrentPage} />;
+      case 'view-debit-notes':
+        return <ViewDebitNotes setCurrentPage={setCurrentPage} />;
+      case 'view-debit-note-detail':
+        return <ViewDebitNoteDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-debit-note':
+        return <EditDebitNote setCurrentPage={setCurrentPage} />;
       case 'view-purchase-order-detail':
         return <ViewPurchaseOrderDetail setCurrentPage={setCurrentPage} />;
       case 'receive-orders':
@@ -706,6 +727,8 @@ function App() {
         return <EnterBills setCurrentPage={setCurrentPage} />;
       case 'view-bills':
         return <ViewBills setCurrentPage={setCurrentPage} />;
+      case 'post-vendor-bill-variances':
+        return <PostVendorBillVariances setCurrentPage={setCurrentPage} />;
       case 'view-bill-detail':
         return <ViewBillDetail setCurrentPage={setCurrentPage} />;
       case 'pay-bills':
@@ -716,8 +739,24 @@ function App() {
         return <ViewItems setCurrentPage={setCurrentPage} />;
       case 'create-item':
         return <CreateItem setCurrentPage={setCurrentPage} />;
+      case 'create-equipment-master':
+        return <EquipmentMasters setCurrentPage={setCurrentPage} />;
+      case 'view-equipment-masters':
+        return <ViewEquipmentMasters setCurrentPage={setCurrentPage} />;
+      case 'view-equipment-master-detail':
+        return <ViewEquipmentMasterDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-equipment-master':
+        return <EditEquipmentMaster setCurrentPage={setCurrentPage} />;
       case 'view-item-detail':
         return <ViewItemDetail setCurrentPage={setCurrentPage} />;
+      case 'view-stock-ledger':
+        return <ViewStockLedger setCurrentPage={setCurrentPage} />;
+      case 'view-stock-ledger-detail':
+        return <ViewStockLedgerDetail setCurrentPage={setCurrentPage} />;
+      case 'replenish-location-by-inventory-transfer':
+        return <ReplenishLocationByInventoryTransfer setCurrentPage={setCurrentPage} />;
+      case 'review-negative-inventory':
+        return <ReviewNegativeInventory setCurrentPage={setCurrentPage} />;
       case 'view-bill-payment-detail':
         return <ViewBillPaymentDetail setCurrentPage={setCurrentPage} />;
       case 'edit-bill-payment':

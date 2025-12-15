@@ -48,15 +48,13 @@ const ViewItems = ({ setCurrentPage }) => {
         <div className="list-actions">
           <button className="btn-view-option">List</button>
           <button className="btn-view-option">Search</button>
-          <button className="btn-view-option">Audit Trail</button>
-          <button className="btn-view-option">Web Site Content Manager</button>
         </div>
       </div>
 
       <div className="list-controls">
-        <div className="view-filter" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div className="view-filter" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
           <div>
-            <label>VIEW</label>
+            <label style={{ marginBottom: '0.5rem', display: 'block' }}>VIEW</label>
             <select 
               value={view}
               onChange={(e) => setView(e.target.value)}
@@ -68,7 +66,7 @@ const ViewItems = ({ setCurrentPage }) => {
             </select>
           </div>
           <div>
-            <label>SEARCH</label>
+            <label style={{ marginBottom: '0.5rem', display: 'block' }}>SEARCH</label>
             <input
               type="text"
               className="form-control"
@@ -80,6 +78,10 @@ const ViewItems = ({ setCurrentPage }) => {
           </div>
         </div>
         <div className="list-actions">
+          <button className="btn btn-secondary" style={{ marginRight: '0.5rem' }}>
+            <i className="fas fa-arrow-left"></i>
+            Back
+          </button>
           <button className="btn btn-primary" onClick={handleNewItem}>
             <i className="fas fa-plus"></i>
             New Item

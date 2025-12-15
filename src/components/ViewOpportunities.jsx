@@ -143,13 +143,13 @@ const ViewOpportunities = ({ onNewClick, onViewClick, onEditClick }) => {
 
   return (
     <div className="enquiries-list">
-      <div className="list-header">
-        <div className="list-title">
-          <i className="fas fa-bullseye"></i>
+      <div className="page-header">
+        <div className="page-title">
+          <i className="fas fa-bullseye" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
           <h1>Opportunity Management</h1>
         </div>
-        <div className="list-actions">
-          <button className="btn-view-option">List</button>
+        <div className="page-actions">
+          <button className="btn-view-option active">List</button>
           <button className="btn-view-option">Search</button>
           <button className="btn-view-option">Audit Trail</button>
         </div>
@@ -157,12 +157,11 @@ const ViewOpportunities = ({ onNewClick, onViewClick, onEditClick }) => {
 
       <div className="list-controls">
         <div className="view-filter">
-          <label>VIEW</label>
+          <label>VIEW:</label>
           <select 
             value={stageFilter}
             onChange={(e) => setStageFilter(e.target.value)}
             className="form-control"
-            style={{ width: '250px' }}
           >
             <option value="all">All Stages</option>
             <option value="Qualification">Qualification</option>
@@ -172,42 +171,37 @@ const ViewOpportunities = ({ onNewClick, onViewClick, onEditClick }) => {
             <option value="Closed Lost">Closed Lost</option>
           </select>
         </div>
-        <div className="list-actions">
-          <button className="btn btn-primary" onClick={onNewClick}>
-            <i className="fas fa-plus"></i>
-            New Opportunity
-          </button>
-        </div>
+        <button className="btn-new-transaction" onClick={onNewClick}>
+          <i className="fas fa-plus"></i> New Opportunity
+        </button>
       </div>
 
       <div className="list-filters">
-        <div className="filter-group">
-          <button className="btn-icon" title="Edit View">
-            <i className="fas fa-edit"></i>
-            <span>EDIT</span>
+        <div className="list-toolbar">
+          <button className="toolbar-btn" title="Edit">
+            <i className="fas fa-edit"></i> EDIT
           </button>
-          <button className="btn-icon" title="Delete">
+          <button className="toolbar-btn" title="Delete">
             <i className="fas fa-times"></i>
           </button>
-          <button className="btn-icon" title="Export">
-            <i className="fas fa-file-export"></i>
+          <button className="toolbar-btn" title="Attach">
+            <i className="fas fa-paperclip"></i>
           </button>
-          <button className="btn-icon" title="Print">
+          <button className="toolbar-btn" title="Print">
             <i className="fas fa-print"></i>
           </button>
         </div>
-        <div className="filter-right-group">
-          <div className="quick-sort">
-            <label>QUICK SORT</label>
-            <select className="form-control">
-              <option>All Opportunities</option>
-              <option>This Quarter</option>
-              <option>High Value</option>
-            </select>
-          </div>
-          <div className="list-total">
-            TOTAL: {filteredOpportunities.length}
-          </div>
+        <div className="list-sort">
+          <label>QUICK SORT:</label>
+          <select className="form-control">
+            <option>All Opportunities</option>
+            <option>This Quarter</option>
+            <option>High Value</option>
+            <option>Expected Close Date</option>
+          </select>
+        </div>
+        <div className="list-total">
+          TOTAL: {filteredOpportunities.length}
         </div>
       </div>
 
@@ -215,38 +209,56 @@ const ViewOpportunities = ({ onNewClick, onViewClick, onEditClick }) => {
         <table className="enquiries-table">
           <thead>
             <tr>
-              <th style={{ width: '8%' }}>EDIT | VIEW</th>
-              <th style={{ width: '8%' }}>OPP ID</th>
-              <th style={{ width: '20%' }}>OPPORTUNITY NAME</th>
-              <th style={{ width: '15%' }}>COMPANY</th>
-              <th style={{ width: '10%' }}>VALUE</th>
-              <th style={{ width: '8%' }}>PROBABILITY</th>
-              <th style={{ width: '10%' }}>STAGE</th>
-              <th style={{ width: '10%' }}>EXPECTED CLOSE</th>
-              <th style={{ width: '11%' }}>ASSIGNED TO</th>
+              <th></th>
+              <th>EDIT | VIEW</th>
+              <th>*</th>
+              <th>OPP ID</th>
+              <th>OPPORTUNITY NAME</th>
+              <th>COMPANY</th>
+              <th>CONTACT PERSON</th>
+              <th>VALUE</th>
+              <th>PROBABILITY</th>
+              <th>STAGE</th>
+              <th>EXPECTED CLOSE</th>
+              <th>ASSIGNED TO</th>
             </tr>
           </thead>
           <tbody>
             {filteredOpportunities.map((opp) => (
               <tr key={opp.id}>
                 <td>
-                  <button 
-                    className="view-link"
-                    onClick={() => onEditClick(opp.id)}
-                  >
-                    Edit
-                  </button>
-                  {' | '}
-                  <button 
-                    className="view-link"
-                    onClick={() => onViewClick(opp.id)}
-                  >
-                    View
-                  </button>
+                  <input type="checkbox" />
                 </td>
-                <td>{opp.id}</td>
+                <td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <button 
+                      className="view-link"
+                      onClick={() => onEditClick(opp.id)}
+                    >
+                      Edit
+                    </button>
+                    <span style={{ color: '#999' }}>|</span>
+                    <button 
+                      className="view-link"
+                      onClick={() => onViewClick(opp.id)}
+                    >
+                      View
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  {opp.stage === 'Closed Won' ? (
+                    <span className="status-badge" style={{ background: '#4caf50', color: 'white' }}>WON</span>
+                  ) : opp.stage === 'Closed Lost' ? (
+                    <span className="status-badge" style={{ background: '#f44336', color: 'white' }}>LOST</span>
+                  ) : (
+                    <span>*</span>
+                  )}
+                </td>
+                <td className="doc-number">{opp.id}</td>
                 <td>{opp.name}</td>
                 <td>{opp.companyName}</td>
+                <td>{opp.contactPerson}</td>
                 <td className="amount">{formatCurrency(opp.value)}</td>
                 <td>{opp.probability}%</td>
                 <td>

@@ -702,6 +702,36 @@
     padding: 1.5rem 0 0 0;
 }
 
+/* Custom tabs for Enquiry screens (Items/Follow-Up) */
+.enquiry-tabs-navigation {
+    display: flex;
+    background: #f5f5f5;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.enquiry-tab-btn {
+    padding: 0.75rem 1.5rem;
+    background: #ffffff;
+    color: #666;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-right: 1px solid #e0e0e0;
+}
+
+.enquiry-tab-btn:hover {
+    background: #f8f8f8;
+    color: #333;
+}
+
+.enquiry-tab-btn.active {
+    background: #5b6b8a;
+    color: #ffffff;
+    font-weight: 600;
+}
+
 .currency-info {
     display: flex;
     gap: 2rem;
@@ -982,6 +1012,77 @@
 
 .detail-items-table tbody tr:hover td {
     background-color: #f9fafb;
+}
+
+.detail-footer {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1.5rem 0 0 0;
+    margin-top: 2rem;
+}
+
+/* CreateItem Form Spacing - Match Quotation */
+.detail-grid .form-group {
+    margin-bottom: 0;
+}
+
+/* Purchasing/Inventory Tab Form Spacing */
+.tab-content .form-group {
+    margin-bottom: 0;
+}
+
+/* Compact form controls for Item forms */
+.detail-content .form-control,
+.tab-content .form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    height: auto;
+}
+
+.detail-content textarea.form-control,
+.tab-content textarea.form-control {
+    padding: 0.5rem 0.75rem;
+}
+
+.detail-content .form-label,
+.tab-content .form-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+/* Equipment Masters Table Styling */
+.expired-renewal {
+    background-color: #fff3e0 !important;
+    color: #e65100 !important;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    display: inline-block;
+}
+
+.btn-certificate {
+    padding: 4px 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.btn-certificate:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-delete-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #0066cc;
+    font-size: 1.2rem;
+}
+
+.btn-delete-icon:hover {
+    color: #dc2626;
 }
 
 .detail-footer-actions {
