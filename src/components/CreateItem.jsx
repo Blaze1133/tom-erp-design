@@ -212,15 +212,6 @@ const CreateItem = ({ setCurrentPage }) => {
                 </select>
               </div>
               <div className="form-group">
-                <label className="form-label">VENDOR NAME/CODE</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.vendorName}
-                  onChange={(e) => handleFormChange('vendorName', e.target.value)}
-                />
-              </div>
-              <div className="form-group">
                 <label className="form-label">SUBITEM OF</label>
                 <input 
                   type="text" 
@@ -254,15 +245,6 @@ const CreateItem = ({ setCurrentPage }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid" style={{ gap: '1rem' }}>
-              <div className="form-group">
-                <label className="form-label">VENDOR NAME/CODE</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  value={formData.vendorName}
-                  onChange={(e) => handleFormChange('vendorName', e.target.value)}
-                />
-              </div>
               <div className="form-group">
                 <label className="form-label">ITEM NAME/NUMBER *</label>
                 <input 

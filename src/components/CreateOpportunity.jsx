@@ -51,6 +51,7 @@ const CreateOpportunity = ({ onBack }) => {
 
   const [newFollowUp, setNewFollowUp] = useState({
     date: '',
+    activityType: '',
     remarks: '',
     nextFollowUpDate: '',
     status: 'Pending',
@@ -170,8 +171,8 @@ const CreateOpportunity = ({ onBack }) => {
   };
 
   const handleAddFollowUp = () => {
-    if (!newFollowUp.date || !newFollowUp.remarks) {
-      showToast('Please fill in Date and Remarks for the follow-up', 'error');
+    if (!newFollowUp.date || !newFollowUp.activityType || !newFollowUp.remarks) {
+      showToast('Please fill in Date, Activity Type, and Remarks for the follow-up', 'error');
       return;
     }
     const followUp = {
@@ -181,6 +182,7 @@ const CreateOpportunity = ({ onBack }) => {
     setFollowUps([...followUps, followUp]);
     setNewFollowUp({
       date: '',
+      activityType: '',
       remarks: '',
       nextFollowUpDate: '',
       status: 'Pending',
@@ -541,6 +543,24 @@ const CreateOpportunity = ({ onBack }) => {
                     value={newFollowUp.date}
                     onChange={(e) => setNewFollowUp({...newFollowUp, date: e.target.value})}
                   />
+                </div>
+                <div className="detail-field">
+                  <label>ACTIVITY TYPE <span style={{ color: '#dc2626' }}>*</span></label>
+                  <select 
+                    className="form-control"
+                    value={newFollowUp.activityType}
+                    onChange={(e) => setNewFollowUp({...newFollowUp, activityType: e.target.value})}
+                  >
+                    <option value="">Select Activity Type...</option>
+                    <option value="Call">Call</option>
+                    <option value="Email">Email</option>
+                    <option value="Message">Message</option>
+                    <option value="Online Meeting">Online Meeting</option>
+                    <option value="In-Person Meeting">In-Person Meeting</option>
+                    <option value="Site Visit">Site Visit</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="SMS">SMS</option>
+                  </select>
                 </div>
                 <div className="detail-field">
                   <label>NEXT FOLLOW-UP DATE</label>

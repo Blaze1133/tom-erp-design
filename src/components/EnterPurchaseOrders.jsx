@@ -13,6 +13,11 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
   const [vendorSearch, setVendorSearch] = useState('');
   const [filteredVendors, setFilteredVendors] = useState([]);
 
+  // Purchase Requisition multi-select states
+  const [showPRDropdown, setShowPRDropdown] = useState(false);
+  const [selectedPRs, setSelectedPRs] = useState([]);
+  const [prSearch, setPRSearch] = useState('');
+
   // Form state
   const [formData, setFormData] = useState({
     date: '',
@@ -76,6 +81,18 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
     'Global Marine Supplies'
   ];
 
+  // Purchase Requisition options
+  const prOptions = [
+    { id: 'PR24TEA00145', name: 'Marine Equipment Purchase' },
+    { id: 'PR24TOM00156', name: 'Electrical Components' },
+    { id: 'PR24TOM00157', name: 'Workshop Tools' },
+    { id: 'PR24TOMDQ00089', name: 'PPE Supplies' },
+    { id: 'PR24TOM00158', name: 'Protective Coatings' },
+    { id: 'PR24TEA00146', name: 'PLC Components' },
+    { id: 'PR24TOM00159', name: 'Raw Materials' },
+    { id: 'PR24TOM00160', name: 'Office Consumables' }
+  ];
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
@@ -93,6 +110,29 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
     setShowVendorDropdown(false);
     setVendorSearch('');
   };
+
+  // PR multi-select handlers
+  const handlePRToggle = (pr) => {
+    setSelectedPRs(prev => {
+      const isSelected = prev.some(p => p.id === pr.id);
+      if (isSelected) {
+        return prev.filter(p => p.id !== pr.id);
+      } else {
+        return [...prev, pr];
+      }
+    });
+  };
+
+  const handleRemovePR = (prId) => {
+    setSelectedPRs(prev => prev.filter(p => p.id !== prId));
+  };
+
+  const filteredPROptions = prSearch 
+    ? prOptions.filter(pr => 
+        pr.id.toLowerCase().includes(prSearch.toLowerCase()) || 
+        pr.name.toLowerCase().includes(prSearch.toLowerCase())
+      )
+    : prOptions;
 
   const handleVendorSearchChange = (e) => {
     const value = e.target.value;
@@ -422,6 +462,146 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                   <option>Main</option>
                   <option>Sub</option>
                 </select>
+              </div>
+              <div className="detail-field" style={{ position: 'relative', zIndex: showPRDropdown ? 10002 : 'auto' }}>
+                <label>PURCHASE REQUISITION</label>
+                <div style={{ position: 'relative' }}>
+                  <div 
+                    className="form-control" 
+                    style={{ 
+                      minHeight: '38px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: '4px',
+                      padding: selectedPRs.length > 0 ? '4px' : '8px 12px',
+                      alignItems: 'center'
+                    }}
+                    onClick={() => setShowPRDropdown(!showPRDropdown)}
+                  >
+                    {selectedPRs.length === 0 ? (
+                      <span style={{ color: '#999' }}>Select Purchase Requisitions...</span>
+                    ) : (
+                      selectedPRs.map(pr => (
+                        <span 
+                          key={pr.id}
+                          style={{
+                            background: '#e3f2fd',
+                            border: '1px solid #2196F3',
+                            borderRadius: '4px',
+                            padding: '2px 8px',
+                            fontSize: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          {pr.id}
+                          <i 
+                            className="fas fa-times" 
+                            style={{ cursor: 'pointer', fontSize: '10px' }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemovePR(pr.id);
+                            }}
+                          ></i>
+                        </span>
+                      ))
+                    )}
+                    <i 
+                      className="fas fa-chevron-down" 
+                      style={{ 
+                        marginLeft: 'auto',
+                        fontSize: '12px',
+                        color: '#666'
+                      }}
+                    ></i>
+                  </div>
+                  {showPRDropdown && (
+                    <>
+                      <div 
+                        style={{ 
+                          position: 'fixed', 
+                          top: 0, 
+                          left: 0, 
+                          right: 0, 
+                          bottom: 0, 
+                          zIndex: 10000 
+                        }}
+                        onClick={() => setShowPRDropdown(false)}
+                      />
+                      <div 
+                        style={{ 
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0,
+                          right: 0,
+                          background: 'white', 
+                          border: '1px solid #ddd', 
+                          borderRadius: '4px', 
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                          zIndex: 10001,
+                          marginTop: '4px',
+                          maxHeight: '300px',
+                          overflowY: 'auto'
+                        }}
+                      >
+                        <div style={{ padding: '8px', borderBottom: '1px solid #e0e0e0' }}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search PR..."
+                            value={prSearch}
+                            onChange={(e) => setPRSearch(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ fontSize: '13px', height: '32px' }}
+                          />
+                        </div>
+                        <div>
+                          {filteredPROptions.map(pr => {
+                            const isSelected = selectedPRs.some(p => p.id === pr.id);
+                            return (
+                              <div 
+                                key={pr.id}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handlePRToggle(pr);
+                                }}
+                                style={{ 
+                                  padding: '10px 12px',
+                                  cursor: 'pointer',
+                                  fontSize: '13px',
+                                  borderBottom: '1px solid #f0f0f0',
+                                  backgroundColor: isSelected ? '#e3f2fd' : 'white',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '8px'
+                                }}
+                                onMouseEnter={(e) => {
+                                  if (!isSelected) e.currentTarget.style.backgroundColor = '#f5f5f5';
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (!isSelected) e.currentTarget.style.backgroundColor = 'white';
+                                }}
+                              >
+                                <input 
+                                  type="checkbox" 
+                                  checked={isSelected}
+                                  onChange={() => {}}
+                                  style={{ cursor: 'pointer' }}
+                                />
+                                <div>
+                                  <div style={{ fontWeight: '500', color: '#333' }}>{pr.id}</div>
+                                  <div style={{ fontSize: '11px', color: '#666' }}>{pr.name}</div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
               <div className="detail-field" style={{ position: 'relative', zIndex: showVendorDropdown ? 10001 : 'auto' }}>
                 <label className="form-label required">VENDOR</label>
@@ -758,9 +938,6 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                           <th style={{ width: '30px' }}></th>
                           <th style={{ minWidth: '150px' }}>ITEM</th>
                           <th style={{ minWidth: '300px' }}>DESCRIPTION</th>
-                          <th style={{ minWidth: '150px' }}>VENDOR NAME</th>
-                          <th style={{ minWidth: '100px' }}>RECEIVED</th>
-                          <th style={{ minWidth: '100px' }}>BILLED</th>
                           <th style={{ minWidth: '100px' }}>ON HAND</th>
                           <th style={{ minWidth: '100px' }}>QUANTITY</th>
                           <th style={{ minWidth: '100px' }}>UNITS</th>
@@ -770,13 +947,10 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                           <th style={{ minWidth: '100px' }}>TAX RATE</th>
                           <th style={{ minWidth: '100px' }}>GROSS AMT</th>
                           <th style={{ minWidth: '100px' }}>TAX AMT</th>
-                          <th style={{ minWidth: '120px' }}>OPTIONS</th>
-                          <th style={{ minWidth: '150px' }}>CUSTOMER</th>
                           <th style={{ minWidth: '150px' }}>PROJECT</th>
                           <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
                           <th style={{ minWidth: '150px' }}>CLASS</th>
                           <th style={{ minWidth: '100px' }}>BILLABLE</th>
-                          <th style={{ minWidth: '150px' }}>MATCH BILL TO RECEIPT</th>
                           <th style={{ minWidth: '150px' }}>EXPECTED RECEIPT DATE</th>
                           <th style={{ minWidth: '100px' }}>CLOSED</th>
                           <th style={{ minWidth: '100px' }}>DO QUANTITY</th>
@@ -854,30 +1028,6 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                                   overflow: 'auto'
                                 }}
                                 rows="3"
-                              />
-                            </td>
-                            <td>
-                              <input 
-                                type="text" 
-                                className="form-control" 
-                                defaultValue={item.vendorName} 
-                                style={{ minWidth: '150px', height: '40px' }} 
-                              />
-                            </td>
-                            <td>
-                              <input 
-                                type="number" 
-                                className="form-control" 
-                                defaultValue={item.received} 
-                                style={{ minWidth: '100px', height: '40px' }} 
-                              />
-                            </td>
-                            <td>
-                              <input 
-                                type="number" 
-                                className="form-control" 
-                                defaultValue={item.billed} 
-                                style={{ minWidth: '100px', height: '40px' }} 
                               />
                             </td>
                             <td>
@@ -963,22 +1113,6 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                               <input 
                                 type="text" 
                                 className="form-control" 
-                                defaultValue={item.options} 
-                                style={{ minWidth: '120px', height: '40px' }} 
-                              />
-                            </td>
-                            <td>
-                              <input 
-                                type="text" 
-                                className="form-control" 
-                                defaultValue={item.customer} 
-                                style={{ minWidth: '150px', height: '40px' }} 
-                              />
-                            </td>
-                            <td>
-                              <input 
-                                type="text" 
-                                className="form-control" 
                                 defaultValue={item.project} 
                                 style={{ minWidth: '150px', height: '40px' }} 
                               />
@@ -1004,14 +1138,6 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                                 type="checkbox" 
                                 defaultChecked={item.billable} 
                                 style={{ width: '20px', height: '20px', cursor: 'pointer' }} 
-                              />
-                            </td>
-                            <td>
-                              <input 
-                                type="text" 
-                                className="form-control" 
-                                defaultValue={item.matchBillToReceipt} 
-                                style={{ minWidth: '150px', height: '40px' }} 
                               />
                             </td>
                             <td>
@@ -1561,6 +1687,7 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                 <tr>
                   <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>ITEM</th>
                   <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
+                  <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>VENDOR</th>
                   <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>PRICE</th>
                   <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>UNITS</th>
                   <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>QUANTITY</th>
@@ -1572,6 +1699,7 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                 <tr>
                   <td style={{ padding: '10px 12px' }}>{selectedItemHistory.item}</td>
                   <td style={{ padding: '10px 12px' }}>{selectedItemHistory.description || '-'}</td>
+                  <td style={{ padding: '10px 12px' }}>{formData.vendor || '-'}</td>
                   <td style={{ padding: '10px 12px' }}>{selectedItemHistory.rate ? selectedItemHistory.rate.toFixed(2) : '0.00'}</td>
                   <td style={{ padding: '10px 12px' }}>{selectedItemHistory.units || 'Pcs'}</td>
                   <td style={{ padding: '10px 12px' }}>{selectedItemHistory.quantity || 0}</td>
@@ -1579,7 +1707,7 @@ const EnterPurchaseOrders = ({ setCurrentPage, isEdit = false, poData = null }) 
                   <td style={{ padding: '10px 12px' }}>Current PO</td>
                 </tr>
                 <tr>
-                  <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.9rem' }}>
+                  <td colSpan="8" style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.9rem' }}>
                     No previous history records found
                   </td>
                 </tr>

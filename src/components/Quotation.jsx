@@ -33,6 +33,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
   // Edit states for Additional Information fields
   const [validityEditable, setValidityEditable] = useState(false);
   const [leadTimeEditable, setLeadTimeEditable] = useState(false);
+  const [scopeInclusionsEditable, setScopeInclusionsEditable] = useState(false);
   const [gstEditable, setGstEditable] = useState(false);
   const [taxesEditable, setTaxesEditable] = useState(false);
   const [paymentEditable, setPaymentEditable] = useState(false);
@@ -97,6 +98,7 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
     // Additional Information
     validity: 'The validity of this Quotation is (30) days from the date of this Quotation. Beyond the valid date, the Project specifications may no longer be applicable, and a new quotation may be required.',
     leadTime: '➢ Refer to the attached Annex-A',
+    scopeInclusions: 'Standard TOM scope of work including supply, fabrication, and installation.',
     gst: 'All prices are subject to GST and our normal Terms and Conditions. TOM is a GST registered company. (GST No. M90362330Y)',
     taxes: 'The withholding tax/GST/VAT is included in this quote.',
     payment: 'Progressive and 30 days upon presentation of invoices.',
@@ -120,7 +122,16 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
   ];
 
   const handleInputChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
+    const updatedData = { ...formData, [field]: value };
+    
+    // Update Scope Inclusions only for DFMA quotation
+    if (field === 'customForm') {
+      if (value.toLowerCase() === 'dfma quotation') {
+        updatedData.scopeInclusions = 'DFMA scope of work including design, fabrication, modularization, and assembly services.';
+      }
+    }
+    
+    setFormData(updatedData);
   };
 
   const showToast = (message, type = 'success') => {
@@ -1288,6 +1299,42 @@ const Quotation = ({ setCurrentPage, isEdit = false }) => {
                     }}
                   />
                 </div>
+
+                {/* Scope Inclusions - Only show for DFMA quotation */}
+                {formData.customForm.toLowerCase() === 'dfma quotation' && (
+                  <div className="detail-field">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <label>SCOPE INCLUSIONS</label>
+                      <button
+                        type="button"
+                        onClick={() => setScopeInclusionsEditable(!scopeInclusionsEditable)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: scopeInclusionsEditable ? '#28a745' : '#007bff',
+                          fontSize: '14px',
+                          padding: '0'
+                        }}
+                        title={scopeInclusionsEditable ? 'Lock' : 'Edit'}
+                      >
+                        <i className={scopeInclusionsEditable ? 'fas fa-lock-open' : 'fas fa-edit'}></i>
+                      </button>
+                    </div>
+                    <textarea
+                      className="form-control"
+                      rows="2"
+                      value={formData.scopeInclusions}
+                      onChange={(e) => handleInputChange('scopeInclusions', e.target.value)}
+                      readOnly={!scopeInclusionsEditable}
+                      style={{ 
+                        background: scopeInclusionsEditable ? '#fff' : '#f5f5f5',
+                        cursor: scopeInclusionsEditable ? 'text' : 'not-allowed',
+                        minHeight: '60px'
+                      }}
+                    />
+                  </div>
+                )}
 
                 {/* GST */}
                 <div className="detail-field">

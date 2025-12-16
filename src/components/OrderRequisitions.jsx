@@ -7,7 +7,7 @@ const OrderRequisitions = () => {
   const [subsidiary, setSubsidiary] = useState('');
   const [department, setDepartment] = useState('');
   const [type, setType] = useState('');
-  const [prNumber, setPrNumber] = useState('');
+  const [selectedPrNumbers, setSelectedPrNumbers] = useState([]);
   const [prNumberSearch, setPrNumberSearch] = useState('');
   const [showPrNumberDropdown, setShowPrNumberDropdown] = useState(false);
 
@@ -273,7 +273,7 @@ const OrderRequisitions = () => {
     setSubsidiary('');
     setDepartment('');
     setType('');
-    setPrNumber('');
+    setSelectedPrNumbers([]);
     setPrNumberSearch('');
     showToast('Filters reset', 'info');
   };
@@ -292,7 +292,7 @@ const OrderRequisitions = () => {
 
   // Filter requisitions based on selected filters
   const filteredRequisitions = requisitions.filter(req => {
-    if (prNumber && req.requestNo !== prNumber) return false;
+    if (selectedPrNumbers.length > 0 && !selectedPrNumbers.includes(req.requestNo)) return false;
     if (subsidiary && !req.supplier.includes(subsidiary)) return false;
     if (type) {
       // Map type values to requisition types
@@ -396,55 +396,148 @@ const OrderRequisitions = () => {
                 ))}
               </select>
             </div>
-            <div className="form-group" style={{ position: 'relative' }}>
+            <div className="form-group" style={{ position: 'relative', zIndex: showPrNumberDropdown ? 1001 : 'auto' }}>
               <label className="form-label">PR NUMBER</label>
-              <input 
-                type="text" 
-                className="form-control"
-                placeholder="Search PR Number..."
-                value={prNumberSearch}
-                onChange={(e) => {
-                  setPrNumberSearch(e.target.value);
-                  setShowPrNumberDropdown(true);
-                }}
-                onFocus={() => setShowPrNumberDropdown(true)}
-                onBlur={() => setTimeout(() => setShowPrNumberDropdown(false), 200)}
-              />
-              {showPrNumberDropdown && filteredPrNumbers.length > 0 && (
-                <div style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  right: 0,
-                  backgroundColor: 'white',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  maxHeight: '200px',
-                  overflowY: 'auto',
-                  zIndex: 1000,
-                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-                }}>
-                  {filteredPrNumbers.map((number, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setPrNumber(number);
-                        setPrNumberSearch(number);
-                        setShowPrNumberDropdown(false);
-                      }}
-                      style={{
-                        padding: '0.75rem 1rem',
-                        cursor: 'pointer',
-                        borderBottom: index < filteredPrNumbers.length - 1 ? '1px solid #f0f0f0' : 'none'
-                      }}
-                      onMouseEnter={(e) => e.target.style.background = '#f8f9fa'}
-                      onMouseLeave={(e) => e.target.style.background = 'white'}
-                    >
-                      {number}
-                    </div>
-                  ))}
+              <div style={{ position: 'relative' }}>
+                <div 
+                  className="form-control" 
+                  style={{ 
+                    minHeight: '38px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '4px',
+                    padding: selectedPrNumbers.length > 0 ? '4px' : '8px 12px',
+                    alignItems: 'center'
+                  }}
+                  onClick={() => setShowPrNumberDropdown(!showPrNumberDropdown)}
+                >
+                  {selectedPrNumbers.length === 0 ? (
+                    <span style={{ color: '#999' }}>Select PR Numbers...</span>
+                  ) : (
+                    selectedPrNumbers.map(prNum => (
+                      <span 
+                        key={prNum}
+                        style={{
+                          background: '#e3f2fd',
+                          border: '1px solid #2196F3',
+                          borderRadius: '4px',
+                          padding: '2px 8px',
+                          fontSize: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        {prNum}
+                        <i 
+                          className="fas fa-times" 
+                          style={{ cursor: 'pointer', fontSize: '10px' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPrNumbers(prev => prev.filter(p => p !== prNum));
+                          }}
+                        ></i>
+                      </span>
+                    ))
+                  )}
+                  <i 
+                    className="fas fa-chevron-down" 
+                    style={{ 
+                      marginLeft: 'auto',
+                      fontSize: '12px',
+                      color: '#666'
+                    }}
+                  ></i>
                 </div>
-              )}
+                {showPrNumberDropdown && (
+                  <>
+                    <div 
+                      style={{ 
+                        position: 'fixed', 
+                        top: 0, 
+                        left: 0, 
+                        right: 0, 
+                        bottom: 0, 
+                        zIndex: 1000 
+                      }}
+                      onClick={() => setShowPrNumberDropdown(false)}
+                    />
+                    <div 
+                      style={{ 
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                        right: 0,
+                        background: 'white', 
+                        border: '1px solid #ddd', 
+                        borderRadius: '4px', 
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+                        zIndex: 1001,
+                        marginTop: '4px',
+                        maxHeight: '300px',
+                        overflowY: 'auto'
+                      }}
+                    >
+                      <div style={{ padding: '8px', borderBottom: '1px solid #e0e0e0' }}>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search PR..."
+                          value={prNumberSearch}
+                          onChange={(e) => setPrNumberSearch(e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          style={{ fontSize: '13px', height: '32px' }}
+                        />
+                      </div>
+                      <div>
+                        {filteredPrNumbers.map(prNum => {
+                          const isSelected = selectedPrNumbers.includes(prNum);
+                          return (
+                            <div 
+                              key={prNum}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedPrNumbers(prev => {
+                                  if (isSelected) {
+                                    return prev.filter(p => p !== prNum);
+                                  } else {
+                                    return [...prev, prNum];
+                                  }
+                                });
+                              }}
+                              style={{ 
+                                padding: '10px 12px',
+                                cursor: 'pointer',
+                                fontSize: '13px',
+                                borderBottom: '1px solid #f0f0f0',
+                                backgroundColor: isSelected ? '#e3f2fd' : 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px'
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!isSelected) e.currentTarget.style.backgroundColor = '#f5f5f5';
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!isSelected) e.currentTarget.style.backgroundColor = 'white';
+                              }}
+                            >
+                              <input 
+                                type="checkbox" 
+                                checked={isSelected}
+                                onChange={() => {}}
+                                style={{ cursor: 'pointer' }}
+                              />
+                              <div style={{ fontWeight: '500', color: '#333' }}>{prNum}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

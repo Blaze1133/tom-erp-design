@@ -298,9 +298,6 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                         <tr>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>ITEM</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>VENDOR NAME</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>RECEIVED</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>BILLED</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>ON HAND</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>QUANTITY</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '60px' }}>UNITS</th>
@@ -310,13 +307,10 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>TAX RATE</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '90px' }}>GROSS AMT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>TAX AMT</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>OPTIONS</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>CUSTOMER</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>PROJECT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>DEPARTMENT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>CLASS</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>BILLABLE</th>
-                          <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '140px' }}>MATCH BILL TO RECEIPT</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '140px' }}>EXPECTED RECEIPT DATE</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>CLOSED</th>
                           <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>DO QUANTITY</th>
@@ -328,9 +322,6 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                           <tr key={item.id}>
                             <td style={{ padding: '10px 12px' }}>{item.item}</td>
                             <td style={{ padding: '10px 12px' }}>{item.description}</td>
-                            <td style={{ padding: '10px 12px' }}>{item.vendorName}</td>
-                            <td style={{ padding: '10px 12px' }}>{item.received}</td>
-                            <td style={{ padding: '10px 12px' }}>{item.billed}</td>
                             <td style={{ padding: '10px 12px' }}>{item.onHand}</td>
                             <td style={{ padding: '10px 12px' }}>{item.quantity}</td>
                             <td style={{ padding: '10px 12px' }}>{item.units}</td>
@@ -341,11 +332,8 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                             <td style={{ padding: '10px 12px' }}>{item.grossAmt.toFixed(2)}</td>
                             <td style={{ padding: '10px 12px' }}>{item.taxAmt.toFixed(2)}</td>
                             <td style={{ padding: '10px 12px' }}>-</td>
-                            <td style={{ padding: '10px 12px' }}>-</td>
-                            <td style={{ padding: '10px 12px' }}>-</td>
                             <td style={{ padding: '10px 12px' }}>TOM : Human Resource</td>
                             <td style={{ padding: '10px 12px' }}>Fabrication</td>
-                            <td style={{ padding: '10px 12px' }}>-</td>
                             <td style={{ padding: '10px 12px' }}>-</td>
                             <td style={{ padding: '10px 12px' }}>10/1/2022</td>
                             <td style={{ padding: '10px 12px' }}>-</td>
@@ -755,6 +743,7 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                   <tr>
                     <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '120px' }}>ITEM</th>
                     <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '200px' }}>DESCRIPTION</th>
+                    <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '150px' }}>VENDOR</th>
                     <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>PRICE</th>
                     <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '80px' }}>UNITS</th>
                     <th style={{ padding: '10px 12px', fontSize: '11px', minWidth: '100px' }}>QUANTITY</th>
@@ -766,6 +755,7 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                   <tr>
                     <td style={{ padding: '10px 12px' }}>{selectedItemHistory.item}</td>
                     <td style={{ padding: '10px 12px' }}>{selectedItemHistory.description}</td>
+                    <td style={{ padding: '10px 12px' }}>{poData.vendor || '-'}</td>
                     <td style={{ padding: '10px 12px' }}>{selectedItemHistory.rate.toFixed(2)}</td>
                     <td style={{ padding: '10px 12px' }}>{selectedItemHistory.units}</td>
                     <td style={{ padding: '10px 12px' }}>{selectedItemHistory.quantity}</td>
@@ -773,7 +763,7 @@ const ViewPurchaseOrderDetail = ({ setCurrentPage }) => {
                     <td style={{ padding: '10px 12px' }}>Current PO</td>
                   </tr>
                   <tr>
-                    <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.9rem' }}>
+                    <td colSpan="8" style={{ padding: '2rem', textAlign: 'center', color: '#999', fontSize: '0.9rem' }}>
                       No previous history records found
                     </td>
                   </tr>
