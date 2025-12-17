@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import EmployeePayrollTabView from './EmployeePayrollTabView';
 import EmployeeLeaveSwipeTabView from './EmployeeLeaveSwipeTabView';
-import EmployeeAccessTabView from './EmployeeAccessTabView';
 import EmployeeSystemInfoTabView from './EmployeeSystemInfoTabView';
 import EmployeeWorkInjuryTabView from './EmployeeWorkInjuryTabView';
 import EmployeeExitProcessTabView from './EmployeeExitProcessTabView';
@@ -134,10 +133,6 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{employeeData.initials}</div>
               </div>
               <div className="detail-field">
-                <label>SUBSIDIARY</label>
-                <div className="field-value">{employeeData.subsidiary}</div>
-              </div>
-              <div className="detail-field">
                 <label>COUNTRY</label>
                 <div className="field-value">Singapore</div>
               </div>
@@ -159,6 +154,10 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY</label>
+                <div className="field-value">{employeeData.subsidiary}</div>
+              </div>
               <div className="detail-field">
                 <label>DEPARTMENT</label>
                 <div className="field-value">{employeeData.department}</div>
@@ -188,10 +187,6 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                 <div className="field-value"></div>
               </div>
               <div className="detail-field">
-                <label>NOTES</label>
-                <div className="field-value"></div>
-              </div>
-              <div className="detail-field">
                 <label>CURRENCY</label>
                 <div className="field-value">{employeeData.currency}</div>
               </div>
@@ -200,20 +195,8 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                 <div className="field-value">{employeeData.supervisor}</div>
               </div>
               <div className="detail-field">
-                <label>1ST LEVEL LEAVE APPROVER</label>
-                <div className="field-value">{employeeData.supervisor}</div>
-              </div>
-              <div className="detail-field">
-                <label>2ND LEVEL LEAVE APPROVER</label>
+                <label>NOTES</label>
                 <div className="field-value"></div>
-              </div>
-              <div className="detail-field">
-                <label>3RD LEVEL LEAVE APPROVER</label>
-                <div className="field-value"></div>
-              </div>
-              <div className="detail-field">
-                <label>NAME</label>
-                <div className="field-value">{employeeData.name}</div>
               </div>
             </div>
           </div>
@@ -247,12 +230,6 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
               Leave/Swipe
             </button>
             <button 
-              className={`tab-btn ${activeTab === 'access' ? 'active' : ''}`}
-              onClick={() => setActiveTab('access')}
-            >
-              Access
-            </button>
-            <button 
               className={`tab-btn ${activeTab === 'systemInfo' ? 'active' : ''}`}
               onClick={() => setActiveTab('systemInfo')}
             >
@@ -281,37 +258,37 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                     <div className="field-value link-text">{employeeData.email}</div>
                   </div>
                   <div className="detail-field">
-                    <label>HOME PHONE</label>
-                    <div className="field-value"></div>
-                  </div>
-                  <div className="detail-field">
                     <label>ALT. EMAIL</label>
                     <div className="field-value link-text">{employeeData.email}</div>
-                  </div>
-                  <div className="detail-field">
-                    <label>FAX</label>
-                    <div className="field-value"></div>
                   </div>
                   <div className="detail-field">
                     <label>PHONE</label>
                     <div className="field-value">{employeeData.phone}</div>
                   </div>
                   <div className="detail-field">
-                    <label>ADDRESS</label>
-                    <div className="field-value" style={{ whiteSpace: 'pre-line' }}>{employeeData.address}</div>
+                    <label>MOBILE PHONE</label>
+                    <div className="field-value"></div>
+                  </div>
+                  <div className="detail-field">
+                    <label>HOME PHONE</label>
+                    <div className="field-value"></div>
                   </div>
                   <div className="detail-field">
                     <label>OFFICE PHONE</label>
                     <div className="field-value"></div>
                   </div>
                   <div className="detail-field">
-                    <label>MOBILE PHONE</label>
+                    <label>FAX</label>
                     <div className="field-value"></div>
+                  </div>
+                  <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                    <label>ADDRESS</label>
+                    <div className="field-value" style={{ whiteSpace: 'pre-line' }}>{employeeData.address}</div>
                   </div>
                 </div>
 
-                <div style={{ padding: '1.5rem', borderTop: '1px solid #e8e8e8' }}>
-                  <h4 style={{ marginBottom: '1rem', fontSize: '0.9rem', fontWeight: 600 }}>Address ●</h4>
+                <div style={{ padding: '1.5rem', borderTop: '1px solid #e0e0e0' }}>
+                  <h4 style={{ marginBottom: '1rem', fontSize: '0.85rem', fontWeight: 600, color: '#333' }}>Address ●</h4>
                   <table className="detail-items-table">
                     <thead>
                       <tr>
@@ -352,9 +329,6 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
             {activeTab === 'leaveSwipe' && (
               <EmployeeLeaveSwipeTabView />
             )}
-            {activeTab === 'access' && (
-              <EmployeeAccessTabView />
-            )}
             {activeTab === 'systemInfo' && (
               <EmployeeSystemInfoTabView />
             )}
@@ -366,59 +340,6 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
             )}
             {activeTab === 'humanResources' && (
               <div className="tab-content-wrapper">
-                {/* Top section with key HR fields - Above sub-tabs */}
-                <div style={{ 
-                  padding: '1.5rem', 
-                  background: '#f8f9fa', 
-                  borderBottom: '1px solid #e0e0e0',
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '1.5rem'
-                }}>
-                  <div>
-                    <div className="detail-field" style={{ marginBottom: '1rem' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#666', marginBottom: '0.25rem', display: 'block' }}>
-                        EMP NATIONALITY <span style={{ color: 'red' }}>*</span>
-                      </label>
-                      <div style={{ fontSize: '0.9rem', color: '#333', padding: '0.5rem', background: 'white', border: '1px solid #ddd', borderRadius: '4px' }}>
-                        INDIAN
-                      </div>
-                    </div>
-                    <div className="detail-field" style={{ marginBottom: '1rem' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#666', marginBottom: '0.25rem', display: 'block' }}>
-                        IS DUTY ROSTER
-                      </label>
-                      <div style={{ fontSize: '0.9rem', color: '#333', padding: '0.5rem' }}>
-                        <input type="checkbox" disabled style={{ marginRight: '0.5rem' }} />
-                      </div>
-                    </div>
-                    <div className="detail-field">
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#666', marginBottom: '0.25rem', display: 'block' }}>
-                        CURRENT AGE
-                      </label>
-                      <div style={{ fontSize: '0.9rem', color: '#333', padding: '0.5rem', background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '4px' }}>
-                        40
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="detail-field" style={{ marginBottom: '1rem' }}>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#666', marginBottom: '0.25rem', display: 'flex', alignItems: 'center' }}>
-                        <input type="checkbox" checked disabled style={{ marginRight: '0.5rem' }} />
-                        EXEMPTION FOR BIOMETRIC
-                      </label>
-                    </div>
-                    <div className="detail-field">
-                      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#666', marginBottom: '0.25rem', display: 'block' }}>
-                        BIO-METRIC NUMBER
-                      </label>
-                      <div style={{ fontSize: '0.9rem', color: '#333', padding: '0.5rem', background: 'white', border: '1px solid #ddd', borderRadius: '4px' }}>
-                        MEP01 001
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 {/* HR Sub-tabs - Horizontal scrollable */}
                 <div style={{ 
                   borderBottom: '2px solid #e0e0e0', 
@@ -655,6 +576,14 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                   {hrSubTab === 'basicInfo' && (
                     <div className="detail-grid">
                           <div className="detail-field">
+                            <label>EMP NATIONALITY</label>
+                            <div className="field-value">INDIAN</div>
+                          </div>
+                          <div className="detail-field">
+                            <label>CURRENT AGE</label>
+                            <div className="field-value">40</div>
+                          </div>
+                          <div className="detail-field">
                             <label>GENDER</label>
                             <div className="field-value">Male</div>
                           </div>
@@ -678,10 +607,117 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                             <label>ETHNIC RACE</label>
                             <div className="field-value">Indian</div>
                           </div>
-                          <div className="detail-field">
-                            <label>EMP NATIONALITY</label>
-                            <div className="field-value">INDIAN</div>
-                          </div>
+                          
+                          {/* Conditional Fields based on EMP RESIDENTIAL STATUS - Foreigner */}
+                          {employeeData.empResidentialStatus === 'Foreigner' && (
+                            <>
+                              <div className="detail-field">
+                                <label>TYPE OF CONTRIBUTION FUND</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>FWL CATEGORY</label>
+                                <div className="field-value">Marine WPH Basic Tier-300</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>WORK PERMIT/PASS TYPE</label>
+                                <div className="field-value">WORK PERMIT</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>PASSPORT ID</label>
+                                <div className="field-value">W8876552</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>WORK PERMIT START DATE</label>
+                                <div className="field-value">20/8/2025</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>PASSPORT EXPIRY DATE</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>WORK PERMIT END DATE</label>
+                                <div className="field-value">20/8/2026</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>EXPENSE LIMIT</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>WORK PERMIT CANCEL DATE</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>EXPENSE APPROVER</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>WORK PASS NO</label>
+                                <div className="field-value">0 33770502</div>
+                              </div>
+                            </>
+                          )}
+                          
+                          {/* Conditional Fields based on EMP RESIDENTIAL STATUS - Singapore PR */}
+                          {employeeData.empResidentialStatus === 'Singapore PR' && (
+                            <>
+                              <div className="detail-field">
+                                <label>TYPE OF CONTRIBUTION FUND</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>PASSPORT ID</label>
+                                <div className="field-value">W8876552</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>SINGAPORE PERMIT RESIDENCE START DATE</label>
+                                <div className="field-value">20/8/2025</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>PASSPORT EXPIRY DATE</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>SINGAPORE PERMIT RESIDENCE END DATE</label>
+                                <div className="field-value">20/8/2026</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>EXPENSE LIMIT</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>EXPENSE APPROVER</label>
+                                <div className="field-value"></div>
+                              </div>
+                            </>
+                          )}
+                          
+                          {/* Conditional Fields based on EMP RESIDENTIAL STATUS - Singaporean */}
+                          {employeeData.empResidentialStatus === 'Singaporean' && (
+                            <>
+                              <div className="detail-field">
+                                <label>TYPE OF CONTRIBUTION FUND</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>PASSPORT ID</label>
+                                <div className="field-value">W8876552</div>
+                              </div>
+                              <div className="detail-field">
+                                <label>PASSPORT EXPIRY DATE</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>EXPENSE LIMIT</label>
+                                <div className="field-value"></div>
+                              </div>
+                              <div className="detail-field">
+                                <label>EXPENSE APPROVER</label>
+                                <div className="field-value"></div>
+                              </div>
+                            </>
+                          )}
+                          
                           <div className="detail-field">
                             <label>IS DUTY ROSTER</label>
                             <div className="field-value">
@@ -689,66 +725,10 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                             </div>
                           </div>
                           <div className="detail-field">
-                            <label>CURRENT AGE</label>
-                            <div className="field-value">40</div>
-                          </div>
-                          <div className="detail-field">
                             <label>EXEMPTION FOR BIOMETRIC</label>
                             <div className="field-value">
                               <input type="checkbox" checked disabled />
                             </div>
-                          </div>
-                          <div className="detail-field">
-                            <label>BIO-METRIC NUMBER</label>
-                            <div className="field-value">MEP01 001</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>TYPE OF CONTRIBUTION FUND</label>
-                            <div className="field-value"></div>
-                          </div>
-                          <div className="detail-field">
-                            <label>WORK PASS NO</label>
-                            <div className="field-value">0 33770502</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>FWL CATEGORY</label>
-                            <div className="field-value">Marine WPH Basic Tier-300</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>PASSPORT ID</label>
-                            <div className="field-value">W8876552</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>SINGAPORE PERMIT RESIDENCE START DATE</label>
-                            <div className="field-value">20/8/2025</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>PASSPORT EXPIRY DATE</label>
-                            <div className="field-value"></div>
-                          </div>
-                          <div className="detail-field">
-                            <label>SINGAPORE PERMIT RESIDENCE END DATE</label>
-                            <div className="field-value">20/8/2026</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>EXPENSE LIMIT</label>
-                            <div className="field-value"></div>
-                          </div>
-                          <div className="detail-field">
-                            <label>WORK PERMIT/PASS TYPE</label>
-                            <div className="field-value">WORK PERMIT</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>EXPENSE APPROVER</label>
-                            <div className="field-value"></div>
-                          </div>
-                          <div className="detail-field">
-                            <label>WORK PERMIT START DATE</label>
-                            <div className="field-value">20/8/2025</div>
-                          </div>
-                          <div className="detail-field">
-                            <label>WORK PERMIT END DATE</label>
-                            <div className="field-value">20/8/2026</div>
                           </div>
                         </div>
                   )}
@@ -880,6 +860,10 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                           <label>DATE CONFERRED</label>
                           <div className="field-value"></div>
                         </div>
+                        <div className="detail-field">
+                          <label>ATTACHMENT</label>
+                          <div className="field-value"></div>
+                        </div>
                       </div>
                     )}
 
@@ -888,63 +872,11 @@ const ViewEmployeeDetail = ({ onBack, onEdit }) => {
                     {hrSubTab === 'certification' && (
                       <div className="detail-grid">
                         <div className="detail-field">
-                          <label>SECTOR</label>
+                          <label>CERTIFICATE TYPE</label>
                           <div className="field-value"></div>
                         </div>
                         <div className="detail-field">
-                          <label>SSIC - TRANSFER NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>SSIC GT EXPIRY DATE</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>SSDC - HOT WORK CERT NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>SSIC HT EXPIRY DATE</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>SSSC - SHIPYARD SAFETY SUPERVISOR CERT NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>BCSS CERT NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>CSOC EXPIRY DATE</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>REST DAY</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>RIGGER / SIGNAL MAN CERT NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>LIFTING SUPERVISOR - CERT NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>CSOC ATTACHMENT</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>CSOC CERT NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>CONSTRUCTION SUPERVISOR CERT NO</label>
-                          <div className="field-value"></div>
-                        </div>
-                        <div className="detail-field">
-                          <label>CORE TRADE TEST DATE</label>
+                          <label>ATTACHMENT</label>
                           <div className="field-value"></div>
                         </div>
                       </div>

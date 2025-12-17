@@ -98,45 +98,67 @@ const CreateCareerProgression = ({ progressionData, onSave, onCancel }) => {
   };
 
   return (
-    <div className="create-form">
-      <div className="quotation-header-clean">
-        <div className="page-title-clean">
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
           <i className="fas fa-chart-line"></i>
           <div>
             <h1>Career Progression-Salary</h1>
-            <p className="page-subtitle">{progressionData ? progressionData.id : 'New Career Progression'}</p>
+            <div className="detail-subtitle">
+              <span>{progressionData ? progressionData.id : 'New Career Progression'}</span>
+            </div>
           </div>
         </div>
-        <div className="header-actions-clean">
-          <button className="btn-clean btn-save" onClick={handleSave}>Save</button>
-          <button className="btn-clean btn-cancel" onClick={onCancel}>Cancel</button>
-          <button className="btn-clean"><i className="fas fa-cog"></i> Actions</button>
+        <div className="detail-actions">
+          <button className="btn-action">
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <button className="btn-action">
+            <i className="fas fa-arrow-right"></i>
+          </button>
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container-clean">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar" onClick={onCancel}>
+          <i className="fas fa-times"></i>
+          Cancel
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-cog"></i>
+          Actions
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Employee Detail Section */}
-        <div className="detail-section" style={{ marginBottom: '1.5rem' }}>
+        <div className="detail-section">
           <div 
             className="section-header" 
             onClick={() => setEmployeeDetailExpanded(!employeeDetailExpanded)}
-            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: '#f5f5f5', borderRadius: '4px' }}
           >
-            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>Employee Detail</h3>
-            <i className={`fas fa-chevron-${employeeDetailExpanded ? 'up' : 'down'}`}></i>
+            <i className={`fas fa-chevron-${employeeDetailExpanded ? 'down' : 'right'}`}></i>
+            <h3>Employee Detail</h3>
           </div>
           {employeeDetailExpanded && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '1.5rem', background: '#f9f9f9', borderRadius: '0 0 8px 8px' }}>
-              <div>
-                <div className="form-group">
-                  <label className="form-label required">EMPLOYEE NAME</label>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>EMPLOYEE NAME <span className="required">*</span></label>
                   <select className="form-control" value={formData.employeeName} onChange={(e) => handleInputChange('employeeName', e.target.value)}>
                     <option value="">Select Employee</option>
                     <option value="222267 Demo employee">222267 Demo employee</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">PROG CODE</label>
+                <div className="detail-field">
+                  <label>PROG CODE</label>
                   <select className="form-control" value={formData.progCode} onChange={(e) => handleInputChange('progCode', e.target.value)}>
                     <option value="">Select Code</option>
                     {progCodeOptions.map((code, idx) => (
@@ -144,24 +166,20 @@ const CreateCareerProgression = ({ progressionData, onSave, onCancel }) => {
                     ))}
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">HIRE DATE</label>
+                <div className="detail-field">
+                  <label>HIRE DATE</label>
                   <input type="date" className="form-control" value={formData.hireDate} onChange={(e) => handleInputChange('hireDate', e.target.value)} />
                 </div>
-              </div>
-              <div>
-                <div className="form-group">
-                  <label className="form-label">PAY GROUP</label>
+                <div className="detail-field">
+                  <label>PAY GROUP</label>
                   <input type="text" className="form-control" value={formData.payGroup} onChange={(e) => handleInputChange('payGroup', e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">JOB TITLE</label>
+                <div className="detail-field">
+                  <label>JOB TITLE</label>
                   <input type="text" className="form-control" value={formData.jobTitle} onChange={(e) => handleInputChange('jobTitle', e.target.value)} />
                 </div>
-              </div>
-              <div>
-                <div className="form-group">
-                  <label className="form-label required">SUBSIDIARY</label>
+                <div className="detail-field">
+                  <label>SUBSIDIARY <span className="required">*</span></label>
                   <select className="form-control" value={formData.subsidiary} onChange={(e) => handleInputChange('subsidiary', e.target.value)}>
                     <option value="">Select Subsidiary</option>
                     {subsidiaries.map((sub, idx) => (
@@ -169,8 +187,8 @@ const CreateCareerProgression = ({ progressionData, onSave, onCancel }) => {
                     ))}
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">COUNTRY</label>
+                <div className="detail-field">
+                  <label>COUNTRY</label>
                   <select className="form-control" value={formData.country} onChange={(e) => handleInputChange('country', e.target.value)}>
                     <option value="Singapore">Singapore</option>
                     <option value="Malaysia">Malaysia</option>
@@ -183,36 +201,29 @@ const CreateCareerProgression = ({ progressionData, onSave, onCancel }) => {
         </div>
 
         {/* Prog Detail Section */}
-        <div className="detail-section" style={{ marginBottom: '1.5rem' }}>
+        <div className="detail-section">
           <div 
             className="section-header" 
             onClick={() => setProgDetailExpanded(!progDetailExpanded)}
-            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: '#f5f5f5', borderRadius: '4px' }}
           >
-            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>Prog Detail</h3>
-            <i className={`fas fa-chevron-${progDetailExpanded ? 'up' : 'down'}`}></i>
+            <i className={`fas fa-chevron-${progDetailExpanded ? 'down' : 'right'}`}></i>
+            <h3>Prog Detail</h3>
           </div>
           {progDetailExpanded && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '1.5rem', background: '#f9f9f9', borderRadius: '0 0 8px 8px' }}>
-              <div>
-                <div className="form-group">
-                  <label className="form-label">REF APPRAISAL RECORD</label>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>REF APPRAISAL RECORD</label>
                   <select className="form-control" value={formData.refAppraisalRecord} onChange={(e) => handleInputChange('refAppraisalRecord', e.target.value)}>
                     <option value="">Select Record</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <input type="checkbox" checked={formData.dataUpdated} onChange={(e) => handleInputChange('dataUpdated', e.target.checked)} />
-                    DATA UPDATED
-                  </label>
-                </div>
-                <div className="form-group">
-                  <label className="form-label required">PROGRESSION DATE</label>
+                <div className="detail-field">
+                  <label>PROGRESSION DATE <span className="required">*</span></label>
                   <input type="text" className="form-control" value={formData.progressionDate} onChange={(e) => handleInputChange('progressionDate', e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">DEPARTMENT</label>
+                <div className="detail-field">
+                  <label>DEPARTMENT</label>
                   <select className="form-control" value={formData.department} onChange={(e) => handleInputChange('department', e.target.value)}>
                     <option value="">Select Department</option>
                     {departments.map((dept, idx) => (
@@ -220,77 +231,77 @@ const CreateCareerProgression = ({ progressionData, onSave, onCancel }) => {
                     ))}
                   </select>
                 </div>
-              </div>
-              <div>
-                <div className="form-group">
-                  <label className="form-label">STATUS</label>
+                <div className="detail-field">
+                  <label>PAY EFFECT ON <span className="required">*</span></label>
+                  <input type="text" className="form-control" value={formData.payEffectOn} onChange={(e) => handleInputChange('payEffectOn', e.target.value)} />
+                </div>
+                <div className="detail-field">
+                  <label>REASON</label>
+                  <select className="form-control" value={formData.reason} onChange={(e) => handleInputChange('reason', e.target.value)}>
+                    <option value="">- New -</option>
+                    <option value="Merit Increment">Merit Increment</option>
+                    <option value="Promotion">Promotion</option>
+                    <option value="Salary Adjustment">Salary Adjustment</option>
+                    <option value="Market Adjustment">Market Adjustment</option>
+                    <option value="Annual Increment">Annual Increment</option>
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label>DATA UPDATED</label>
+                  <div className="field-value">
+                    <input type="checkbox" checked={formData.dataUpdated} onChange={(e) => handleInputChange('dataUpdated', e.target.checked)} />
+                  </div>
+                </div>
+                <div className="detail-field">
+                  <label>STATUS</label>
                   <select className="form-control" value={formData.status} onChange={(e) => handleInputChange('status', e.target.value)}>
                     <option value="Approved">Approved</option>
                     <option value="Pending">Pending</option>
                     <option value="Rejected">Rejected</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label required">PAY EFFECT ON</label>
-                  <input type="text" className="form-control" value={formData.payEffectOn} onChange={(e) => handleInputChange('payEffectOn', e.target.value)} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">REASON</label>
-                  <select className="form-control" value={formData.reason} onChange={(e) => handleInputChange('reason', e.target.value)}>
-                    <option value="">Select Reason</option>
-                    <option value="Merit Increment">Merit Increment</option>
-                    <option value="Promotion">Promotion</option>
-                    <option value="Annual Increment">Annual Increment</option>
-                  </select>
-                </div>
               </div>
-              <div></div>
             </div>
           )}
         </div>
 
         {/* Summary Section */}
-        <div className="detail-section" style={{ marginBottom: '1.5rem' }}>
+        <div className="detail-section">
           <div 
             className="section-header" 
             onClick={() => setSummaryExpanded(!summaryExpanded)}
-            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: '#f5f5f5', borderRadius: '4px' }}
           >
-            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>Summary</h3>
-            <i className={`fas fa-chevron-${summaryExpanded ? 'up' : 'down'}`}></i>
+            <i className={`fas fa-chevron-${summaryExpanded ? 'down' : 'right'}`}></i>
+            <h3>Summary</h3>
           </div>
           {summaryExpanded && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', padding: '1.5rem', background: '#f9f9f9', borderRadius: '0 0 8px 8px' }}>
-              <div>
-                <div className="form-group">
-                  <label className="form-label required">OLD SALARY</label>
+            <div className="section-body">
+              <div className="detail-grid">
+                <div className="detail-field">
+                  <label>OLD SALARY <span className="required">*</span></label>
                   <input type="text" className="form-control" value={formData.oldSalary} onChange={(e) => handleInputChange('oldSalary', e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">NAME</label>
+                <div className="detail-field">
+                  <label>NAME</label>
                   <input type="text" className="form-control" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} />
                 </div>
-              </div>
-              <div>
-                <div className="form-group">
-                  <label className="form-label required">INCREMENT</label>
+                <div className="detail-field">
+                  <label>INCREMENT <span className="required">*</span></label>
                   <input type="text" className="form-control" value={formData.increment} onChange={(e) => handleInputChange('increment', e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">% OF INCREMENT</label>
+                <div className="detail-field">
+                  <label>% OF INCREMENT</label>
                   <input type="text" className="form-control" value={formData.percentIncrement} disabled style={{ background: '#f5f5f5' }} />
                 </div>
-              </div>
-              <div>
-                <div className="form-group">
-                  <label className="form-label">NEW SALARY</label>
+                <div className="detail-field">
+                  <label>NEW SALARY</label>
                   <input type="text" className="form-control" value={formData.newSalary} disabled style={{ background: '#f5f5f5' }} />
                 </div>
-                <div className="form-group">
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div className="detail-field">
+                  <label>UPDATE SALARY</label>
+                  <div className="field-value">
                     <input type="checkbox" checked={formData.updateSalary} onChange={(e) => handleInputChange('updateSalary', e.target.checked)} />
-                    UPDATE SALARY
-                  </label>
+                  </div>
                 </div>
               </div>
             </div>

@@ -750,12 +750,13 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'hr-employee-master', label: 'Employee Master' },
-        { id: 'hr-employee-profile', label: 'Employee Profile' },
-        { id: 'hr-fwl-qualification', label: 'FWL Qualification' },
-        { id: 'hr-shift-master', label: 'Shift Master' },
+        { id: 'hr-career-progress-salary', label: 'Career Progress Salary' },
+        { id: 'hr-asset-name-list', label: 'Asset Name List' },
         { id: 'hr-asset-issue-to-employee', label: 'Asset Issue to Employee' },
         { id: 'hr-employee-loan-application', label: 'Employee Loan Application' },
-        { id: 'hr-career-progress-salary', label: 'Career Progress Salary' },
+        { id: 'hr-leave-pay-calendar', label: 'Calendar' },
+        { id: 'hr-fwl-qualification', label: 'FWL Qualification' },
+        { id: 'hr-shift-master', label: 'Shift Master' },
         { id: 'hr-employee-exit-process', label: 'Employee Exit Process' }
       ]
     },

@@ -189,13 +189,29 @@ const ViewCareerProgressionDetail = ({ onBack, onEdit }) => {
                   <div className="field-value">{progressionData.refAppraisalRecord || '-'}</div>
                 </div>
                 <div className="detail-field" style={{ marginBottom: '1rem' }}>
+                  <label>PROGRESSION DATE</label>
+                  <div className="field-value">{progressionData.progressionDate}</div>
+                </div>
+                <div className="detail-field" style={{ marginBottom: '1rem' }}>
+                  <label>DEPARTMENT</label>
+                  <div className="field-value">{progressionData.department}</div>
+                </div>
+                <div className="detail-field" style={{ marginBottom: '1rem' }}>
+                  <label>PAY EFFECT ON</label>
+                  <div className="field-value">{progressionData.payEffectOn}</div>
+                </div>
+                <div className="detail-field" style={{ marginBottom: '1rem' }}>
+                  <label>REASON</label>
+                  <div className="field-value">{progressionData.reason || '-'}</div>
+                </div>
+              </div>
+              <div>
+                <div className="detail-field" style={{ marginBottom: '1rem' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <input type="checkbox" checked={progressionData.dataUpdated} disabled />
                     DATA UPDATED
                   </label>
                 </div>
-              </div>
-              <div>
                 <div className="detail-field" style={{ marginBottom: '1rem' }}>
                   <label>STATUS</label>
                   <div className="field-value">{progressionData.status}</div>

@@ -49,18 +49,18 @@ const ViewEmployeeLoanDetail = ({ onBack, onEdit }) => {
   ];
 
   const payScheduled = [
-    { emiDate: '1/1/2021', emiAmount: 1000, amountRemain: 11000 },
-    { emiDate: '1/2/2021', emiAmount: 1000, amountRemain: 10000 },
-    { emiDate: '1/3/2021', emiAmount: 1000, amountRemain: 9000 },
-    { emiDate: '1/4/2021', emiAmount: 1000, amountRemain: 8000 },
-    { emiDate: '1/5/2021', emiAmount: 1000, amountRemain: 7000 },
-    { emiDate: '1/6/2021', emiAmount: 1000, amountRemain: 6000 },
-    { emiDate: '1/7/2021', emiAmount: 1000, amountRemain: 5000 },
-    { emiDate: '1/8/2021', emiAmount: 1000, amountRemain: 4000 },
-    { emiDate: '1/9/2021', emiAmount: 1000, amountRemain: 3000 },
-    { emiDate: '1/10/2021', emiAmount: 1000, amountRemain: 2000 },
-    { emiDate: '1/11/2021', emiAmount: 1000, amountRemain: 1000 },
-    { emiDate: '1/12/2021', emiAmount: 1000, amountRemain: 0 }
+    { emiDate: '1/1/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 11000 },
+    { emiDate: '1/2/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 10000 },
+    { emiDate: '1/3/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 9000 },
+    { emiDate: '1/4/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 8000 },
+    { emiDate: '1/5/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 7000 },
+    { emiDate: '1/6/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 6000 },
+    { emiDate: '1/7/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 5000 },
+    { emiDate: '1/8/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 4000 },
+    { emiDate: '1/9/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 3000 },
+    { emiDate: '1/10/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 2000 },
+    { emiDate: '1/11/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 1000 },
+    { emiDate: '1/12/2021', emiAmount: 1000, loanInterestAmount: 0, principle: 1000, principleLoanAmountRemaining: 0 }
   ];
 
   const workflow = {
@@ -137,114 +137,112 @@ const ViewEmployeeLoanDetail = ({ onBack, onEdit }) => {
       </div>
 
       <div className="detail-content">
-        {/* Main Information Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', marginBottom: '2rem', padding: '1.5rem', background: '#f9f9f9', borderRadius: '8px' }}>
-          <div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>ID</label>
-              <div className="field-value">{loanData.id}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>EMPLOYEE ID | NAME</label>
-              <div className="field-value">{loanData.employeeIdName}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>LOAN CATEGORY</label>
-              <div className="field-value">{loanData.loanCategory}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>EMPLOYEE STATUS</label>
-              <div className="field-value">{loanData.employeeStatus}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>APPLICATION DATE</label>
-              <div className="field-value">{loanData.applicationDate}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>LOAN AMOUNT</label>
-              <div className="field-value">{loanData.loanAmount}</div>
-            </div>
-            <div className="detail-field">
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input type="checkbox" checked={loanData.withInterest} disabled />
-                WITH INTEREST
-              </label>
-            </div>
-            <div className="detail-field" style={{ marginTop: '1rem' }}>
-              <label>INTEREST RATE (%)</label>
-              <div className="field-value">{loanData.interestRate || '-'}</div>
-            </div>
+        <div className="detail-section">
+          <div className="section-header">
+            <h3>Loan Application Details</h3>
           </div>
-
-          <div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>DURATION COUNT - EMI</label>
-              <div className="field-value">{loanData.durationCount}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>AMOUNT - EMI</label>
-              <div className="field-value">{loanData.amountEmi}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>BEGIN - REPAYMENT</label>
-              <div className="field-value">{loanData.beginRepayment}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>END - REPAYMENT</label>
-              <div className="field-value">{loanData.endRepayment}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>REPAID LOAN AMOUNT</label>
-              <div className="field-value">{loanData.repaidLoanAmount}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>BALANCE LOAN AMOUNT</label>
-              <div className="field-value">{loanData.balanceLoanAmount}</div>
-            </div>
-          </div>
-
-          <div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>MEMO</label>
-              <div className="field-value">{loanData.memo || '-'}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>APPLICATION STATUS</label>
-              <div className="field-value">{loanData.applicationStatus}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>PAY RECORD</label>
-              <div className="field-value">{loanData.payRecord || '-'}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input type="checkbox" checked={loanData.scheduleCreated} disabled />
-                SCHEDULE CREATED
-              </label>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>SUBSIDIARY</label>
-              <div className="field-value">{loanData.subsidiary}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>COUNTRY</label>
-              <div className="field-value">{loanData.country}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>APPROVE BY MANAGER</label>
-              <div className="field-value">{loanData.approveByManager || '-'}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>APPROVE BY MD</label>
-              <div className="field-value">{loanData.approveByMd || '-'}</div>
-            </div>
-            <div className="detail-field" style={{ marginBottom: '1rem' }}>
-              <label>SUPERVISOR</label>
-              <div className="field-value">{loanData.supervisor}</div>
-            </div>
-            <div className="detail-field">
-              <label>SUPERVISOR MD</label>
-              <div className="field-value">{loanData.supervisorMd}</div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>ID</label>
+                <div className="field-value">{loanData.id}</div>
+              </div>
+              <div className="detail-field">
+                <label>EMPLOYEE ID | NAME</label>
+                <div className="field-value">{loanData.employeeIdName}</div>
+              </div>
+              <div className="detail-field">
+                <label>LOAN CATEGORY</label>
+                <div className="field-value">{loanData.loanCategory}</div>
+              </div>
+              <div className="detail-field">
+                <label>EMPLOYEE STATUS</label>
+                <div className="field-value">{loanData.employeeStatus}</div>
+              </div>
+              <div className="detail-field">
+                <label>APPLICATION DATE</label>
+                <div className="field-value">{loanData.applicationDate}</div>
+              </div>
+              <div className="detail-field">
+                <label>LOAN AMOUNT</label>
+                <div className="field-value">{loanData.loanAmount}</div>
+              </div>
+              <div className="detail-field">
+                <label>WITH INTEREST</label>
+                <div className="field-value">
+                  <input type="checkbox" checked={loanData.withInterest} disabled />
+                </div>
+              </div>
+              <div className="detail-field">
+                <label>INTEREST RATE (%)</label>
+                <div className="field-value">{loanData.interestRate || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>DURATION COUNT - EMI</label>
+                <div className="field-value">{loanData.durationCount}</div>
+              </div>
+              <div className="detail-field">
+                <label>AMOUNT - EMI</label>
+                <div className="field-value">{loanData.amountEmi}</div>
+              </div>
+              <div className="detail-field">
+                <label>BEGIN - REPAYMENT</label>
+                <div className="field-value">{loanData.beginRepayment}</div>
+              </div>
+              <div className="detail-field">
+                <label>END - REPAYMENT</label>
+                <div className="field-value">{loanData.endRepayment}</div>
+              </div>
+              <div className="detail-field">
+                <label>REPAID LOAN AMOUNT</label>
+                <div className="field-value">{loanData.repaidLoanAmount}</div>
+              </div>
+              <div className="detail-field">
+                <label>BALANCE LOAN AMOUNT</label>
+                <div className="field-value">{loanData.balanceLoanAmount}</div>
+              </div>
+              <div className="detail-field">
+                <label>APPLICATION STATUS</label>
+                <div className="field-value">{loanData.applicationStatus}</div>
+              </div>
+              <div className="detail-field">
+                <label>PAY RECORD</label>
+                <div className="field-value">{loanData.payRecord || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>SCHEDULE CREATED</label>
+                <div className="field-value">
+                  <input type="checkbox" checked={loanData.scheduleCreated} disabled />
+                </div>
+              </div>
+              <div className="detail-field">
+                <label>SUBSIDIARY</label>
+                <div className="field-value">{loanData.subsidiary}</div>
+              </div>
+              <div className="detail-field">
+                <label>COUNTRY</label>
+                <div className="field-value">{loanData.country}</div>
+              </div>
+              <div className="detail-field">
+                <label>APPROVE BY MANAGER</label>
+                <div className="field-value">{loanData.approveByManager || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>APPROVE BY MD</label>
+                <div className="field-value">{loanData.approveByMd || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>SUPERVISOR</label>
+                <div className="field-value">{loanData.supervisor}</div>
+              </div>
+              <div className="detail-field">
+                <label>SUPERVISOR MD</label>
+                <div className="field-value">{loanData.supervisorMd}</div>
+              </div>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <div className="field-value">{loanData.memo || '-'}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -286,7 +284,9 @@ const ViewEmployeeLoanDetail = ({ onBack, onEdit }) => {
                     <tr>
                       <th>EMI DATE</th>
                       <th>EMI AMOUNT</th>
-                      <th>AMOUNT REMAIN</th>
+                      <th>LOAN INTEREST AMOUNT</th>
+                      <th>PRINCIPLE</th>
+                      <th>PRINCIPLE LOAN AMOUNT REMAINING</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -294,7 +294,9 @@ const ViewEmployeeLoanDetail = ({ onBack, onEdit }) => {
                       <tr key={idx}>
                         <td>{item.emiDate}</td>
                         <td className="amount">{item.emiAmount.toLocaleString()}</td>
-                        <td className="amount">{item.amountRemain.toLocaleString()}</td>
+                        <td className="amount">{item.loanInterestAmount}</td>
+                        <td className="amount">{item.principle.toLocaleString()}</td>
+                        <td className="amount">{item.principleLoanAmountRemaining.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>

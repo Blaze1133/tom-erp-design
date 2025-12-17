@@ -90,47 +90,71 @@ const CreateAssetIssue = ({ assetData, onSave, onCancel }) => {
   };
 
   return (
-    <div className="create-form">
-      <div className="quotation-header-clean">
-        <div className="page-title-clean">
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
           <i className="fas fa-box"></i>
           <div>
             <h1>Asset Issue to Employee</h1>
-            <p className="page-subtitle">{assetData ? assetData.id : 'New Asset Issue'}</p>
+            <div className="detail-subtitle">
+              <span>{assetData ? assetData.id : 'New Asset Issue'}</span>
+            </div>
           </div>
         </div>
-        <div className="header-actions-clean">
-          <button className="btn-clean btn-save" onClick={handleSave}>Save</button>
-          <button className="btn-clean btn-cancel" onClick={onCancel}>Cancel</button>
-          <button className="btn-clean"><i className="fas fa-cog"></i> Actions</button>
+        <div className="detail-actions">
+          <button className="btn-action">
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <button className="btn-action">
+            <i className="fas fa-arrow-right"></i>
+          </button>
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
         </div>
       </div>
 
-      <div className="quotation-container-clean">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-          {/* Left Column */}
-          <div className="form-section-clean">
-            <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
-              <div className="form-group">
-                <label className="form-label">ID</label>
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar" onClick={onCancel}>
+          <i className="fas fa-times"></i>
+          Cancel
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-cog"></i>
+          Actions
+        </button>
+      </div>
+
+      <div className="detail-content">
+        <div className="detail-section">
+          <div className="section-header">
+            <h3>Asset Issue Details</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>ID</label>
                 <input type="text" className="form-control" value={formData.id} onChange={(e) => handleInputChange('id', e.target.value)} disabled style={{ background: '#f5f5f5' }} />
               </div>
-              <div className="form-group">
-                <label className="form-label required">EMPLOYEE</label>
+              <div className="detail-field">
+                <label>EMPLOYEE <span className="required">*</span></label>
                 <select className="form-control" value={formData.employee} onChange={(e) => handleInputChange('employee', e.target.value)}>
                   <option value="">Select Employee</option>
                   <option value="222267 Demo employee">222267 Demo employee</option>
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">ISSUE TYPE</label>
+              <div className="detail-field">
+                <label>ISSUE TYPE</label>
                 <select className="form-control" value={formData.issueType} onChange={(e) => handleInputChange('issueType', e.target.value)}>
                   <option value="Allocation">Allocation</option>
                   <option value="Temporary">Temporary</option>
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label required">ASSET NAME</label>
+              <div className="detail-field">
+                <label>ASSET NAME <span className="required">*</span></label>
                 <select className="form-control" value={formData.assetName} onChange={(e) => handleInputChange('assetName', e.target.value)}>
                   <option value="Laptop">Laptop</option>
                   <option value="Desktop">Desktop</option>
@@ -138,42 +162,36 @@ const CreateAssetIssue = ({ assetData, onSave, onCancel }) => {
                   <option value="Tablet">Tablet</option>
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">DESCRIPTION</label>
-                <textarea className="form-control" value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} rows="3" />
+              <div className="detail-field">
+                <label>DESCRIPTION</label>
+                <textarea className="form-control" value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} rows="2" />
               </div>
-              <div className="form-group">
-                <label className="form-label required">DATE OF ISSUE</label>
+              <div className="detail-field">
+                <label>DATE OF ISSUE <span className="required">*</span></label>
                 <input type="text" className="form-control" value={formData.dateOfIssue} onChange={(e) => handleInputChange('dateOfIssue', e.target.value)} />
               </div>
-            </div>
-          </div>
-
-          {/* Middle Column */}
-          <div className="form-section-clean">
-            <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
-              <div className="form-group">
-                <label className="form-label">NO OF DAYS</label>
+              <div className="detail-field">
+                <label>NO OF DAYS</label>
                 <input type="text" className="form-control" value={formData.noOfDays} onChange={(e) => handleInputChange('noOfDays', e.target.value)} />
               </div>
-              <div className="form-group">
-                <label className="form-label">COLLECTION DATE</label>
+              <div className="detail-field">
+                <label>COLLECTION DATE</label>
                 <input type="text" className="form-control" value={formData.collectionDate} onChange={(e) => handleInputChange('collectionDate', e.target.value)} />
               </div>
-              <div className="form-group">
-                <label className="form-label">DATE OF RETURN</label>
+              <div className="detail-field">
+                <label>DATE OF RETURN</label>
                 <input type="text" className="form-control" value={formData.dateOfReturn} onChange={(e) => handleInputChange('dateOfReturn', e.target.value)} />
               </div>
-              <div className="form-group">
-                <label className="form-label">STATUS</label>
+              <div className="detail-field">
+                <label>STATUS</label>
                 <select className="form-control" value={formData.status} onChange={(e) => handleInputChange('status', e.target.value)}>
                   {statusOptions.map((status, idx) => (
                     <option key={idx} value={status}>{status}</option>
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label required">SUBSIDIARY</label>
+              <div className="detail-field">
+                <label>SUBSIDIARY <span className="required">*</span></label>
                 <select className="form-control" value={formData.subsidiary} onChange={(e) => handleInputChange('subsidiary', e.target.value)}>
                   <option value="">Select Subsidiary</option>
                   {subsidiaries.map((sub, idx) => (
@@ -181,34 +199,28 @@ const CreateAssetIssue = ({ assetData, onSave, onCancel }) => {
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">COUNTRY</label>
+              <div className="detail-field">
+                <label>COUNTRY</label>
                 <select className="form-control" value={formData.country} onChange={(e) => handleInputChange('country', e.target.value)}>
                   <option value="Singapore">Singapore</option>
                   <option value="Malaysia">Malaysia</option>
                   <option value="Indonesia">Indonesia</option>
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">REQUEST DATE</label>
+              <div className="detail-field">
+                <label>REQUEST DATE</label>
                 <input type="text" className="form-control" value={formData.requestDate} onChange={(e) => handleInputChange('requestDate', e.target.value)} />
               </div>
-              <div className="form-group">
-                <label className="form-label required">REQUESTING DEPARTMENT</label>
+              <div className="detail-field">
+                <label>REQUESTING DEPARTMENT <span className="required">*</span></label>
                 <select className="form-control" value={formData.requestingDepartment} onChange={(e) => handleInputChange('requestingDepartment', e.target.value)}>
                   {departments.map((dept, idx) => (
                     <option key={idx} value={dept}>{dept}</option>
                   ))}
                 </select>
               </div>
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="form-section-clean">
-            <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
-              <div className="form-group">
-                <label className="form-label">ISSUING DEPARTMENT</label>
+              <div className="detail-field">
+                <label>ISSUING DEPARTMENT</label>
                 <select className="form-control" value={formData.issuingDepartment} onChange={(e) => handleInputChange('issuingDepartment', e.target.value)}>
                   <option value="">Select Department</option>
                   {departments.map((dept, idx) => (
@@ -216,16 +228,12 @@ const CreateAssetIssue = ({ assetData, onSave, onCancel }) => {
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">MEMO</label>
-                <textarea className="form-control" value={formData.memo} onChange={(e) => handleInputChange('memo', e.target.value)} rows="3" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">SUPERVISOR</label>
+              <div className="detail-field">
+                <label>SUPERVISOR</label>
                 <input type="text" className="form-control" value={formData.supervisor} onChange={(e) => handleInputChange('supervisor', e.target.value)} />
               </div>
-              <div className="form-group">
-                <label className="form-label">HR DEPT</label>
+              <div className="detail-field">
+                <label>HR DEPT</label>
                 <select className="form-control" value={formData.hrDept} onChange={(e) => handleInputChange('hrDept', e.target.value)}>
                   <option value="">Select Department</option>
                   {departments.map((dept, idx) => (
@@ -233,14 +241,18 @@ const CreateAssetIssue = ({ assetData, onSave, onCancel }) => {
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">IT ADMIN</label>
+              <div className="detail-field">
+                <label>IT ADMIN</label>
                 <select className="form-control" value={formData.itAdmin} onChange={(e) => handleInputChange('itAdmin', e.target.value)}>
                   <option value="">Select Admin</option>
                   {departments.map((dept, idx) => (
                     <option key={idx} value={dept}>{dept}</option>
                   ))}
                 </select>
+              </div>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <textarea className="form-control" value={formData.memo} onChange={(e) => handleInputChange('memo', e.target.value)} rows="2" />
               </div>
             </div>
           </div>

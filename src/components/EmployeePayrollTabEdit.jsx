@@ -151,228 +151,116 @@ const EmployeePayrollTabEdit = () => {
   );
 
   return (
-    <div className="tab-content-wrapper">
-      <style jsx>{`
-        .form-group {
-          margin-bottom: 0.5rem;
-        }
-        .form-label {
-          font-size: 0.75rem;
-          font-weight: 600;
-          margin-bottom: 0.25rem;
-          color: #4a5568;
-        }
-        .form-control {
-          padding: 0.375rem 0.5rem;
-          font-size: 0.8rem;
-          height: auto;
-        }
-      `}</style>
-      <div style={{
-        padding: '1rem',
-        background: '#f8f9fa',
-        borderBottom: '1px solid #e0e0e0',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gap: '1rem',
-        fontSize: '0.85rem'
-      }}>
-        <div style={{ display: 'grid', gap: '0.75rem' }}>
-          <div className="form-group">
-            {payrollToggle('inPayroll')}
-          </div>
-          <div className="form-group">
-            <label className="form-label required">PAY GROUP</label>
-            <select
-              className="form-control"
-              value={payrollData.payGroup}
-              onChange={(e) => handleInputChange('payGroup', e.target.value)}
-            >
-              {payGroups.map(group => (
-                <option key={group} value={group}>{group}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            {payrollToggle('cpfContribution')}
-          </div>
-          <div className="form-group">
-            {payrollToggle('sdlApplicable')}
-          </div>
-          <div className="form-group">
-            {payrollToggle('overtimeEntitled')}
-          </div>
-          <div className="form-group">
-            {payrollToggle('leaveBuybackEligibility')}
-          </div>
-          <div className="form-group">
-            {payrollToggle('awsApplicable')}
-          </div>
-          <div className="form-group">
-            <label className="form-label">SALARY AMOUNT PAID</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.salaryAmountPaid}
-              onChange={(e) => handleInputChange('salaryAmountPaid', e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">AW AMOUNT PAID</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.awAmountPaid}
-              onChange={(e) => handleInputChange('awAmountPaid', e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label required">CPF CONTRIBUTION TYPE</label>
-            <select
-              className="form-control"
-              value={payrollData.cpfContributionType}
-              onChange={(e) => handleInputChange('cpfContributionType', e.target.value)}
-            >
-              {cpfContributionTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label required">NRIC | CPF | FIN ID</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.nrIc}
-              onChange={(e) => handleInputChange('nrIc', e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">INCOME TAX ID</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.incomeTaxId}
-              onChange={(e) => handleInputChange('incomeTaxId', e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label required">EMPLOYEE WORKING SHIFT</label>
-            <select
-              className="form-control"
-              value={payrollData.workingShift}
-              onChange={(e) => handleInputChange('workingShift', e.target.value)}
-            >
-              {workingShifts.map(shift => (
-                <option key={shift} value={shift}>{shift}</option>
-              ))}
-            </select>
+    <div className="tab-content-wrapper" style={{ padding: '1.5rem' }}>
+      <div className="detail-grid" style={{ marginBottom: '1.5rem' }}>
+        <div className="detail-field">
+          <label>PAY GROUP <span className="required">*</span></label>
+          <select className="form-control" value={payrollData.payGroup} onChange={(e) => handleInputChange('payGroup', e.target.value)}>
+            {payGroups.map(group => (<option key={group} value={group}>{group}</option>))}
+          </select>
+        </div>
+        <div className="detail-field">
+          <label>WORK DAYS IN WEEK</label>
+          <input type="text" className="form-control" value={payrollData.workDaysInWeek} onChange={(e) => handleInputChange('workDaysInWeek', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>MONTHLY BASIC SALARY</label>
+          <input type="text" className="form-control" value={payrollData.monthlyBasicSalary} onChange={(e) => handleInputChange('monthlyBasicSalary', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>HOURLY RATE</label>
+          <input type="text" className="form-control" value={payrollData.hourlyRate} onChange={(e) => handleInputChange('hourlyRate', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>DAILY RATE</label>
+          <input type="text" className="form-control" value={payrollData.dailyRate} onChange={(e) => handleInputChange('dailyRate', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>PAY METHOD</label>
+          <select className="form-control" value={payrollData.payMethod} onChange={(e) => handleInputChange('payMethod', e.target.value)}>
+            {payMethods.map(method => (<option key={method} value={method}>{method}</option>))}
+          </select>
+        </div>
+        <div className="detail-field">
+          <label>EMPLOYEE WAGE TYPE</label>
+          <select className="form-control" value={payrollData.employeeWageType} onChange={(e) => handleInputChange('employeeWageType', e.target.value)}>
+            {employeeWageTypes.map(type => (<option key={type} value={type}>{type}</option>))}
+          </select>
+        </div>
+        <div className="detail-field">
+          <label>ID TYPE OF EMPLOYEE</label>
+          <select className="form-control" value={payrollData.idTypeOfEmployee} onChange={(e) => handleInputChange('idTypeOfEmployee', e.target.value)}>
+            {employeeIdTypes.map(type => (<option key={type} value={type}>{type}</option>))}
+          </select>
+        </div>
+        <div className="detail-field">
+          <label>PAY SLIP MODE</label>
+          <select className="form-control" value={payrollData.paySlipMode} onChange={(e) => handleInputChange('paySlipMode', e.target.value)}>
+            {paySlipModes.map(mode => (<option key={mode} value={mode}>{mode}</option>))}
+          </select>
+        </div>
+        <div className="detail-field">
+          <label>CPF CONTRIBUTION TYPE <span className="required">*</span></label>
+          <select className="form-control" value={payrollData.cpfContributionType} onChange={(e) => handleInputChange('cpfContributionType', e.target.value)}>
+            {cpfContributionTypes.map(type => (<option key={type} value={type}>{type}</option>))}
+          </select>
+        </div>
+        <div className="detail-field">
+          <label>EMPLOYEE WORKING SHIFT <span className="required">*</span></label>
+          <select className="form-control" value={payrollData.workingShift} onChange={(e) => handleInputChange('workingShift', e.target.value)}>
+            {workingShifts.map(shift => (<option key={shift} value={shift}>{shift}</option>))}
+          </select>
+        </div>
+        <div className="detail-field">
+          <label>NRIC | CPF | FIN ID <span className="required">*</span></label>
+          <input type="text" className="form-control" value={payrollData.nrIc} onChange={(e) => handleInputChange('nrIc', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>INCOME TAX ID</label>
+          <input type="text" className="form-control" value={payrollData.incomeTaxId} onChange={(e) => handleInputChange('incomeTaxId', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>SALARY AMOUNT PAID</label>
+          <input type="text" className="form-control" value={payrollData.salaryAmountPaid} onChange={(e) => handleInputChange('salaryAmountPaid', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>AW AMOUNT PAID</label>
+          <input type="text" className="form-control" value={payrollData.awAmountPaid} onChange={(e) => handleInputChange('awAmountPaid', e.target.value)} />
+        </div>
+        <div className="detail-field">
+          <label>IN PAYROLL</label>
+          <div className="field-value">
+            <input type="checkbox" checked={payrollData.inPayroll} onChange={(e) => handleInputChange('inPayroll', e.target.checked)} />
           </div>
         </div>
-
-        <div style={{ display: 'grid', gap: '0.75rem' }}>
-          <div className="form-group">
-            <label className="form-label">WORK DAYS IN WEEK</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.workDaysInWeek}
-              onChange={(e) => handleInputChange('workDaysInWeek', e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">MONTHLY BASIC SALARY</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.monthlyBasicSalary}
-              onChange={(e) => handleInputChange('monthlyBasicSalary', e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">HOURLY RATE</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.hourlyRate}
-              onChange={(e) => handleInputChange('hourlyRate', e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">ANNUAL CPF AW CEILING</label>
-            <input type="text" className="form-control" defaultValue="102,000.00" disabled />
-          </div>
-          <div className="form-group">
-            <label className="form-label">EMPLOYEE WAGE TYPE</label>
-            <select
-              className="form-control"
-              value={payrollData.employeeWageType}
-              onChange={(e) => handleInputChange('employeeWageType', e.target.value)}
-            >
-              {employeeWageTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">MONTHLY TOTAL SALARY</label>
-            <input type="text" className="form-control" defaultValue="1,700.00" disabled />
+        <div className="detail-field">
+          <label>CPF CONTRIBUTION</label>
+          <div className="field-value">
+            <input type="checkbox" checked={payrollData.cpfContribution} onChange={(e) => handleInputChange('cpfContribution', e.target.checked)} />
           </div>
         </div>
-
-        <div style={{ display: 'grid', gap: '0.75rem' }}>
-          <div className="form-group">
-            <label className="form-label">PAY METHOD</label>
-            <select
-              className="form-control"
-              value={payrollData.payMethod}
-              onChange={(e) => handleInputChange('payMethod', e.target.value)}
-            >
-              {payMethods.map(method => (
-                <option key={method} value={method}>{method}</option>
-              ))}
-            </select>
+        <div className="detail-field">
+          <label>SDL APPLICABLE</label>
+          <div className="field-value">
+            <input type="checkbox" checked={payrollData.sdlApplicable} onChange={(e) => handleInputChange('sdlApplicable', e.target.checked)} />
           </div>
-          <div className="form-group">
-            <label className="form-label">DAILY RATE</label>
-            <input
-              type="text"
-              className="form-control"
-              value={payrollData.dailyRate}
-              onChange={(e) => handleInputChange('dailyRate', e.target.value)}
-            />
+        </div>
+        <div className="detail-field">
+          <label>OVERTIME ENTITLED</label>
+          <div className="field-value">
+            <input type="checkbox" checked={payrollData.overtimeEntitled} onChange={(e) => handleInputChange('overtimeEntitled', e.target.checked)} />
           </div>
-          <div className="form-group">
-            <label className="form-label">MONTHLY CPF OW CEILING</label>
-            <input type="text" className="form-control" defaultValue="7,400.00" disabled />
+        </div>
+        <div className="detail-field">
+          <label>LEAVE BUY BACK ELIGIBILITY</label>
+          <div className="field-value">
+            <input type="checkbox" checked={payrollData.leaveBuybackEligibility} onChange={(e) => handleInputChange('leaveBuybackEligibility', e.target.checked)} />
           </div>
-          <div className="form-group">
-            <label className="form-label">PAY SLIP MODE</label>
-            <select
-              className="form-control"
-              value={payrollData.paySlipMode}
-              onChange={(e) => handleInputChange('paySlipMode', e.target.value)}
-            >
-              {paySlipModes.map(mode => (
-                <option key={mode} value={mode}>{mode}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">ID TYPE OF EMPLOYEE</label>
-            <select
-              className="form-control"
-              value={payrollData.idTypeOfEmployee}
-              onChange={(e) => handleInputChange('idTypeOfEmployee', e.target.value)}
-            >
-              {employeeIdTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">HOURLY RATE BASED ON - MONTHLY TOTAL SALARY</label>
-            <input type="text" className="form-control" defaultValue="8.92" disabled />
+        </div>
+        <div className="detail-field">
+          <label>AWS APPLICABLE</label>
+          <div className="field-value">
+            <input type="checkbox" checked={payrollData.awsApplicable} onChange={(e) => handleInputChange('awsApplicable', e.target.checked)} />
           </div>
         </div>
       </div>

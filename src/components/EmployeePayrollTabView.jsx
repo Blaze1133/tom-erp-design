@@ -68,45 +68,29 @@ const EmployeePayrollTabView = () => {
   );
 
   return (
-    <div className="tab-content-wrapper">
-      <div style={{
-        padding: '1.5rem',
-        background: '#f8f9fa',
-        borderBottom: '1px solid #e0e0e0',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '1.5rem'
-      }}>
-        <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-          {toggleDisplay('IN PAYROLL', payrollInfo.inPayroll)}
-          {infoBlock('PAY GROUP', payrollInfo.payGroup)}
-          {toggleDisplay('CPF CONTRIBUTION', payrollInfo.cpfContribution)}
-          {toggleDisplay('SDL APPLICABLE', payrollInfo.sdlApplicable)}
-          {toggleDisplay('OVERTIME ENTITLED', payrollInfo.overtimeEntitled)}
-          {toggleDisplay('LEAVE BUY BACK ELIGIBILITY STATUS', payrollInfo.leaveBuybackEligibility)}
-          {toggleDisplay('AWS APPLICABLE', payrollInfo.awsApplicable)}
-          {infoBlock('SALARY AMOUNT PAID', payrollInfo.salaryAmountPaid)}
-          {infoBlock('AW AMOUNT PAID', payrollInfo.awAmountPaid)}
-          {infoBlock('CPF CONTRIBUTION TYPE', payrollInfo.cpfContributionType, 2)}
-          {infoBlock('NRIC | CPF | FIN ID', payrollInfo.nrIc)}
-          {infoBlock('INCOME TAX ID', payrollInfo.incomeTaxId)}
-          {infoBlock('EMPLOYEE WORKING SHIFT', payrollInfo.workingShift)}
-        </div>
-
-        <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-          {infoBlock('WORK DAYS IN WEEK', payrollInfo.workDaysInWeek)}
-          {infoBlock('PAY METHOD', payrollInfo.payMethod)}
-          {infoBlock('MONTHLY BASIC SALARY', payrollInfo.monthlyBasicSalary)}
-          {infoBlock('DAILY RATE', payrollInfo.dailyRate)}
-          {infoBlock('HOURLY RATE', payrollInfo.hourlyRate)}
-          {infoBlock('MONTHLY CPF OW CEILING', payrollInfo.monthlyCpfOwCeiling)}
-          {infoBlock('ANNUAL CPF AW CEILING', payrollInfo.annualCpfAwCeiling)}
-          {infoBlock('PAY SLIP MODE', payrollInfo.paySlipMode)}
-          {infoBlock('EMPLOYEE WAGE TYPE', payrollInfo.employeeWageType)}
-          {infoBlock('ID TYPE OF EMPLOYEE', payrollInfo.idTypeOfEmployee)}
-          {infoBlock('MONTHLY TOTAL SALARY', payrollInfo.monthlyTotalSalary)}
-          {infoBlock('HOURLY RATE BASED ON - MONTHLY TOTAL SALARY', payrollInfo.hourlyRateBased)}
-        </div>
+    <div className="tab-content-wrapper" style={{ padding: '1.5rem' }}>
+      <div className="detail-grid" style={{ marginBottom: '1.5rem' }}>
+        {infoBlock('PAY GROUP', payrollInfo.payGroup)}
+        {infoBlock('WORK DAYS IN WEEK', payrollInfo.workDaysInWeek)}
+        {infoBlock('MONTHLY BASIC SALARY', payrollInfo.monthlyBasicSalary)}
+        {infoBlock('HOURLY RATE', payrollInfo.hourlyRate)}
+        {infoBlock('DAILY RATE', payrollInfo.dailyRate)}
+        {infoBlock('PAY METHOD', payrollInfo.payMethod)}
+        {infoBlock('EMPLOYEE WAGE TYPE', payrollInfo.employeeWageType)}
+        {infoBlock('ID TYPE OF EMPLOYEE', payrollInfo.idTypeOfEmployee)}
+        {infoBlock('PAY SLIP MODE', payrollInfo.paySlipMode)}
+        {infoBlock('CPF CONTRIBUTION TYPE', payrollInfo.cpfContributionType)}
+        {infoBlock('EMPLOYEE WORKING SHIFT', payrollInfo.workingShift)}
+        {infoBlock('NRIC | CPF | FIN ID', payrollInfo.nrIc)}
+        {infoBlock('INCOME TAX ID', payrollInfo.incomeTaxId)}
+        {infoBlock('SALARY AMOUNT PAID', payrollInfo.salaryAmountPaid)}
+        {infoBlock('AW AMOUNT PAID', payrollInfo.awAmountPaid)}
+        {toggleDisplay('IN PAYROLL', payrollInfo.inPayroll)}
+        {toggleDisplay('CPF CONTRIBUTION', payrollInfo.cpfContribution)}
+        {toggleDisplay('SDL APPLICABLE', payrollInfo.sdlApplicable)}
+        {toggleDisplay('OVERTIME ENTITLED', payrollInfo.overtimeEntitled)}
+        {toggleDisplay('LEAVE BUY BACK ELIGIBILITY', payrollInfo.leaveBuybackEligibility)}
+        {toggleDisplay('AWS APPLICABLE', payrollInfo.awsApplicable)}
       </div>
 
       <div style={{

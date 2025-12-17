@@ -262,6 +262,9 @@ import CreateShiftMaster from './components/CreateShiftMaster';
 import ViewAssetIssues from './components/ViewAssetIssues';
 import ViewAssetIssueDetail from './components/ViewAssetIssueDetail';
 import CreateAssetIssue from './components/CreateAssetIssue';
+import ViewAssetNameList from './components/ViewAssetNameList';
+import ViewAssetNameListDetail from './components/ViewAssetNameListDetail';
+import CreateAssetNameList from './components/CreateAssetNameList';
 import ViewEmployeeLoanApplications from './components/ViewEmployeeLoanApplications';
 import ViewEmployeeLoanDetail from './components/ViewEmployeeLoanDetail';
 import CreateEmployeeLoan from './components/CreateEmployeeLoan';
@@ -1147,6 +1150,29 @@ function App() {
           onCancel={() => setCurrentPage('hr-shift-master-view')}
         />;
       
+      // HR - Asset Name List
+      case 'hr-asset-name-list':
+        return <ViewAssetNameList 
+          onNewClick={() => setCurrentPage('hr-asset-name-new')}
+          onViewClick={() => setCurrentPage('hr-asset-name-view')}
+          onEditClick={() => setCurrentPage('hr-asset-name-edit')}
+        />;
+      case 'hr-asset-name-view':
+        return <ViewAssetNameListDetail 
+          onBack={() => setCurrentPage('hr-asset-name-list')}
+          onEdit={() => setCurrentPage('hr-asset-name-edit')}
+        />;
+      case 'hr-asset-name-new':
+        return <CreateAssetNameList 
+          onSave={() => setCurrentPage('hr-asset-name-list')}
+          onCancel={() => setCurrentPage('hr-asset-name-list')}
+        />;
+      case 'hr-asset-name-edit':
+        return <CreateAssetNameList 
+          onSave={() => setCurrentPage('hr-asset-name-list')}
+          onCancel={() => setCurrentPage('hr-asset-name-list')}
+        />;
+
       // HR - Asset Issue to Employee
       case 'hr-asset-issue-to-employee':
         return <ViewAssetIssues 
