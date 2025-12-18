@@ -7,6 +7,7 @@ const ViewChartOfAccountDetail = ({ onBack, onEdit }) => {
   const [activeTab, setActiveTab] = useState('workflow');
   const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
   const [restrictionsCollapsed, setRestrictionsCollapsed] = useState(false);
+  const [workflowTab, setWorkflowTab] = useState('active');
 
   // Sample data
   const accountData = {
@@ -28,7 +29,11 @@ const ViewChartOfAccountDetail = ({ onBack, onEdit }) => {
     restrictToLocation: '',
     subsidiaries: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     includeChildren: true,
-    tomRefAccountNumber: ''
+    tomRefAccountNumber: '',
+    bankRoutingNumber: '',
+    bankAccountNumber: '',
+    bankName: '',
+    date: '18/12/2025'
   };
 
   const showToast = (message, type = 'success') => {
@@ -99,104 +104,93 @@ const ViewChartOfAccountDetail = ({ onBack, onEdit }) => {
             <h3>Primary Information</h3>
           </div>
           <div className="section-body">
-            <div className="detail-grid">
-              <div className="detail-field">
-                <label>NUMBER</label>
-                <div className="field-value">{accountData.number || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>GENERAL RATE TYPE</label>
-                <div className="field-value">{accountData.generalRateType}</div>
-              </div>
-              <div className="detail-field">
-                <label>NAME</label>
-                <div className="field-value">{accountData.name}</div>
-              </div>
-              <div className="detail-field">
-                <label>CASH FLOW RATE TYPE</label>
-                <div className="field-value">{accountData.cashFlowRateType}</div>
-              </div>
-              <div className="detail-field">
-                <label>LEGAL NAME</label>
-                <div className="field-value">{accountData.legalName || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>INVENTORY</label>
-                <div className="field-value">
-                  {accountData.inventory ? '☑' : '☐'}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
+              {/* Column 1 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="detail-field">
+                  <label>NUMBER</label>
+                  <div className="field-value">{accountData.number || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>NAME</label>
+                  <div className="field-value">{accountData.name}</div>
+                </div>
+                <div className="detail-field">
+                  <label>LEGAL NAME</label>
+                  <div className="field-value">{accountData.legalName || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>SUBACCOUNT OF</label>
+                  <div className="field-value">{accountData.subaccountOf || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>TYPE</label>
+                  <div className="field-value">{accountData.type}</div>
+                </div>
+                <div className="detail-field">
+                  <label>CURRENCY</label>
+                  <div className="field-value">{accountData.currency || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>GENERAL RATE TYPE</label>
+                  <div className="field-value">{accountData.generalRateType}</div>
                 </div>
               </div>
-              <div className="detail-field">
-                <label>SUBACCOUNT OF</label>
-                <div className="field-value">{accountData.subaccountOf || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>REVALUE OPEN BALANCE FOR FOREIGN CURRENCY TRANSACTIONS</label>
-                <div className="field-value">
-                  {accountData.revalueOpenBalance ? '☑' : '☐'}
-                </div>
-              </div>
-              <div className="detail-field">
-                <label>TYPE</label>
-                <div className="field-value">{accountData.type}</div>
-              </div>
-              <div className="detail-field">
-                <label>DESCRIPTION</label>
-                <div className="field-value">{accountData.description || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>CURRENCY</label>
-                <div className="field-value">{accountData.currency || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>SUMMARY</label>
-                <div className="field-value">
-                  {accountData.summary ? '☑' : '☐'}
-                </div>
-              </div>
-              <div className="detail-field">
-                <label>INACTIVE</label>
-                <div className="field-value">
-                  {accountData.inactive ? '☑' : '☐'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Restrictions Section */}
-        <div className={`detail-section ${restrictionsCollapsed ? 'collapsed' : ''}`}>
-          <div className="section-header" onClick={() => setRestrictionsCollapsed(!restrictionsCollapsed)}>
-            <i className="fas fa-chevron-down"></i>
-            <h3>Restrictions</h3>
-          </div>
-          <div className="section-body">
-            <div className="detail-grid">
-              <div className="detail-field">
-                <label>RESTRICT TO DEPARTMENT</label>
-                <div className="field-value">{accountData.restrictToDepartment || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>SUBSIDIARIES</label>
-                <div className="field-value">{accountData.subsidiaries}</div>
-              </div>
-              <div className="detail-field">
-                <label>RESTRICT TO CLASS</label>
-                <div className="field-value">{accountData.restrictToClass || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>INCLUDE CHILDREN</label>
-                <div className="field-value">
-                  {accountData.includeChildren ? '☑' : '☐'}
+              {/* Column 2 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="detail-field">
+                  <label>CASH FLOW RATE TYPE</label>
+                  <div className="field-value">{accountData.cashFlowRateType}</div>
+                </div>
+                <div className="detail-field">
+                  <label>INVENTORY</label>
+                  <div className="field-value">{accountData.inventory ? '☑' : '☐'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>REVALUE OPEN BALANCE FOR FOREIGN CURRENCY TRANSACTIONS</label>
+                  <div className="field-value">{accountData.revalueOpenBalance ? '☑' : '☐'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>DESCRIPTION</label>
+                  <div className="field-value">{accountData.description || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>SUMMARY</label>
+                  <div className="field-value">{accountData.summary ? '☑' : '☐'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>INACTIVE</label>
+                  <div className="field-value">{accountData.inactive ? '☑' : '☐'}</div>
                 </div>
               </div>
-              <div className="detail-field">
-                <label>RESTRICT TO LOCATION</label>
-                <div className="field-value">{accountData.restrictToLocation || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>TOM REF ACCOUNT NUMBER</label>
-                <div className="field-value">{accountData.tomRefAccountNumber || '-'}</div>
+
+              {/* Column 3 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="detail-field">
+                  <label>RESTRICT TO DEPARTMENT</label>
+                  <div className="field-value">{accountData.restrictToDepartment || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>RESTRICT TO CLASS</label>
+                  <div className="field-value">{accountData.restrictToClass || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>RESTRICT TO LOCATION</label>
+                  <div className="field-value">{accountData.restrictToLocation || '-'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>SUBSIDIARIES</label>
+                  <div className="field-value">{accountData.subsidiaries}</div>
+                </div>
+                <div className="detail-field">
+                  <label>INCLUDE CHILDREN</label>
+                  <div className="field-value">{accountData.includeChildren ? '☑' : '☐'}</div>
+                </div>
+                <div className="detail-field">
+                  <label>TOM REF ACCOUNT NUMBER</label>
+                  <div className="field-value">{accountData.tomRefAccountNumber || '-'}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -219,31 +213,141 @@ const ViewChartOfAccountDetail = ({ onBack, onEdit }) => {
             </button>
           </div>
 
-          <div className="tabs-content">
+          <div className="tabs-content" style={{ padding: '1.5rem' }}>
             {activeTab === 'workflow' && (
+              <div>
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', borderBottom: '1px solid #e0e0e0' }}>
+                  <button 
+                    style={{
+                      padding: '0.5rem 1rem',
+                      border: 'none',
+                      background: workflowTab === 'active' ? 'white' : 'transparent',
+                      borderBottom: workflowTab === 'active' ? '2px solid #4a90e2' : 'none',
+                      cursor: 'pointer',
+                      fontWeight: workflowTab === 'active' ? '600' : '400',
+                      color: workflowTab === 'active' ? '#4a90e2' : '#666'
+                    }}
+                    onClick={() => setWorkflowTab('active')}
+                  >
+                    Active Workflows
+                  </button>
+                  <button 
+                    style={{
+                      padding: '0.5rem 1rem',
+                      border: 'none',
+                      background: workflowTab === 'history' ? 'white' : 'transparent',
+                      borderBottom: workflowTab === 'history' ? '2px solid #4a90e2' : 'none',
+                      cursor: 'pointer',
+                      fontWeight: workflowTab === 'history' ? '600' : '400',
+                      color: workflowTab === 'history' ? '#4a90e2' : '#666'
+                    }}
+                    onClick={() => setWorkflowTab('history')}
+                  >
+                    Workflow History
+                  </button>
+                </div>
+
+                {workflowTab === 'active' && (
+                  <div className="items-table-wrapper">
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <label style={{ fontSize: '11px', color: '#666', marginRight: '8px' }}>VIEW</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>Default</option>
+                      </select>
+                      <button className="btn btn-secondary">
+                        Customize View
+                      </button>
+                      <button className="btn btn-secondary">
+                        Refresh
+                      </button>
+                    </div>
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th>WORKFLOW</th>
+                          <th>CURRENT STATE</th>
+                          <th>DATE ENTERED WORKFLOW</th>
+                          <th>DATE ENTERED STATE</th>
+                          <th>OPTIONS</th>
+                          <th>STATUS</th>
+                          <th>CANCEL</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                            No records to show.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {workflowTab === 'history' && (
+                  <div className="items-table-wrapper">
+                    <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <label style={{ fontSize: '11px', color: '#666', marginRight: '8px' }}>VIEW</label>
+                      <select className="form-control" style={{ width: '200px' }}>
+                        <option>Default</option>
+                      </select>
+                      <button className="btn btn-secondary">
+                        Customize View
+                      </button>
+                      <button className="btn btn-secondary">
+                        Refresh
+                      </button>
+                    </div>
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th>WORKFLOW</th>
+                          <th>STATE NAME INFO</th>
+                          <th>DATE ENTERED STATE</th>
+                          <th>DATE EXITED STATE</th>
+                          <th>OPTIONS</th>
+                          <th>LOG</th>
+                          <th>NOTES</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                            No records to show.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'system-notes' && (
               <div className="items-table-wrapper">
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ marginRight: '1rem', fontSize: '0.875rem', fontWeight: '500' }}>VIEW</label>
-                  <select className="form-control" style={{ width: '200px', display: 'inline-block' }}>
+                <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <label style={{ fontSize: '11px', color: '#666', marginRight: '8px' }}>VIEW</label>
+                  <select className="form-control" style={{ width: '200px' }}>
                     <option>Default</option>
                   </select>
-                  <button className="btn btn-secondary" style={{ marginLeft: '1rem' }}>
+                  <label style={{ fontSize: '11px', color: '#666', marginRight: '8px', marginLeft: '1rem' }}>FIELD</label>
+                  <select className="form-control" style={{ width: '200px' }}>
+                    <option>- All -</option>
+                  </select>
+                  <button className="btn btn-secondary">
                     Customize View
-                  </button>
-                  <button className="btn btn-secondary" style={{ marginLeft: '0.5rem' }}>
-                    Refresh
                   </button>
                 </div>
                 <table className="detail-items-table">
                   <thead>
                     <tr>
-                      <th>WORKFLOW</th>
-                      <th>CURRENT STATE</th>
-                      <th>DATE ENTERED WORKFLOW</th>
-                      <th>DATE ENTERED STATE</th>
-                      <th>OPTIONS</th>
-                      <th>STATUS</th>
-                      <th>CANCEL</th>
+                      <th>DATE</th>
+                      <th>SET BY</th>
+                      <th>CONTEXT</th>
+                      <th>TYPE</th>
+                      <th>FIELD</th>
+                      <th>OLD VALUE</th>
+                      <th>NEW VALUE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -254,20 +358,6 @@ const ViewChartOfAccountDetail = ({ onBack, onEdit }) => {
                     </tr>
                   </tbody>
                 </table>
-              </div>
-            )}
-
-            {activeTab === 'system-notes' && (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
-                <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
-                  <button className="btn btn-secondary">
-                    Customize View
-                  </button>
-                  <button className="btn btn-secondary" style={{ marginLeft: '0.5rem' }}>
-                    Refresh
-                  </button>
-                </div>
-                <p>No system notes available.</p>
               </div>
             )}
           </div>

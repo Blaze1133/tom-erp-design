@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import './Enquiries.css';
 
-const NewChartOfAccount = () => {
+const NewChartOfAccount = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
+  const [restrictionsCollapsed, setRestrictionsCollapsed] = useState(false);
+  const [activeTab, setActiveTab] = useState('workflow');
+  const [workflowTab, setWorkflowTab] = useState('active');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -24,7 +29,11 @@ const NewChartOfAccount = () => {
     restrictToLocation: '',
     subsidiaries: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     includeChildren: true,
-    tomRefAccountNumber: ''
+    tomRefAccountNumber: '',
+    bankRoutingNumber: '',
+    bankAccountNumber: '',
+    bankName: '',
+    date: new Date().toLocaleDateString('en-GB')
   });
 
   const accountTypes = [
@@ -134,328 +143,204 @@ const NewChartOfAccount = () => {
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
       showToast('Changes cancelled', 'info');
-      window.location.reload();
+      if (setCurrentPage) {
+        setCurrentPage('view-chart-of-accounts');
+      }
+    }
+  };
+
+  const handleBack = () => {
+    if (setCurrentPage) {
+      setCurrentPage('view-chart-of-accounts');
     }
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-book" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Account</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-book"></i>
+          <div>
+            <h1>Account</h1>
+            <div className="detail-subtitle">
+              <span style={{ color: '#999', fontStyle: 'italic' }}># To be generated – New Account</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="form-container">
-        <div className="form-section">
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">NUMBER</label>
-              <input
-                type="text"
-                className="form-control"
-                value={formData.number}
-                onChange={(e) => handleInputChange('number', e.target.value)}
-              />
-            </div>
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-times"></i>
+          Cancel
+        </button>
+      </div>
 
-            <div className="form-group">
-              <label className="form-label">GENERAL RATE TYPE</label>
-              <select
-                className="form-control"
-                value={formData.generalRateType}
-                onChange={(e) => handleInputChange('generalRateType', e.target.value)}
-              >
-                {generalRateTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">RESTRICT TO DEPARTMENT</label>
-              <select
-                className="form-control"
-                value={formData.restrictToDepartment}
-                onChange={(e) => handleInputChange('restrictToDepartment', e.target.value)}
-              >
-                <option value=""></option>
-                {departments.map(dept => (
-                  <option key={dept} value={dept}>{dept}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label required">NAME</label>
-              <input
-                type="text"
-                className="form-control"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">CASH FLOW RATE TYPE</label>
-              <select
-                className="form-control"
-                value={formData.cashFlowRateType}
-                onChange={(e) => handleInputChange('cashFlowRateType', e.target.value)}
-              >
-                {cashFlowRateTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">RESTRICT TO CLASS</label>
-              <select
-                className="form-control"
-                value={formData.restrictToClass}
-                onChange={(e) => handleInputChange('restrictToClass', e.target.value)}
-              >
-                <option value=""></option>
-                {classes.map(cls => (
-                  <option key={cls} value={cls}>{cls}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">LEGAL NAME</label>
-              <input
-                type="text"
-                className="form-control"
-                value={formData.legalName}
-                onChange={(e) => handleInputChange('legalName', e.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={formData.inventory}
-                  onChange={() => handleCheckboxChange('inventory')}
-                />
-                <span>INVENTORY</span>
-              </label>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">RESTRICT TO LOCATION</label>
-              <select
-                className="form-control"
-                value={formData.restrictToLocation}
-                onChange={(e) => handleInputChange('restrictToLocation', e.target.value)}
-              >
-                <option value=""></option>
-                {locations.map(loc => (
-                  <option key={loc} value={loc}>{loc}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">SUBACCOUNT OF</label>
-              <select
-                className="form-control"
-                value={formData.subaccountOf}
-                onChange={(e) => handleInputChange('subaccountOf', e.target.value)}
-              >
-                <option value=""></option>
-                <option value="Estimates">Estimates</option>
-                <option value="Opportunities">Opportunities</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={formData.revalueOpenBalance}
-                  onChange={() => handleCheckboxChange('revalueOpenBalance')}
-                />
-                <span>REVALUE OPEN BALANCE FOR FOREIGN CURRENCY TRANSACTIONS</span>
-              </label>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label required">SUBSIDIARIES</label>
-              <select
-                className="form-control"
-                value={formData.subsidiaries}
-                onChange={(e) => handleInputChange('subsidiaries', e.target.value)}
-              >
-                {subsidiariesList.map(subsidiary => (
-                  <option key={subsidiary} value={subsidiary}>{subsidiary}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">TYPE</label>
-              <select
-                className="form-control"
-                value={formData.type}
-                onChange={(e) => handleInputChange('type', e.target.value)}
-              >
-                {accountTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">DESCRIPTION</label>
-              <textarea
-                className="form-control"
-                rows="3"
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={formData.includeChildren}
-                  onChange={() => handleCheckboxChange('includeChildren')}
-                />
-                <span>INCLUDE CHILDREN</span>
-              </label>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">CURRENCY</label>
-              <select
-                className="form-control"
-                value={formData.currency}
-                onChange={(e) => handleInputChange('currency', e.target.value)}
-              >
-                <option value=""></option>
-                {currencies.map(currency => (
-                  <option key={currency} value={currency}>{currency}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={formData.summary}
-                  onChange={() => handleCheckboxChange('summary')}
-                />
-                <span>SUMMARY</span>
-              </label>
-              <label className="checkbox-label" style={{ marginTop: '0.5rem' }}>
-                <input
-                  type="checkbox"
-                  checked={formData.inactive}
-                  onChange={() => handleCheckboxChange('inactive')}
-                />
-                <span>INACTIVE</span>
-              </label>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">TOM REF ACCOUNT NUMBER</label>
-              <input
-                type="text"
-                className="form-control"
-                value={formData.tomRefAccountNumber}
-                onChange={(e) => handleInputChange('tomRefAccountNumber', e.target.value)}
-              />
-            </div>
+      <div className="detail-content">
+        {/* Primary Information Section */}
+        <div className={`detail-section ${primaryInfoCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header" onClick={() => setPrimaryInfoCollapsed(!primaryInfoCollapsed)}>
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
           </div>
-        </div>
+          <div className="section-body">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
+              {/* Column 1 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="detail-field">
+                  <label>NUMBER <span style={{ color: 'red' }}>*</span></label>
+                  <input type="text" className="form-control" value={formData.number} onChange={(e) => handleInputChange('number', e.target.value)} />
+                </div>
+                <div className="detail-field">
+                  <label>NAME <span style={{ color: 'red' }}>*</span></label>
+                  <input type="text" className="form-control" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} required />
+                </div>
+                <div className="detail-field">
+                  <label>LEGAL NAME</label>
+                  <input type="text" className="form-control" value={formData.legalName} onChange={(e) => handleInputChange('legalName', e.target.value)} />
+                </div>
+                <div className="detail-field">
+                  <label>SUBACCOUNT OF</label>
+                  <select className="form-control" value={formData.subaccountOf} onChange={(e) => handleInputChange('subaccountOf', e.target.value)}>
+                    <option value=""></option>
+                    <option value="Estimates">Estimates</option>
+                    <option value="Opportunities">Opportunities</option>
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label>TYPE <span style={{ color: 'red' }}>*</span></label>
+                  <select className="form-control" value={formData.type} onChange={(e) => handleInputChange('type', e.target.value)}>
+                    {accountTypes.map(type => (<option key={type} value={type}>{type}</option>))}
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label>CURRENCY <span style={{ color: 'red' }}>*</span></label>
+                  <select className="form-control" value={formData.currency} onChange={(e) => handleInputChange('currency', e.target.value)}>
+                    <option value=""></option>
+                    {currencies.map(currency => (<option key={currency} value={currency}>{currency}</option>))}
+                  </select>
+                </div>
+              </div>
 
-        {/* Workflow Section */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-project-diagram"></i>
-            Workflow
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0' }} />
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ marginRight: '1rem', fontSize: '0.875rem', fontWeight: '500' }}>VIEW</label>
-            <select className="form-control" style={{ width: '200px', display: 'inline-block' }}>
-              <option>Default</option>
-            </select>
-            <button className="btn btn-secondary" style={{ marginLeft: '1rem' }}>
-              Customize View
-            </button>
-            <button className="btn btn-secondary" style={{ marginLeft: '0.5rem' }}>
-              Refresh
-            </button>
-          </div>
-          <div className="table-responsive">
-            <table className="items-table">
-              <thead>
-                <tr>
-                  <th>WORKFLOW</th>
-                  <th>CURRENT STATE</th>
-                  <th>DATE ENTERED WORKFLOW</th>
-                  <th>DATE ENTERED STATE</th>
-                  <th>OPTIONS</th>
-                  <th>STATUS</th>
-                  <th>CANCEL</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                    No records to show.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+              {/* Column 2 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="detail-field">
+                  <label>GENERAL RATE TYPE</label>
+                  <select className="form-control" value={formData.generalRateType} onChange={(e) => handleInputChange('generalRateType', e.target.value)}>
+                    {generalRateTypes.map(type => (<option key={type} value={type}>{type}</option>))}
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label>CASH FLOW RATE TYPE</label>
+                  <select className="form-control" value={formData.cashFlowRateType} onChange={(e) => handleInputChange('cashFlowRateType', e.target.value)}>
+                    {cashFlowRateTypes.map(type => (<option key={type} value={type}>{type}</option>))}
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={formData.inventory} onChange={() => handleCheckboxChange('inventory')} style={{ width: 'auto', margin: 0 }} />
+                    <span>INVENTORY</span>
+                  </label>
+                </div>
+                <div className="detail-field">
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={formData.revalueOpenBalance} onChange={() => handleCheckboxChange('revalueOpenBalance')} style={{ width: 'auto', margin: 0 }} />
+                    <span>REVALUE OPEN BALANCE FOR FOREIGN CURRENCY TRANSACTIONS</span>
+                  </label>
+                </div>
+                <div className="detail-field">
+                  <label>DESCRIPTION</label>
+                  <textarea className="form-control" rows="4" value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} />
+                </div>
+                <div className="detail-field">
+                  <label>DATE</label>
+                  <input type="date" className="form-control" value={formData.date} onChange={(e) => handleInputChange('date', e.target.value)} />
+                </div>
+                <div className="detail-field">
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={formData.summary} onChange={() => handleCheckboxChange('summary')} style={{ width: 'auto', margin: 0 }} />
+                    <span>SUMMARY</span>
+                  </label>
+                </div>
+                <div className="detail-field">
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={formData.inactive} onChange={() => handleCheckboxChange('inactive')} style={{ width: 'auto', margin: 0 }} />
+                    <span>INACTIVE</span>
+                  </label>
+                </div>
+                <div className="detail-field">
+                  <label>BANK NAME</label>
+                  <input type="text" className="form-control" value={formData.bankName} onChange={(e) => handleInputChange('bankName', e.target.value)} />
+                </div>
+              </div>
 
-        {/* System Notes Section */}
-        <div className="form-section">
-          <h2 className="section-title">
-            <i className="fas fa-sticky-note"></i>
-            System Notes
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0' }} />
-          <div style={{ marginBottom: '1rem' }}>
-            <button className="btn btn-secondary">
-              Customize View
-            </button>
-            <button className="btn btn-secondary" style={{ marginLeft: '0.5rem' }}>
-              Refresh
-            </button>
-          </div>
-          <div style={{ backgroundColor: '#f8f9fa', padding: '2rem', textAlign: 'center', borderRadius: '8px', border: '1px solid #e0e0e0' }}>
-            <p style={{ color: '#6c757d', margin: 0 }}>No records to show.</p>
+              {/* Column 3 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="detail-field">
+                  <label>BANK ROUTING NUMBER</label>
+                  <input type="text" className="form-control" value={formData.bankRoutingNumber} onChange={(e) => handleInputChange('bankRoutingNumber', e.target.value)} />
+                </div>
+                <div className="detail-field">
+                  <label>BANK ACCOUNT NUMBER</label>
+                  <input type="text" className="form-control" value={formData.bankAccountNumber} onChange={(e) => handleInputChange('bankAccountNumber', e.target.value)} />
+                </div>
+                <div className="detail-field">
+                  <label>RESTRICT TO DEPARTMENT</label>
+                  <select className="form-control" value={formData.restrictToDepartment} onChange={(e) => handleInputChange('restrictToDepartment', e.target.value)}>
+                    <option value=""></option>
+                    {departments.map(dept => (<option key={dept} value={dept}>{dept}</option>))}
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label>RESTRICT TO CLASS</label>
+                  <select className="form-control" value={formData.restrictToClass} onChange={(e) => handleInputChange('restrictToClass', e.target.value)}>
+                    <option value=""></option>
+                    {classes.map(cls => (<option key={cls} value={cls}>{cls}</option>))}
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label>RESTRICT TO LOCATION</label>
+                  <select className="form-control" value={formData.restrictToLocation} onChange={(e) => handleInputChange('restrictToLocation', e.target.value)}>
+                    <option value=""></option>
+                    {locations.map(loc => (<option key={loc} value={loc}>{loc}</option>))}
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label>SUBSIDIARIES <span style={{ color: 'red' }}>*</span></label>
+                  <select className="form-control" value={formData.subsidiaries} onChange={(e) => handleInputChange('subsidiaries', e.target.value)}>
+                    {subsidiariesList.map(subsidiary => (<option key={subsidiary} value={subsidiary}>{subsidiary}</option>))}
+                  </select>
+                </div>
+                <div className="detail-field">
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input type="checkbox" checked={formData.includeChildren} onChange={() => handleCheckboxChange('includeChildren')} style={{ width: 'auto', margin: 0 }} />
+                    <span>INCLUDE CHILDREN</span>
+                  </label>
+                </div>
+                <div className="detail-field">
+                  <label>TOM REF ACCOUNT NUMBER</label>
+                  <input type="text" className="form-control" value={formData.tomRefAccountNumber} onChange={(e) => handleInputChange('tomRefAccountNumber', e.target.value)} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <Toast
-        show={toast.show}
-        message={toast.message}
-        type={toast.type}
-        onClose={() => setToast({ ...toast, show: false })}
-      />
+      <Toast show={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
     </div>
   );
 };

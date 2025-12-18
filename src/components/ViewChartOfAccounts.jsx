@@ -6,7 +6,6 @@ const ViewChartOfAccounts = ({ onNewClick, onViewClick, onEditClick }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [searchTerm, setSearchTerm] = useState('');
   const [accountTypeFilter, setAccountTypeFilter] = useState('All Types');
-  const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [expandedNodes, setExpandedNodes] = useState({});
 
   // Hierarchical account data structure based on Excel
@@ -211,6 +210,36 @@ const ViewChartOfAccounts = ({ onNewClick, onViewClick, onEditClick }) => {
     setExpandedNodes({});
   };
 
+  // Filter accounts based on search and filters
+  const filterAccounts = (accounts) => {
+    return accounts.map(account => {
+      // Check if account matches search term
+      const matchesSearch = !searchTerm || 
+        account.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        account.code.toLowerCase().includes(searchTerm.toLowerCase());
+
+      // Check if account matches type filter
+      const matchesType = accountTypeFilter === 'All Types' || account.type === accountTypeFilter;
+
+      // Filter children recursively
+      let filteredChildren = [];
+      if (account.children) {
+        filteredChildren = filterAccounts(account.children);
+      }
+
+      // Include account if it matches or has matching children
+      if ((matchesSearch && matchesType) || filteredChildren.length > 0) {
+        return {
+          ...account,
+          children: filteredChildren
+        };
+      }
+      return null;
+    }).filter(account => account !== null);
+  };
+
+  const filteredAccountsData = filterAccounts(accountsData);
+
   const renderAccountRow = (account, parentExpanded = true) => {
     if (!parentExpanded) return null;
 
@@ -226,21 +255,6 @@ const ViewChartOfAccounts = ({ onNewClick, onViewClick, onEditClick }) => {
             fontWeight: account.isParent ? '600' : '400'
           }}
         >
-          <td>
-            <button 
-              className="view-link"
-              onClick={() => onEditClick && onEditClick(account)}
-            >
-              Edit
-            </button>
-            {' | '}
-            <button 
-              className="view-link"
-              onClick={() => onViewClick && onViewClick(account)}
-            >
-              View
-            </button>
-          </td>
           <td style={indentStyle}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               {hasChildren && (
@@ -299,6 +313,40 @@ const ViewChartOfAccounts = ({ onNewClick, onViewClick, onEditClick }) => {
           <td style={{ color: '#666', fontSize: '13px' }}>{account.currency || '-'}</td>
           <td className="amount" style={{ textAlign: 'right', color: '#333', fontSize: '13px' }}>{account.foreignCurrencyBalance || '-'}</td>
           <td className="amount" style={{ textAlign: 'right', color: '#333', fontSize: '13px', fontWeight: '500' }}>{account.balance || '-'}</td>
+          <td>
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
+              <button 
+                className="view-link"
+                onClick={() => onEditClick && onEditClick(account)}
+                title="Edit"
+                style={{
+                  padding: '4px 8px',
+                  fontSize: '12px',
+                  color: '#4a90e2',
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <i className="fas fa-edit"></i>
+              </button>
+              <button 
+                className="view-link"
+                onClick={() => onViewClick && onViewClick(account)}
+                title="View"
+                style={{
+                  padding: '4px 8px',
+                  fontSize: '12px',
+                  color: '#28a745',
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <i className="fas fa-eye"></i>
+              </button>
+            </div>
+          </td>
         </tr>
         {hasChildren && account.children.map(child => renderAccountRow(child, isExpanded))}
       </React.Fragment>
@@ -313,22 +361,48 @@ const ViewChartOfAccounts = ({ onNewClick, onViewClick, onEditClick }) => {
           <h1>Chart of Accounts</h1>
         </div>
         <div className="list-actions">
-          <button className="btn-view-option" title="Import">
-            <i className="fas fa-file-import"></i>
+          <button 
+            className="btn-view-option" 
+            title="Import"
+            style={{
+              padding: '8px 16px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              background: 'white',
+              cursor: 'pointer',
+              fontSize: '13px',
+              color: '#555',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <i className="fas fa-file-import" style={{ fontSize: '12px' }}></i>
             Import
           </button>
-          <button className="btn-view-option" title="Export">
-            <i className="fas fa-file-export"></i>
+          <button 
+            className="btn-view-option" 
+            title="Export"
+            style={{
+              padding: '8px 16px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              background: 'white',
+              cursor: 'pointer',
+              fontSize: '13px',
+              color: '#555',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <i className="fas fa-file-export" style={{ fontSize: '12px' }}></i>
             Export
-          </button>
-          <button className="btn btn-primary" onClick={() => onNewClick && onNewClick()}>
-            <i className="fas fa-plus"></i>
-            Add Account
           </button>
         </div>
       </div>
 
-      <div className="list-controls" style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #e0e0e0' }}>
+      <div className="list-controls" style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #e0e0e0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <div className="view-filter">
             <label style={{ fontSize: '11px', color: '#666', marginRight: '8px' }}>SEARCH ACCOUNTS</label>
@@ -357,64 +431,29 @@ const ViewChartOfAccounts = ({ onNewClick, onViewClick, onEditClick }) => {
               <option value="Expense">Expense</option>
             </select>
           </div>
-          <div className="view-filter">
-            <label style={{ fontSize: '11px', color: '#666', marginRight: '8px' }}>STATUS</label>
-            <select 
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="form-control"
-              style={{ width: '180px' }}
-            >
-              <option value="All Statuses">All Statuses</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-          </div>
         </div>
-      </div>
-
-      <div className="list-filters">
-        <div className="filter-group">
-          <button className="btn-icon" onClick={expandAll} title="Expand All">
-            <i className="fas fa-expand-alt"></i>
-            <span>EXPAND ALL</span>
-          </button>
-          <button className="btn-icon" onClick={collapseAll} title="Collapse All">
-            <i className="fas fa-compress-alt"></i>
-            <span>COLLAPSE ALL</span>
-          </button>
-        </div>
-        <div className="filter-right-group">
-          <div style={{ 
-            fontSize: '13px', 
-            color: '#666',
-            padding: '8px 16px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '4px',
-            fontWeight: '500'
-          }}>
-            <i className="fas fa-sitemap" style={{ marginRight: '8px', color: '#4a90e2' }}></i>
-            Account Hierarchy
-          </div>
-        </div>
+        <button className="btn btn-primary" onClick={() => onNewClick && onNewClick()}>
+          <i className="fas fa-plus"></i>
+          Add Account
+        </button>
       </div>
 
       <div className="enquiries-table-container">
         <table className="enquiries-table" style={{ borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ backgroundColor: '#f5f7fa' }}>
-              <th style={{ width: '8%', textAlign: 'left', padding: '12px 16px' }}>EDIT | VIEW</th>
-              <th style={{ width: '22%', textAlign: 'left', padding: '12px 16px' }}>ACCOUNT NAME</th>
+              <th style={{ width: '26%', textAlign: 'left', padding: '12px 16px' }}>ACCOUNT NAME</th>
               <th style={{ width: '10%', textAlign: 'left', padding: '12px 16px' }}>ACCOUNT CODE</th>
               <th style={{ width: '12%', textAlign: 'left', padding: '12px 16px' }}>TYPE</th>
               <th style={{ width: '15%', textAlign: 'left', padding: '12px 16px' }}>DESCRIPTION</th>
               <th style={{ width: '8%', textAlign: 'left', padding: '12px 16px' }}>CURRENCY</th>
               <th style={{ width: '12%', textAlign: 'right', padding: '12px 16px' }}>FOREIGN CURRENCY BALANCE</th>
-              <th style={{ width: '13%', textAlign: 'right', padding: '12px 16px' }}>BALANCE</th>
+              <th style={{ width: '11%', textAlign: 'right', padding: '12px 16px' }}>BALANCE</th>
+              <th style={{ width: '6%', textAlign: 'center', padding: '12px 16px' }}>ACTIONS</th>
             </tr>
           </thead>
           <tbody>
-            {accountsData.map(account => renderAccountRow(account, true))}
+            {filteredAccountsData.map(account => renderAccountRow(account, true))}
           </tbody>
         </table>
       </div>
