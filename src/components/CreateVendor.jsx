@@ -50,10 +50,18 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
     webAddress: '',
     comments: '',
     
+    // Individual specific fields
+    salutation: 'Mr.',
+    individualName: '',
+    jobTitle: '',
+    
     // Contact Information
     email: '',
     phone: '',
     altPhone: '',
+    altEmail: '',
+    mobilePhone: '',
+    homePhone: '',
     fax: '',
     address: isEdit ? 'Serangoon Road\nSingapore\nSingapore' : '',
     
@@ -253,47 +261,107 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
                   style={{ background: '#f5f5f5', cursor: 'not-allowed' }}
                 />
               </div>
-              <div className="detail-field">
-                <label>NAME <span style={{ color: 'red' }}>*</span></label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  required
-                />
-              </div>
-              <div className="detail-field">
-                <label>COMPANY NAME</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={formData.companyName}
-                  onChange={(e) => handleInputChange('companyName', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>CATEGORY</label>
-                <select
-                  className="form-control"
-                  value={formData.category}
-                  onChange={(e) => handleInputChange('category', e.target.value)}
-                >
-                  <option value=""></option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="detail-field">
-                <label>WEB ADDRESS</label>
-                <input
-                  type="url"
-                  className="form-control"
-                  value={formData.webAddress}
-                  onChange={(e) => handleInputChange('webAddress', e.target.value)}
-                />
-              </div>
+
+              {/* Company Type Fields */}
+              {formData.type === 'Company' && (
+                <>
+                  <div className="detail-field">
+                    <label>COMPANY NAME <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.companyName}
+                      onChange={(e) => handleInputChange('companyName', e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>WEB ADDRESS</label>
+                    <input
+                      type="url"
+                      className="form-control"
+                      value={formData.webAddress}
+                      onChange={(e) => handleInputChange('webAddress', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>CATEGORY</label>
+                    <select
+                      className="form-control"
+                      value={formData.category}
+                      onChange={(e) => handleInputChange('category', e.target.value)}
+                    >
+                      <option value=""></option>
+                      {categories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {/* Individual Type Fields */}
+              {formData.type === 'Individual' && (
+                <>
+                  <div className="detail-field">
+                    <label>COMPANY NAME</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.companyName}
+                      onChange={(e) => handleInputChange('companyName', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>JOB TITLE</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.jobTitle}
+                      onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>CATEGORY</label>
+                    <select
+                      className="form-control"
+                      value={formData.category}
+                      onChange={(e) => handleInputChange('category', e.target.value)}
+                    >
+                      <option value=""></option>
+                      {categories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>MR./MS.</label>
+                    <select
+                      className="form-control"
+                      value={formData.salutation}
+                      onChange={(e) => handleInputChange('salutation', e.target.value)}
+                    >
+                      <option value="Mr.">Mr.</option>
+                      <option value="Ms.">Ms.</option>
+                      <option value="Mrs.">Mrs.</option>
+                      <option value="Dr.">Dr.</option>
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>NAME <span style={{ color: 'red' }}>*</span></label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.individualName}
+                      onChange={(e) => handleInputChange('individualName', e.target.value)}
+                      placeholder="Enter name"
+                      required
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* TYPE Field - Common for both */}
               <div className="detail-field">
                 <label style={{ display: 'block', marginBottom: '0.5rem' }}>TYPE</label>
                 <div style={{ display: 'flex', gap: '1.5rem' }}>
@@ -319,15 +387,7 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
                   </label>
                 </div>
               </div>
-              <div className="detail-field">
-                <label>ADDRESS <span style={{ color: 'red' }}>*</span></label>
-                <textarea
-                  className="form-control"
-                  rows="2"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange('address', e.target.value)}
-                />
-              </div>
+              
               <div className="detail-field">
                 <label>COMMENTS</label>
                 <textarea
@@ -349,52 +409,136 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
-              <div className="detail-field">
-                <label>EMAIL</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>ALT. PHONE</label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  value={formData.altPhone}
-                  onChange={(e) => handleInputChange('altPhone', e.target.value)}
-                />
-              </div>
-              <div className="detail-field" style={{ display: 'none' }}>
-                <label>ADDRESS</label>
-                <textarea
-                  className="form-control"
-                  rows="3"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange('address', e.target.value)}
-                />
-                <small style={{color: 'blue', cursor: 'pointer'}}>🗺 Map</small>
-              </div>
-              <div className="detail-field">
-                <label>PHONE</label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                />
-              </div>
-              <div className="detail-field">
-                <label>FAX</label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  value={formData.fax}
-                  onChange={(e) => handleInputChange('fax', e.target.value)}
-                />
-              </div>
+              {/* Company Type - Email/Phone/Address */}
+              {formData.type === 'Company' && (
+                <>
+                  <div className="detail-field">
+                    <label>EMAIL</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>ALT. PHONE</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.altPhone}
+                      onChange={(e) => handleInputChange('altPhone', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field" style={{ gridColumn: 'span 1', gridRow: 'span 2' }}>
+                    <label>ADDRESS</label>
+                    <textarea
+                      className="form-control"
+                      rows="3"
+                      value={formData.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
+                    />
+                    <small style={{color: 'blue', cursor: 'pointer'}}>🗺 Map</small>
+                  </div>
+                  <div className="detail-field">
+                    <label>PHONE</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>FAX</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.fax}
+                      onChange={(e) => handleInputChange('fax', e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Individual Type - Email/Phone/Address */}
+              {formData.type === 'Individual' && (
+                <>
+                  <div className="detail-field">
+                    <label>EMAIL</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>ALT. PHONE</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.altPhone}
+                      onChange={(e) => handleInputChange('altPhone', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field" style={{ gridColumn: 'span 1', gridRow: 'span 3' }}>
+                    <label>ADDRESS</label>
+                    <textarea
+                      className="form-control"
+                      rows="5"
+                      value={formData.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
+                    />
+                    <small style={{color: 'blue', cursor: 'pointer'}}>🗺 Map</small>
+                  </div>
+                  <div className="detail-field">
+                    <label>ALT. EMAIL</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={formData.altEmail}
+                      onChange={(e) => handleInputChange('altEmail', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>MOBILE PHONE</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.mobilePhone}
+                      onChange={(e) => handleInputChange('mobilePhone', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>PHONE</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>HOME PHONE</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.homePhone}
+                      onChange={(e) => handleInputChange('homePhone', e.target.value)}
+                    />
+                  </div>
+                  <div className="detail-field">
+                    <label>FAX</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={formData.fax}
+                      onChange={(e) => handleInputChange('fax', e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -385,6 +385,16 @@ const CreateLead = ({ onBack }) => {
                   ))}
                 </select>
               </div>
+              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                <label>ADDRESS</label>
+                <textarea 
+                  className="form-control"
+                  value={formData.address}
+                  onChange={(e) => handleInputChange('address', e.target.value)}
+                  placeholder="Enter company address"
+                  rows="3"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -598,16 +608,6 @@ const CreateLead = ({ onBack }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
-              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
-                <label>ADDRESS</label>
-                <textarea 
-                  className="form-control"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange('address', e.target.value)}
-                  placeholder="Enter company address"
-                  rows="3"
-                />
-              </div>
               <div className="detail-field" style={{ gridColumn: 'span 2' }}>
                 <label>PROJECT DESCRIPTION</label>
                 <textarea 

@@ -18,9 +18,18 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
     companyName: '5MS Enterprise Pte Ltd',
     webAddress: '',
     comments: '',
+    
+    // Individual specific fields
+    salutation: 'Mr.',
+    individualName: 'John Doe',
+    jobTitle: 'Manager',
+    
     email: '',
     phone: '',
     altPhone: '',
+    altEmail: '',
+    mobilePhone: '',
+    homePhone: '',
     fax: '',
     address: 'Serangoon Road\nSingapore\nSingapore Map',
     primarySubsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
@@ -146,29 +155,60 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
                 <label>VENDOR ID</label>
                 <div className="field-value">{vendorData.id}</div>
               </div>
-              <div className="detail-field">
-                <label>WEB ADDRESS</label>
-                <div className="field-value">{vendorData.webAddress || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>COMMENTS</label>
-                <div className="field-value">{vendorData.comments || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>NAME</label>
-                <div className="field-value">{vendorData.name}</div>
-              </div>
-              <div className="detail-field">
-                <label>CATEGORY</label>
-                <div className="field-value">{vendorData.category}</div>
-              </div>
+
+              {/* Company Type Fields */}
+              {vendorData.type === 'Company' && (
+                <>
+                  <div className="detail-field">
+                    <label>COMPANY NAME</label>
+                    <div className="field-value">{vendorData.companyName}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>WEB ADDRESS</label>
+                    <div className="field-value">{vendorData.webAddress || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>CATEGORY</label>
+                    <div className="field-value">{vendorData.category}</div>
+                  </div>
+                </>
+              )}
+
+              {/* Individual Type Fields */}
+              {vendorData.type === 'Individual' && (
+                <>
+                  <div className="detail-field">
+                    <label>COMPANY NAME</label>
+                    <div className="field-value">{vendorData.companyName || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>JOB TITLE</label>
+                    <div className="field-value">{vendorData.jobTitle || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>CATEGORY</label>
+                    <div className="field-value">{vendorData.category}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>MR./MS.</label>
+                    <div className="field-value">{vendorData.salutation}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>NAME</label>
+                    <div className="field-value">{vendorData.individualName}</div>
+                  </div>
+                </>
+              )}
+
+              {/* TYPE Field - Common for both */}
               <div className="detail-field">
                 <label>TYPE</label>
                 <div className="field-value">{vendorData.type}</div>
               </div>
+              
               <div className="detail-field">
-                <label>COMPANY NAME</label>
-                <div className="field-value">{vendorData.companyName}</div>
+                <label>COMMENTS</label>
+                <div className="field-value">{vendorData.comments || '-'}</div>
               </div>
             </div>
           </div>
@@ -182,30 +222,77 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
           </div>
           <div className="section-body">
             <div className="detail-grid">
-              <div className="detail-field">
-                <label>EMAIL</label>
-                <div className="field-value">{vendorData.email || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>ALT. PHONE</label>
-                <div className="field-value">{vendorData.altPhone || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>ADDRESS</label>
-                <div className="field-value">
-                  {vendorData.address}
-                  <br />
-                  <small style={{color: 'blue', cursor: 'pointer'}}>🗺 Singapore Map</small>
-                </div>
-              </div>
-              <div className="detail-field">
-                <label>PHONE</label>
-                <div className="field-value">{vendorData.phone || '-'}</div>
-              </div>
-              <div className="detail-field">
-                <label>FAX</label>
-                <div className="field-value">{vendorData.fax || '-'}</div>
-              </div>
+              {/* Company Type - Email/Phone/Address */}
+              {vendorData.type === 'Company' && (
+                <>
+                  <div className="detail-field">
+                    <label>EMAIL</label>
+                    <div className="field-value">{vendorData.email || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>ALT. PHONE</label>
+                    <div className="field-value">{vendorData.altPhone || '-'}</div>
+                  </div>
+                  <div className="detail-field" style={{ gridRow: 'span 2' }}>
+                    <label>ADDRESS</label>
+                    <div className="field-value">
+                      {vendorData.address}
+                      <br />
+                      <small style={{color: 'blue', cursor: 'pointer'}}>🗺 Singapore Map</small>
+                    </div>
+                  </div>
+                  <div className="detail-field">
+                    <label>PHONE</label>
+                    <div className="field-value">{vendorData.phone || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>FAX</label>
+                    <div className="field-value">{vendorData.fax || '-'}</div>
+                  </div>
+                </>
+              )}
+
+              {/* Individual Type - Email/Phone/Address */}
+              {vendorData.type === 'Individual' && (
+                <>
+                  <div className="detail-field">
+                    <label>EMAIL</label>
+                    <div className="field-value">{vendorData.email || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>ALT. PHONE</label>
+                    <div className="field-value">{vendorData.altPhone || '-'}</div>
+                  </div>
+                  <div className="detail-field" style={{ gridRow: 'span 3' }}>
+                    <label>ADDRESS</label>
+                    <div className="field-value">
+                      {vendorData.address}
+                      <br />
+                      <small style={{color: 'blue', cursor: 'pointer'}}>🗺 Singapore Map</small>
+                    </div>
+                  </div>
+                  <div className="detail-field">
+                    <label>ALT. EMAIL</label>
+                    <div className="field-value">{vendorData.altEmail || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>MOBILE PHONE</label>
+                    <div className="field-value">{vendorData.mobilePhone || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>PHONE</label>
+                    <div className="field-value">{vendorData.phone || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>HOME PHONE</label>
+                    <div className="field-value">{vendorData.homePhone || '-'}</div>
+                  </div>
+                  <div className="detail-field">
+                    <label>FAX</label>
+                    <div className="field-value">{vendorData.fax || '-'}</div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
