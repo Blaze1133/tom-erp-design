@@ -297,6 +297,17 @@ import ViewManualEntryDetail from './components/ViewManualEntryDetail';
 import ViewEmployeeDailyAttendanceList from './components/ViewEmployeeDailyAttendanceList';
 import ViewEmployeeDailyAttendanceDetail from './components/ViewEmployeeDailyAttendanceDetail';
 import EditEmployeeDailyAttendance from './components/EditEmployeeDailyAttendance';
+import ViewTimesheetPool from './components/ViewTimesheetPool';
+import ViewTimesheetPoolDetail from './components/ViewTimesheetPoolDetail';
+import CorrectTimesheetRecord from './components/CorrectTimesheetRecord';
+import ViewPayrollRuns from './components/ViewPayrollRuns';
+import ViewPayrollRunDetail from './components/ViewPayrollRunDetail';
+import CreatePayrollRun from './components/CreatePayrollRun';
+import PayrollAttendanceVerification from './components/PayrollAttendanceVerification';
+import PayrollAdjustments from './components/PayrollAdjustments';
+import PayrollCalculationReview from './components/PayrollCalculationReview';
+import PayrollFinalization from './components/PayrollFinalization';
+import PayrollAccountsPosting from './components/PayrollAccountsPosting';
 import ViewPayComponents from './components/ViewPayComponents';
 import CreatePayComponent from './components/CreatePayComponent';
 import ViewPayComponentDetail from './components/ViewPayComponentDetail';
@@ -1047,6 +1058,65 @@ function App() {
           onBack={() => setCurrentPage('view-employee-daily-attendance-list')}
           onSave={() => setCurrentPage('view-employee-daily-attendance-list')}
           setCurrentPage={setCurrentPage} 
+        />;
+      
+      // Payroll Workflow - Timesheet Pool
+      case 'view-timesheet-pool':
+        return <ViewTimesheetPool 
+          onViewClick={() => setCurrentPage('view-timesheet-pool-detail')}
+          onNewClick={() => setCurrentPage('view-employee-daily-attendance-list')}
+          onCorrectClick={() => setCurrentPage('correct-timesheet-record')}
+        />;
+      case 'view-timesheet-pool-detail':
+        return <ViewTimesheetPoolDetail 
+          onBack={() => setCurrentPage('view-timesheet-pool')}
+        />;
+      case 'correct-timesheet-record':
+        return <CorrectTimesheetRecord 
+          onBack={() => setCurrentPage('view-timesheet-pool')}
+          onSave={() => setCurrentPage('view-timesheet-pool')}
+        />;
+      
+      // Payroll Workflow - Payroll Runs
+      case 'view-payroll-runs':
+        return <ViewPayrollRuns 
+          onViewClick={() => setCurrentPage('view-payroll-run-detail')}
+          onNewClick={() => setCurrentPage('create-payroll-run')}
+        />;
+      case 'view-payroll-run-detail':
+        return <ViewPayrollRunDetail 
+          onBack={() => setCurrentPage('view-payroll-runs')}
+          onEdit={() => setCurrentPage('create-payroll-run')}
+        />;
+      case 'create-payroll-run':
+        return <CreatePayrollRun 
+          onBack={() => setCurrentPage('view-payroll-runs')}
+          setCurrentPage={setCurrentPage}
+        />;
+      case 'payroll-attendance-verification':
+        return <PayrollAttendanceVerification 
+          onBack={() => setCurrentPage('view-payroll-runs')}
+          onConfirm={() => setCurrentPage('payroll-adjustments')}
+        />;
+      case 'payroll-adjustments':
+        return <PayrollAdjustments 
+          onBack={() => setCurrentPage('payroll-attendance-verification')}
+          onNext={() => setCurrentPage('payroll-calculation-review')}
+        />;
+      case 'payroll-calculation-review':
+        return <PayrollCalculationReview 
+          onBack={() => setCurrentPage('payroll-adjustments')}
+          onApprove={() => setCurrentPage('payroll-finalization')}
+        />;
+      case 'payroll-finalization':
+        return <PayrollFinalization 
+          onBack={() => setCurrentPage('payroll-calculation-review')}
+          onFinalize={() => setCurrentPage('payroll-accounts-posting')}
+        />;
+      case 'payroll-accounts-posting':
+        return <PayrollAccountsPosting 
+          onBack={() => setCurrentPage('payroll-finalization')}
+          onComplete={() => setCurrentPage('view-payroll-runs')}
         />;
       
       // Individual Price List

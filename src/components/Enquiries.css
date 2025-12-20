@@ -344,6 +344,12 @@
     display: inline-block;
 }
 
+.status-badge.approved-locked {
+    background: #6b7280;
+    color: #fff;
+    border: 1px solid #4b5563;
+}
+
 .status-proposal {
     background: #e3f2fd;
     color: #1976d2;
@@ -506,6 +512,7 @@
 
 .detail-actions {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
 }
 

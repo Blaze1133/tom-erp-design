@@ -702,6 +702,27 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       ]
     },
     { 
+      id: 'payroll-data-prep',
+      label: 'Data Preparation',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-yard-data', label: 'Yard Data' },
+        { id: 'view-biometric-data', label: 'Biometric Data' },
+        { id: 'view-manual-entry', label: 'Manual Entry' },
+        { id: 'employee-daily-attendance-list', label: 'Employee Daily Attendance List' }
+      ]
+    },
+    { 
+      id: 'payroll-workflow',
+      label: 'Payroll Workflow',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'view-timesheet-pool', label: 'Timesheet Pool' },
+        { id: 'create-payroll-run', label: 'Create Payroll Run' },
+        { id: 'view-payroll-runs', label: 'Payroll Runs' }
+      ]
+    },
+    { 
       id: 'payroll-processing',
       label: 'Payroll Processing',
       hasSubmenu: true,
@@ -720,17 +741,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
         { id: 'payroll-community-contribution-fund', label: 'Community Contribution Fund' },
         { id: 'payroll-sdl-master', label: 'SDL Master' },
         { id: 'payroll-ir8a-year', label: 'IR8A Year' }
-      ]
-    },
-    { 
-      id: 'payroll-data-prep',
-      label: 'Data Preparation',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'view-yard-data', label: 'Yard Data' },
-        { id: 'view-biometric-data', label: 'Biometric Data' },
-        { id: 'view-manual-entry', label: 'Manual Entry' },
-        { id: 'employee-daily-attendance-list', label: 'Employee Daily Attendance List' }
       ]
     },
     { 
