@@ -256,6 +256,11 @@ import CreateEmployee from './components/CreateEmployee';
 import ViewLeavePayCalendars from './components/ViewLeavePayCalendars';
 import ViewLeavePayCalendarDetail from './components/ViewLeavePayCalendarDetail';
 import CreateLeavePayCalendar from './components/CreateLeavePayCalendar';
+import ViewCalendarMasters from './components/ViewCalendarMasters';
+import ViewCalendarDetail from './components/ViewCalendarDetail';
+import CreateCalendar from './components/CreateCalendar';
+import CreatePublicHoliday from './components/CreatePublicHoliday';
+import CreatePayPeriod from './components/CreatePayPeriod';
 import ViewShiftMasters from './components/ViewShiftMasters';
 import ViewShiftMasterDetail from './components/ViewShiftMasterDetail';
 import CreateShiftMaster from './components/CreateShiftMaster';
@@ -1186,7 +1191,46 @@ function App() {
           onCancel={() => setCurrentPage('hr-employee-master-view')}
         />;
       
-      // HR - Leave Pay Calendar
+      // HR - Calendar Masters
+      case 'hr-calendar-masters':
+        return <ViewCalendarMasters 
+          onNewClick={() => setCurrentPage('hr-calendar-masters-new')}
+          onViewClick={() => setCurrentPage('hr-calendar-masters-view')}
+          onEditClick={() => setCurrentPage('hr-calendar-masters-edit')}
+        />;
+      case 'hr-calendar-masters-view':
+        return <ViewCalendarDetail 
+          onBack={() => setCurrentPage('hr-calendar-masters')}
+          onNewPublicHoliday={() => setCurrentPage('hr-calendar-masters-new-holiday')}
+          onNewPayPeriod={() => setCurrentPage('hr-calendar-masters-new-pay-period')}
+        />;
+      case 'hr-calendar-masters-new-holiday':
+        return <CreatePublicHoliday 
+          onBack={() => setCurrentPage('hr-calendar-masters-view')}
+          onSave={() => setCurrentPage('hr-calendar-masters-view')}
+        />;
+      case 'hr-calendar-masters-new-pay-period':
+        return <CreatePayPeriod 
+          onBack={() => setCurrentPage('hr-calendar-masters-view')}
+          onSave={() => setCurrentPage('hr-calendar-masters-view')}
+        />;
+      case 'hr-calendar-masters-new':
+        return <CreateCalendar 
+          onBack={() => setCurrentPage('hr-calendar-masters')}
+          onSave={() => setCurrentPage('hr-calendar-masters')}
+        />;
+      case 'hr-calendar-masters-edit':
+        return <CreateCalendar 
+          calendarData={{
+            name: '2021 (MEP)',
+            year: 2021,
+            subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.'
+          }}
+          onBack={() => setCurrentPage('hr-calendar-masters-view')}
+          onSave={() => setCurrentPage('hr-calendar-masters-view')}
+        />;
+      
+      // HR - Leave Pay Calendar (Old)
       case 'hr-leave-pay-calendar':
         return <ViewLeavePayCalendars 
           onNewClick={() => setCurrentPage('hr-leave-pay-calendar-new')}
