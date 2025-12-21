@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewPayrollRunDetail = ({ onBack, onEdit, payrollRunData }) => {
+const ViewPayrollRunDetail = ({ onBack, onEdit, onProcess, payrollRunData }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
   const [processingOptionsCollapsed, setProcessingOptionsCollapsed] = useState(false);
@@ -89,7 +89,11 @@ const ViewPayrollRunDetail = ({ onBack, onEdit, payrollRunData }) => {
   };
 
   const handleProcess = () => {
-    showToast('Processing payroll run...', 'info');
+    if (onProcess) {
+      onProcess(data.stage);
+    } else {
+      showToast('Processing payroll run...', 'info');
+    }
   };
 
   const getStatusColor = (status) => {
@@ -153,10 +157,10 @@ const ViewPayrollRunDetail = ({ onBack, onEdit, payrollRunData }) => {
           <i className="fas fa-edit"></i>
           Edit
         </button>
-        {data.status === 'In Progress' && (
-          <button className="btn-toolbar" onClick={handleProcess}>
-            <i className="fas fa-cogs"></i>
-            Process
+        {data.status === 'In Progress' && data.stage !== 'Accounts Verified' && (
+          <button className="btn-toolbar-primary" onClick={handleProcess} style={{ background: '#10b981', marginLeft: '0.5rem' }}>
+            <i className="fas fa-play-circle"></i>
+            Process Workflow
           </button>
         )}
         <button className="btn-toolbar">

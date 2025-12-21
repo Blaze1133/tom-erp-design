@@ -1082,11 +1082,33 @@ function App() {
         return <ViewPayrollRuns 
           onViewClick={() => setCurrentPage('view-payroll-run-detail')}
           onNewClick={() => setCurrentPage('create-payroll-run')}
+          onProcessClick={(record) => {
+            // Navigate to appropriate workflow stage based on current stage
+            const stageMap = {
+              'Created': 'payroll-attendance-verification',
+              'Attendance Verification': 'payroll-adjustments',
+              'Adjustments': 'payroll-calculation-review',
+              'Payroll Review': 'payroll-finalization',
+              'Finalization': 'payroll-accounts-posting'
+            };
+            setCurrentPage(stageMap[record.stage] || 'payroll-attendance-verification');
+          }}
         />;
       case 'view-payroll-run-detail':
         return <ViewPayrollRunDetail 
           onBack={() => setCurrentPage('view-payroll-runs')}
           onEdit={() => setCurrentPage('create-payroll-run')}
+          onProcess={(stage) => {
+            // Navigate to appropriate workflow stage
+            const stageMap = {
+              'Created': 'payroll-attendance-verification',
+              'Attendance Verification': 'payroll-adjustments',
+              'Adjustments': 'payroll-calculation-review',
+              'Payroll Review': 'payroll-finalization',
+              'Finalization': 'payroll-accounts-posting'
+            };
+            setCurrentPage(stageMap[stage] || 'payroll-attendance-verification');
+          }}
         />;
       case 'create-payroll-run':
         return <CreatePayrollRun 

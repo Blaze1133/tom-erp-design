@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewPayrollRuns = ({ onViewClick, onNewClick }) => {
+const ViewPayrollRuns = ({ onViewClick, onNewClick, onProcessClick }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [searchText, setSearchText] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -67,7 +67,11 @@ const ViewPayrollRuns = ({ onViewClick, onNewClick }) => {
   };
 
   const handleProcess = (record) => {
-    showToast(`Processing payroll run ${record.id}...`, 'info');
+    if (onProcessClick) {
+      onProcessClick(record);
+    } else {
+      showToast(`Processing payroll run ${record.id}...`, 'info');
+    }
   };
 
   const showToast = (message, type = 'success') => {
