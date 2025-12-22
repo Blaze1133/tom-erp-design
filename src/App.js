@@ -442,6 +442,10 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState('dashboard');
+  const [payrollViewOnly, setPayrollViewOnly] = useState(false);
+  const [selectedYardData, setSelectedYardData] = useState(null);
+  const [selectedBiometricData, setSelectedBiometricData] = useState(null);
+  const [selectedManualEntry, setSelectedManualEntry] = useState(null);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -1088,31 +1092,34 @@ function App() {
           onViewClick={() => setCurrentPage('view-payroll-run-detail')}
           onNewClick={() => setCurrentPage('create-payroll-run')}
           onProcessClick={(record) => {
-            // Navigate to appropriate workflow stage based on current stage
-            const stageMap = {
-              'Created': 'payroll-attendance-verification',
-              'Attendance Verification': 'payroll-adjustments',
-              'Adjustments': 'payroll-calculation-review',
-              'Payroll Review': 'payroll-finalization',
-              'Finalization': 'payroll-accounts-posting'
-            };
-            setCurrentPage(stageMap[record.stage] || 'payroll-attendance-verification');
+            // Always start processing from Attendance Verification
+            setPayrollViewOnly(false);
+            setCurrentPage('payroll-attendance-verification');
           }}
         />;
       case 'view-payroll-run-detail':
         return <ViewPayrollRunDetail 
           onBack={() => setCurrentPage('view-payroll-runs')}
           onEdit={() => setCurrentPage('create-payroll-run')}
-          onProcess={(stage) => {
+          onProcess={(stage, viewOnly = false) => {
             // Navigate to appropriate workflow stage
             const stageMap = {
               'Created': 'payroll-attendance-verification',
-              'Attendance Verification': 'payroll-adjustments',
-              'Adjustments': 'payroll-calculation-review',
-              'Payroll Review': 'payroll-finalization',
-              'Finalization': 'payroll-accounts-posting'
+              'Attendance Verification': 'payroll-attendance-verification',
+              'Adjustments': 'payroll-adjustments',
+              'Payroll Review': 'payroll-calculation-review',
+              'Finalization': 'payroll-finalization',
+              'Accounts Verified': 'payroll-accounts-posting'
             };
-            setCurrentPage(stageMap[stage] || 'payroll-attendance-verification');
+            setPayrollViewOnly(viewOnly);
+            
+            // When processing (not view-only), always start from Attendance Verification
+            if (!viewOnly) {
+              setCurrentPage('payroll-attendance-verification');
+            } else {
+              // When viewing, go to the specific stage clicked
+              setCurrentPage(stageMap[stage] || 'payroll-attendance-verification');
+            }
           }}
         />;
       case 'create-payroll-run':
@@ -1122,28 +1129,48 @@ function App() {
         />;
       case 'payroll-attendance-verification':
         return <PayrollAttendanceVerification 
-          onBack={() => setCurrentPage('view-payroll-runs')}
+          onBack={() => {
+            setPayrollViewOnly(false);
+            setCurrentPage('view-payroll-runs');
+          }}
           onConfirm={() => setCurrentPage('payroll-adjustments')}
+          viewOnly={payrollViewOnly}
         />;
       case 'payroll-adjustments':
         return <PayrollAdjustments 
-          onBack={() => setCurrentPage('payroll-attendance-verification')}
+          onBack={() => {
+            setPayrollViewOnly(false);
+            setCurrentPage('view-payroll-run-detail');
+          }}
           onNext={() => setCurrentPage('payroll-calculation-review')}
+          viewOnly={payrollViewOnly}
         />;
       case 'payroll-calculation-review':
         return <PayrollCalculationReview 
-          onBack={() => setCurrentPage('payroll-adjustments')}
+          onBack={() => {
+            setPayrollViewOnly(false);
+            setCurrentPage('view-payroll-run-detail');
+          }}
           onApprove={() => setCurrentPage('payroll-finalization')}
+          viewOnly={payrollViewOnly}
         />;
       case 'payroll-finalization':
         return <PayrollFinalization 
-          onBack={() => setCurrentPage('payroll-calculation-review')}
+          onBack={() => {
+            setPayrollViewOnly(false);
+            setCurrentPage('view-payroll-run-detail');
+          }}
           onFinalize={() => setCurrentPage('payroll-accounts-posting')}
+          viewOnly={payrollViewOnly}
         />;
       case 'payroll-accounts-posting':
         return <PayrollAccountsPosting 
-          onBack={() => setCurrentPage('payroll-finalization')}
+          onBack={() => {
+            setPayrollViewOnly(false);
+            setCurrentPage('view-payroll-run-detail');
+          }}
           onComplete={() => setCurrentPage('view-payroll-runs')}
+          viewOnly={payrollViewOnly}
         />;
       
       // Individual Price List
@@ -1796,13 +1823,17 @@ function App() {
       case 'view-yard-data':
         return <ViewYardData 
           onNewClick={() => setCurrentPage('create-yard-data')}
-          onViewClick={() => setCurrentPage('view-yard-data-detail')}
+          onViewClick={(record) => {
+            setSelectedYardData(record);
+            setCurrentPage('view-yard-data-detail');
+          }}
           onEditClick={() => setCurrentPage('create-yard-data')}
         />;
       case 'view-yard-data-detail':
         return <ViewYardDataDetail 
           onBack={() => setCurrentPage('view-yard-data')}
           onEdit={() => setCurrentPage('create-yard-data')}
+          recordData={selectedYardData}
         />;
       
       // Payroll - Biometric Data
@@ -1811,13 +1842,17 @@ function App() {
       case 'view-biometric-data':
         return <ViewBiometricData 
           onNewClick={() => setCurrentPage('create-biometric-data')}
-          onViewClick={() => setCurrentPage('view-biometric-data-detail')}
+          onViewClick={(record) => {
+            setSelectedBiometricData(record);
+            setCurrentPage('view-biometric-data-detail');
+          }}
           onEditClick={() => setCurrentPage('create-biometric-data')}
         />;
       case 'view-biometric-data-detail':
         return <ViewBiometricDataDetail 
           onBack={() => setCurrentPage('view-biometric-data')}
           onEdit={() => setCurrentPage('create-biometric-data')}
+          recordData={selectedBiometricData}
         />;
       
       // Payroll - Manual Entry
@@ -1826,13 +1861,17 @@ function App() {
       case 'view-manual-entry':
         return <ViewManualEntry 
           onNewClick={() => setCurrentPage('create-manual-entry')}
-          onViewClick={() => setCurrentPage('view-manual-entry-detail')}
+          onViewClick={(record) => {
+            setSelectedManualEntry(record);
+            setCurrentPage('view-manual-entry-detail');
+          }}
           onEditClick={() => setCurrentPage('create-manual-entry')}
         />;
       case 'view-manual-entry-detail':
         return <ViewManualEntryDetail 
           onBack={() => setCurrentPage('view-manual-entry')}
           onEdit={() => setCurrentPage('create-manual-entry')}
+          recordData={selectedManualEntry}
         />;
       
       // Reports Module

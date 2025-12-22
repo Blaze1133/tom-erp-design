@@ -2,74 +2,80 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const PayrollAdjustments = ({ payrollRunId, onBack, onNext }) => {
+const PayrollAdjustments = ({ payrollRunId, onBack, onNext, viewOnly = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [activeTab, setActiveTab] = useState('additions');
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [formData, setFormData] = useState({
-    employee: '',
-    component: '',
-    amount: '',
-    remarks: ''
-  });
+  const [searchText, setSearchText] = useState('');
 
-  const [additions, setAdditions] = useState([
+  // Employee data with adjustments
+  const [employees, setEmployees] = useState([
     {
-      id: 1,
-      employeeId: 'TMO008',
-      employeeName: 'Natarajan Muruganandham',
-      component: 'Performance Bonus',
-      amount: 500.00,
-      remarks: 'Q1 2024 Performance Bonus',
-      addedBy: 'HR Manager',
-      addedDate: '01-May-2024'
+      id: 'TMO008',
+      name: 'Natarajan Muruganandham',
+      department: 'TOM: Operating',
+      designation: 'Technician',
+      basicSalary: 2800.00,
+      bonus: 500.00,
+      bonusComponent: 'Performance Bonus',
+      bonusRemarks: 'Q1 2024 Performance',
+      deduction: 100.00,
+      deductionComponent: 'Loan Recovery',
+      deductionRemarks: 'Monthly installment'
     },
     {
-      id: 2,
-      employeeId: 'MEP01',
-      employeeName: 'Jeganathan Sundaravelu',
-      component: 'Transport Allowance',
-      amount: 150.00,
-      remarks: 'Monthly transport allowance',
-      addedBy: 'HR Manager',
-      addedDate: '01-May-2024'
+      id: 'MEP01',
+      name: 'Jeganathan Sundaravelu',
+      department: 'TOM: Engineering',
+      designation: 'Engineer',
+      basicSalary: 3200.00,
+      bonus: 150.00,
+      bonusComponent: 'Transport Allowance',
+      bonusRemarks: 'Monthly transport',
+      deduction: 0,
+      deductionComponent: '',
+      deductionRemarks: ''
     },
     {
-      id: 3,
-      employeeId: 'TMO015',
-      employeeName: 'Kumar Selvam',
-      component: 'Site Allowance',
-      amount: 200.00,
-      remarks: 'Offshore site allowance',
-      addedBy: 'HR Manager',
-      addedDate: '01-May-2024'
+      id: 'TMO015',
+      name: 'Kumar Selvam',
+      department: 'TOM: Operating',
+      designation: 'Operator',
+      basicSalary: 2600.00,
+      bonus: 200.00,
+      bonusComponent: 'Site Allowance',
+      bonusRemarks: 'Offshore site',
+      deduction: 0,
+      deductionComponent: '',
+      deductionRemarks: ''
+    },
+    {
+      id: 'TMO020',
+      name: 'Ravi Chandran',
+      department: 'TOM: Logistic',
+      designation: 'Supervisor',
+      basicSalary: 3000.00,
+      bonus: 0,
+      bonusComponent: '',
+      bonusRemarks: '',
+      deduction: 250.00,
+      deductionComponent: 'Advance Adjustment',
+      deductionRemarks: 'Salary advance'
+    },
+    {
+      id: 'TMO025',
+      name: 'Suresh Kumar',
+      department: 'TOM: Production',
+      designation: 'Technician',
+      basicSalary: 2700.00,
+      bonus: 0,
+      bonusComponent: '',
+      bonusRemarks: '',
+      deduction: 0,
+      deductionComponent: '',
+      deductionRemarks: ''
     }
   ]);
 
-  const [deductions, setDeductions] = useState([
-    {
-      id: 1,
-      employeeId: 'TMO008',
-      employeeName: 'Natarajan Muruganandham',
-      component: 'Loan Recovery',
-      amount: 100.00,
-      remarks: 'Monthly loan installment',
-      addedBy: 'HR Manager',
-      addedDate: '01-May-2024'
-    },
-    {
-      id: 2,
-      employeeId: 'TMO020',
-      employeeName: 'Ravi Chandran',
-      component: 'Advance Adjustment',
-      amount: 250.00,
-      remarks: 'Salary advance recovery',
-      addedBy: 'HR Manager',
-      addedDate: '01-May-2024'
-    }
-  ]);
-
-  const additionComponents = [
+  const bonusComponents = [
     'Performance Bonus',
     'Incentive',
     'Transport Allowance',
@@ -90,60 +96,10 @@ const PayrollAdjustments = ({ payrollRunId, onBack, onNext }) => {
     'Other Deduction'
   ];
 
-  const employees = [
-    { id: 'TMO008', name: 'Natarajan Muruganandham' },
-    { id: 'MEP01', name: 'Jeganathan Sundaravelu' },
-    { id: 'TMO015', name: 'Kumar Selvam' },
-    { id: 'TMO020', name: 'Ravi Chandran' },
-    { id: 'TMO025', name: 'Suresh Kumar' }
-  ];
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleAddAdjustment = () => {
-    if (!formData.employee || !formData.component || !formData.amount) {
-      showToast('Please fill in all required fields', 'error');
-      return;
-    }
-
-    const selectedEmployee = employees.find(emp => emp.id === formData.employee);
-    const newAdjustment = {
-      id: activeTab === 'additions' ? additions.length + 1 : deductions.length + 1,
-      employeeId: formData.employee,
-      employeeName: selectedEmployee.name,
-      component: formData.component,
-      amount: parseFloat(formData.amount),
-      remarks: formData.remarks,
-      addedBy: 'HR Manager',
-      addedDate: new Date().toLocaleDateString('en-GB')
-    };
-
-    if (activeTab === 'additions') {
-      setAdditions([...additions, newAdjustment]);
-      showToast('Addition added successfully', 'success');
-    } else {
-      setDeductions([...deductions, newAdjustment]);
-      showToast('Deduction added successfully', 'success');
-    }
-
-    setFormData({ employee: '', component: '', amount: '', remarks: '' });
-    setShowAddForm(false);
-  };
-
-  const handleDeleteAdjustment = (id) => {
-    if (activeTab === 'additions') {
-      setAdditions(additions.filter(item => item.id !== id));
-      showToast('Addition removed', 'success');
-    } else {
-      setDeductions(deductions.filter(item => item.id !== id));
-      showToast('Deduction removed', 'success');
-    }
+  const handleCellChange = (employeeId, field, value) => {
+    setEmployees(employees.map(emp => 
+      emp.id === employeeId ? { ...emp, [field]: value } : emp
+    ));
   };
 
   const handleProceed = () => {
@@ -157,8 +113,15 @@ const PayrollAdjustments = ({ payrollRunId, onBack, onNext }) => {
     setToast({ show: true, message, type });
   };
 
-  const totalAdditions = additions.reduce((sum, item) => sum + item.amount, 0);
-  const totalDeductions = deductions.reduce((sum, item) => sum + item.amount, 0);
+  const filteredEmployees = employees.filter(emp =>
+    emp.name.toLowerCase().includes(searchText.toLowerCase()) ||
+    emp.id.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const totalBonus = employees.reduce((sum, emp) => sum + (parseFloat(emp.bonus) || 0), 0);
+  const totalDeductions = employees.reduce((sum, emp) => sum + (parseFloat(emp.deduction) || 0), 0);
+  const employeesWithBonus = employees.filter(emp => (parseFloat(emp.bonus) || 0) > 0).length;
+  const employeesWithDeductions = employees.filter(emp => (parseFloat(emp.deduction) || 0) > 0).length;
 
   return (
     <div className="enquiry-detail">
@@ -184,14 +147,27 @@ const PayrollAdjustments = ({ payrollRunId, onBack, onNext }) => {
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar-primary" onClick={handleProceed}>
-          <i className="fas fa-arrow-right"></i>
-          Proceed to Calculation
-        </button>
-        <button className="btn-toolbar" onClick={() => setShowAddForm(!showAddForm)}>
-          <i className="fas fa-plus"></i>
-          Add Adjustment
-        </button>
+        {!viewOnly && (
+          <button className="btn-toolbar-primary" onClick={handleProceed}>
+            <i className="fas fa-arrow-right"></i>
+            Proceed to Calculation
+          </button>
+        )}
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <input
+            type="text"
+            placeholder="Search employees..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{
+              padding: '0.5rem 1rem',
+              border: '1px solid #e0e0e0',
+              borderRadius: '4px',
+              fontSize: '13px',
+              width: '250px'
+            }}
+          />
+        </div>
       </div>
 
       <div className="detail-content">
@@ -203,233 +179,202 @@ const PayrollAdjustments = ({ payrollRunId, onBack, onNext }) => {
           <div className="section-body">
             <div className="detail-grid">
               <div className="detail-field">
-                <label>TOTAL ADDITIONS</label>
+                <label>TOTAL BONUS/ALLOWANCES</label>
                 <div className="field-value" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#10b981' }}>
-                  ${totalAdditions.toFixed(2)}
+                  ${totalBonus.toFixed(2)}
                 </div>
               </div>
               <div className="detail-field">
-                <label>TOTAL DEDUCTIONS (VARIABLE)</label>
+                <label>TOTAL DEDUCTIONS</label>
                 <div className="field-value" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#dc2626' }}>
                   ${totalDeductions.toFixed(2)}
                 </div>
               </div>
               <div className="detail-field">
-                <label>EMPLOYEES WITH ADDITIONS</label>
+                <label>EMPLOYEES WITH BONUS</label>
                 <div className="field-value" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4a5568' }}>
-                  {new Set(additions.map(a => a.employeeId)).size}
+                  {employeesWithBonus}
                 </div>
               </div>
               <div className="detail-field">
                 <label>EMPLOYEES WITH DEDUCTIONS</label>
                 <div className="field-value" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4a5568' }}>
-                  {new Set(deductions.map(d => d.employeeId)).size}
+                  {employeesWithDeductions}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {showAddForm && (
-          <div className="detail-section">
-            <div className="section-header">
-              <i className="fas fa-chevron-down"></i>
-              <h3>Add {activeTab === 'additions' ? 'Addition' : 'Deduction'}</h3>
-            </div>
-            <div className="section-body">
-              <div className="detail-grid">
-                <div className="detail-field">
-                  <label>EMPLOYEE <span className="required">*</span></label>
-                  <select
-                    name="employee"
-                    value={formData.employee}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  >
-                    <option value="">Select Employee</option>
-                    {employees.map(emp => (
-                      <option key={emp.id} value={emp.id}>{emp.id} - {emp.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="detail-field">
-                  <label>COMPONENT <span className="required">*</span></label>
-                  <select
-                    name="component"
-                    value={formData.component}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  >
-                    <option value="">Select Component</option>
-                    {(activeTab === 'additions' ? additionComponents : deductionComponents).map(comp => (
-                      <option key={comp} value={comp}>{comp}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="detail-field">
-                  <label>AMOUNT <span className="required">*</span></label>
-                  <input
-                    type="number"
-                    name="amount"
-                    value={formData.amount}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="0.00"
-                    step="0.01"
-                  />
-                </div>
-
-                <div className="detail-field">
-                  <label>REMARKS</label>
-                  <input
-                    type="text"
-                    name="remarks"
-                    value={formData.remarks}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Enter remarks..."
-                  />
-                </div>
-              </div>
-              <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                <button className="btn-toolbar-primary" onClick={handleAddAdjustment}>
-                  <i className="fas fa-check"></i>
-                  Add
-                </button>
-                <button className="btn-toolbar" onClick={() => setShowAddForm(false)}>
-                  <i className="fas fa-times"></i>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '2rem 0' }} />
 
         <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>
-            <h3>Adjustments Details</h3>
+            <h3>Employee Adjustments Grid ({filteredEmployees.length} employees)</h3>
           </div>
           <div className="section-body">
-            <div className="detail-tabs">
-              <div className="tabs-header">
-                <button 
-                  className={`tab-btn ${activeTab === 'additions' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('additions')}
-                >
-                  Additions (Allowances / Bonuses) • {additions.length}
-                </button>
-                <button 
-                  className={`tab-btn ${activeTab === 'deductions' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('deductions')}
-                >
-                  Deductions (Variable) • {deductions.length}
-                </button>
-              </div>
-
-              <div className="tabs-content">
-                {activeTab === 'additions' && (
-                  <div style={{ overflowX: 'auto' }}>
-                <table className="detail-items-table">
-                  <thead>
-                    <tr>
-                      <th>EMPLOYEE ID</th>
-                      <th>EMPLOYEE NAME</th>
-                      <th>COMPONENT</th>
-                      <th>AMOUNT</th>
-                      <th>REMARKS</th>
-                      <th>ADDED BY</th>
-                      <th>ADDED DATE</th>
-                      <th>ACTION</th>
+            <div style={{ overflowX: 'auto', marginTop: '1rem' }}>
+              <table className="detail-items-table" style={{ fontSize: '12px' }}>
+                <thead>
+                  <tr style={{ background: '#f8f9fa' }}>
+                    <th style={{ minWidth: '100px', position: 'sticky', left: 0, background: '#f8f9fa', zIndex: 1 }}>EMP ID</th>
+                    <th style={{ minWidth: '200px', position: 'sticky', left: '100px', background: '#f8f9fa', zIndex: 1 }}>EMPLOYEE NAME</th>
+                    <th style={{ minWidth: '150px' }}>DEPARTMENT</th>
+                    <th style={{ minWidth: '120px' }}>DESIGNATION</th>
+                    <th style={{ minWidth: '120px', textAlign: 'right' }}>BASIC SALARY</th>
+                    <th style={{ minWidth: '150px', background: '#e8f5e9' }}>BONUS COMPONENT</th>
+                    <th style={{ minWidth: '120px', textAlign: 'right', background: '#e8f5e9' }}>BONUS AMOUNT</th>
+                    <th style={{ minWidth: '150px', background: '#e8f5e9' }}>BONUS REMARKS</th>
+                    <th style={{ minWidth: '180px', background: '#ffebee' }}>DEDUCTION COMPONENT</th>
+                    <th style={{ minWidth: '140px', textAlign: 'right', background: '#ffebee' }}>DEDUCTION AMOUNT</th>
+                    <th style={{ minWidth: '180px', background: '#ffebee' }}>DEDUCTION REMARKS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredEmployees.map(emp => (
+                    <tr key={emp.id}>
+                      <td style={{ position: 'sticky', left: 0, background: 'white', fontWeight: '600' }}>{emp.id}</td>
+                      <td style={{ position: 'sticky', left: '100px', background: 'white', fontWeight: '500' }}>{emp.name}</td>
+                      <td>{emp.department}</td>
+                      <td>{emp.designation}</td>
+                      <td style={{ textAlign: 'right', fontWeight: '600' }}>${emp.basicSalary.toFixed(2)}</td>
+                      <td style={{ background: '#f1f8f4' }}>
+                        {viewOnly ? (
+                          emp.bonusComponent
+                        ) : (
+                          <select
+                            value={emp.bonusComponent}
+                            onChange={(e) => handleCellChange(emp.id, 'bonusComponent', e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '0.4rem',
+                              border: '1px solid #d1d5db',
+                              borderRadius: '4px',
+                              fontSize: '12px'
+                            }}
+                          >
+                            <option value="">Select...</option>
+                            {bonusComponents.map(comp => (
+                              <option key={comp} value={comp}>{comp}</option>
+                            ))}
+                          </select>
+                        )}
+                      </td>
+                      <td style={{ textAlign: 'right', background: '#f1f8f4' }}>
+                        {viewOnly ? (
+                          <span style={{ color: '#10b981', fontWeight: '600' }}>
+                            {emp.bonus > 0 ? `$${parseFloat(emp.bonus).toFixed(2)}` : '-'}
+                          </span>
+                        ) : (
+                          <input
+                            type="number"
+                            value={emp.bonus}
+                            onChange={(e) => handleCellChange(emp.id, 'bonus', e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '0.4rem',
+                              border: '1px solid #d1d5db',
+                              borderRadius: '4px',
+                              textAlign: 'right',
+                              fontSize: '12px',
+                              fontWeight: '600',
+                              color: '#10b981'
+                            }}
+                            step="0.01"
+                            min="0"
+                          />
+                        )}
+                      </td>
+                      <td style={{ background: '#f1f8f4' }}>
+                        {viewOnly ? (
+                          emp.bonusRemarks
+                        ) : (
+                          <input
+                            type="text"
+                            value={emp.bonusRemarks}
+                            onChange={(e) => handleCellChange(emp.id, 'bonusRemarks', e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '0.4rem',
+                              border: '1px solid #d1d5db',
+                              borderRadius: '4px',
+                              fontSize: '12px'
+                            }}
+                            placeholder="Remarks..."
+                          />
+                        )}
+                      </td>
+                      <td style={{ background: '#fef2f2' }}>
+                        {viewOnly ? (
+                          emp.deductionComponent
+                        ) : (
+                          <select
+                            value={emp.deductionComponent}
+                            onChange={(e) => handleCellChange(emp.id, 'deductionComponent', e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '0.4rem',
+                              border: '1px solid #d1d5db',
+                              borderRadius: '4px',
+                              fontSize: '12px'
+                            }}
+                          >
+                            <option value="">Select...</option>
+                            {deductionComponents.map(comp => (
+                              <option key={comp} value={comp}>{comp}</option>
+                            ))}
+                          </select>
+                        )}
+                      </td>
+                      <td style={{ textAlign: 'right', background: '#fef2f2' }}>
+                        {viewOnly ? (
+                          <span style={{ color: '#dc2626', fontWeight: '600' }}>
+                            {emp.deduction > 0 ? `$${parseFloat(emp.deduction).toFixed(2)}` : '-'}
+                          </span>
+                        ) : (
+                          <input
+                            type="number"
+                            value={emp.deduction}
+                            onChange={(e) => handleCellChange(emp.id, 'deduction', e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '0.4rem',
+                              border: '1px solid #d1d5db',
+                              borderRadius: '4px',
+                              textAlign: 'right',
+                              fontSize: '12px',
+                              fontWeight: '600',
+                              color: '#dc2626'
+                            }}
+                            step="0.01"
+                            min="0"
+                          />
+                        )}
+                      </td>
+                      <td style={{ background: '#fef2f2' }}>
+                        {viewOnly ? (
+                          emp.deductionRemarks
+                        ) : (
+                          <input
+                            type="text"
+                            value={emp.deductionRemarks}
+                            onChange={(e) => handleCellChange(emp.id, 'deductionRemarks', e.target.value)}
+                            style={{
+                              width: '100%',
+                              padding: '0.4rem',
+                              border: '1px solid #d1d5db',
+                              borderRadius: '4px',
+                              fontSize: '12px'
+                            }}
+                            placeholder="Remarks..."
+                          />
+                        )}
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {additions.length === 0 ? (
-                      <tr>
-                        <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                          No additions added yet
-                        </td>
-                      </tr>
-                    ) : (
-                      additions.map(item => (
-                        <tr key={item.id}>
-                          <td>{item.employeeId}</td>
-                          <td>{item.employeeName}</td>
-                          <td>{item.component}</td>
-                          <td style={{ color: '#10b981', fontWeight: 'bold' }}>+${item.amount.toFixed(2)}</td>
-                          <td>{item.remarks}</td>
-                          <td>{item.addedBy}</td>
-                          <td>{item.addedDate}</td>
-                          <td>
-                            <button 
-                              className="btn-table-action"
-                              onClick={() => handleDeleteAdjustment(item.id)}
-                              style={{ color: '#dc2626' }}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-                  </div>
-                )}
-
-                {activeTab === 'deductions' && (
-                  <div style={{ overflowX: 'auto' }}>
-                <table className="detail-items-table">
-                  <thead>
-                    <tr>
-                      <th>EMPLOYEE ID</th>
-                      <th>EMPLOYEE NAME</th>
-                      <th>COMPONENT</th>
-                      <th>AMOUNT</th>
-                      <th>REMARKS</th>
-                      <th>ADDED BY</th>
-                      <th>ADDED DATE</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {deductions.length === 0 ? (
-                      <tr>
-                        <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                          No deductions added yet
-                        </td>
-                      </tr>
-                    ) : (
-                      deductions.map(item => (
-                        <tr key={item.id}>
-                          <td>{item.employeeId}</td>
-                          <td>{item.employeeName}</td>
-                          <td>{item.component}</td>
-                          <td style={{ color: '#dc2626', fontWeight: 'bold' }}>-${item.amount.toFixed(2)}</td>
-                          <td>{item.remarks}</td>
-                          <td>{item.addedBy}</td>
-                          <td>{item.addedDate}</td>
-                          <td>
-                            <button 
-                              className="btn-table-action"
-                              onClick={() => handleDeleteAdjustment(item.id)}
-                              style={{ color: '#dc2626' }}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-                  </div>
-                )}
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -444,10 +389,12 @@ const PayrollAdjustments = ({ payrollRunId, onBack, onNext }) => {
           <div className="section-body">
             <div style={{ padding: '1.25rem', background: '#f0f9ff', border: '1px solid #bfdbfe', borderRadius: '6px' }}>
               <ul style={{ margin: 0, paddingLeft: '1.75rem', color: '#1e40af', fontSize: '13px', lineHeight: '1.8' }}>
-                <li><strong>Additions:</strong> One-time or recurring allowances, bonuses, incentives</li>
-                <li><strong>Deductions (Variable):</strong> Loan recovery, advance adjustments, penalties</li>
+                <li><strong>Excel-like Grid:</strong> Edit bonus and deduction amounts directly in the table cells</li>
+                <li><strong>Bonus/Allowances:</strong> Select component type and enter amount for one-time or recurring bonuses</li>
+                <li><strong>Deductions (Variable):</strong> Enter loan recovery, advance adjustments, penalties, etc.</li>
                 <li><strong>Fixed Deductions:</strong> CPF, SDL, and other statutory deductions are calculated automatically</li>
-                <li>All adjustments can be edited before payroll calculation</li>
+                <li><strong>Search:</strong> Use the search box to quickly find specific employees</li>
+                <li>All changes are saved automatically and can be modified before proceeding to calculation</li>
               </ul>
             </div>
           </div>

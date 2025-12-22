@@ -52,7 +52,8 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
       day: 'Tuesday',
       exemptForBiometric: 'Yes',
       updatedFromDayShiftScript: 'No',
-      updatedFromNightShiftScript: 'No'
+      updatedFromNightShiftScript: 'No',
+      postingStatus: 'Posted'
     },
     {
       id: 51102,
@@ -95,7 +96,8 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
       day: 'Wednesday',
       exemptForBiometric: 'Yes',
       updatedFromDayShiftScript: 'No',
-      updatedFromNightShiftScript: 'No'
+      updatedFromNightShiftScript: 'No',
+      postingStatus: 'Not Posted'
     },
     {
       id: 51103,
@@ -138,7 +140,8 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
       day: 'Thursday',
       exemptForBiometric: 'Yes',
       updatedFromDayShiftScript: 'No',
-      updatedFromNightShiftScript: 'No'
+      updatedFromNightShiftScript: 'No',
+      postingStatus: 'Not Posted'
     },
     {
       id: 51104,
@@ -181,7 +184,8 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
       day: 'Friday',
       exemptForBiometric: 'Yes',
       updatedFromDayShiftScript: 'No',
-      updatedFromNightShiftScript: 'No'
+      updatedFromNightShiftScript: 'No',
+      postingStatus: 'Posted'
     },
     {
       id: 51105,
@@ -224,7 +228,8 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
       day: 'Saturday',
       exemptForBiometric: 'Yes',
       updatedFromDayShiftScript: 'No',
-      updatedFromNightShiftScript: 'No'
+      updatedFromNightShiftScript: 'No',
+      postingStatus: 'Not Posted'
     },
     {
       id: 51106,
@@ -267,7 +272,8 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
       day: '',
       exemptForBiometric: '',
       updatedFromDayShiftScript: '',
-      updatedFromNightShiftScript: ''
+      updatedFromNightShiftScript: '',
+      postingStatus: 'Not Posted'
     }
   ]);
 
@@ -378,7 +384,9 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
         <table className="enquiries-table">
           <thead>
             <tr>
-              <th>Edit | View</th>
+              <th>ATTENDANCE STATUS</th>
+              <th>POSTING STATUS</th>
+              <th>ACTIONS</th>
               <th>ID</th>
               <th>Employee Name</th>
               <th>Biometric Number</th>
@@ -393,7 +401,6 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
               <th>Net Working Hours</th>
               <th>Early Go (In Minute)</th>
               <th>Late Arrival (In Minute)</th>
-              <th>Attendance Status</th>
               <th>Manual Update</th>
               <th>Extra Working Hours (OT)</th>
               <th>LATITUDE TIME IN</th>
@@ -425,6 +432,32 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
           <tbody>
             {filteredRecords.map((record) => (
               <tr key={record.id}>
+                <td>
+                  <span className={`status-badge ${
+                    record.attendanceStatus === 'P' ? 'success' : 
+                    record.attendanceStatus === 'A' ? 'error' : 
+                    record.attendanceStatus === 'H' ? 'warning' : 
+                    record.attendanceStatus === 'R' ? 'info' : 'default'
+                  }`}>
+                    {record.attendanceStatus}
+                  </span>
+                </td>
+                <td>
+                  <span style={{
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '4px',
+                    fontSize: '0.75rem',
+                    fontWeight: '500',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    backgroundColor: record.postingStatus === 'Posted' ? '#10b981' : '#f59e0b',
+                    color: '#fff',
+                    border: record.postingStatus === 'Posted' ? '1px solid #059669' : '1px solid #d97706'
+                  }}>
+                    {record.postingStatus === 'Posted' ? '✓' : '⏳'} {record.postingStatus}
+                  </span>
+                </td>
                 <td>
                   <div style={{ display: 'flex', gap: '5px' }}>
                     <button 
@@ -458,16 +491,6 @@ const ViewEmployeeDailyAttendanceList = ({ onNewClick, onViewClick, onEditClick 
                 <td>{record.netWorkingHours}</td>
                 <td>{record.earlyGo}</td>
                 <td>{record.lateArrival}</td>
-                <td>
-                  <span className={`status-badge ${
-                    record.attendanceStatus === 'P' ? 'success' : 
-                    record.attendanceStatus === 'A' ? 'error' : 
-                    record.attendanceStatus === 'H' ? 'warning' : 
-                    record.attendanceStatus === 'R' ? 'info' : 'default'
-                  }`}>
-                    {record.attendanceStatus}
-                  </span>
-                </td>
                 <td>{record.manualUpdate}</td>
                 <td>{record.extraWorkingHours}</td>
                 <td>{record.latitudeTimeIn}</td>

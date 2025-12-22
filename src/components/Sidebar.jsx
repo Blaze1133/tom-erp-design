@@ -718,7 +718,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       hasSubmenu: true,
       submenu: [
         { id: 'view-timesheet-pool', label: 'Timesheet Pool' },
-        { id: 'create-payroll-run', label: 'Create Payroll Run' },
         { id: 'view-payroll-runs', label: 'Payroll Runs' }
       ]
     },

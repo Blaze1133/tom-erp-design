@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import CustomAlert from './CustomAlert';
 import './Enquiries.css';
 
-const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove }) => {
+const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [expandedRows, setExpandedRows] = useState({});
   const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [alert, setAlert] = useState({ show: false, type: 'confirm', title: '', message: '', onConfirm: null, variant: 'warning' });
 
   const payrollData = [
     {
@@ -131,11 +133,21 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove }) => {
   };
 
   const handleApprovePayroll = () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to approve this payroll? Once approved, the payroll will be frozen and cannot be modified.'
-    );
-    if (!confirmed) return;
+    setAlert({
+      show: true,
+      type: 'confirm',
+      title: 'Approve Payroll',
+      message: 'Are you sure you want to approve this payroll? Once approved, the payroll will be frozen and cannot be modified.',
+      variant: 'warning',
+      onConfirm: () => {
+        setAlert({ ...alert, show: false });
+        proceedWithApproval();
+      },
+      onCancel: () => setAlert({ ...alert, show: false })
+    });
+  };
 
+  const proceedWithApproval = () => {
     showToast('Payroll approved successfully! Proceeding to finalization...', 'success');
     setTimeout(() => {
       if (onApprove) onApprove();
@@ -183,14 +195,18 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove }) => {
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar-primary" onClick={handleApprovePayroll}>
-          <i className="fas fa-check-circle"></i>
-          Approve Payroll
-        </button>
-        <button className="btn-toolbar" onClick={handleSendBack}>
-          <i className="fas fa-undo"></i>
-          Send Back
-        </button>
+        {!viewOnly && (
+          <button className="btn-toolbar-primary" onClick={handleApprovePayroll}>
+            <i className="fas fa-check-circle"></i>
+            Approve Payroll
+          </button>
+        )}
+        {!viewOnly && (
+          <button className="btn-toolbar" onClick={handleSendBack}>
+            <i className="fas fa-undo"></i>
+            Send Back
+          </button>
+        )}
       </div>
 
       <div className="detail-content">
@@ -416,6 +432,16 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove }) => {
         type={toast.type} 
         show={toast.show} 
         onClose={() => setToast({ ...toast, show: false })} 
+      />
+
+      <CustomAlert
+        show={alert.show}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+        variant={alert.variant}
+        onConfirm={alert.onConfirm}
+        onCancel={alert.onCancel}
       />
     </div>
   );

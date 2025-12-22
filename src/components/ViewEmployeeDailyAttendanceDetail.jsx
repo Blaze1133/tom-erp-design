@@ -51,6 +51,7 @@ const ViewEmployeeDailyAttendanceDetail = ({ onBack, onEdit }) => {
     exemptForBiometric: 'Yes',
     updatedFromDayShiftScript: 'No',
     updatedFromNightShiftScript: 'No',
+    postingStatus: 'Not Posted',
     createdBy: 'System',
     createdDate: '1/2/2022 8:00:00 AM',
     lastModifiedBy: 'Admin User',
@@ -81,6 +82,18 @@ const ViewEmployeeDailyAttendanceDetail = ({ onBack, onEdit }) => {
                 attendanceData.attendanceStatus === 'R' ? 'info' : 'default'
               }`}>
                 {attendanceData.attendanceStatus}
+              </span>
+              <span style={{
+                padding: '0.35rem 0.75rem',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                fontWeight: '500',
+                backgroundColor: attendanceData.postingStatus === 'Posted' ? '#10b981' : '#f59e0b',
+                color: '#fff',
+                border: attendanceData.postingStatus === 'Posted' ? '1px solid #059669' : '1px solid #d97706',
+                marginLeft: '0.5rem'
+              }}>
+                {attendanceData.postingStatus === 'Posted' ? '✓' : '⏳'} {attendanceData.postingStatus}
               </span>
             </div>
           </div>

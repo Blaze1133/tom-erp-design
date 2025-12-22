@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import CustomAlert from './CustomAlert';
 import './Enquiries.css';
 
 const CreatePayrollRun = ({ onBack, setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [alert, setAlert] = useState({ show: false, type: 'confirm', title: '', message: '', onConfirm: null, variant: 'warning' });
   const [formData, setFormData] = useState({
     subsidiary: '',
     payrollMonth: '',
@@ -31,12 +33,127 @@ const CreatePayrollRun = ({ onBack, setCurrentPage }) => {
     'Both (Hourly + EP & Local)'
   ];
 
-  const payrollCalendars = [
-    'Monthly - Last Day',
-    'Monthly - 25th',
-    'Bi-Weekly',
-    'Weekly'
+  const calendarMasters = [
+    {
+      id: 1,
+      name: '2021 (MEP)',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
+      year: 2021,
+      startDate: '1/1/2021',
+      endDate: '31/12/2021',
+      inactive: false
+    },
+    {
+      id: 2,
+      name: '2021 (TDQ)',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Offshore Marine (DQ) Pte Ltd',
+      year: 2021,
+      startDate: '1/1/2021',
+      endDate: '31/12/2021',
+      inactive: false
+    },
+    {
+      id: 3,
+      name: '2021 (TEA)',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Electric & Automation Pte Ltd',
+      year: 2021,
+      startDate: '1/1/2021',
+      endDate: '31/12/2021',
+      inactive: false
+    },
+    {
+      id: 4,
+      name: '2021 (TMO)',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Marine Offshore (S) Pte Ltd',
+      year: 2021,
+      startDate: '1/1/2021',
+      endDate: '31/12/2021',
+      inactive: false
+    },
+    {
+      id: 5,
+      name: '2021 (TSV)',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Offshore Marine (SV) Pte Ltd',
+      year: 2021,
+      startDate: '1/1/2021',
+      endDate: '31/12/2021',
+      inactive: false
+    },
+    {
+      id: 6,
+      name: '2022 MEP',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
+      year: 2022,
+      startDate: '1/1/2022',
+      endDate: '31/12/2022',
+      inactive: false
+    },
+    {
+      id: 7,
+      name: '2022 TDQ',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Offshore Marine (DQ) Pte Ltd',
+      year: 2022,
+      startDate: '1/1/2022',
+      endDate: '31/12/2022',
+      inactive: false
+    },
+    {
+      id: 8,
+      name: '2022 TEA',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Electric & Automation Pte Ltd',
+      year: 2022,
+      startDate: '1/1/2022',
+      endDate: '31/12/2022',
+      inactive: false
+    },
+    {
+      id: 9,
+      name: '2022 TMO',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Marine Offshore (S) Pte Ltd',
+      year: 2022,
+      startDate: '1/1/2022',
+      endDate: '31/12/2022',
+      inactive: false
+    },
+    {
+      id: 10,
+      name: '2022 TSV',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd : Tech Offshore Marine (SV) Pte Ltd',
+      year: 2022,
+      startDate: '1/1/2022',
+      endDate: '31/12/2022',
+      inactive: false
+    },
+    {
+      id: 11,
+      name: 'MEP 2023',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
+      year: 2023,
+      startDate: '1/1/2023',
+      endDate: '31/12/2023',
+      inactive: false
+    },
+    {
+      id: 12,
+      name: 'MEP 2024',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
+      year: 2024,
+      startDate: '1/1/2024',
+      endDate: '31/12/2024',
+      inactive: false
+    },
+    {
+      id: 13,
+      name: 'MEP 2025',
+      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
+      year: 2025,
+      startDate: '1/1/2025',
+      endDate: '31/12/2025',
+      inactive: false
+    }
   ];
+
+  const activeCalendars = calendarMasters.filter(cal => !cal.inactive);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -60,10 +177,19 @@ const CreatePayrollRun = ({ onBack, setCurrentPage }) => {
   };
 
   const handleCancel = () => {
-    if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
-      if (onBack) onBack();
-      if (setCurrentPage) setCurrentPage('view-payroll-runs');
-    }
+    setAlert({
+      show: true,
+      type: 'confirm',
+      title: 'Cancel Payroll Run',
+      message: 'Are you sure you want to cancel? Any unsaved changes will be lost.',
+      variant: 'warning',
+      onConfirm: () => {
+        setAlert({ ...alert, show: false });
+        if (onBack) onBack();
+        if (setCurrentPage) setCurrentPage('view-payroll-runs');
+      },
+      onCancel: () => setAlert({ ...alert, show: false })
+    });
   };
 
   const showToast = (message, type = 'success') => {
@@ -158,8 +284,8 @@ const CreatePayrollRun = ({ onBack, setCurrentPage }) => {
                   className="form-control"
                 >
                   <option value="">Select Calendar</option>
-                  {payrollCalendars.map(cal => (
-                    <option key={cal} value={cal}>{cal}</option>
+                  {activeCalendars.map(cal => (
+                    <option key={cal.id} value={cal.name}>{cal.name} - {cal.year}</option>
                   ))}
                 </select>
               </div>
@@ -304,6 +430,16 @@ const CreatePayrollRun = ({ onBack, setCurrentPage }) => {
         type={toast.type} 
         show={toast.show} 
         onClose={() => setToast({ ...toast, show: false })} 
+      />
+
+      <CustomAlert
+        show={alert.show}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+        variant={alert.variant}
+        onConfirm={alert.onConfirm}
+        onCancel={alert.onCancel}
       />
     </div>
   );

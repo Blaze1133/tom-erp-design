@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import PayrollWorkflowDiagram from './PayrollWorkflowDiagram';
 import './Enquiries.css';
 
 const ViewPayrollRunDetail = ({ onBack, onEdit, onProcess, payrollRunData }) => {
@@ -19,8 +20,8 @@ const ViewPayrollRunDetail = ({ onBack, onEdit, onProcess, payrollRunData }) => 
     paymentDate: '07-May-2024',
     description: 'Regular monthly payroll run for hourly employees',
     employeeCount: 28,
-    status: 'In Progress',
-    stage: 'Payroll Review',
+    status: 'Completed',
+    stage: 'Accounts Verified',
     createdBy: 'HR Manager',
     createdDate: '01-May-2024',
     includeNewJoiners: true,
@@ -90,10 +91,41 @@ const ViewPayrollRunDetail = ({ onBack, onEdit, onProcess, payrollRunData }) => 
 
   const handleProcess = () => {
     if (onProcess) {
-      onProcess(data.stage);
+      onProcess(data.stage, false); // false = not view-only, enable action buttons
     } else {
       showToast('Processing payroll run...', 'info');
     }
+  };
+
+  const handleStageClick = (stageId) => {
+    showToast(`Opening ${stageId} in view-only mode...`, 'info');
+    // Map workflow diagram stage IDs to actual stage names
+    const stageNameMap = {
+      'attendance-verification': 'Attendance Verification',
+      'payroll-adjustments': 'Adjustments',
+      'payroll-calculation': 'Payroll Review',
+      'payroll-review': 'Payroll Review',
+      'payroll-finalization': 'Finalization',
+      'accounts-posting': 'Accounts Verified'
+    };
+    
+    const stageName = stageNameMap[stageId] || stageId;
+    if (onProcess) {
+      onProcess(stageName, true); // true indicates view-only mode
+    }
+  };
+
+  const getCurrentStage = () => {
+    const stageMapping = {
+      'Attendance Verification': 'attendance-verification',
+      'Payroll Adjustments': 'payroll-adjustments',
+      'Payroll Calculation': 'payroll-calculation',
+      'Payroll Review': 'payroll-review',
+      'Payroll Finalization': 'payroll-finalization',
+      'Accounts Posting': 'accounts-posting',
+      'Accounts Verified': 'accounts-posting'
+    };
+    return stageMapping[data.stage] || 'attendance-verification';
   };
 
   const getStatusColor = (status) => {
@@ -153,14 +185,10 @@ const ViewPayrollRunDetail = ({ onBack, onEdit, onProcess, payrollRunData }) => 
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar-primary" onClick={handleEdit}>
-          <i className="fas fa-edit"></i>
-          Edit
-        </button>
-        {data.status === 'In Progress' && data.stage !== 'Accounts Verified' && (
-          <button className="btn-toolbar-primary" onClick={handleProcess} style={{ background: '#10b981', marginLeft: '0.5rem' }}>
-            <i className="fas fa-play-circle"></i>
-            Process Workflow
+        {data.status !== 'Completed' && (
+          <button className="btn-toolbar-primary" onClick={handleProcess}>
+            <i className="fas fa-play"></i>
+            Process Payroll
           </button>
         )}
         <button className="btn-toolbar">
@@ -168,8 +196,8 @@ const ViewPayrollRunDetail = ({ onBack, onEdit, onProcess, payrollRunData }) => 
           Print
         </button>
         <button className="btn-toolbar">
-          <i className="fas fa-copy"></i>
-          Copy
+          <i className="fas fa-download"></i>
+          Export
         </button>
         <div style={{ marginLeft: 'auto' }}>
           <button className="btn-toolbar">
@@ -180,6 +208,12 @@ const ViewPayrollRunDetail = ({ onBack, onEdit, onProcess, payrollRunData }) => 
       </div>
 
       <div className="detail-content">
+        {data.status === 'Completed' && data.stage === 'Accounts Verified' && (
+          <PayrollWorkflowDiagram 
+            currentStage={getCurrentStage()}
+            onStageClick={handleStageClick}
+          />
+        )}
 
         {/* Primary Information Section */}
         <div className={`detail-section ${primaryInfoCollapsed ? 'collapsed' : ''}`}>

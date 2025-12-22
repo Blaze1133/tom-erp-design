@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import CustomAlert from './CustomAlert';
 import './Enquiries.css';
 
-const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm }) => {
+const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOnly = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [showExceptionsOnly, setShowExceptionsOnly] = useState(false);
+  const [alert, setAlert] = useState({ show: false, type: 'confirm', title: '', message: '', onConfirm: null, variant: 'warning' });
 
   const attendanceData = [
     {
@@ -84,12 +86,25 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm }) => {
     const exceptionsCount = attendanceData.filter(emp => emp.hasException).length;
     
     if (exceptionsCount > 0) {
-      const confirmed = window.confirm(
-        `There are ${exceptionsCount} employee(s) with exceptions. Do you want to proceed with attendance confirmation?`
-      );
-      if (!confirmed) return;
+      setAlert({
+        show: true,
+        type: 'confirm',
+        title: 'Confirm Attendance with Exceptions',
+        message: `There are ${exceptionsCount} employee(s) with exceptions. Do you want to proceed with attendance confirmation?`,
+        variant: 'warning',
+        onConfirm: () => {
+          setAlert({ ...alert, show: false });
+          proceedWithConfirmation();
+        },
+        onCancel: () => setAlert({ ...alert, show: false })
+      });
+      return;
     }
 
+    proceedWithConfirmation();
+  };
+
+  const proceedWithConfirmation = () => {
     showToast('Attendance confirmed and locked for this payroll run', 'success');
     setTimeout(() => {
       if (onConfirm) onConfirm();
@@ -153,16 +168,17 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm }) => {
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar-primary" onClick={handleConfirmAttendance}>
-          <i className="fas fa-check-circle"></i>
-          Confirm Attendance
-        </button>
+        {!viewOnly && (
+          <button className="btn-toolbar-primary" onClick={handleConfirmAttendance}>
+            <i className="fas fa-check"></i>
+            Confirm Attendance
+          </button>
+        )}
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', cursor: 'pointer', marginLeft: '1rem' }}>
           <input 
             type="checkbox" 
             checked={showExceptionsOnly}
             onChange={(e) => setShowExceptionsOnly(e.target.checked)}
-            style={{ cursor: 'pointer' }}
           />
           Show Exceptions Only
         </label>
@@ -304,16 +320,18 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm }) => {
           </div>
         </div>
 
-        <div className="detail-footer">
-          <button className="btn-toolbar" onClick={onBack}>
-            <i className="fas fa-arrow-left"></i>
-            Back
-          </button>
-          <button className="btn-toolbar-primary" onClick={handleConfirmAttendance}>
-            <i className="fas fa-check-circle"></i>
-            Confirm Attendance
-          </button>
-        </div>
+        {!viewOnly && (
+          <div className="detail-footer">
+            <button className="btn-toolbar" onClick={onBack}>
+              <i className="fas fa-arrow-left"></i>
+              Back
+            </button>
+            <button className="btn-toolbar-primary" onClick={handleConfirmAttendance}>
+              <i className="fas fa-check-circle"></i>
+              Confirm Attendance
+            </button>
+          </div>
+        )}
       </div>
 
       <Toast 
@@ -321,6 +339,16 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm }) => {
         type={toast.type} 
         show={toast.show} 
         onClose={() => setToast({ ...toast, show: false })} 
+      />
+
+      <CustomAlert
+        show={alert.show}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+        variant={alert.variant}
+        onConfirm={alert.onConfirm}
+        onCancel={alert.onCancel}
       />
 
       <style jsx>{`

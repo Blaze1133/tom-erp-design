@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewManualEntryDetail = ({ onBack, onEdit }) => {
+const ViewManualEntryDetail = ({ onBack, onEdit, recordData }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
   const [systemInfoCollapsed, setSystemInfoCollapsed] = useState(false);
 
-  const manualEntryData = {
+  // Use passed recordData or fallback to sample data
+  const manualEntryData = recordData || {
     employeeName: 'John Doe',
     employeeId: 'EMP001',
     companyName: 'Tech Onshore MEP Prefabricators Pte Ltd',
@@ -24,6 +25,10 @@ const ViewManualEntryDetail = ({ onBack, onEdit }) => {
     createdDate: '2025-04-10 07:45:00',
     lastModifiedBy: 'Admin User',
     lastModifiedDate: '2025-04-10 07:45:00'
+  };
+
+  const getStatusColor = (status) => {
+    return status === 'Posted' ? '#4caf50' : '#ff9800';
   };
 
   const showToast = (message, type = 'success') => {
@@ -47,7 +52,15 @@ const ViewManualEntryDetail = ({ onBack, onEdit }) => {
             <h1>Manual Entry Record</h1>
             <div className="detail-subtitle">
               <span>{manualEntryData.employeeId}</span>
-              <span className="status-badge-detail" style={{ background: '#4caf50' }}>
+              <span className="status-badge-detail" style={{ 
+                background: getStatusColor(manualEntryData.status),
+                color: 'white',
+                padding: '4px 12px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                fontWeight: '600',
+                marginLeft: '10px'
+              }}>
                 {manualEntryData.status}
               </span>
             </div>

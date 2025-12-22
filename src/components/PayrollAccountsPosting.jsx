@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import CustomAlert from './CustomAlert';
 import './Enquiries.css';
 
-const PayrollAccountsPosting = ({ payrollRunId, onBack, onComplete }) => {
+const PayrollAccountsPosting = ({ payrollRunId, onBack, onComplete, viewOnly = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('summary');
   const [postingDate, setPostingDate] = useState('');
   const [postingRemarks, setPostingRemarks] = useState('');
+  const [alert, setAlert] = useState({ show: false, type: 'confirm', title: '', message: '', onConfirm: null, variant: 'warning' });
 
   const payrollSummary = {
     payrollRunId: payrollRunId || 'PR-2024-05-001',
@@ -96,15 +98,21 @@ const PayrollAccountsPosting = ({ payrollRunId, onBack, onComplete }) => {
       return;
     }
 
-    const confirmed = window.confirm(
-      'Are you sure you want to post this payroll to accounts?\n\n' +
-      `Total Debit: $${totalDebit.toFixed(2)}\n` +
-      `Total Credit: $${totalCredit.toFixed(2)}\n\n` +
-      'This action will create journal entries in the accounting system.'
-    );
-    
-    if (!confirmed) return;
+    setAlert({
+      show: true,
+      type: 'confirm',
+      title: 'Confirm Accounts Posting',
+      message: `Are you sure you want to post this payroll to accounts?\n\nTotal Debit: $${totalDebit.toFixed(2)}\nTotal Credit: $${totalCredit.toFixed(2)}\n\nThis action will create journal entries in the accounting system.`,
+      variant: 'warning',
+      onConfirm: () => {
+        setAlert({ ...alert, show: false });
+        proceedWithPosting();
+      },
+      onCancel: () => setAlert({ ...alert, show: false })
+    });
+  };
 
+  const proceedWithPosting = () => {
     showToast('Posting to accounts...', 'info');
     
     setTimeout(() => {
@@ -155,10 +163,12 @@ const PayrollAccountsPosting = ({ payrollRunId, onBack, onComplete }) => {
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar-primary" onClick={handlePostToAccounts} disabled={!isBalanced || !postingDate}>
-          <i className="fas fa-check-circle"></i>
-          Post to Accounts
-        </button>
+        {!viewOnly && (
+          <button className="btn-toolbar-primary" onClick={handlePostToAccounts} disabled={!isBalanced || !postingDate}>
+            <i className="fas fa-check-circle"></i>
+            Post to Accounts
+          </button>
+        )}
         <button className="btn-toolbar">
           <i className="fas fa-print"></i>
           Print Journal
@@ -396,6 +406,16 @@ const PayrollAccountsPosting = ({ payrollRunId, onBack, onComplete }) => {
         type={toast.type} 
         show={toast.show} 
         onClose={() => setToast({ ...toast, show: false })} 
+      />
+
+      <CustomAlert
+        show={alert.show}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+        variant={alert.variant}
+        onConfirm={alert.onConfirm}
+        onCancel={alert.onCancel}
       />
     </div>
   );

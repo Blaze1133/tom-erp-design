@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import CustomAlert from './CustomAlert';
 import './Enquiries.css';
 
-const PayrollFinalization = ({ payrollRunId, onBack, onFinalize }) => {
+const PayrollFinalization = ({ payrollRunId, onBack, onFinalize, viewOnly = false }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [generatePayslips, setGeneratePayslips] = useState(true);
   const [sendEmailNotifications, setSendEmailNotifications] = useState(true);
   const [lockPayroll, setLockPayroll] = useState(true);
+  const [alert, setAlert] = useState({ show: false, type: 'confirm', title: '', message: '', onConfirm: null, variant: 'warning' });
 
   const payrollSummary = {
     payrollRunId: payrollRunId || 'PR-2024-05-001',
@@ -26,18 +28,21 @@ const PayrollFinalization = ({ payrollRunId, onBack, onFinalize }) => {
   };
 
   const handleFinalize = () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to finalize this payroll?\n\n' +
-      'This action will:\n' +
-      '• Lock payroll data permanently\n' +
-      '• Generate payslips for all employees\n' +
-      '• Assign payroll reference numbers\n' +
-      '• Prepare data for accounts posting\n\n' +
-      'No changes will be allowed after finalization without reversal.'
-    );
-    
-    if (!confirmed) return;
+    setAlert({
+      show: true,
+      type: 'confirm',
+      title: 'Finalize Payroll',
+      message: 'Are you sure you want to finalize this payroll?\n\nThis action will:\n• Lock payroll data permanently\n• Generate payslips for all employees\n• Assign payroll reference numbers\n• Prepare data for accounts posting\n\nNo changes will be allowed after finalization without reversal.',
+      variant: 'warning',
+      onConfirm: () => {
+        setAlert({ ...alert, show: false });
+        proceedWithFinalization();
+      },
+      onCancel: () => setAlert({ ...alert, show: false })
+    });
+  };
 
+  const proceedWithFinalization = () => {
     showToast('Finalizing payroll...', 'info');
     
     setTimeout(() => {
@@ -76,10 +81,12 @@ const PayrollFinalization = ({ payrollRunId, onBack, onFinalize }) => {
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
-        <button className="btn-toolbar-primary" onClick={handleFinalize}>
-          <i className="fas fa-lock"></i>
-          Finalize Payroll
-        </button>
+        {!viewOnly && (
+          <button className="btn-toolbar-primary" onClick={handleFinalize}>
+            <i className="fas fa-lock"></i>
+            Finalize Payroll
+          </button>
+        )}
         <button className="btn-toolbar">
           <i className="fas fa-print"></i>
           Print Summary
@@ -313,6 +320,16 @@ const PayrollFinalization = ({ payrollRunId, onBack, onFinalize }) => {
         type={toast.type} 
         show={toast.show} 
         onClose={() => setToast({ ...toast, show: false })} 
+      />
+
+      <CustomAlert
+        show={alert.show}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+        variant={alert.variant}
+        onConfirm={alert.onConfirm}
+        onCancel={alert.onCancel}
       />
     </div>
   );

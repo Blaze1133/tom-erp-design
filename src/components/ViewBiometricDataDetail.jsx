@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewBiometricDataDetail = ({ onBack, onEdit }) => {
+const ViewBiometricDataDetail = ({ onBack, onEdit, recordData }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
   const [systemInfoCollapsed, setSystemInfoCollapsed] = useState(false);
 
-  const biometricData = {
+  // Use passed recordData or fallback to sample data
+  const biometricData = recordData || {
     employeeName: 'John Doe',
     employeeId: 'EMP001',
     companyName: 'Tech Onshore MEP Prefabricators Pte Ltd',
@@ -29,6 +30,10 @@ const ViewBiometricDataDetail = ({ onBack, onEdit }) => {
     lastModifiedDate: '2025-04-05 09:15:00'
   };
 
+  const getStatusColor = (status) => {
+    return status === 'Posted' ? '#4caf50' : '#ff9800';
+  };
+
   const handleEdit = () => {
     if (onEdit) onEdit();
   };
@@ -46,7 +51,15 @@ const ViewBiometricDataDetail = ({ onBack, onEdit }) => {
             <h1>Biometric Data Record</h1>
             <div className="detail-subtitle">
               <span>{biometricData.employeeId}</span>
-              <span className="status-badge-detail" style={{ background: '#4caf50' }}>
+              <span className="status-badge-detail" style={{ 
+                background: getStatusColor(biometricData.status),
+                color: 'white',
+                padding: '4px 12px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                fontWeight: '600',
+                marginLeft: '10px'
+              }}>
                 {biometricData.status}
               </span>
             </div>

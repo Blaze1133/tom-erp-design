@@ -49,52 +49,25 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
     },
     {
       id: 2,
-      employee: 'TMO008 Natarajan Muruganandham',
-      employeeId: 'TMO008',
-      date: '11-Mar-2024',
-      day: 'Monday',
-      firstIn: '08:00',
-      lastOut: '17:00',
+      employee: 'TMO015 Kumar Selvam',
+      employeeId: 'TMO015',
+      date: '10-Mar-2024',
+      day: 'Sunday',
+      firstIn: '08:30',
+      lastOut: '17:30',
       normalHours: '8.00',
-      ot15Hours: '0.00',
+      ot15Hours: '1.00',
       ot20Hours: '0.00',
-      weekendHours: '0.00',
+      weekendHours: '8.00',
       holidayHours: '0.00',
-      status: 'Approved',
-      dayType: 'Weekday',
+      status: 'OK',
+      dayType: 'Weekend',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
       detailRecords: [
         {
           project: 'Project A - Marine Fabrication',
-          inTime: '08:00',
-          outTime: '17:00',
-          normalHours: '8.00',
-          ot15Hours: '0.00',
-          ot20Hours: '0.00'
-        }
-      ]
-    },
-    {
-      id: 3,
-      employee: 'MEP01 Jeganathan Sundaravelu',
-      employeeId: 'MEP01',
-      date: '10-Mar-2024',
-      day: 'Sunday',
-      firstIn: '09:00',
-      lastOut: '18:00',
-      normalHours: '8.00',
-      ot15Hours: '1.00',
-      ot20Hours: '0.00',
-      weekendHours: '9.00',
-      holidayHours: '0.00',
-      status: 'OK',
-      dayType: 'Weekend',
-      subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd',
-      detailRecords: [
-        {
-          project: 'Project C - MEP Installation',
-          inTime: '09:00',
-          outTime: '18:00',
+          inTime: '08:30',
+          outTime: '17:30',
           normalHours: '8.00',
           ot15Hours: '1.00',
           ot20Hours: '0.00'
@@ -102,7 +75,52 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       ]
     },
     {
+      id: 3,
+      employee: 'TMO022 Ravi Chandran',
+      employeeId: 'TMO022',
+      date: '10-Mar-2024',
+      day: 'Sunday',
+      firstIn: '07:45',
+      lastOut: '16:00',
+      normalHours: '8.00',
+      ot15Hours: '0.25',
+      ot20Hours: '0.00',
+      weekendHours: '8.00',
+      holidayHours: '0.00',
+      status: 'Missing',
+      dayType: 'Weekend',
+      subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+      detailRecords: []
+    },
+    {
       id: 4,
+      employee: 'TMO031 Suresh Babu',
+      employeeId: 'TMO031',
+      date: '10-Mar-2024',
+      day: 'Sunday',
+      firstIn: '08:00',
+      lastOut: '17:00',
+      normalHours: '8.00',
+      ot15Hours: '1.00',
+      ot20Hours: '0.00',
+      weekendHours: '8.00',
+      holidayHours: '0.00',
+      status: 'Conflict',
+      dayType: 'Weekend',
+      subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+      detailRecords: [
+        {
+          project: 'Project B - Offshore Installation',
+          inTime: '08:00',
+          outTime: '17:00',
+          normalHours: '8.00',
+          ot15Hours: '1.00',
+          ot20Hours: '0.00'
+        }
+      ]
+    },
+    {
+      id: 5,
       employee: 'TMO015 Kumar Selvam',
       employeeId: 'TMO015',
       date: '12-Mar-2024',
@@ -118,33 +136,6 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       dayType: 'Weekday',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
       detailRecords: []
-    },
-    {
-      id: 5,
-      employee: 'TMO020 Ravi Chandran',
-      employeeId: 'TMO020',
-      date: '13-Mar-2024',
-      day: 'Wednesday',
-      firstIn: '08:00',
-      lastOut: '08:30',
-      normalHours: '0.50',
-      ot15Hours: '0.00',
-      ot20Hours: '0.00',
-      weekendHours: '0.00',
-      holidayHours: '0.00',
-      status: 'Conflict',
-      dayType: 'Weekday',
-      subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
-      detailRecords: [
-        {
-          project: 'Project D - Repair Works',
-          inTime: '08:00',
-          outTime: '08:30',
-          normalHours: '0.50',
-          ot15Hours: '0.00',
-          ot20Hours: '0.00'
-        }
-      ]
     }
   ]);
 
@@ -169,8 +160,81 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       showToast('Please select records to approve', 'error');
       return;
     }
+    setTimesheetRecords(prev => prev.map(r => 
+      selectedRecords.includes(r.id)
+        ? { ...r, status: 'Approved' }
+        : r
+    ));
     showToast(`${selectedRecords.length} timesheet(s) approved successfully`, 'success');
     setSelectedRecords([]);
+  };
+
+  const handleFetchUpdatedRecords = () => {
+    showToast('Fetching updated records from data sources...', 'info');
+    
+    setTimeout(() => {
+      const newRecords = [
+        {
+          id: Date.now(),
+          employee: 'TMO045 Ahmed Hassan',
+          employeeId: 'TMO045',
+          date: '11-Mar-2024',
+          day: 'Monday',
+          firstIn: '08:15',
+          lastOut: '17:30',
+          normalHours: '8.00',
+          ot15Hours: '1.25',
+          ot20Hours: '0.00',
+          weekendHours: '0.00',
+          holidayHours: '0.00',
+          status: 'OK',
+          postingStatus: 'Not Posted',
+          dayType: 'Weekday',
+          subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+          detailRecords: [
+            {
+              project: 'Project C - Hull Repair',
+              inTime: '08:15',
+              outTime: '17:30',
+              normalHours: '8.00',
+              ot15Hours: '1.25',
+              ot20Hours: '0.00'
+            }
+          ]
+        },
+        {
+          id: Date.now() + 1,
+          employee: 'TMO052 Tan Wei Ming',
+          employeeId: 'TMO052',
+          date: '11-Mar-2024',
+          day: 'Monday',
+          firstIn: '08:00',
+          lastOut: '18:00',
+          normalHours: '8.00',
+          ot15Hours: '2.00',
+          ot20Hours: '0.00',
+          weekendHours: '0.00',
+          holidayHours: '0.00',
+          status: 'OK',
+          postingStatus: 'Not Posted',
+          dayType: 'Weekday',
+          subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+          detailRecords: [
+            {
+              project: 'Project D - Piping Installation',
+              inTime: '08:00',
+              outTime: '18:00',
+              normalHours: '8.00',
+              ot15Hours: '2.00',
+              ot20Hours: '0.00'
+            }
+          ]
+        }
+      ];
+      
+      setTimesheetRecords(prev => [...newRecords, ...prev]);
+      showToast(`${newRecords.length} new record(s) fetched successfully`, 'success');
+    }, 1500);
   };
 
   const handleCorrect = (record) => {
@@ -228,6 +292,7 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       setSelectedRecords(filteredRecords.map(r => r.id));
     }
   };
+
 
   return (
     <div className="enquiries-list">
@@ -294,13 +359,64 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
 
       <div className="list-filters">
         <div className="filter-group">
-          <button className="btn-icon" onClick={handleBulkApprove} title="Approve Selected">
+          <button 
+            className="btn-icon" 
+            onClick={handleBulkApprove} 
+            title="Approve Selected"
+            style={{
+              padding: '0.5rem 1rem',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              color: selectedRecords.length > 0 ? '#059669' : '#6b7280',
+              backgroundColor: '#fff',
+              border: '1px solid #d1d5db',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#f9fafb';
+              e.currentTarget.style.borderColor = '#9ca3af';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#fff';
+              e.currentTarget.style.borderColor = '#d1d5db';
+            }}
+          >
             <i className="fas fa-check-circle"></i>
             <span>APPROVE SELECTED ({selectedRecords.length})</span>
           </button>
-          <button className="btn-icon" title="Export">
-            <i className="fas fa-file-excel"></i>
-            <span>EXPORT</span>
+          <button 
+            className="btn-list-action" 
+            onClick={handleFetchUpdatedRecords}
+            style={{
+              padding: '0.5rem 1rem',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              color: '#374151',
+              backgroundColor: '#fff',
+              border: '1px solid #d1d5db',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#f9fafb';
+              e.currentTarget.style.borderColor = '#9ca3af';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#fff';
+              e.currentTarget.style.borderColor = '#d1d5db';
+            }}
+          >
+            <i className="fas fa-sync-alt"></i>
+            Fetch Updated Records
           </button>
         </div>
         <div className="filter-right-group">
@@ -331,8 +447,8 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
               <th>NORMAL</th>
               <th>OT 1.5X</th>
               <th>OT 2.0X</th>
-              <th>WEEKEND</th>
-              <th>HOLIDAY</th>
+              <th>WEEKEND HRS</th>
+              <th>HOLIDAY HRS</th>
               <th>STATUS</th>
               <th>ACTIONS</th>
             </tr>
@@ -460,7 +576,7 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
                 </tr>
                 {expandedRows[record.id] && record.detailRecords.length > 0 && (
                   <tr className="detail-row">
-                    <td colSpan="15">
+                    <td colSpan="13">
                       <div style={{ padding: '1rem', background: '#f8f9fa' }}>
                         <h4 style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: '#4a5568' }}>
                           Work Sessions - {record.employee} - {record.date}

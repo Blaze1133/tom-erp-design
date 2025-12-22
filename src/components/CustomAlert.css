@@ -1,0 +1,161 @@
+.custom-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.custom-alert-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 400px;
+  max-width: 500px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.custom-alert-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.custom-alert-header i {
+  font-size: 24px;
+}
+
+.custom-alert-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.custom-alert-header.info {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.custom-alert-header.info i {
+  color: #1976d2;
+}
+
+.custom-alert-header.success {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.custom-alert-header.success i {
+  color: #388e3c;
+}
+
+.custom-alert-header.warning {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.custom-alert-header.warning i {
+  color: #f57c00;
+}
+
+.custom-alert-header.error,
+.custom-alert-header.danger {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.custom-alert-header.error i,
+.custom-alert-header.danger i {
+  color: #d32f2f;
+}
+
+.custom-alert-body {
+  padding: 24px;
+}
+
+.custom-alert-body p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  white-space: pre-line;
+}
+
+.custom-alert-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.custom-alert-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.custom-alert-btn-cancel {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.custom-alert-btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.custom-alert-btn-confirm {
+  background-color: #dc2626;
+  color: white;
+}
+
+.custom-alert-btn-confirm:hover {
+  background-color: #b91c1c;
+}
+
+.custom-alert-btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 600px) {
+  .custom-alert-container {
+    min-width: 90%;
+    max-width: 90%;
+  }
+}
