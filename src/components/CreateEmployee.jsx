@@ -15,7 +15,7 @@ const CreateEmployee = ({ employeeData, onSave, onCancel }) => {
   const [addressRows, setAddressRows] = useState([]);
   const [newAddress, setNewAddress] = useState({
     defaultShipping: false,
-    home: false,
+    home: false,  
     label: '',
     address: ''
   });

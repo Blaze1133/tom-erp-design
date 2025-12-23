@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import Toast from './Toast';
 import './Enquiries.css';
 
 const WriteTaxLiability = ({ setCurrentPage }) => {
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     account: '11110 ALL Bank Accounts : TSV DBS SGD 072-004442-8',
     balance: '-13,485.52',
@@ -42,93 +44,74 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
     'Default Tax Agency SG'
   ];
 
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+  };
+
   const handleSave = () => {
-    console.log('Saving tax liability:', formData);
-    setCurrentPage('view-tax-liabilities');
+    showToast('Tax Liability Cheque saved successfully!', 'success');
+    setTimeout(() => {
+      setCurrentPage('view-tax-liabilities');
+    }, 1500);
   };
 
   const handleCancel = () => {
-    setCurrentPage('view-tax-liabilities');
+    if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+      setCurrentPage('view-tax-liabilities');
+    }
   };
 
   return (
-    <div className="sales-quotation">
-      {/* Header */}
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-file-invoice-dollar" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-file-invoice-dollar"></i>
           <div>
-            <h1 style={{ margin: 0 }}>Tax Liability Cheque</h1>
+            <h1>Tax Liability Cheque</h1>
+            <div className="detail-subtitle">
+              <span>New Tax Liability Cheque</span>
+            </div>
           </div>
         </div>
-        <div className="page-actions" style={{ display: 'flex', gap: '12px' }}>
-          <button 
-            onClick={handleSave}
-            style={{
-              padding: '8px 24px',
-              background: '#4a90e2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-              minWidth: '80px'
-            }}
-          >
-            Save
-          </button>
-          <button 
-            onClick={handleCancel}
-            style={{
-              padding: '8px 24px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              minWidth: '80px'
-            }}
-          >
-            Cancel
-          </button>
-          <button 
-            style={{
-              padding: '8px 24px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              minWidth: '80px'
-            }}
-          >
-            List
-          </button>
-          <button 
-            style={{
-              padding: '8px 24px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              minWidth: '80px'
-            }}
-          >
-            More
+        <div className="detail-actions">
+          <button className="btn-action" onClick={() => setCurrentPage('view-tax-liabilities')}>List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
+        </div>
+      </div>
+
+      <div className="detail-toolbar">
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-print"></i>
+          Print
+        </button>
+        <div className="toolbar-dropdown" style={{ marginLeft: 'auto' }}>
+          <button className="btn-toolbar">
+            <i className="fas fa-cog"></i>
+            Actions
+            <i className="fas fa-chevron-down" style={{ marginLeft: '0.5rem', fontSize: '0.7rem' }}></i>
           </button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        {/* Main Form */}
-        <div className="form-section">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-            {/* Left Column */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div className="form-group">
-                <label className="form-label">ACCOUNT</label>
+      <div className="detail-content">
+        {/* Primary Information */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>ACCOUNT <span className="required">*</span></label>
                 <select 
                   className="form-control"
                   value={formData.account}
@@ -140,20 +123,20 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">BALANCE</label>
+              <div className="detail-field">
+                <label>BALANCE</label>
                 <input 
                   type="text"
                   className="form-control"
                   value={formData.balance}
                   onChange={(e) => setFormData({...formData, balance: e.target.value})}
                   disabled
-                  style={{ background: '#f5f5f5' }}
+                  style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">SUBSIDIARY</label>
+              <div className="detail-field">
+                <label>SUBSIDIARY <span className="required">*</span></label>
                 <select 
                   className="form-control"
                   value={formData.subsidiary}
@@ -165,20 +148,20 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">CURRENCY</label>
+              <div className="detail-field">
+                <label>CURRENCY</label>
                 <input 
                   type="text"
                   className="form-control"
                   value={formData.currency}
                   onChange={(e) => setFormData({...formData, currency: e.target.value})}
                   disabled
-                  style={{ background: '#f5f5f5' }}
+                  style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">TAX ACCOUNT</label>
+              <div className="detail-field">
+                <label>TAX ACCOUNT <span className="required">*</span></label>
                 <select 
                   className="form-control"
                   value={formData.taxAccount}
@@ -190,18 +173,8 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">DO RECORD CREATED</label>
-                <div style={{ padding: '8px 0', fontSize: '13px', color: '#666' }}>
-                  -
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div className="form-group">
-                <label className="form-label required">PAYEE</label>
+              <div className="detail-field">
+                <label>PAYEE <span className="required">*</span></label>
                 <select 
                   className="form-control"
                   value={formData.payee}
@@ -214,8 +187,8 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label className="form-label required">DATE</label>
+              <div className="detail-field">
+                <label>DATE <span className="required">*</span></label>
                 <input 
                   type="text"
                   className="form-control"
@@ -224,8 +197,8 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">POSTING PERIOD</label>
+              <div className="detail-field">
+                <label>POSTING PERIOD</label>
                 <select 
                   className="form-control"
                   value={formData.postingPeriod}
@@ -246,8 +219,8 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label className="form-label required">AMOUNT</label>
+              <div className="detail-field">
+                <label>AMOUNT <span className="required">*</span></label>
                 <input 
                   type="text"
                   className="form-control"
@@ -257,8 +230,8 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">MEMO</label>
+              <div className="detail-field">
+                <label>MEMO</label>
                 <input 
                   type="text"
                   className="form-control"
@@ -266,54 +239,35 @@ const WriteTaxLiability = ({ setCurrentPage }) => {
                   onChange={(e) => setFormData({...formData, memo: e.target.value})}
                 />
               </div>
+              <div className="detail-field">
+                <label>DO RECORD CREATED</label>
+                <div className="field-value" style={{ padding: '8px 0', fontSize: '13px', color: '#666' }}>
+                  -
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="footer-actions" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          gap: '12px',
-          marginTop: '2rem',
-          paddingTop: '1.5rem',
-          borderTop: '1px solid #e0e0e0'
-        }}>
-          <button 
-            onClick={handleCancel}
-            style={{
-              padding: '10px 28px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-              minWidth: '100px'
-            }}
-          >
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-times"></i>
             Cancel
           </button>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button 
-              onClick={handleSave}
-              style={{
-                padding: '10px 28px',
-                background: '#4a90e2',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '500',
-                minWidth: '100px'
-              }}
-            >
-              Save
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-save"></i>
+            Save
+          </button>
         </div>
       </div>
+
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        show={toast.show} 
+        onClose={() => setToast({ ...toast, show: false })} 
+      />
     </div>
   );
 };

@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
+import Toast from './Toast';
 import './Enquiries.css';
 
 const ViewTaxLiabilities = ({ setCurrentPage }) => {
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewType, setViewType] = useState('Vendor Bills');
 
   // Empty state - no records to show
   const taxLiabilities = [];
+
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+  };
 
   const handleNewTransaction = () => {
     setCurrentPage('write-tax-liability');
@@ -25,163 +31,111 @@ const ViewTaxLiabilities = ({ setCurrentPage }) => {
         </div>
       </div>
 
-      {/* Content Area */}
-      <div style={{ padding: '24px' }}>
-        <div style={{ background: 'white', borderRadius: '8px', padding: '20px' }}>
-          
-          {/* View and New Transaction */}
-          <div className="list-controls">
-            <div className="view-filter">
-              <label>VIEW:</label>
-              <select 
-                className="form-control"
-                value={viewType}
-                onChange={(e) => setViewType(e.target.value)}
-              >
-                <option>Vendor Bills</option>
-                <option>All Tax Liabilities</option>
-                <option>Recent Tax Liabilities</option>
-              </select>
-            </div>
-            <button className="btn-new-transaction" onClick={handleNewTransaction}>
-              <i className="fas fa-plus"></i> New Transaction
-            </button>
-          </div>
+      <div className="list-controls">
+        <div className="view-filter">
+          <label>VIEW:</label>
+          <select 
+            className="form-control"
+            value={viewType}
+            onChange={(e) => setViewType(e.target.value)}
+          >
+            <option>Vendor Bills</option>
+            <option>All Tax Liabilities</option>
+            <option>Recent Tax Liabilities</option>
+          </select>
+        </div>
+        <button className="btn-new-transaction" onClick={handleNewTransaction}>
+          <i className="fas fa-plus"></i> New Transaction
+        </button>
+      </div>
 
-          {/* Filters */}
-          <div style={{ marginBottom: '20px' }}>
-            <button style={{
-              padding: '8px 20px',
-              background: 'white',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <i className="fas fa-filter"></i> FILTERS
-            </button>
-          </div>
-
-          {/* Action Buttons and Sort */}
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '16px',
-            paddingBottom: '12px',
-            borderBottom: '1px solid #e0e0e0'
-          }}>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button style={{
-                padding: '8px 16px',
-                background: 'white',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                minWidth: '40px'
-              }}>
-                <i className="fas fa-download"></i>
-              </button>
-              <button style={{
-                padding: '8px 16px',
-                background: 'white',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                minWidth: '40px'
-              }}>
-                <i className="fas fa-save"></i>
-              </button>
-              <button style={{
-                padding: '8px 16px',
-                background: 'white',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                minWidth: '40px'
-              }}>
-                <i className="fas fa-print"></i>
-              </button>
-              <button style={{
-                padding: '8px 20px',
-                background: 'white',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                minWidth: '60px'
-              }}>
-                EDIT
-              </button>
-            </div>
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#666' }}>QUICK SORT:</span>
-              <select style={{
-                padding: '8px 16px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '14px',
-                cursor: 'pointer',
-                background: 'white',
-                minWidth: '150px'
-              }}>
-                <option>Date</option>
-                <option>Document Number</option>
-                <option>Amount</option>
-              </select>
-              <span style={{ fontSize: '14px', color: '#666', fontWeight: '500' }}>
-                TOTAL: 0
-              </span>
-            </div>
-          </div>
-
-          {/* Table */}
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ 
-              width: '100%', 
-              borderCollapse: 'collapse',
-              fontSize: '13px'
-            }}>
-              <thead>
-                <tr style={{ borderBottom: '2px solid #dee2e6' }}>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '100px' }}>
-                    EDIT | VIEW
-                  </th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '100px' }}>ORDER TYPE</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '200px' }}>SUBSIDIARY</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '100px' }}>DATE</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '110px' }}>AS-OF DATE</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '100px' }}>PERIOD</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '110px' }}>TAX PERIOD</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '140px' }}>DOCUMENT NUMBER</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '150px' }}>NAME</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'right', fontWeight: '600', color: '#495057', fontSize: '11px', width: '130px' }}>AMOUNT (NET OF TAX)</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'right', fontWeight: '600', color: '#495057', fontSize: '11px', width: '100px' }}>TAX TOTAL</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'right', fontWeight: '600', color: '#495057', fontSize: '11px', width: '100px' }}>AMOUNT</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '280px' }}>ACCOUNT</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '150px' }}>STATUS</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '150px' }}>MEMO</th>
-                  <th style={{ padding: '14px 12px', textAlign: 'left', fontWeight: '600', color: '#495057', fontSize: '11px', width: '200px' }}>MATERIAL SPECIFICATION</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan="16" style={{ padding: '40px', textAlign: 'center', color: '#999', fontSize: '14px' }}>
-                    No records to show.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div className="list-filters">
+        <div className="list-toolbar">
+          <button className="toolbar-btn" title="Edit">
+            <i className="fas fa-edit"></i> EDIT
+          </button>
+          <button className="toolbar-btn" title="Delete">
+            <i className="fas fa-times"></i>
+          </button>
+          <button className="toolbar-btn" title="Attach">
+            <i className="fas fa-paperclip"></i>
+          </button>
+          <button className="toolbar-btn" title="Print">
+            <i className="fas fa-print"></i>
+          </button>
+        </div>
+        <div className="list-sort">
+          <label>QUICK SORT:</label>
+          <select className="form-control">
+            <option>Date</option>
+            <option>Document Number</option>
+            <option>Amount</option>
+          </select>
+        </div>
+        <div className="list-total">
+          TOTAL: {taxLiabilities.length}
         </div>
       </div>
+
+      <div className="enquiries-table-container">
+        <table className="enquiries-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>EDIT | VIEW</th>
+              <th>DATE</th>
+              <th>DOCUMENT NUMBER</th>
+              <th>SUBSIDIARY</th>
+              <th>PAYEE</th>
+              <th>TAX ACCOUNT</th>
+              <th>POSTING PERIOD</th>
+              <th>AMOUNT</th>
+              <th>MEMO</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {taxLiabilities.length === 0 ? (
+              <tr>
+                <td colSpan="11" style={{ padding: '40px', textAlign: 'center', color: '#999', fontSize: '14px' }}>
+                  No records to show.
+                </td>
+              </tr>
+            ) : (
+              taxLiabilities.map((liability) => (
+                <tr key={liability.id}>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button className="view-link">Edit</button>
+                      <span style={{ color: '#999' }}>|</span>
+                      <button className="view-link">View</button>
+                    </div>
+                  </td>
+                  <td>{liability.date}</td>
+                  <td className="doc-number">{liability.documentNumber}</td>
+                  <td>{liability.subsidiary}</td>
+                  <td>{liability.payee}</td>
+                  <td>{liability.taxAccount}</td>
+                  <td>{liability.postingPeriod}</td>
+                  <td className="amount">{liability.amount}</td>
+                  <td>{liability.memo}</td>
+                  <td>{liability.status}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        show={toast.show} 
+        onClose={() => setToast({ ...toast, show: false })} 
+      />
     </div>
   );
 };

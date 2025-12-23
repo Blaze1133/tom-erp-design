@@ -195,22 +195,27 @@ import EnterTransferOrder from './components/EnterTransferOrder';
 import ViewTransferOrders from './components/ViewTransferOrders';
 import ViewTransferOrderDetail from './components/ViewTransferOrderDetail';
 import EditTransferOrder from './components/EditTransferOrder';
-import WriteChecks from './components/WriteChecks';
-import ViewChecks from './components/ViewChecks';
-import ViewCheckDetail from './components/ViewCheckDetail';
-import EditCheck from './components/EditCheck';
-import MakeDeposit from './components/MakeDeposit';
-import ViewDeposits from './components/ViewDeposits';
-import ViewDepositDetail from './components/ViewDepositDetail';
-import TransferFunds from './components/TransferFunds';
-import ViewTransfers from './components/ViewTransfers';
-import ViewTransferDetail from './components/ViewTransferDetail';
+import CreateWriteCheck from './components/CreateWriteCheck';
+import ViewWriteChecks from './components/ViewWriteChecks';
+import ViewWriteCheckDetail from './components/ViewWriteCheckDetail';
+import EditWriteCheck from './components/EditWriteCheck';
+import CreateMakeDeposit from './components/CreateMakeDeposit';
+import ViewMakeDeposits from './components/ViewMakeDeposits';
+import ViewMakeDepositDetail from './components/ViewMakeDepositDetail';
+import EditMakeDeposit from './components/EditMakeDeposit';
+import CreateTransferFund from './components/CreateTransferFund';
+import ViewTransferFunds from './components/ViewTransferFunds';
+import ViewTransferFundDetail from './components/ViewTransferFundDetail';
+import EditTransferFund from './components/EditTransferFund';
 import ReconcileAccountStatement from './components/ReconcileAccountStatement';
 import ReconciledStatements from './components/ReconciledStatements';
 import WriteTaxLiability from './components/WriteTaxLiability';
 import ViewTaxLiabilities from './components/ViewTaxLiabilities';
 import ReconciliationRules from './components/ReconciliationRules';
-import ReconcileBankStatement from './components/ReconcileBankStatement';
+import CreateBankReconciliation from './components/CreateBankReconciliation';
+import ViewBankReconciliations from './components/ViewBankReconciliations';
+import ViewBankReconciliationDetail from './components/ViewBankReconciliationDetail';
+import EditBankReconciliation from './components/EditBankReconciliation';
 import CommitOrders from './components/CommitOrders';
 import CommitOrderSchedule from './components/CommitOrderSchedule';
 import AcceptCustomerPayment from './components/AcceptCustomerPayment';
@@ -896,32 +901,39 @@ function App() {
         />;
       
       case 'write-checks':
-        return <WriteChecks setCurrentPage={setCurrentPage} />;
+      case 'write-check':
+        return <CreateWriteCheck setCurrentPage={setCurrentPage} />;
       case 'view-checks':
-        return <ViewChecks setCurrentPage={setCurrentPage} />;
+        return <ViewWriteChecks setCurrentPage={setCurrentPage} />;
       case 'view-check-detail':
-        return <ViewCheckDetail setCurrentPage={setCurrentPage} />;
+        return <ViewWriteCheckDetail setCurrentPage={setCurrentPage} />;
       case 'edit-check':
-        return <EditCheck setCurrentPage={setCurrentPage} />;
+        return <EditWriteCheck setCurrentPage={setCurrentPage} />;
       case 'make-deposit':
       case 'make-deposits':
-        return <MakeDeposit setCurrentPage={setCurrentPage} />;
+        return <CreateMakeDeposit setCurrentPage={setCurrentPage} />;
       case 'view-deposits':
-        return <ViewDeposits setCurrentPage={setCurrentPage} />;
+        return <ViewMakeDeposits setCurrentPage={setCurrentPage} />;
       case 'view-deposit-detail':
-        return <ViewDepositDetail setCurrentPage={setCurrentPage} />;
+        return <ViewMakeDepositDetail setCurrentPage={setCurrentPage} />;
       case 'edit-deposit':
-        return <MakeDeposit setCurrentPage={setCurrentPage} />;
+        return <EditMakeDeposit setCurrentPage={setCurrentPage} />;
       case 'transfer-funds':
-        return <TransferFunds setCurrentPage={setCurrentPage} />;
+        return <CreateTransferFund setCurrentPage={setCurrentPage} />;
       case 'view-transfers':
-        return <ViewTransfers setCurrentPage={setCurrentPage} />;
+        return <ViewTransferFunds setCurrentPage={setCurrentPage} />;
       case 'view-transfer-detail':
-        return <ViewTransferDetail setCurrentPage={setCurrentPage} />;
+        return <ViewTransferFundDetail setCurrentPage={setCurrentPage} />;
       case 'edit-transfer':
-        return <TransferFunds setCurrentPage={setCurrentPage} />;
+        return <EditTransferFund setCurrentPage={setCurrentPage} />;
       case 'reconcile-bank-statement':
-        return <ReconcileBankStatement setCurrentPage={setCurrentPage} />;
+        return <CreateBankReconciliation setCurrentPage={setCurrentPage} />;
+      case 'view-bank-reconciliations':
+        return <ViewBankReconciliations setCurrentPage={setCurrentPage} />;
+      case 'view-bank-reconciliation-detail':
+        return <ViewBankReconciliationDetail setCurrentPage={setCurrentPage} />;
+      case 'edit-bank-reconciliation':
+        return <EditBankReconciliation setCurrentPage={setCurrentPage} />;
       case 'reconcile-account-statement':
         return <ReconcileAccountStatement setCurrentPage={setCurrentPage} />;
       case 'reconciled-statements':

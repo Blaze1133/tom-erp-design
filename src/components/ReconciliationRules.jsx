@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import Toast from './Toast';
 import './Enquiries.css';
 
 const ReconciliationRules = ({ setCurrentPage }) => {
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [showNewRuleForm, setShowNewRuleForm] = useState(false);
   const [systemRules] = useState([
     {
       id: 1,
@@ -20,14 +23,54 @@ const ReconciliationRules = ({ setCurrentPage }) => {
     }
   ]);
 
-  const [userRules] = useState([]);
+  const [userRules, setUserRules] = useState([]);
+  const [newRule, setNewRule] = useState({
+    ruleName: '',
+    matchOn: 'amount',
+    dateTolerance: '',
+    active: true
+  });
 
   const handleNewRule = () => {
-    console.log('Creating new rule');
+    setShowNewRuleForm(true);
+  };
+
+  const handleSaveRule = () => {
+    if (!newRule.ruleName.trim()) {
+      setToast({ show: true, message: 'Please enter a rule name', type: 'error' });
+      return;
+    }
+
+    const rule = {
+      id: Date.now(),
+      active: newRule.active,
+      ruleName: newRule.ruleName,
+      matchOn: newRule.matchOn,
+      dateTolerance: newRule.dateTolerance
+    };
+
+    setUserRules([...userRules, rule]);
+    setNewRule({ ruleName: '', matchOn: 'amount', dateTolerance: '', active: true });
+    setShowNewRuleForm(false);
+    setToast({ show: true, message: 'Rule created successfully!', type: 'success' });
+  };
+
+  const handleCancelRule = () => {
+    setNewRule({ ruleName: '', matchOn: 'amount', dateTolerance: '', active: true });
+    setShowNewRuleForm(false);
+  };
+
+  const handleDeleteRule = (ruleId) => {
+    if (window.confirm('Are you sure you want to delete this rule?')) {
+      setUserRules(userRules.filter(rule => rule.id !== ruleId));
+      setToast({ show: true, message: 'Rule deleted successfully!', type: 'success' });
+    }
   };
 
   const handleToggleRule = (ruleId) => {
-    console.log('Toggling rule:', ruleId);
+    setUserRules(userRules.map(rule => 
+      rule.id === ruleId ? { ...rule, active: !rule.active } : rule
+    ));
   };
 
   return (
@@ -145,19 +188,122 @@ const ReconciliationRules = ({ setCurrentPage }) => {
               onClick={handleNewRule}
               style={{
                 padding: '8px 20px',
-                background: '#6c757d',
+                background: '#4a90e2',
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
                 fontSize: '13px',
-                fontWeight: '500'
+                fontWeight: '500',
+                marginBottom: '16px'
               }}
             >
+              <i className="fas fa-plus" style={{ marginRight: '8px' }}></i>
               New Rule
             </button>
 
-            {userRules.length === 0 && (
+            {showNewRuleForm && (
+              <div style={{
+                marginBottom: '20px',
+                padding: '20px',
+                border: '1px solid #e0e0e0',
+                borderRadius: '4px',
+                background: '#f9f9f9'
+              }}>
+                <h3 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '16px', color: '#333' }}>
+                  Create New Rule
+                </h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', marginBottom: '6px', color: '#5a6c7d' }}>
+                      RULE NAME <span style={{ color: 'red' }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newRule.ruleName}
+                      onChange={(e) => setNewRule({ ...newRule, ruleName: e.target.value })}
+                      placeholder="Enter rule name"
+                      style={{ width: '100%' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', marginBottom: '6px', color: '#5a6c7d' }}>
+                      MATCH ON
+                    </label>
+                    <select
+                      className="form-control"
+                      value={newRule.matchOn}
+                      onChange={(e) => setNewRule({ ...newRule, matchOn: e.target.value })}
+                      style={{ width: '100%' }}
+                    >
+                      <option value="amount">Amount</option>
+                      <option value="transactionNumber">Transaction Number</option>
+                      <option value="both">Amount and Transaction Number</option>
+                      <option value="date">Date</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', marginBottom: '6px', color: '#5a6c7d' }}>
+                      DATE TOLERANCE (DAYS)
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={newRule.dateTolerance}
+                      onChange={(e) => setNewRule({ ...newRule, dateTolerance: e.target.value })}
+                      placeholder="e.g., 90"
+                      style={{ width: '100%' }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
+                    <input
+                      type="checkbox"
+                      checked={newRule.active}
+                      onChange={(e) => setNewRule({ ...newRule, active: e.target.checked })}
+                      style={{ width: '18px', height: '18px', marginRight: '8px', cursor: 'pointer' }}
+                    />
+                    <label style={{ fontSize: '13px', color: '#333', margin: 0 }}>Active</label>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={handleSaveRule}
+                    style={{
+                      padding: '8px 20px',
+                      background: '#4a90e2',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: '500'
+                    }}
+                  >
+                    <i className="fas fa-save" style={{ marginRight: '6px' }}></i>
+                    Save
+                  </button>
+                  <button
+                    onClick={handleCancelRule}
+                    style={{
+                      padding: '8px 20px',
+                      background: '#6c757d',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: '500'
+                    }}
+                  >
+                    <i className="fas fa-times" style={{ marginRight: '6px' }}></i>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {userRules.length === 0 && !showNewRuleForm && (
               <div style={{ 
                 marginTop: '20px',
                 padding: '40px',
@@ -170,9 +316,128 @@ const ReconciliationRules = ({ setCurrentPage }) => {
                 No user rules defined. Click "New Rule" to create one.
               </div>
             )}
+
+            {userRules.length > 0 && (
+              <table style={{ 
+                width: '100%', 
+                borderCollapse: 'collapse',
+                fontSize: '14px',
+                marginTop: '16px'
+              }}>
+                <thead>
+                  <tr style={{ background: '#e8e8e8', borderBottom: '1px solid #d0d0d0' }}>
+                    <th style={{ 
+                      padding: '12px 16px', 
+                      textAlign: 'left', 
+                      fontWeight: '600', 
+                      color: '#5a6c7d', 
+                      fontSize: '13px',
+                      width: '100px'
+                    }}>
+                      ACTIVE
+                    </th>
+                    <th style={{ 
+                      padding: '12px 16px', 
+                      textAlign: 'left', 
+                      fontWeight: '600', 
+                      color: '#5a6c7d', 
+                      fontSize: '13px'
+                    }}>
+                      RULE NAME
+                    </th>
+                    <th style={{ 
+                      padding: '12px 16px', 
+                      textAlign: 'left', 
+                      fontWeight: '600', 
+                      color: '#5a6c7d', 
+                      fontSize: '13px',
+                      width: '200px'
+                    }}>
+                      MATCH ON
+                    </th>
+                    <th style={{ 
+                      padding: '12px 16px', 
+                      textAlign: 'center', 
+                      fontWeight: '600', 
+                      color: '#5a6c7d', 
+                      fontSize: '13px',
+                      width: '100px'
+                    }}>
+                      ACTIONS
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userRules.map((rule) => (
+                    <tr 
+                      key={rule.id}
+                      style={{ 
+                        borderBottom: '1px solid #e8e8e8',
+                        background: 'white'
+                      }}
+                    >
+                      <td style={{ padding: '14px 16px' }}>
+                        <input 
+                          type="checkbox"
+                          checked={rule.active}
+                          onChange={() => handleToggleRule(rule.id)}
+                          style={{ 
+                            width: '18px', 
+                            height: '18px',
+                            cursor: 'pointer',
+                            accentColor: '#4a90e2'
+                          }}
+                        />
+                      </td>
+                      <td style={{ 
+                        padding: '14px 16px', 
+                        color: '#333', 
+                        fontSize: '13px'
+                      }}>
+                        {rule.ruleName}
+                      </td>
+                      <td style={{ 
+                        padding: '14px 16px', 
+                        color: '#666', 
+                        fontSize: '13px'
+                      }}>
+                        {rule.matchOn === 'amount' && 'Amount'}
+                        {rule.matchOn === 'transactionNumber' && 'Transaction Number'}
+                        {rule.matchOn === 'both' && 'Amount and Transaction Number'}
+                        {rule.matchOn === 'date' && 'Date'}
+                        {rule.dateTolerance && ` (${rule.dateTolerance} days)`}
+                      </td>
+                      <td style={{ padding: '14px 16px', textAlign: 'center' }}>
+                        <button
+                          onClick={() => handleDeleteRule(rule.id)}
+                          style={{
+                            padding: '4px 12px',
+                            background: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '3px',
+                            cursor: 'pointer',
+                            fontSize: '12px'
+                          }}
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
+
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        show={toast.show} 
+        onClose={() => setToast({ ...toast, show: false })} 
+      />
     </div>
   );
 };
