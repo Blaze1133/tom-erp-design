@@ -11,7 +11,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
     budgetCategory: 'Labor',
     budgetCategoryType: 'Global',
     currency: 'SGD',
-    customerProject: '',
+    customer: '',
+    project: '',
     item: '',
     class: '',
     department: '',
@@ -79,38 +80,50 @@ const SetUpBudgets = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-chart-line" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Budget</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-chart-line"></i>
+          <div>
+            <h1>Budget</h1>
+            <div className="detail-subtitle">
+              <span>{formData.year} • {formData.subsidiary || 'New Budget'}</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-trash"></i>
-            Clear
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-cog"></i>
-            Actions
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        {/* Filter Section */}
-        <div className="form-section">
-          <div className="form-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-            <div className="form-group">
-              <label className="form-label required">Subsidiary</label>
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-trash"></i>
+          Clear
+        </button>
+      </div>
+
+      <div className="detail-content">
+        {/* Primary Information */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+            <div className="detail-field">
+              <label>SUBSIDIARY <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.subsidiary}
@@ -125,8 +138,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>Tech Offshore Marine (SV) Pte Ltd</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Currency</label>
+            <div className="detail-field">
+              <label>CURRENCY</label>
               <select 
                 className="form-control"
                 value={formData.currency}
@@ -137,8 +150,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>EUR</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Department</label>
+            <div className="detail-field">
+              <label>DEPARTMENT</label>
               <select 
                 className="form-control"
                 value={formData.department}
@@ -150,8 +163,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>Operations</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label required">Year</label>
+            <div className="detail-field">
+              <label>YEAR <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.year}
@@ -162,18 +175,28 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>2026</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Customer/Project</label>
+            <div className="detail-field">
+              <label>CUSTOMER</label>
               <input 
                 type="text" 
                 className="form-control"
                 placeholder="<Type then tab>"
-                value={formData.customerProject}
-                onChange={(e) => handleInputChange('customerProject', e.target.value)}
+                value={formData.customer}
+                onChange={(e) => handleInputChange('customer', e.target.value)}
               />
             </div>
-            <div className="form-group">
-              <label className="form-label">Location</label>
+            <div className="detail-field">
+              <label>PROJECT</label>
+              <input 
+                type="text" 
+                className="form-control"
+                placeholder="<Type then tab>"
+                value={formData.project}
+                onChange={(e) => handleInputChange('project', e.target.value)}
+              />
+            </div>
+            <div className="detail-field">
+              <label>LOCATION</label>
               <select 
                 className="form-control"
                 value={formData.location}
@@ -184,8 +207,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>Malaysia</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label required">Budget Category</label>
+            <div className="detail-field">
+              <label>BUDGET CATEGORY <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.budgetCategory}
@@ -196,8 +219,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>Overhead</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Item</label>
+            <div className="detail-field">
+              <label>ITEM</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -206,8 +229,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 onChange={(e) => handleInputChange('item', e.target.value)}
               />
             </div>
-            <div className="form-group">
-              <label className="form-label">Account Type</label>
+            <div className="detail-field">
+              <label>ACCOUNT TYPE</label>
               <select 
                 className="form-control"
                 value={formData.accountType}
@@ -221,8 +244,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>All</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label required">Budget Category Type</label>
+            <div className="detail-field">
+              <label>BUDGET CATEGORY TYPE <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.budgetCategoryType}
@@ -233,8 +256,8 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>Project</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Class</label>
+            <div className="detail-field">
+              <label>CLASS</label>
               <select 
                 className="form-control"
                 value={formData.class}
@@ -245,20 +268,38 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 <option>Material Supply</option>
               </select>
             </div>
+            </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div style={{ marginTop: '20px', marginBottom: '15px', display: 'flex', gap: '10px' }}>
-          <button className="btn btn-secondary" onClick={handleMarkAll}>Mark All</button>
-          <button className="btn btn-secondary" onClick={handleUnmarkAll}>Unmark All</button>
-          <button className="btn btn-secondary" onClick={handleDistribute}>Distribute</button>
-          <button className="btn btn-secondary" onClick={handleFill}>Fill</button>
-        </div>
+        {/* Budget Lines Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Budget Lines</h3>
+          </div>
+          <div className="section-body">
+            <div style={{ marginBottom: '15px', display: 'flex', gap: '10px' }}>
+              <button className="btn-toolbar" onClick={handleMarkAll}>
+                <i className="fas fa-check-square"></i>
+                Mark All
+              </button>
+              <button className="btn-toolbar" onClick={handleUnmarkAll}>
+                <i className="fas fa-square"></i>
+                Unmark All
+              </button>
+              <button className="btn-toolbar" onClick={handleDistribute}>
+                <i className="fas fa-chart-bar"></i>
+                Distribute
+              </button>
+              <button className="btn-toolbar" onClick={handleFill}>
+                <i className="fas fa-fill"></i>
+                Fill
+              </button>
+            </div>
 
-        {/* Budget Table */}
-        <div className="items-table-wrapper" style={{ overflowX: 'auto' }}>
-          <table className="detail-items-table" style={{ minWidth: '2000px' }}>
+            <div className="items-section" style={{ overflowX: 'auto' }}>
+              <table className="items-table" style={{ minWidth: '2000px' }}>
             <thead>
               <tr>
                 <th style={{ width: '50px', position: 'sticky', left: 0, background: '#f8f9fa', zIndex: 2 }}>APPLY</th>
@@ -294,28 +335,24 @@ const SetUpBudgets = ({ setCurrentPage }) => {
                 </tr>
               ))}
             </tbody>
-          </table>
+              </table>
+            </div>
+          </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-arrow-left"></i>
+            Back
           </button>
-          <div>
-            <button className="btn btn-primary" onClick={handleSave}>
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-trash"></i>
-              Clear
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-cog"></i>
-              Actions
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-save"></i>
+            Save
+          </button>
+          <button className="btn-toolbar">
+            <i className="fas fa-trash"></i>
+            Clear
+          </button>
         </div>
       </div>
 

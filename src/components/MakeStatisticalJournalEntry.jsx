@@ -19,6 +19,9 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
   });
 
   const [lines, setLines] = useState([]);
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -50,6 +53,65 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
     setLines([]);
   };
 
+  const handleMenuToggle = (index, event) => {
+    event.stopPropagation();
+    if (activeMenu === index) {
+      setActiveMenu(null);
+    } else {
+      const rect = event.currentTarget.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX
+      });
+      setActiveMenu(index);
+    }
+  };
+
+  const handleInsertAbove = (index) => {
+    const newLine = {
+      id: Date.now(),
+      account: '',
+      amount: '',
+      memo: '',
+      name: '',
+      department: '',
+      class: '',
+      location: '',
+      units: ''
+    };
+    setLines(prev => [
+      ...prev.slice(0, index),
+      newLine,
+      ...prev.slice(index)
+    ]);
+    setActiveMenu(null);
+  };
+
+  const handleInsertBelow = (index) => {
+    const newLine = {
+      id: Date.now(),
+      account: '',
+      amount: '',
+      memo: '',
+      name: '',
+      department: '',
+      class: '',
+      location: '',
+      units: ''
+    };
+    setLines(prev => [
+      ...prev.slice(0, index + 1),
+      newLine,
+      ...prev.slice(index + 1)
+    ]);
+    setActiveMenu(null);
+  };
+
+  const handleDeleteRow = (index) => {
+    setLines(prev => prev.filter((_, i) => i !== index));
+    setActiveMenu(null);
+  };
+
   const handleSave = () => {
     showToast('Statistical Journal Entry saved successfully!', 'success');
   };
@@ -63,52 +125,46 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-file-alt" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Statistical Journal</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-file-alt"></i>
+          <div>
+            <h1>Statistical Journal Entry</h1>
+            <div className="detail-subtitle">
+              <span>{formData.entryNo}</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-view-option">
-            <i className="fas fa-list"></i>
-            List
-          </button>
-          <button className="btn btn-view-option">
-            <i className="fas fa-search"></i>
-            Search
-          </button>
-          <button className="btn btn-view-option">
-            <i className="fas fa-cog"></i>
-            Customize
-          </button>
-          <button className="btn btn-view-option">
-            <i className="fas fa-ellipsis-h"></i>
-            More
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-            <div className="form-group">
-              <label className="form-label required">Custom Form</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+            <div className="detail-field">
+              <label>CUSTOM FORM <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.customForm}
@@ -119,8 +175,8 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Accounting Period</label>
+            <div className="detail-field">
+              <label>ACCOUNTING PERIOD</label>
               <select 
                 className="form-control"
                 value={formData.accountingPeriod}
@@ -134,8 +190,8 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Entry No.</label>
+            <div className="detail-field">
+              <label>ENTRY NO.</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -145,8 +201,8 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Reversal Date</label>
+            <div className="detail-field">
+              <label>REVERSAL DATE</label>
               <input 
                 type="date" 
                 className="form-control"
@@ -155,8 +211,8 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label required">Date</label>
+            <div className="detail-field">
+              <label>DATE <span className="required">*</span></label>
               <input 
                 type="date" 
                 className="form-control"
@@ -165,8 +221,8 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Memo</label>
+            <div className="detail-field">
+              <label>MEMO</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -174,20 +230,20 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
                 onChange={(e) => handleInputChange('memo', e.target.value)}
               />
             </div>
+            </div>
           </div>
         </div>
 
         {/* Statistical Information */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-chart-line"></i>
-            Statistical Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-            <div className="form-group">
-              <label className="form-label required">Unit of Measure Type</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Statistical Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+            <div className="detail-field">
+              <label>UNIT OF MEASURE TYPE <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.unitOfMeasureType}
@@ -199,20 +255,8 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label" style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.absoluteUpdate}
-                  onChange={(e) => handleInputChange('absoluteUpdate', e.target.checked)}
-                  style={{ marginRight: '8px' }}
-                />
-                Absolute Update
-              </label>
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label">Unit of Measure</label>
+            <div className="detail-field">
+              <label>UNIT OF MEASURE</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -220,20 +264,32 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
                 onChange={(e) => handleInputChange('unitOfMeasure', e.target.value)}
               />
             </div>
+            
+            <div className="detail-field">
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.absoluteUpdate}
+                  onChange={(e) => handleInputChange('absoluteUpdate', e.target.checked)}
+                  style={{ width: 'auto', margin: 0 }}
+                />
+                <span>ABSOLUTE UPDATE</span>
+              </label>
+            </div>
+            </div>
           </div>
         </div>
 
         {/* Classification */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-tags"></i>
-            Classification
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid" style={{ gridTemplateColumns: '1fr', maxWidth: '500px' }}>
-            <div className="form-group">
-              <label className="form-label required">Subsidiary</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid" style={{ gridTemplateColumns: '1fr' }}>
+            <div className="detail-field">
+              <label>SUBSIDIARY <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.subsidiary}
@@ -248,165 +304,161 @@ const MakeStatisticalJournalEntry = ({ setCurrentPage }) => {
                 <option>Tech Offshore Marine (SV) Pte Ltd</option>
               </select>
             </div>
+            </div>
           </div>
         </div>
 
-        {/* Lines Table */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <div style={{ 
-            padding: '12px 20px',
-            background: '#5b6b8f',
-            color: 'white',
-            display: 'flex',
-            gap: '20px',
-            fontSize: '13px',
-            fontWeight: '500',
-            borderRadius: '4px 4px 0 0'
-          }}>
-            <div style={{ borderBottom: '2px solid white', paddingBottom: '8px' }}>Lines</div>
-            <div style={{ color: '#ccc' }}>Communication</div>
-            <div style={{ color: '#ccc' }}>Tax Reporting</div>
+        {/* Lines */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Lines</h3>
           </div>
+          <div className="section-body">
+            <div style={{ marginBottom: '15px' }}>
+              <button className="btn-toolbar" onClick={handleAddLine}>
+                <i className="fas fa-plus"></i>
+                Add Line
+              </button>
+            </div>
 
-          <div style={{ background: 'white', padding: '15px', borderLeft: '1px solid #e0e0e0', borderRight: '1px solid #e0e0e0' }}>
-            <div style={{ fontSize: '18px', fontWeight: '600', marginBottom: '15px' }}>0.00</div>
-            
-            <button className="btn btn-secondary" onClick={handleClearAllLines} style={{ marginBottom: '15px' }}>
-              Clear All Lines
-            </button>
-
-            <div className="items-table-wrapper">
-              <table className="detail-items-table">
+            <div className="items-section" style={{ overflowX: 'auto' }}>
+              <table className="items-table">
                 <thead>
                   <tr>
-                    <th style={{width: '16%', padding: '8px 6px'}}>ACCOUNT <span style={{ color: '#e53e3e' }}>*</span></th>
-                    <th style={{width: '8%', padding: '8px 6px'}}>AMOUNT <span style={{ color: '#e53e3e' }}>*</span></th>
-                    <th style={{width: '12%', padding: '8px 6px'}}>MEMO</th>
-                    <th style={{width: '12%', padding: '8px 6px'}}>NAME</th>
-                    <th style={{width: '10%', padding: '8px 6px'}}>DEPARTMENT <span style={{ color: '#e53e3e' }}>*</span></th>
-                    <th style={{width: '9%', padding: '8px 6px'}}>CLASS</th>
-                    <th style={{width: '9%', padding: '8px 6px'}}>LOCATION</th>
-                    <th style={{width: '7%', padding: '8px 6px'}}>UNITS <span style={{ color: '#e53e3e' }}>*</span></th>
-                    <th style={{width: '10%', padding: '8px 6px'}}>AMOUNT (BASE UNIT)</th>
+                    <th style={{ width: '40px', textAlign: 'center' }}></th>
+                    <th style={{ minWidth: '200px' }}>ACCOUNT <span className="required">*</span></th>
+                    <th style={{ minWidth: '120px' }}>AMOUNT <span className="required">*</span></th>
+                    <th style={{ minWidth: '150px' }}>MEMO</th>
+                    <th style={{ minWidth: '150px' }}>NAME</th>
+                    <th style={{ minWidth: '150px' }}>DEPARTMENT <span className="required">*</span></th>
+                    <th style={{ minWidth: '150px' }}>CLASS</th>
+                    <th style={{ minWidth: '150px' }}>LOCATION</th>
+                    <th style={{ minWidth: '100px' }}>UNITS <span className="required">*</span></th>
+                    <th style={{ minWidth: '150px' }}>AMOUNT (BASE UNIT)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {lines.length > 0 ? (
-                    lines.map((line) => (
-                      <tr key={line.id}>
-                        <td style={{ padding: '4px' }}>
+                    lines.map((line, index) => (
+                      <tr key={line.id} className={`table-row-with-actions ${hoveredRow === index ? 'hovered' : ''}`} onMouseEnter={() => setHoveredRow(index)} onMouseLeave={() => setHoveredRow(null)}>
+                        <td style={{ textAlign: 'center', position: 'relative' }}>
+                          {hoveredRow === index && (
+                            <button className="row-actions-btn" title="Row Actions" onClick={(e) => handleMenuToggle(index, e)}>
+                              <i className="fas fa-ellipsis-v"></i>
+                            </button>
+                          )}
+                          {activeMenu === index && (
+                            <div className="row-actions-menu" style={{ position: 'fixed', top: `${menuPosition.top}px`, left: `${menuPosition.left}px`, display: 'block', zIndex: 1000 }} onClick={(e) => e.stopPropagation()}>
+                              <button onClick={() => handleInsertAbove(index)}>
+                                <i className="fas fa-arrow-up"></i> Insert Above
+                              </button>
+                              <button onClick={() => handleInsertBelow(index)}>
+                                <i className="fas fa-arrow-down"></i> Insert Below
+                              </button>
+                              <button onClick={() => handleDeleteRow(index)} className="delete-action">
+                                <i className="fas fa-trash"></i> Delete Row
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                        <td>
                           <input 
                             type="text" 
-                            className="table-input" 
+                            className="form-control" 
                             placeholder="<Type then tab>"
-                            style={{width: '100%'}} 
+                            style={{ minWidth: '200px', height: '40px' }} 
                           />
                         </td>
-                        <td style={{ padding: '4px' }}>
+                        <td>
                           <input 
                             type="text" 
-                            className="table-input" 
-                            style={{width: '100%'}} 
+                            className="form-control" 
+                            style={{ minWidth: '120px', height: '40px', textAlign: 'right' }} 
                           />
                         </td>
-                        <td style={{ padding: '4px' }}>
+                        <td>
                           <input 
                             type="text" 
-                            className="table-input" 
-                            style={{width: '100%'}} 
+                            className="form-control" 
+                            style={{ minWidth: '150px', height: '40px' }} 
                           />
                         </td>
-                        <td style={{ padding: '4px' }}>
+                        <td>
                           <input 
                             type="text" 
-                            className="table-input" 
-                            style={{width: '100%'}} 
+                            className="form-control" 
+                            style={{ minWidth: '150px', height: '40px' }} 
                           />
                         </td>
-                        <td style={{ padding: '4px' }}>
-                          <select className="table-input" style={{width: '100%'}}>
+                        <td>
+                          <select className="form-control" style={{ minWidth: '150px', height: '40px' }}>
                             <option value="">Select...</option>
-                            <option>Construction</option>
-                            <option>MEP</option>
-                            <option>MEP MARINE</option>
-                            <option>O&G</option>
-                            <option>Piping</option>
-                            <option>Shipyard</option>
+                            <option>TOM: Human Resource</option>
+                            <option>TOM: Engineering</option>
+                            <option>TOM: Production</option>
+                            <option>TOM: Purchase</option>
+                            <option>TOM: Sales and Marketing</option>
                           </select>
                         </td>
-                        <td style={{ padding: '4px' }}>
-                          <select className="table-input" style={{width: '100%'}}>
+                        <td>
+                          <select className="form-control" style={{ minWidth: '150px', height: '40px' }}>
                             <option value="">Select...</option>
                             <option>Consumable Item</option>
+                            <option>Fabrication</option>
                             <option>Material Supply</option>
-                            <option>MEP Works</option>
+                            <option>Piping</option>
+                            <option>Structure</option>
                           </select>
                         </td>
-                        <td style={{ padding: '4px' }}>
-                          <select className="table-input" style={{width: '100%'}}>
+                        <td>
+                          <select className="form-control" style={{ minWidth: '150px', height: '40px' }}>
                             <option value="">Select...</option>
-                            <option>Singapore(MEP)</option>
+                            <option>Hong Hang Shipyard</option>
                             <option>Mega yard</option>
+                            <option>Singapore (MEP)</option>
+                            <option>TOM-11</option>
+                            <option>TOM-13</option>
                           </select>
                         </td>
-                        <td style={{ padding: '4px' }}>
+                        <td>
                           <input 
                             type="text" 
-                            className="table-input" 
-                            style={{width: '100%'}} 
+                            className="form-control" 
+                            style={{ minWidth: '100px', height: '40px', textAlign: 'right' }} 
                           />
                         </td>
-                        <td style={{ padding: '4px' }}>
+                        <td>
                           <input 
                             type="text" 
-                            className="table-input" 
-                            style={{width: '100%'}} 
+                            className="form-control" 
+                            style={{ minWidth: '150px', height: '40px', textAlign: 'right' }} 
                           />
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="9" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
-                        No lines added. Click "Add" to add a line.
+                      <td colSpan="10" style={{ textAlign: 'center', padding: '2rem', color: '#999', background: '#f9f9f9' }}>
+                        No lines added yet.
                       </td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
-
-            <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-              <button className="btn btn-primary" onClick={handleAddLine}>
-                <i className="fas fa-plus"></i> Add
-              </button>
-              <button className="btn btn-secondary">
-                <i className="fas fa-times"></i> Cancel
-              </button>
-              <button className="btn btn-secondary">
-                <i className="fas fa-copy"></i> Copy Previous
-              </button>
-              <button className="btn btn-secondary">
-                <i className="fas fa-upload"></i> Insert
-              </button>
-              <button className="btn btn-secondary">
-                <i className="fas fa-trash"></i> Remove
-              </button>
-            </div>
           </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-arrow-left"></i>
+            Back
           </button>
-          <div>
-            <button className="btn btn-primary" onClick={handleSave}>
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-save"></i>
+            Save
+          </button>
         </div>
       </div>
 

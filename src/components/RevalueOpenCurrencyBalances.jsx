@@ -17,7 +17,7 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
     accountType: 'All'
   });
 
-  const [accounts] = useState([
+  const [accounts, setAccounts] = useState([
     { id: 1, include: true, account: 'ALL Bank Accounts', accountType: 'Bank', currency: 'SGD', lastRunDate: '15/10/2024 10:30 AM', result: 'Success - No adjustment needed' },
     { id: 2, include: true, account: 'ALL Bank Accounts : Credit Card Payment', accountType: 'Bank', currency: 'SGD', lastRunDate: '15/10/2024 10:31 AM', result: 'Success - Adjusted SGD 125.50' },
     { id: 3, include: true, account: 'ALL Bank Accounts : MEP DBS SGD 003-906132-3', accountType: 'Bank', currency: 'SGD', lastRunDate: '15/10/2024 10:32 AM', result: 'Success - No adjustment needed' },
@@ -61,43 +61,63 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
     }
   };
 
+  const handleToggleAccount = (id) => {
+    setAccounts(prev => prev.map(account => 
+      account.id === id ? { ...account, include: !account.include } : account
+    ));
+  };
+
   const handleMarkAll = () => {
+    setAccounts(prev => prev.map(account => ({ ...account, include: true })));
     showToast('All accounts marked', 'success');
   };
 
   const handleUnmarkAll = () => {
+    setAccounts(prev => prev.map(account => ({ ...account, include: false })));
     showToast('All accounts unmarked', 'success');
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-dollar-sign" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Month End Currency Revaluation</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-exchange-alt"></i>
+          <div>
+            <h1>Revalue Open Currency Balances</h1>
+            <div className="detail-subtitle">
+              <span>{formData.postingPeriod} • {formData.subsidiary}</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-ellipsis-h"></i>
-            More
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        {/* Filter Section */}
-        <div className="form-section">
-          <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-            <div className="form-group">
-              <label className="form-label required">Posting Period</label>
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-play"></i>
+          Run Revaluation
+        </button>
+      </div>
+
+      <div className="detail-content">
+        {/* Filter Criteria */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Revaluation Criteria</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+            <div className="detail-field">
+              <label>POSTING PERIOD <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.postingPeriod}
@@ -113,8 +133,8 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
                 <option>Dec 2025</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Memo</label>
+            <div className="detail-field">
+              <label>MEMO</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -123,8 +143,8 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label required">Subsidiary</label>
+            <div className="detail-field">
+              <label>SUBSIDIARY <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.subsidiary}
@@ -138,8 +158,8 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
                 <option>Tech Offshore Marine (SV) Pte Ltd</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Class</label>
+            <div className="detail-field">
+              <label>CLASS</label>
               <select 
                 className="form-control"
                 value={formData.class}
@@ -166,8 +186,8 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Currency</label>
+            <div className="detail-field">
+              <label>CURRENCY</label>
               <select 
                 className="form-control"
                 value={formData.currency}
@@ -180,8 +200,8 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
                 <option>GBP</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Department</label>
+            <div className="detail-field">
+              <label>DEPARTMENT</label>
               <select 
                 className="form-control"
                 value={formData.department}
@@ -203,8 +223,8 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Location</label>
+            <div className="detail-field">
+              <label>LOCATION</label>
               <select 
                 className="form-control"
                 value={formData.location}
@@ -229,8 +249,8 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
                 <option>TOM - 20</option>
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Account Type</label>
+            <div className="detail-field">
+              <label>ACCOUNT TYPE</label>
               <select 
                 className="form-control"
                 value={formData.accountType}
@@ -249,92 +269,83 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
                 <option>Other Current Liability</option>
               </select>
             </div>
-          </div>
-
-          {/* Checkboxes at the bottom */}
-          <div style={{ display: 'flex', gap: '30px', marginTop: '20px', paddingLeft: '5px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', fontSize: '13px', cursor: 'pointer' }}>
-              <input 
-                type="checkbox" 
-                checked={formData.includeChildren}
-                onChange={(e) => handleInputChange('includeChildren', e.target.checked)}
-                style={{ marginRight: '8px' }}
-              />
-              Include Children
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', fontSize: '13px', cursor: 'pointer' }}>
-              <input 
-                type="checkbox" 
-                style={{ marginRight: '8px' }}
-              />
-              Match Source Classification
-            </label>
+            <div className="detail-field">
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.includeChildren}
+                  onChange={(e) => handleInputChange('includeChildren', e.target.checked)}
+                  style={{ width: 'auto', margin: 0 }}
+                />
+                <span>INCLUDE CHILDREN</span>
+              </label>
+            </div>
+            </div>
           </div>
         </div>
 
-        {/* Accounts Table */}
-        <div className="form-section" style={{ marginTop: '20px' }}>
-          {/* Action Buttons in Table Header */}
-          <div style={{ 
-            background: '#f8f9fa', 
-            padding: '12px 15px', 
-            borderRadius: '4px 4px 0 0',
-            display: 'flex', 
-            gap: '10px',
-            borderBottom: '1px solid #e0e0e0'
-          }}>
-            <button className="btn btn-secondary" onClick={handleMarkAll} style={{ padding: '6px 16px', fontSize: '13px' }}>
-              Mark All
-            </button>
-            <button className="btn btn-secondary" onClick={handleUnmarkAll} style={{ padding: '6px 16px', fontSize: '13px' }}>
-              Unmark All
-            </button>
+        {/* Accounts to Revalue */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Accounts to Revalue</h3>
           </div>
-          
-          <div className="items-table-wrapper">
-            <table className="detail-items-table">
-              <thead>
-                <tr>
-                  <th style={{width: '5%'}}>INCLUDE</th>
-                  <th style={{width: '35%'}}>ACCOUNT</th>
-                  <th style={{width: '15%'}}>ACCOUNT TYPE</th>
-                  <th style={{width: '10%'}}>CURRENCY</th>
-                  <th style={{width: '15%'}}>LAST RUN DATE</th>
-                  <th style={{width: '20%'}}>RESULT</th>
-                </tr>
-              </thead>
-              <tbody>
-                {accounts.map((account) => (
-                  <tr key={account.id}>
-                    <td style={{ textAlign: 'center' }}>
-                      <input 
-                        type="checkbox" 
-                        defaultChecked={account.include}
-                      />
-                    </td>
-                    <td style={{ color: '#333', fontSize: '13px' }}>{account.account}</td>
-                    <td style={{ color: '#333', fontSize: '13px' }}>{account.accountType}</td>
-                    <td style={{ color: '#333', fontSize: '13px' }}>{account.currency}</td>
-                    <td style={{ color: '#666', fontSize: '13px' }}>{account.lastRunDate}</td>
-                    <td style={{ color: '#666', fontSize: '13px' }}>{account.result}</td>
+          <div className="section-body">
+            <div style={{ marginBottom: '15px', display: 'flex', gap: '10px' }}>
+              <button className="btn-toolbar" onClick={handleMarkAll}>
+                <i className="fas fa-check-square"></i>
+                Mark All
+              </button>
+              <button className="btn-toolbar" onClick={handleUnmarkAll}>
+                <i className="fas fa-square"></i>
+                Unmark All
+              </button>
+            </div>
+
+            <div className="items-section" style={{ overflowX: 'auto' }}>
+              <table className="items-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '50px', textAlign: 'center' }}>INCLUDE</th>
+                    <th style={{ minWidth: '300px' }}>ACCOUNT</th>
+                    <th style={{ minWidth: '150px' }}>ACCOUNT TYPE</th>
+                    <th style={{ minWidth: '100px' }}>CURRENCY</th>
+                    <th style={{ minWidth: '180px' }}>LAST RUN DATE</th>
+                    <th style={{ minWidth: '250px' }}>RESULT</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {accounts.map((account) => (
+                    <tr key={account.id}>
+                      <td style={{ textAlign: 'center' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={account.include}
+                          onChange={() => handleToggleAccount(account.id)}
+                        />
+                      </td>
+                      <td style={{ color: '#4a90e2' }}>{account.account}</td>
+                      <td>{account.accountType}</td>
+                      <td>{account.currency}</td>
+                      <td style={{ color: '#666', fontSize: '12px' }}>{account.lastRunDate}</td>
+                      <td style={{ color: account.result.includes('Adjusted') ? '#48bb78' : '#666', fontSize: '12px' }}>{account.result}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-arrow-left"></i>
+            Back
           </button>
-          <div>
-            <button className="btn btn-primary" onClick={handleSave}>
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-play"></i>
+            Run Revaluation
+          </button>
         </div>
       </div>
 

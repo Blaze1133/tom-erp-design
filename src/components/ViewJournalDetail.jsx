@@ -113,176 +113,173 @@ const ViewJournalDetail = ({ setCurrentPage }) => {
   const { debitTotal, creditTotal } = calculateTotals();
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-book" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Journal</h1>
-          <span style={{ 
-            marginLeft: '15px',
-            padding: '4px 12px',
-            background: '#48BB78',
-            color: 'white',
-            borderRadius: '4px',
-            fontSize: '12px',
-            fontWeight: '600'
-          }}>
-            {journalData.status}
-          </span>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-book"></i>
+          <div>
+            <h1>Journal Entry</h1>
+            <div className="detail-subtitle">
+              <span>{journalData.entryNo} • {journalData.date}</span>
+              <span className="status-badge success" style={{ marginLeft: '10px' }}>
+                {journalData.status}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-secondary" onClick={handleEdit}>
-            <i className="fas fa-edit"></i>
-            Edit
-          </button>
-          <button className="btn btn-secondary" onClick={handleBack}>
-            <i className="fas fa-arrow-left"></i>
-            Back
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-print"></i>
-            Print
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-cog"></i>
-            Actions
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleEdit}>
+          <i className="fas fa-edit"></i>
+          Edit
+        </button>
+        <button className="btn-toolbar">
+          <i className="fas fa-print"></i>
+          Print
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">ENTRY NO.</label>
-              <div className="form-value">{journalData.entryNo}</div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">POSTING PERIOD</label>
-              <div className="form-value">{journalData.postingPeriod}</div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">CURRENCY</label>
-              <div className="form-value">{journalData.currency}</div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">REVERSAL #</label>
-              <div className="form-value">{journalData.reversalNo || '-'}</div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">EXCHANGE RATE</label>
-              <div className="form-value">{journalData.exchangeRate}</div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">REVERSAL DATE</label>
-              <div className="form-value">{journalData.reversalDate || '-'}</div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">DATE</label>
-              <div className="form-value">{journalData.date}</div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">MEMO</label>
-              <div className="form-value">{journalData.memo}</div>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>ENTRY NO.</label>
+                <div className="field-value">{journalData.entryNo}</div>
+              </div>
+              <div className="detail-field">
+                <label>DATE</label>
+                <div className="field-value">{journalData.date}</div>
+              </div>
+              <div className="detail-field">
+                <label>POSTING PERIOD</label>
+                <div className="field-value">{journalData.postingPeriod}</div>
+              </div>
+              <div className="detail-field">
+                <label>CURRENCY</label>
+                <div className="field-value">{journalData.currency}</div>
+              </div>
+              <div className="detail-field">
+                <label>EXCHANGE RATE</label>
+                <div className="field-value">{journalData.exchangeRate}</div>
+              </div>
+              <div className="detail-field">
+                <label>REVERSAL DATE</label>
+                <div className="field-value">{journalData.reversalDate || '-'}</div>
+              </div>
+              <div className="detail-field">
+                <label>DEBIT TOTAL</label>
+                <div className="field-value" style={{ fontWeight: '600' }}>${debitTotal.toFixed(2)}</div>
+              </div>
+              <div className="detail-field">
+                <label>CREDIT TOTAL</label>
+                <div className="field-value" style={{ fontWeight: '600' }}>${creditTotal.toFixed(2)}</div>
+              </div>
+              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                <label>MEMO</label>
+                <div className="field-value">{journalData.memo}</div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Classification */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-tags"></i>
-            Classification
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">SUBSIDIARY</label>
-              <div className="form-value">{journalData.subsidiary}</div>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Classification</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>SUBSIDIARY</label>
+                <div className="field-value">{journalData.subsidiary}</div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Lines Section */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-list"></i>
-            Lines
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div style={{ 
-            padding: '10px 15px', 
-            background: '#EDF2F7',
-            borderRadius: '6px',
-            fontWeight: '600',
-            marginBottom: '15px',
-            fontSize: '16px'
-          }}>
-            {debitTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ●
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Lines</h3>
           </div>
-
-          <div className="items-table-wrapper">
-            <table className="detail-items-table">
-              <thead>
-                <tr>
-                  <th style={{width: '15%'}}>ACCOUNT</th>
-                  <th style={{width: '10%'}}>DEBIT</th>
-                  <th style={{width: '10%'}}>CREDIT</th>
-                  <th style={{width: '8%'}}>TAX CODE</th>
-                  <th style={{width: '7%'}}>TAX RATE</th>
-                  <th style={{width: '10%'}}>GROSS AMT.</th>
-                  <th style={{width: '10%'}}>MEMO</th>
-                  <th style={{width: '12%'}}>NAME</th>
-                  <th style={{width: '10%'}}>DEPARTMENT</th>
-                  <th style={{width: '8%'}}>CLASS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {journalData.lines.map((line) => (
-                  <tr key={line.id}>
-                    <td style={{ color: '#4a90e2' }}>{line.account}</td>
-                    <td style={{ textAlign: 'right', fontWeight: '600' }}>{line.debit}</td>
-                    <td style={{ textAlign: 'right', fontWeight: '600' }}>{line.credit}</td>
-                    <td>{line.taxCode}</td>
-                    <td>{line.taxRate}</td>
-                    <td style={{ textAlign: 'right' }}>{line.grossAmt}</td>
-                    <td>{line.memo}</td>
-                    <td style={{ color: '#4a90e2', fontWeight: '500' }}>{line.name}</td>
-                    <td>{line.department}</td>
-                    <td>{line.class}</td>
+          <div className="section-body">
+            <div className="items-section" style={{ overflowX: 'auto' }}>
+              <table className="items-table">
+                <thead>
+                  <tr>
+                    <th style={{ minWidth: '250px' }}>ACCOUNT</th>
+                    <th style={{ minWidth: '120px' }}>DEBIT</th>
+                    <th style={{ minWidth: '120px' }}>CREDIT</th>
+                    <th style={{ minWidth: '150px' }}>TAX CODE</th>
+                    <th style={{ minWidth: '100px' }}>TAX RATE</th>
+                    <th style={{ minWidth: '120px' }}>GROSS AMT.</th>
+                    <th style={{ minWidth: '200px' }}>MEMO</th>
+                    <th style={{ minWidth: '180px' }}>NAME</th>
+                    <th style={{ minWidth: '180px' }}>DEPARTMENT</th>
+                    <th style={{ minWidth: '150px' }}>CLASS</th>
+                    <th style={{ minWidth: '150px' }}>LOCATION</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {journalData.lines.map((line) => (
+                    <tr key={line.id}>
+                      <td>{line.account}</td>
+                      <td style={{ textAlign: 'right', fontWeight: '600' }}>{line.debit || '-'}</td>
+                      <td style={{ textAlign: 'right', fontWeight: '600' }}>{line.credit || '-'}</td>
+                      <td>{line.taxCode || '-'}</td>
+                      <td>{line.taxRate || '-'}</td>
+                      <td style={{ textAlign: 'right' }}>{line.grossAmt || '-'}</td>
+                      <td>{line.memo || '-'}</td>
+                      <td>{line.name || '-'}</td>
+                      <td>{line.department || '-'}</td>
+                      <td>{line.class || '-'}</td>
+                      <td>{line.location || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end', gap: '2rem', padding: '1rem', background: '#f9f9f9', borderRadius: '4px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <span style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.25rem' }}>Total Debit</span>
+                <strong style={{ fontSize: '1.25rem', color: '#333' }}>${debitTotal.toFixed(2)}</strong>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <span style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.25rem' }}>Total Credit</span>
+                <strong style={{ fontSize: '1.25rem', color: '#333' }}>${creditTotal.toFixed(2)}</strong>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-secondary" onClick={handleBack}>
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <div>
-            <button className="btn btn-secondary" onClick={handleEdit}>
-              <i className="fas fa-edit"></i>
-              Edit
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-print"></i>
-              Print
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-cog"></i>
-              Actions
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleEdit}>
+            <i className="fas fa-edit"></i>
+            Edit
+          </button>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import './Enquiries.css';
 
 const ViewAllocationScheduleDetail = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [activeTab, setActiveTab] = useState('source');
 
   // Dummy data for viewing
   const scheduleData = {
@@ -13,13 +14,12 @@ const ViewAllocationScheduleDetail = ({ setCurrentPage }) => {
     nextDate: '31/12/2024',
     subsequentDate: 'REMIND FOREVER',
     inactive: false,
-    allocationMode: 'Fixed Allocation',
     creditAccount: '60000 Operating Expenses',
     creditName: 'Overhead Costs',
-    creditDepartment: 'MEP',
-    creditLocation: 'Singapore',
+    creditDepartment: 'TOM: Engineering',
+    creditLocation: 'Singapore (MEP)',
     creditClass: 'Material Supply',
-    allocationLines: [
+    sourceLines: [
       {
         id: 1,
         account: '60100 Salaries and Wages',
@@ -44,6 +44,46 @@ const ViewAllocationScheduleDetail = ({ setCurrentPage }) => {
         location: 'Singapore',
         class: 'Consumable Item'
       }
+    ],
+    destinationLines: [
+      {
+        id: 1,
+        account: '70100 Project A Costs',
+        name: 'Project Alpha',
+        department: 'TOM: Engineering',
+        location: 'Singapore (MEP)',
+        class: 'Fabrication',
+        weight: '40',
+        balance: '45,000.00'
+      },
+      {
+        id: 2,
+        account: '70200 Project B Costs',
+        name: 'Project Beta',
+        department: 'TOM: Production',
+        location: 'Mega yard',
+        class: 'Material Supply',
+        weight: '60',
+        balance: '67,500.00'
+      }
+    ],
+    historyLines: [
+      {
+        id: 'ALLOC-2024-001',
+        postingPeriod: 'Dec 2024',
+        entryDate: '15/12/2024',
+        accountingBook: 'Primary Books',
+        journalEntry: 'JE-2024-1234',
+        detail: 'View'
+      },
+      {
+        id: 'ALLOC-2024-002',
+        postingPeriod: 'Nov 2024',
+        entryDate: '15/11/2024',
+        accountingBook: 'Primary Books',
+        journalEntry: 'JE-2024-1123',
+        detail: 'View'
+      }
     ]
   };
 
@@ -64,243 +104,235 @@ const ViewAllocationScheduleDetail = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      {/* Top Header */}
-      <div style={{ 
-        background: '#f8f9fa', 
-        padding: '12px 20px', 
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <i className="fas fa-chart-pie" style={{ fontSize: '18px', color: '#4a90e2' }}></i>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-chart-pie"></i>
           <div>
-            <div style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>Allocation Schedule</div>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '4px' }}>
-              <span style={{ fontSize: '13px', color: '#666' }}>{scheduleData.name}</span>
-              <span style={{ 
-                padding: '2px 10px', 
-                background: '#48bb78', 
-                color: 'white', 
-                borderRadius: '3px', 
-                fontSize: '11px',
-                fontWeight: '600',
-                textTransform: 'uppercase'
-              }}>
-                ACTIVE
-              </span>
+            <h1>Allocation Schedule</h1>
+            <div className="detail-subtitle">
+              <span>{scheduleData.name}</span>
+              <span className="status-badge" style={{ background: '#48bb78', marginLeft: '10px' }}>ACTIVE</span>
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <button style={{ padding: '4px 8px', border: 'none', background: 'transparent', cursor: 'pointer' }}>
-            <i className="fas fa-arrow-left"></i>
-          </button>
-          <button style={{ padding: '4px 8px', border: 'none', background: 'transparent', cursor: 'pointer' }}>
-            <i className="fas fa-arrow-right"></i>
-          </button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>List</button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>Search</button>
-          <button className="btn-view-option" style={{ padding: '6px 12px', fontSize: '13px' }}>Customize</button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      {/* Action Buttons Bar */}
-      <div style={{ 
-        background: 'white', 
-        padding: '12px 20px', 
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="btn btn-primary" onClick={handleEdit} style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-edit"></i> Edit
-          </button>
-          <button className="btn btn-secondary" onClick={handleBack} style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-arrow-left"></i> Back
-          </button>
-          <button className="btn btn-secondary" style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-print"></i> Print
-          </button>
-          <button className="btn btn-secondary" style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-copy"></i> Copy
-          </button>
-        </div>
-        <div>
-          <button className="btn btn-secondary" style={{ padding: '6px 16px', fontSize: '13px' }}>
-            <i className="fas fa-cog"></i> Actions
-          </button>
-        </div>
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleBack}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar" onClick={handleEdit}>
+          <i className="fas fa-edit"></i>
+          Edit
+        </button>
       </div>
 
-      <div className="quotation-container" style={{ background: '#f8f9fa', padding: '20px' }}>
+      <div className="detail-content">
         {/* Primary Information */}
-        <div style={{ 
-          background: 'white', 
-          borderRadius: '4px', 
-          marginBottom: '20px',
-          border: '1px solid #e0e0e0'
-        }}>
-          <div style={{ 
-            padding: '15px 20px',
-            borderBottom: '1px solid #e0e0e0',
-            background: '#f8f9fa',
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '8px',
-            cursor: 'pointer'
-          }}>
-            <i className="fas fa-chevron-down" style={{ fontSize: '11px', color: '#666' }}></i>
-            <h3 style={{ fontSize: '13px', fontWeight: '600', margin: 0, color: '#333' }}>Primary Information</h3>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
           </div>
-          <div style={{ padding: '25px 20px' }}>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(3, 1fr)', 
-              gap: '30px 60px',
-              fontSize: '13px'
-            }}>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>NAME</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.name}</div>
+          <div className="section-body">
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>NAME</label>
+                <div className="field-value">{scheduleData.name}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>SUBSIDIARY</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.subsidiary}</div>
+              <div className="detail-field">
+                <label>SUBSIDIARY</label>
+                <div className="field-value">{scheduleData.subsidiary}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>FREQUENCY</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.frequency}</div>
+              <div className="detail-field">
+                <label>FREQUENCY</label>
+                <div className="field-value">{scheduleData.frequency}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>NEXT DATE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.nextDate}</div>
+              <div className="detail-field">
+                <label>NEXT DATE</label>
+                <div className="field-value">{scheduleData.nextDate}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>SUBSEQUENT DATE</div>
-                <div style={{ color: '#e53e3e', fontSize: '14px', fontWeight: '500' }}>{scheduleData.subsequentDate}</div>
+              <div className="detail-field">
+                <label>SUBSEQUENT DATE</label>
+                <div className="field-value" style={{ color: '#e53e3e', fontWeight: '500' }}>{scheduleData.subsequentDate}</div>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>ALLOCATION MODE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.allocationMode}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>INACTIVE</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.inactive ? 'Yes' : 'No'}</div>
+              <div className="detail-field">
+                <label>INACTIVE</label>
+                <div className="field-value">{scheduleData.inactive ? 'Yes' : 'No'}</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Dynamic Allocation Section */}
-        <div style={{ 
-          background: 'white', 
-          borderRadius: '4px', 
-          marginBottom: '20px',
-          border: '1px solid #e0e0e0'
-        }}>
-          <div style={{ 
-            padding: '15px 20px',
-            borderBottom: '1px solid #e0e0e0',
-            background: '#f8f9fa',
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '8px',
-            cursor: 'pointer'
-          }}>
-            <i className="fas fa-chevron-down" style={{ fontSize: '11px', color: '#666' }}></i>
-            <h3 style={{ fontSize: '13px', fontWeight: '600', margin: 0, color: '#333' }}>Dynamic Allocation</h3>
+        {/* Tabs Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Allocation Details</h3>
           </div>
-          <div style={{ padding: '25px 20px' }}>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(3, 1fr)', 
-              gap: '30px 60px',
-              fontSize: '13px',
-              marginBottom: '30px'
-            }}>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CREDIT ACCOUNT</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.creditAccount}</div>
+          <div className="section-body">
+            <div className="tabs-container">
+              <div className="tabs-header">
+                <button 
+                  className={`tab-button ${activeTab === 'source' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('source')}
+                >
+                  Source
+                </button>
+                <button 
+                  className={`tab-button ${activeTab === 'destination' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('destination')}
+                >
+                  Destination
+                </button>
+                <button 
+                  className={`tab-button ${activeTab === 'history' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('history')}
+                >
+                  History
+                </button>
               </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CREDIT LOCATION</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.creditLocation}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CREDIT NAME</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.creditName}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CREDIT CLASS</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.creditClass}</div>
-              </div>
-              <div>
-                <div style={{ color: '#999', fontSize: '10px', marginBottom: '6px', textTransform: 'uppercase', fontWeight: '500', letterSpacing: '0.5px' }}>CREDIT DEPARTMENT</div>
-                <div style={{ color: '#333', fontSize: '14px' }}>{scheduleData.creditDepartment}</div>
-              </div>
-            </div>
 
-          {/* Allocation Lines Table */}
-          <div>
-            
-            {scheduleData.allocationLines.length > 0 ? (
-              <div className="items-table-wrapper">
-                <table className="detail-items-table">
-                  <thead>
-                    <tr>
-                      <th style={{width: '25%'}}>ACCOUNT</th>
-                      <th style={{width: '20%'}}>NAME</th>
-                      <th style={{width: '18%'}}>DEPARTMENT</th>
-                      <th style={{width: '18%'}}>LOCATION</th>
-                      <th style={{width: '19%'}}>CLASS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {scheduleData.allocationLines.map((line) => (
-                      <tr key={line.id}>
-                        <td style={{ color: '#4a90e2' }}>{line.account}</td>
-                        <td>{line.name}</td>
-                        <td>{line.department}</td>
-                        <td>{line.location}</td>
-                        <td>{line.class}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="empty-items-message">
-                <p>No allocation lines available.</p>
-              </div>
-            )}
-          </div>
+              {/* Source Tab */}
+              {activeTab === 'source' && (
+                <div className="tab-content">
+                  <div style={{ marginBottom: '20px' }}>
+                    <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                      <div className="detail-field">
+                        <label>CREDIT ACCOUNT</label>
+                        <div className="field-value">{scheduleData.creditAccount}</div>
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT LOCATION</label>
+                        <div className="field-value">{scheduleData.creditLocation}</div>
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT NAME</label>
+                        <div className="field-value">{scheduleData.creditName}</div>
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT CLASS</label>
+                        <div className="field-value">{scheduleData.creditClass}</div>
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT DEPARTMENT</label>
+                        <div className="field-value">{scheduleData.creditDepartment}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="items-section" style={{ overflowX: 'auto' }}>
+                    <table className="items-table">
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '250px' }}>ACCOUNT</th>
+                          <th style={{ minWidth: '180px' }}>NAME</th>
+                          <th style={{ minWidth: '180px' }}>DEPARTMENT</th>
+                          <th style={{ minWidth: '150px' }}>LOCATION</th>
+                          <th style={{ minWidth: '150px' }}>CLASS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {scheduleData.sourceLines.map((line) => (
+                          <tr key={line.id}>
+                            <td style={{ color: '#4a90e2' }}>{line.account}</td>
+                            <td>{line.name}</td>
+                            <td>{line.department}</td>
+                            <td>{line.location}</td>
+                            <td>{line.class}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Destination Tab */}
+              {activeTab === 'destination' && (
+                <div className="tab-content">
+                  <div className="items-section" style={{ overflowX: 'auto' }}>
+                    <table className="items-table">
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '250px' }}>ACCOUNT</th>
+                          <th style={{ minWidth: '180px' }}>NAME</th>
+                          <th style={{ minWidth: '180px' }}>DEPARTMENT</th>
+                          <th style={{ minWidth: '150px' }}>LOCATION</th>
+                          <th style={{ minWidth: '150px' }}>CLASS</th>
+                          <th style={{ minWidth: '120px', textAlign: 'right' }}>WEIGHT</th>
+                          <th style={{ minWidth: '120px', textAlign: 'right' }}>BALANCE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {scheduleData.destinationLines.map((line) => (
+                          <tr key={line.id}>
+                            <td style={{ color: '#4a90e2' }}>{line.account}</td>
+                            <td>{line.name}</td>
+                            <td>{line.department}</td>
+                            <td>{line.location}</td>
+                            <td>{line.class}</td>
+                            <td style={{ textAlign: 'right', fontWeight: '500' }}>{line.weight}</td>
+                            <td style={{ textAlign: 'right', fontWeight: '500' }}>{line.balance}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* History Tab */}
+              {activeTab === 'history' && (
+                <div className="tab-content">
+                  <div className="items-section" style={{ overflowX: 'auto' }}>
+                    <table className="items-table">
+                      <thead>
+                        <tr>
+                          <th style={{ minWidth: '100px' }}>ID</th>
+                          <th style={{ minWidth: '150px' }}>POSTING PERIOD</th>
+                          <th style={{ minWidth: '120px' }}>ENTRY DATE</th>
+                          <th style={{ minWidth: '180px' }}>ACCOUNTING BOOK</th>
+                          <th style={{ minWidth: '150px' }}>JOURNAL ENTRY</th>
+                          <th style={{ minWidth: '120px' }}>DETAIL</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {scheduleData.historyLines.map((line) => (
+                          <tr key={line.id}>
+                            <td>{line.id}</td>
+                            <td>{line.postingPeriod}</td>
+                            <td>{line.entryDate}</td>
+                            <td>{line.accountingBook}</td>
+                            <td style={{ color: '#4a90e2' }}>{line.journalEntry}</td>
+                            <td><button className="view-link">View</button></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-secondary" onClick={handleBack}>
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <div>
-            <button className="btn btn-secondary" onClick={handleEdit}>
-              <i className="fas fa-edit"></i>
-              Edit
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-print"></i>
-              Print
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-cog"></i>
-              Actions
-            </button>
-          </div>
+          <button className="btn-toolbar" onClick={handleEdit}>
+            <i className="fas fa-edit"></i>
+            Edit
+          </button>
         </div>
       </div>
 

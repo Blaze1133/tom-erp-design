@@ -45,44 +45,46 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-chart-bar" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Statistical Schedule</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-chart-bar"></i>
+          <div>
+            <h1>Statistical Schedule</h1>
+            <div className="detail-subtitle">
+              <span>{formData.name || 'New Statistical Schedule'}</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-view-option">
-            <i className="fas fa-list"></i>
-            List
-          </button>
-          <button className="btn btn-view-option">
-            <i className="fas fa-ellipsis-h"></i>
-            More
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-            <div className="form-group">
-              <label className="form-label required">Name</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+            <div className="detail-field">
+              <label>NAME <span className="required">*</span></label>
               <input 
                 type="text" 
                 className="form-control"
@@ -91,8 +93,8 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Account Subsidiaries</label>
+            <div className="detail-field">
+              <label>ACCOUNT SUBSIDIARIES</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -101,8 +103,8 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label required">Statistical Account</label>
+            <div className="detail-field">
+              <label>STATISTICAL ACCOUNT <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.statisticalAccount}
@@ -115,8 +117,8 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Unit Type</label>
+            <div className="detail-field">
+              <label>UNIT TYPE</label>
               <input 
                 type="text" 
                 className="form-control"
@@ -124,12 +126,10 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
                 onChange={(e) => handleInputChange('unitType', e.target.value)}
               />
             </div>
-          </div>
-
-          {/* Saved Search Section */}
-          <div style={{ marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'flex-end', maxWidth: '600px' }}>
-            <div style={{ flex: 1 }}>
-              <label className="form-label">Saved Search <span style={{ color: '#e53e3e' }}>*</span></label>
+            <div className="detail-field" style={{ gridColumn: '1 / -1' }}>
+              <label>SAVED SEARCH <span className="required">*</span></label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+                <div style={{ flex: 1 }}>
               <select 
                 className="form-control"
                 value={formData.savedSearch}
@@ -144,24 +144,27 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
                 <option>--Org Manpower Budget Open Status</option>
                 <option>3WAY Vendor Bill - Item Receipt Quantity Subsidiary Tolerance</option>
               </select>
+                </div>
+                <button className="btn-toolbar" onClick={handleValidate}>
+                  <i className="fas fa-check"></i>
+                  Validate
+                </button>
+              </div>
             </div>
-            <button className="btn btn-secondary" onClick={handleValidate} style={{ padding: '8px 16px', fontSize: '13px' }}>
-              Validate
-            </button>
+            </div>
           </div>
         </div>
 
         {/* Scheduling */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-calendar-alt"></i>
-            Scheduling
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-            <div className="form-group">
-              <label className="form-label">Frequency</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Scheduling</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+            <div className="detail-field">
+              <label>FREQUENCY</label>
               <select 
                 className="form-control"
                 value={formData.frequency}
@@ -181,8 +184,8 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label required">Time Zone</label>
+            <div className="detail-field">
+              <label>TIME ZONE <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.timeZone}
@@ -199,8 +202,8 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Subsequent Date</label>
+            <div className="detail-field">
+              <label>SUBSEQUENT DATE</label>
               <input 
                 type="date" 
                 className="form-control"
@@ -209,8 +212,8 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label required">Start Date</label>
+            <div className="detail-field">
+              <label>START DATE <span className="required">*</span></label>
               <input 
                 type="date" 
                 className="form-control"
@@ -218,20 +221,19 @@ const CreateStatisticalSchedule = ({ setCurrentPage }) => {
                 onChange={(e) => handleInputChange('startDate', e.target.value)}
               />
             </div>
+            </div>
           </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-arrow-left"></i>
+            Back
           </button>
-          <div>
-            <button className="btn btn-primary" onClick={handleSave}>
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-save"></i>
+            Save
+          </button>
         </div>
       </div>
 

@@ -15,7 +15,8 @@ const NewChartOfAccount = ({ setCurrentPage }) => {
     name: 'Estimates',
     legalName: '',
     subaccountOf: '',
-    type: 'Non Posting',
+    accountType: '',
+    subAccountType: '',
     currency: '',
     generalRateType: 'Average',
     cashFlowRateType: 'Average',
@@ -37,22 +38,37 @@ const NewChartOfAccount = ({ setCurrentPage }) => {
   });
 
   const accountTypes = [
-    'Non Posting',
-    'Accounts Receivable',
-    'Accounts Payable',
-    'Bank',
-    'Other Expense',
-    'Other Current Asset',
-    'Fixed Asset',
-    'Other Current Liability',
-    'Long Term Liability',
+    'Assets',
+    'Liabilities',
     'Equity',
     'Income',
-    'Cost of Goods Sold',
-    'Expense',
-    'Other Income',
-    'Other Asset'
+    'Expenses'
   ];
+
+  const subAccountTypes = {
+    'Assets': [
+      'Current Assets',
+      'Fixed Assets',
+      'Other Assets'
+    ],
+    'Liabilities': [
+      'Current Liabilities',
+      'Long Term Liabilities'
+    ],
+    'Equity': [
+      'Owner Equity',
+      'Retained Earnings'
+    ],
+    'Income': [
+      'Operating Income',
+      'Other Income'
+    ],
+    'Expenses': [
+      'Operating Expenses',
+      'Cost of Goods Sold',
+      'Other Expenses'
+    ]
+  };
 
   const generalRateTypes = ['Average', 'Current', 'Historical'];
   const cashFlowRateTypes = ['Average', 'Current', 'Historical'];
@@ -213,17 +229,31 @@ const NewChartOfAccount = ({ setCurrentPage }) => {
                   <input type="text" className="form-control" value={formData.legalName} onChange={(e) => handleInputChange('legalName', e.target.value)} />
                 </div>
                 <div className="detail-field">
-                  <label>SUBACCOUNT OF</label>
-                  <select className="form-control" value={formData.subaccountOf} onChange={(e) => handleInputChange('subaccountOf', e.target.value)}>
-                    <option value=""></option>
-                    <option value="Estimates">Estimates</option>
-                    <option value="Opportunities">Opportunities</option>
+                  <label>ACCOUNT TYPE <span style={{ color: 'red' }}>*</span></label>
+                  <select 
+                    className="form-control" 
+                    value={formData.accountType} 
+                    onChange={(e) => {
+                      handleInputChange('accountType', e.target.value);
+                      handleInputChange('subAccountType', '');
+                    }}
+                  >
+                    <option value="">- Select Account Type -</option>
+                    {accountTypes.map(type => (<option key={type} value={type}>{type}</option>))}
                   </select>
                 </div>
                 <div className="detail-field">
-                  <label>TYPE <span style={{ color: 'red' }}>*</span></label>
-                  <select className="form-control" value={formData.type} onChange={(e) => handleInputChange('type', e.target.value)}>
-                    {accountTypes.map(type => (<option key={type} value={type}>{type}</option>))}
+                  <label>SUB ACCOUNT TYPE <span style={{ color: 'red' }}>*</span></label>
+                  <select 
+                    className="form-control" 
+                    value={formData.subAccountType} 
+                    onChange={(e) => handleInputChange('subAccountType', e.target.value)}
+                    disabled={!formData.accountType}
+                  >
+                    <option value="">- Select Sub Account Type -</option>
+                    {formData.accountType && subAccountTypes[formData.accountType]?.map(subType => (
+                      <option key={subType} value={subType}>{subType}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="detail-field">

@@ -4,6 +4,10 @@ import './Enquiries.css';
 
 const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [activeTab, setActiveTab] = useState('source');
+  const [hoveredRow, setHoveredRow] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   
   const [formData, setFormData] = useState({
     name: '',
@@ -12,13 +16,9 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
     nextDate: '',
     subsequentDate: 'REMIND FOREVER',
     inactive: false,
-    allocationMode: 'Fixed Allocation',
-    creditAccount: '',
-    creditName: '',
-    creditDepartment: '',
-    creditLocation: '',
-    creditClass: '',
-    allocationLines: []
+    sourceLines: [],
+    destinationLines: [],
+    historyLines: []
   });
 
   const showToast = (message, type = 'success') => {
@@ -44,9 +44,9 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
     }
   };
 
-  const handleAddLine = () => {
+  const handleAddSourceLine = () => {
     const newLine = {
-      id: formData.allocationLines.length + 1,
+      id: formData.sourceLines.length + 1,
       account: '',
       name: '',
       department: '',
@@ -55,45 +55,137 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
     };
     setFormData(prev => ({
       ...prev,
-      allocationLines: [...prev.allocationLines, newLine]
+      sourceLines: [...prev.sourceLines, newLine]
     }));
   };
 
+  const handleAddDestinationLine = () => {
+    const newLine = {
+      id: formData.destinationLines.length + 1,
+      account: '',
+      name: '',
+      department: '',
+      location: '',
+      class: '',
+      weight: '',
+      balance: ''
+    };
+    setFormData(prev => ({
+      ...prev,
+      destinationLines: [...prev.destinationLines, newLine]
+    }));
+  };
+
+  const handleMenuToggle = (index, event) => {
+    event.stopPropagation();
+    if (activeMenu === index) {
+      setActiveMenu(null);
+    } else {
+      const rect = event.currentTarget.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX
+      });
+      setActiveMenu(index);
+    }
+  };
+
+  const handleInsertAbove = (index) => {
+    const newLine = {
+      id: Date.now(),
+      account: '',
+      name: '',
+      department: '',
+      location: '',
+      class: '',
+      weight: '',
+      balance: ''
+    };
+    const lines = activeTab === 'source' ? 'sourceLines' : 'destinationLines';
+    setFormData(prev => ({
+      ...prev,
+      [lines]: [
+        ...prev[lines].slice(0, index),
+        newLine,
+        ...prev[lines].slice(index)
+      ]
+    }));
+    setActiveMenu(null);
+  };
+
+  const handleInsertBelow = (index) => {
+    const newLine = {
+      id: Date.now(),
+      account: '',
+      name: '',
+      department: '',
+      location: '',
+      class: '',
+      weight: '',
+      balance: ''
+    };
+    const lines = activeTab === 'source' ? 'sourceLines' : 'destinationLines';
+    setFormData(prev => ({
+      ...prev,
+      [lines]: [
+        ...prev[lines].slice(0, index + 1),
+        newLine,
+        ...prev[lines].slice(index + 1)
+      ]
+    }));
+    setActiveMenu(null);
+  };
+
+  const handleDeleteRow = (index) => {
+    const lines = activeTab === 'source' ? 'sourceLines' : 'destinationLines';
+    setFormData(prev => ({
+      ...prev,
+      [lines]: prev[lines].filter((_, i) => i !== index)
+    }));
+    setActiveMenu(null);
+  };
+
   return (
-    <div className="sales-quotation">
-      <div className="page-header">
-        <div className="page-title">
-          <i className="fas fa-exchange-alt" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
-          <h1>Intercompany Allocation Schedule</h1>
+    <div className="enquiry-detail">
+      <div className="detail-header">
+        <div className="detail-title">
+          <i className="fas fa-exchange-alt"></i>
+          <div>
+            <h1>Intercompany Allocation Schedule</h1>
+            <div className="detail-subtitle">
+              <span>{formData.name || 'New Intercompany Allocation Schedule'}</span>
+            </div>
+          </div>
         </div>
-        <div className="page-actions">
-          <button className="btn btn-primary" onClick={handleSave}>
-            <i className="fas fa-save"></i>
-            Save
-          </button>
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
-          </button>
-          <button className="btn btn-secondary">
-            <i className="fas fa-cog"></i>
-            Actions
-          </button>
+        <div className="detail-actions">
+          <button className="btn-action">List</button>
+          <button className="btn-action">Search</button>
+          <button className="btn-action">Customize</button>
         </div>
       </div>
 
-      <div className="quotation-container">
+      <div className="detail-toolbar">
+        <button className="btn-toolbar" onClick={handleCancel}>
+          <i className="fas fa-arrow-left"></i>
+          Back
+        </button>
+        <button className="btn-toolbar-primary" onClick={handleSave}>
+          <i className="fas fa-save"></i>
+          Save
+        </button>
+      </div>
+
+      <div className="detail-content">
         {/* Primary Information */}
-        <div className="form-section">
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-info-circle"></i>
-            Primary Information
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-          
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label required">Name</label>
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Primary Information</h3>
+          </div>
+          <div className="section-body">
+            <div className="detail-grid">
+            <div className="detail-field">
+              <label>NAME <span className="required">*</span></label>
               <input 
                 type="text" 
                 className="form-control"
@@ -102,8 +194,8 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label required">Subsidiary</label>
+            <div className="detail-field">
+              <label>SUBSIDIARY <span className="required">*</span></label>
               <select 
                 className="form-control"
                 value={formData.subsidiary}
@@ -119,8 +211,8 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Frequency</label>
+            <div className="detail-field">
+              <label>FREQUENCY</label>
               <select 
                 className="form-control"
                 value={formData.frequency}
@@ -140,8 +232,8 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
               </select>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Next Date</label>
+            <div className="detail-field">
+              <label>NEXT DATE</label>
               <input 
                 type="date" 
                 className="form-control"
@@ -150,8 +242,8 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
               />
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Subsequent Date</label>
+            <div className="detail-field">
+              <label>SUBSEQUENT DATE</label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
                   <input 
@@ -176,189 +268,369 @@ const CreateIntercompanyAllocationSchedule = ({ setCurrentPage }) => {
               </div>
             </div>
             
-            <div className="form-group">
-              <label className="form-label">Allocation Mode</label>
-              <select 
-                className="form-control"
-                value={formData.allocationMode}
-                onChange={(e) => handleInputChange('allocationMode', e.target.value)}
-              >
-                <option>Fixed Allocation</option>
-                <option>Dynamic Allocation</option>
-              </select>
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label" style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
+            <div className="detail-field">
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                 <input 
                   type="checkbox" 
                   checked={formData.inactive}
                   onChange={(e) => handleInputChange('inactive', e.target.checked)}
-                  style={{ marginRight: '8px' }}
+                  style={{ width: 'auto', margin: 0 }}
                 />
-                Inactive
+                <span>INACTIVE</span>
               </label>
+            </div>
             </div>
           </div>
         </div>
 
-        {/* Dynamic Allocation Section */}
-        <div className="form-section" style={{ marginTop: '1.5rem' }}>
-          <h2 className="section-title" style={{ fontSize: '18px', fontWeight: '600' }}>
-            <i className="fas fa-layer-group"></i>
-            Dynamic Allocation
-          </h2>
-          <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '0.5rem 0 1rem 0' }} />
-
-          <div>
-              <div className="form-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-                <div className="form-group">
-                  <label className="form-label">Credit Account</label>
-                  <input 
-                    type="text" 
-                    className="form-control"
-                    placeholder="<Type then tab>"
-                    value={formData.creditAccount}
-                    onChange={(e) => handleInputChange('creditAccount', e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Credit Location</label>
-                  <select className="form-control" value={formData.creditLocation} onChange={(e) => handleInputChange('creditLocation', e.target.value)}>
-                    <option value="">- None -</option>
-                    <option>Singapore</option>
-                    <option>Malaysia</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Credit Name</label>
-                  <input 
-                    type="text" 
-                    className="form-control"
-                    placeholder="<Type then tab>"
-                    value={formData.creditName}
-                    onChange={(e) => handleInputChange('creditName', e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Credit Class</label>
-                  <select className="form-control" value={formData.creditClass} onChange={(e) => handleInputChange('creditClass', e.target.value)}>
-                    <option value="">- None -</option>
-                    <option>Consumable Item</option>
-                    <option>Material Supply</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Credit Department</label>
-                  <select className="form-control" value={formData.creditDepartment} onChange={(e) => handleInputChange('creditDepartment', e.target.value)}>
-                    <option value="">- None -</option>
-                    <option>MEP</option>
-                    <option>Engineering</option>
-                    <option>Operations</option>
-                  </select>
-                </div>
+        {/* Tabs Section */}
+        <div className="detail-section">
+          <div className="section-header">
+            <i className="fas fa-chevron-down"></i>
+            <h3>Allocation Details</h3>
+          </div>
+          <div className="section-body">
+            <div className="tabs-container">
+              <div className="tabs-header">
+                <button 
+                  className={`tab-button ${activeTab === 'source' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('source')}
+                >
+                  Source
+                </button>
+                <button 
+                  className={`tab-button ${activeTab === 'destination' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('destination')}
+                >
+                  Destination
+                </button>
+                <button 
+                  className={`tab-button ${activeTab === 'history' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('history')}
+                >
+                  History
+                </button>
               </div>
 
-              {/* Allocation Lines Table */}
-              <div style={{ marginTop: '20px' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-                  <button className="btn btn-primary" onClick={handleAddLine}>
-                    <i className="fas fa-plus"></i> Add
-                  </button>
-                  <button className="btn btn-secondary">
-                    <i className="fas fa-times"></i> Cancel
-                  </button>
-                  <button className="btn btn-secondary">
-                    <i className="fas fa-upload"></i> Insert
-                  </button>
-                  <button className="btn btn-secondary">
-                    <i className="fas fa-trash"></i> Remove
-                  </button>
-                </div>
+              {/* Source Tab */}
+              {activeTab === 'source' && (
+                <div className="tab-content">
+                  <div style={{ marginBottom: '15px' }}>
+                    <button className="btn-toolbar" onClick={handleAddSourceLine}>
+                      <i className="fas fa-plus"></i>
+                      Add Line
+                    </button>
+                  </div>
 
-                {formData.allocationLines.length > 0 ? (
-                  <div className="items-table-wrapper">
-                    <table className="detail-items-table">
-                      <thead>
-                        <tr>
-                          <th style={{width: '25%'}}>ACCOUNT</th>
-                          <th style={{width: '20%'}}>NAME</th>
-                          <th style={{width: '18%'}}>DEPARTMENT</th>
-                          <th style={{width: '18%'}}>LOCATION</th>
-                          <th style={{width: '19%'}}>CLASS</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {formData.allocationLines.map((line) => (
-                          <tr key={line.id}>
-                            <td>
-                              <input 
-                                type="text" 
-                                className="table-input" 
-                                placeholder="<Type then tab>"
-                                defaultValue={line.account} 
-                                style={{width: '100%'}} 
-                              />
-                            </td>
-                            <td>
-                              <input 
-                                type="text" 
-                                className="table-input" 
-                                defaultValue={line.name} 
-                                style={{width: '100%'}} 
-                              />
-                            </td>
-                            <td>
-                              <select className="table-input" defaultValue={line.department} style={{width: '100%'}}>
-                                <option value="">Select...</option>
-                                <option>MEP</option>
-                                <option>Engineering</option>
-                                <option>Operations</option>
-                              </select>
-                            </td>
-                            <td>
-                              <select className="table-input" defaultValue={line.location} style={{width: '100%'}}>
-                                <option value="">Select...</option>
-                                <option>Singapore</option>
-                                <option>Malaysia</option>
-                              </select>
-                            </td>
-                            <td>
-                              <select className="table-input" defaultValue={line.class} style={{width: '100%'}}>
-                                <option value="">Select...</option>
-                                <option>Consumable Item</option>
-                                <option>Material Supply</option>
-                              </select>
-                            </td>
+                  <div style={{ marginBottom: '20px' }}>
+                    <div className="detail-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                      <div className="detail-field">
+                        <label>CREDIT ACCOUNT</label>
+                        <input type="text" className="form-control" placeholder="<Type then tab>" />
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT LOCATION</label>
+                        <select className="form-control">
+                          <option value="">- None -</option>
+                          <option>Hong Hang Shipyard</option>
+                          <option>Mega yard</option>
+                          <option>Singapore (MEP)</option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT NAME</label>
+                        <input type="text" className="form-control" placeholder="<Type then tab>" />
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT CLASS</label>
+                        <select className="form-control">
+                          <option value="">- None -</option>
+                          <option>Consumable Item</option>
+                          <option>Fabrication</option>
+                          <option>Material Supply</option>
+                        </select>
+                      </div>
+                      <div className="detail-field">
+                        <label>CREDIT DEPARTMENT</label>
+                        <select className="form-control">
+                          <option value="">- None -</option>
+                          <option>TOM: Human Resource</option>
+                          <option>TOM: Engineering</option>
+                          <option>TOM: Production</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="items-section" style={{ overflowX: 'auto' }}>
+                    {formData.sourceLines.length > 0 ? (
+                      <table className="items-table">
+                        <thead>
+                          <tr>
+                            <th style={{ width: '40px', textAlign: 'center' }}></th>
+                            <th style={{ minWidth: '250px' }}>ACCOUNT <span className="required">*</span></th>
+                            <th style={{ minWidth: '180px' }}>NAME</th>
+                            <th style={{ minWidth: '180px' }}>DEPARTMENT</th>
+                            <th style={{ minWidth: '150px' }}>LOCATION</th>
+                            <th style={{ minWidth: '150px' }}>CLASS</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {formData.sourceLines.map((line, index) => (
+                            <tr key={line.id} className={`table-row-with-actions ${hoveredRow === index ? 'hovered' : ''}`} onMouseEnter={() => setHoveredRow(index)} onMouseLeave={() => setHoveredRow(null)}>
+                              <td style={{ textAlign: 'center', position: 'relative' }}>
+                                {hoveredRow === index && (
+                                  <button className="row-actions-btn" title="Row Actions" onClick={(e) => handleMenuToggle(index, e)}>
+                                    <i className="fas fa-ellipsis-v"></i>
+                                  </button>
+                                )}
+                                {activeMenu === index && (
+                                  <div className="row-actions-menu" style={{ position: 'fixed', top: `${menuPosition.top}px`, left: `${menuPosition.left}px`, display: 'block', zIndex: 1000 }} onClick={(e) => e.stopPropagation()}>
+                                    <button onClick={() => handleInsertAbove(index)}>
+                                      <i className="fas fa-arrow-up"></i> Insert Above
+                                    </button>
+                                    <button onClick={() => handleInsertBelow(index)}>
+                                      <i className="fas fa-arrow-down"></i> Insert Below
+                                    </button>
+                                    <button onClick={() => handleDeleteRow(index)} className="delete-action">
+                                      <i className="fas fa-trash"></i> Delete Row
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                              <td>
+                                <input 
+                                  type="text" 
+                                  className="form-control" 
+                                  placeholder="<Type then tab>"
+                                  defaultValue={line.account} 
+                                  style={{ minWidth: '250px', height: '40px' }} 
+                                />
+                              </td>
+                              <td>
+                                <input 
+                                  type="text" 
+                                  className="form-control" 
+                                  defaultValue={line.name} 
+                                  style={{ minWidth: '180px', height: '40px' }} 
+                                />
+                              </td>
+                              <td>
+                                <select className="form-control" defaultValue={line.department} style={{ minWidth: '180px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                  <option>TOM: Human Resource</option>
+                                  <option>TOM: Engineering</option>
+                                  <option>TOM: Production</option>
+                                </select>
+                              </td>
+                              <td>
+                                <select className="form-control" defaultValue={line.location} style={{ minWidth: '150px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                  <option>Hong Hang Shipyard</option>
+                                  <option>Mega yard</option>
+                                  <option>Singapore (MEP)</option>
+                                </select>
+                              </td>
+                              <td>
+                                <select className="form-control" defaultValue={line.class} style={{ minWidth: '150px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                  <option>Consumable Item</option>
+                                  <option>Fabrication</option>
+                                  <option>Material Supply</option>
+                                </select>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <div style={{ padding: '2rem', textAlign: 'center', color: '#999', background: '#f9f9f9', borderRadius: '4px' }}>
+                        <p>No source lines added yet.</p>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="empty-items-message">
-                    <p>No allocation lines added yet. Click "Add" to start adding lines.</p>
+                </div>
+              )}
+
+              {/* Destination Tab */}
+              {activeTab === 'destination' && (
+                <div className="tab-content">
+                  <div style={{ marginBottom: '15px' }}>
+                    <button className="btn-toolbar" onClick={handleAddDestinationLine}>
+                      <i className="fas fa-plus"></i>
+                      Add Line
+                    </button>
                   </div>
-                )}
-              </div>
+
+                  <div style={{ marginBottom: '20px', display: 'flex', gap: '20px', alignItems: 'center' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+                      <input type="checkbox" />
+                      <span>VALUES ARE PERCENTAGES</span>
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+                      <input type="checkbox" />
+                      <span>USE SOURCE/CREDIT ACCOUNT(S)</span>
+                    </label>
+                  </div>
+
+                  <div className="items-section" style={{ overflowX: 'auto' }}>
+                    {formData.destinationLines.length > 0 ? (
+                      <table className="items-table">
+                        <thead>
+                          <tr>
+                            <th style={{ width: '40px', textAlign: 'center' }}></th>
+                            <th style={{ minWidth: '250px' }}>ACCOUNT <span className="required">*</span></th>
+                            <th style={{ minWidth: '180px' }}>NAME</th>
+                            <th style={{ minWidth: '180px' }}>DEPARTMENT</th>
+                            <th style={{ minWidth: '150px' }}>LOCATION</th>
+                            <th style={{ minWidth: '150px' }}>CLASS</th>
+                            <th style={{ minWidth: '120px' }}>WEIGHT</th>
+                            <th style={{ minWidth: '120px' }}>BALANCE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {formData.destinationLines.map((line, index) => (
+                            <tr key={line.id} className={`table-row-with-actions ${hoveredRow === index ? 'hovered' : ''}`} onMouseEnter={() => setHoveredRow(index)} onMouseLeave={() => setHoveredRow(null)}>
+                              <td style={{ textAlign: 'center', position: 'relative' }}>
+                                {hoveredRow === index && (
+                                  <button className="row-actions-btn" title="Row Actions" onClick={(e) => handleMenuToggle(index, e)}>
+                                    <i className="fas fa-ellipsis-v"></i>
+                                  </button>
+                                )}
+                                {activeMenu === index && (
+                                  <div className="row-actions-menu" style={{ position: 'fixed', top: `${menuPosition.top}px`, left: `${menuPosition.left}px`, display: 'block', zIndex: 1000 }} onClick={(e) => e.stopPropagation()}>
+                                    <button onClick={() => handleInsertAbove(index)}>
+                                      <i className="fas fa-arrow-up"></i> Insert Above
+                                    </button>
+                                    <button onClick={() => handleInsertBelow(index)}>
+                                      <i className="fas fa-arrow-down"></i> Insert Below
+                                    </button>
+                                    <button onClick={() => handleDeleteRow(index)} className="delete-action">
+                                      <i className="fas fa-trash"></i> Delete Row
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                              <td>
+                                <input 
+                                  type="text" 
+                                  className="form-control" 
+                                  placeholder="<Type then tab>"
+                                  defaultValue={line.account} 
+                                  style={{ minWidth: '250px', height: '40px' }} 
+                                />
+                              </td>
+                              <td>
+                                <input 
+                                  type="text" 
+                                  className="form-control" 
+                                  defaultValue={line.name} 
+                                  style={{ minWidth: '180px', height: '40px' }} 
+                                />
+                              </td>
+                              <td>
+                                <select className="form-control" defaultValue={line.department} style={{ minWidth: '180px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                  <option>TOM: Human Resource</option>
+                                  <option>TOM: Engineering</option>
+                                  <option>TOM: Production</option>
+                                </select>
+                              </td>
+                              <td>
+                                <select className="form-control" defaultValue={line.location} style={{ minWidth: '150px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                  <option>Hong Hang Shipyard</option>
+                                  <option>Mega yard</option>
+                                  <option>Singapore (MEP)</option>
+                                </select>
+                              </td>
+                              <td>
+                                <select className="form-control" defaultValue={line.class} style={{ minWidth: '150px', height: '40px' }}>
+                                  <option value="">Select...</option>
+                                  <option>Consumable Item</option>
+                                  <option>Fabrication</option>
+                                  <option>Material Supply</option>
+                                </select>
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  className="form-control" 
+                                  defaultValue={line.weight} 
+                                  style={{ minWidth: '120px', height: '40px', textAlign: 'right' }} 
+                                />
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  className="form-control" 
+                                  defaultValue={line.balance} 
+                                  style={{ minWidth: '120px', height: '40px', textAlign: 'right' }} 
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <div style={{ padding: '2rem', textAlign: 'center', color: '#999', background: '#f9f9f9', borderRadius: '4px' }}>
+                        <p>No destination lines added yet.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* History Tab */}
+              {activeTab === 'history' && (
+                <div className="tab-content">
+                  <div className="items-section" style={{ overflowX: 'auto' }}>
+                    {formData.historyLines.length > 0 ? (
+                      <table className="items-table">
+                        <thead>
+                          <tr>
+                            <th style={{ minWidth: '100px' }}>ID</th>
+                            <th style={{ minWidth: '150px' }}>POSTING PERIOD</th>
+                            <th style={{ minWidth: '120px' }}>ENTRY DATE</th>
+                            <th style={{ minWidth: '180px' }}>ACCOUNTING BOOK</th>
+                            <th style={{ minWidth: '150px' }}>JOURNAL ENTRY</th>
+                            <th style={{ minWidth: '120px' }}>DETAIL</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {formData.historyLines.map((line) => (
+                            <tr key={line.id}>
+                              <td>{line.id}</td>
+                              <td>{line.postingPeriod}</td>
+                              <td>{line.entryDate}</td>
+                              <td>{line.accountingBook}</td>
+                              <td style={{ color: '#4a90e2' }}>{line.journalEntry}</td>
+                              <td><button className="view-link">View</button></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <div style={{ padding: '2rem', textAlign: 'center', color: '#999', background: '#f9f9f9', borderRadius: '4px' }}>
+                        <p>No records to show.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="footer-actions">
-          <button className="btn btn-tertiary" onClick={handleCancel}>
-            <i className="fas fa-times"></i>
-            Cancel
+        <div className="detail-footer">
+          <button className="btn-toolbar" onClick={handleCancel}>
+            <i className="fas fa-arrow-left"></i>
+            Back
           </button>
-          <div>
-            <button className="btn btn-primary" onClick={handleSave}>
-              <i className="fas fa-save"></i>
-              Save
-            </button>
-            <button className="btn btn-secondary">
-              <i className="fas fa-cog"></i>
-              Actions
-            </button>
-          </div>
+          <button className="btn-toolbar-primary" onClick={handleSave}>
+            <i className="fas fa-save"></i>
+            Save
+          </button>
         </div>
       </div>
 

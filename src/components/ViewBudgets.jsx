@@ -15,6 +15,7 @@ const ViewBudgets = ({ setCurrentPage }) => {
       class: 'Material Supply',
       location: 'Singapore',
       customer: 'Pacific Marine Ltd',
+      project: 'Marine Refurbishment 2025',
       currency: 'SGD',
       amount: '125,000.00',
       category: 'Labor',
@@ -30,6 +31,7 @@ const ViewBudgets = ({ setCurrentPage }) => {
       class: 'Consumable Item',
       location: 'Singapore',
       customer: 'Oceanic Engineering Pte Ltd',
+      project: 'Electrical Upgrade Project',
       currency: 'SGD',
       amount: '85,500.00',
       category: 'Materials',
@@ -45,6 +47,7 @@ const ViewBudgets = ({ setCurrentPage }) => {
       class: 'Material Supply',
       location: 'Malaysia',
       customer: 'Harbor Logistics Pte Ltd',
+      project: 'Offshore Platform Construction',
       currency: 'SGD',
       amount: '210,000.00',
       category: 'Overhead',
@@ -60,6 +63,7 @@ const ViewBudgets = ({ setCurrentPage }) => {
       class: 'Consumable Item',
       location: 'Singapore',
       customer: 'Maritime Services Corp',
+      project: 'Vessel Maintenance 2025',
       currency: 'USD',
       amount: '45,800.00',
       category: 'Labor',
@@ -75,6 +79,7 @@ const ViewBudgets = ({ setCurrentPage }) => {
       class: 'Material Supply',
       location: 'Singapore',
       customer: 'Coastal Construction Pte Ltd',
+      project: 'Building MEP Installation',
       currency: 'SGD',
       amount: '95,200.00',
       category: 'Materials',
@@ -160,6 +165,7 @@ const ViewBudgets = ({ setCurrentPage }) => {
                 <th style={{ width: '120px', padding: '10px', textAlign: 'left', fontWeight: '600', fontSize: '11px', color: '#666', textTransform: 'uppercase' }}>CLASS</th>
                 <th style={{ width: '120px', padding: '10px', textAlign: 'left', fontWeight: '600', fontSize: '11px', color: '#666', textTransform: 'uppercase' }}>LOCATION</th>
                 <th style={{ width: '150px', padding: '10px', textAlign: 'left', fontWeight: '600', fontSize: '11px', color: '#666', textTransform: 'uppercase' }}>CUSTOMER</th>
+                <th style={{ width: '180px', padding: '10px', textAlign: 'left', fontWeight: '600', fontSize: '11px', color: '#666', textTransform: 'uppercase' }}>PROJECT</th>
                 <th style={{ width: '100px', padding: '10px', textAlign: 'left', fontWeight: '600', fontSize: '11px', color: '#666', textTransform: 'uppercase' }}>CURRENCY</th>
                 <th style={{ width: '120px', padding: '10px', textAlign: 'right', fontWeight: '600', fontSize: '11px', color: '#666', textTransform: 'uppercase' }}>AMOUNT</th>
                 <th style={{ width: '150px', padding: '10px', textAlign: 'left', fontWeight: '600', fontSize: '11px', color: '#666', textTransform: 'uppercase' }}>CATEGORY</th>
@@ -195,6 +201,7 @@ const ViewBudgets = ({ setCurrentPage }) => {
                   <td style={{ padding: '12px', fontSize: '13px', color: '#333' }}>{budget.class}</td>
                   <td style={{ padding: '12px', fontSize: '13px', color: '#333' }}>{budget.location}</td>
                   <td style={{ padding: '12px', color: '#4a90e2', fontSize: '13px' }}>{budget.customer}</td>
+                  <td style={{ padding: '12px', fontSize: '13px', color: '#333' }}>{budget.project}</td>
                   <td style={{ padding: '12px', fontSize: '13px', color: '#333' }}>{budget.currency}</td>
                   <td style={{ padding: '12px', textAlign: 'right', fontWeight: '500', fontSize: '13px', color: '#333' }}>{budget.amount}</td>
                   <td style={{ padding: '12px', fontSize: '13px', color: '#333' }}>{budget.category}</td>
