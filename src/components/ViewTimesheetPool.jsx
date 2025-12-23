@@ -17,7 +17,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       employee: 'TMO008 Natarajan Muruganandham',
       employeeId: 'TMO008',
       date: '10-Mar-2024',
+      inDate: '10-Mar-2024',
+      outDate: '11-Mar-2024',
       day: 'Sunday',
+      shift: '8 AM To 5 PM',
+      shiftInTime: '8:00 am',
+      shiftOutTime: '5:00 pm',
       firstIn: '08:00',
       lastOut: '01:00',
       normalHours: '8.00',
@@ -28,6 +33,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       status: 'Approved',
       dayType: 'Weekend',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+      attendanceStatus: 'P',
+      postingStatus: 'Posted',
+      earlyGo: '0',
+      lateArrival: '0',
+      netWorkingHours: '16.00',
+      attendanceRemark: 'Cross-midnight shift',
       detailRecords: [
         {
           project: 'Project A - Marine Fabrication',
@@ -52,7 +63,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       employee: 'TMO015 Kumar Selvam',
       employeeId: 'TMO015',
       date: '10-Mar-2024',
+      inDate: '10-Mar-2024',
+      outDate: '10-Mar-2024',
       day: 'Sunday',
+      shift: '8 AM To 5 PM',
+      shiftInTime: '8:00 am',
+      shiftOutTime: '5:00 pm',
       firstIn: '08:30',
       lastOut: '17:30',
       normalHours: '8.00',
@@ -63,6 +79,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       status: 'OK',
       dayType: 'Weekend',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+      attendanceStatus: 'P',
+      postingStatus: 'Not Posted',
+      earlyGo: '0',
+      lateArrival: '0',
+      netWorkingHours: '9.00',
+      attendanceRemark: 'Regular weekend shift',
       detailRecords: [
         {
           project: 'Project A - Marine Fabrication',
@@ -79,7 +101,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       employee: 'TMO022 Ravi Chandran',
       employeeId: 'TMO022',
       date: '10-Mar-2024',
+      inDate: '10-Mar-2024',
+      outDate: '10-Mar-2024',
       day: 'Sunday',
+      shift: '8 AM To 5 PM',
+      shiftInTime: '8:00 am',
+      shiftOutTime: '5:00 pm',
       firstIn: '07:45',
       lastOut: '16:00',
       normalHours: '8.00',
@@ -90,6 +117,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       status: 'Missing',
       dayType: 'Weekend',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+      attendanceStatus: 'P',
+      postingStatus: 'Not Posted',
+      earlyGo: '0',
+      lateArrival: '15',
+      netWorkingHours: '8.25',
+      attendanceRemark: 'Missing project allocation',
       detailRecords: []
     },
     {
@@ -97,7 +130,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       employee: 'TMO031 Suresh Babu',
       employeeId: 'TMO031',
       date: '10-Mar-2024',
+      inDate: '10-Mar-2024',
+      outDate: '10-Mar-2024',
       day: 'Sunday',
+      shift: '8 AM To 5 PM',
+      shiftInTime: '8:00 am',
+      shiftOutTime: '5:00 pm',
       firstIn: '08:00',
       lastOut: '17:00',
       normalHours: '8.00',
@@ -108,6 +146,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       status: 'Conflict',
       dayType: 'Weekend',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+      attendanceStatus: 'P',
+      postingStatus: 'Not Posted',
+      earlyGo: '0',
+      lateArrival: '0',
+      netWorkingHours: '9.00',
+      attendanceRemark: 'Overlapping time entries',
       detailRecords: [
         {
           project: 'Project B - Offshore Installation',
@@ -124,7 +168,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       employee: 'TMO015 Kumar Selvam',
       employeeId: 'TMO015',
       date: '12-Mar-2024',
+      inDate: '12-Mar-2024',
+      outDate: '',
       day: 'Tuesday',
+      shift: '8 AM To 5 PM',
+      shiftInTime: '8:00 am',
+      shiftOutTime: '5:00 pm',
       firstIn: '08:00',
       lastOut: '',
       normalHours: '0.00',
@@ -135,6 +184,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
       status: 'Missing',
       dayType: 'Weekday',
       subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+      attendanceStatus: '',
+      postingStatus: 'Not Posted',
+      earlyGo: '',
+      lateArrival: '',
+      netWorkingHours: '0.00',
+      attendanceRemark: 'Missing clock out',
       detailRecords: []
     }
   ]);
@@ -179,7 +234,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
           employee: 'TMO045 Ahmed Hassan',
           employeeId: 'TMO045',
           date: '11-Mar-2024',
+          inDate: '11-Mar-2024',
+          outDate: '11-Mar-2024',
           day: 'Monday',
+          shift: '8 AM To 5 PM',
+          shiftInTime: '8:00 am',
+          shiftOutTime: '5:00 pm',
           firstIn: '08:15',
           lastOut: '17:30',
           normalHours: '8.00',
@@ -191,6 +251,11 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
           postingStatus: 'Not Posted',
           dayType: 'Weekday',
           subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+          attendanceStatus: 'P',
+          earlyGo: '0',
+          lateArrival: '15',
+          netWorkingHours: '9.25',
+          attendanceRemark: 'Auto-fetched from biometric',
           detailRecords: [
             {
               project: 'Project C - Hull Repair',
@@ -207,7 +272,12 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
           employee: 'TMO052 Tan Wei Ming',
           employeeId: 'TMO052',
           date: '11-Mar-2024',
+          inDate: '11-Mar-2024',
+          outDate: '11-Mar-2024',
           day: 'Monday',
+          shift: '8 AM To 5 PM',
+          shiftInTime: '8:00 am',
+          shiftOutTime: '5:00 pm',
           firstIn: '08:00',
           lastOut: '18:00',
           normalHours: '8.00',
@@ -219,6 +289,11 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
           postingStatus: 'Not Posted',
           dayType: 'Weekday',
           subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
+          attendanceStatus: 'P',
+          earlyGo: '0',
+          lateArrival: '0',
+          netWorkingHours: '10.00',
+          attendanceRemark: 'Auto-fetched from biometric',
           detailRecords: [
             {
               project: 'Project D - Piping Installation',
@@ -440,15 +515,24 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
               <th style={{ width: '50px' }}>Expand</th>
               <th>EMPLOYEE</th>
               <th>EMP ID</th>
-              <th>DATE</th>
+              <th>BIOMETRIC NUMBER</th>
+              <th>IN DATE</th>
+              <th>OUT DATE</th>
               <th>DAY</th>
+              <th>SHIFT</th>
+              <th>SHIFT IN TIME</th>
+              <th>SHIFT OUT TIME</th>
               <th>FIRST IN</th>
               <th>LAST OUT</th>
+              <th>NET WORKING HOURS</th>
+              <th>EARLY GO</th>
+              <th>LATE ARRIVAL</th>
               <th>NORMAL</th>
               <th>OT 1.5X</th>
               <th>OT 2.0X</th>
               <th>WEEKEND HRS</th>
               <th>HOLIDAY HRS</th>
+              <th>ATTENDANCE REMARK</th>
               <th>STATUS</th>
               <th>ACTIONS</th>
             </tr>
@@ -480,19 +564,28 @@ const ViewTimesheetPool = ({ onViewClick, onNewClick, onCorrectClick }) => {
                   </td>
                   <td>{record.employee}</td>
                   <td>{record.employeeId}</td>
-                  <td>{record.date}</td>
+                  <td>{record.employeeId}</td>
+                  <td>{record.inDate}</td>
+                  <td>{record.outDate || '-'}</td>
                   <td>
                     <span className={`status-badge ${record.dayType === 'Weekend' ? 'warning' : record.dayType === 'Holiday' ? 'error' : 'info'}`}>
                       {record.day}
                     </span>
                   </td>
+                  <td>{record.shift}</td>
+                  <td>{record.shiftInTime}</td>
+                  <td>{record.shiftOutTime}</td>
                   <td>{record.firstIn}</td>
                   <td>{record.lastOut || '-'}</td>
+                  <td>{record.netWorkingHours}</td>
+                  <td>{record.earlyGo}</td>
+                  <td>{record.lateArrival}</td>
                   <td>{record.normalHours}</td>
                   <td>{record.ot15Hours}</td>
                   <td>{record.ot20Hours}</td>
                   <td>{record.weekendHours}</td>
                   <td>{record.holidayHours}</td>
+                  <td>{record.attendanceRemark}</td>
                   <td>
                     <span style={{
                       ...getStatusStyle(record.status),

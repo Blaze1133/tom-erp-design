@@ -8,12 +8,21 @@ const CorrectTimesheetRecord = ({ record, onBack, onSave }) => {
   const [formData, setFormData] = useState({
     employee: record?.employee || 'TMO008 Natarajan Muruganandham',
     employeeId: record?.employeeId || 'TMO008',
+    biometricNumber: record?.biometricNumber || record?.employeeId || 'TMO008',
     date: record?.date || '10-Mar-2024',
+    inDate: record?.inDate || '10-Mar-2024',
+    outDate: record?.outDate || '11-Mar-2024',
     subsidiary: 'Tech Marine Offshore (S) Pte Ltd',
     shift: record?.shift || '8 AM To 5 PM',
+    shiftInTime: record?.shiftInTime || '8:00 am',
+    shiftOutTime: record?.shiftOutTime || '5:00 pm',
     dayType: record?.dayType || 'Weekday',
     firstIn: record?.firstIn || '08:00',
     lastOut: record?.lastOut || '01:00',
+    earlyGo: record?.earlyGo || '0',
+    lateArrival: record?.lateArrival || '0',
+    netWorkingHours: record?.netWorkingHours || '16.00',
+    attendanceRemark: record?.attendanceRemark || '',
     project: 'Project A - Marine Fabrication',
     remarks: '',
     correctedBy: 'HR Manager',
@@ -183,12 +192,32 @@ const CorrectTimesheetRecord = ({ record, onBack, onSave }) => {
                 />
               </div>
               <div className="detail-field">
-                <label>DATE</label>
+                <label>BIOMETRIC NUMBER</label>
                 <input
                   type="text"
                   className="form-control"
-                  value={formData.date}
+                  value={formData.biometricNumber}
                   disabled
+                />
+              </div>
+              <div className="detail-field">
+                <label>IN DATE <span className="required">*</span></label>
+                <input
+                  type="date"
+                  name="inDate"
+                  className="form-control"
+                  value={formData.inDate}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="detail-field">
+                <label>OUT DATE <span className="required">*</span></label>
+                <input
+                  type="date"
+                  name="outDate"
+                  className="form-control"
+                  value={formData.outDate}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="detail-field">
@@ -212,6 +241,26 @@ const CorrectTimesheetRecord = ({ record, onBack, onSave }) => {
                     <option key={shift} value={shift}>{shift}</option>
                   ))}
                 </select>
+              </div>
+              <div className="detail-field">
+                <label>SHIFT IN TIME <span className="required">*</span></label>
+                <input
+                  type="time"
+                  name="shiftInTime"
+                  className="form-control"
+                  value={formData.shiftInTime}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="detail-field">
+                <label>SHIFT OUT TIME <span className="required">*</span></label>
+                <input
+                  type="time"
+                  name="shiftOutTime"
+                  className="form-control"
+                  value={formData.shiftOutTime}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="detail-field">
                 <label>DAY TYPE <span className="required">*</span></label>
@@ -255,6 +304,48 @@ const CorrectTimesheetRecord = ({ record, onBack, onSave }) => {
                   value={formData.lastOut}
                   onChange={handleInputChange}
                   className="form-control"
+                />
+              </div>
+              <div className="detail-field">
+                <label>NET WORKING HOURS</label>
+                <input
+                  type="number"
+                  name="netWorkingHours"
+                  value={formData.netWorkingHours}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  step="0.01"
+                />
+              </div>
+              <div className="detail-field">
+                <label>EARLY GO (MINUTES)</label>
+                <input
+                  type="number"
+                  name="earlyGo"
+                  value={formData.earlyGo}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="detail-field">
+                <label>LATE ARRIVAL (MINUTES)</label>
+                <input
+                  type="number"
+                  name="lateArrival"
+                  value={formData.lateArrival}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="detail-field" style={{ gridColumn: 'span 2' }}>
+                <label>ATTENDANCE REMARK</label>
+                <textarea
+                  name="attendanceRemark"
+                  value={formData.attendanceRemark}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  rows="2"
+                  placeholder="Attendance remarks..."
                 />
               </div>
               <div className="detail-field" style={{ gridColumn: 'span 2' }}>

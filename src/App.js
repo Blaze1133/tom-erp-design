@@ -167,6 +167,8 @@ import ReviewNegativeInventory from './components/ReviewNegativeInventory';
 import ViewBillPaymentDetail from './components/ViewBillPaymentDetail';
 import EditBillPayment from './components/EditBillPayment';
 import ViewVendorPayments from './components/ViewVendorPayments';
+import ViewSingleVendorPayments from './components/ViewSingleVendorPayments';
+import ViewMultipleVendorPayments from './components/ViewMultipleVendorPayments';
 import ViewVendorPaymentDetail from './components/ViewVendorPaymentDetail';
 import EnterVendorPrepayment from './components/EnterVendorPrepayment';
 import ViewVendorPrepayments from './components/ViewVendorPrepayments';
@@ -786,8 +788,14 @@ function App() {
         return <EditBillPayment setCurrentPage={setCurrentPage} />;
       case 'pay-single-vendor':
         return <PayBillsUnified setCurrentPage={setCurrentPage} />;
+      case 'pay-multiple-vendors':
+        return <PayBillsUnified setCurrentPage={setCurrentPage} />;
       case 'view-vendor-payments':
         return <ViewVendorPayments setCurrentPage={setCurrentPage} />;
+      case 'view-single-vendor-payments':
+        return <ViewSingleVendorPayments setCurrentPage={setCurrentPage} />;
+      case 'view-multiple-vendor-payments':
+        return <ViewMultipleVendorPayments setCurrentPage={setCurrentPage} />;
       case 'view-vendor-payment-detail':
         return <ViewVendorPaymentDetail setCurrentPage={setCurrentPage} />;
       case 'enter-vendor-prepayment':

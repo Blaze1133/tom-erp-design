@@ -92,8 +92,12 @@ const PayBillsUnified = ({ setCurrentPage }) => {
   };
 
   const handleList = () => {
-    if (setCurrentPage && paymentMode === 'pay-single-vendor') {
-      setCurrentPage('view-vendor-payments');
+    if (setCurrentPage) {
+      if (paymentMode === 'pay-single-vendor') {
+        setCurrentPage('view-single-vendor-payments');
+      } else if (paymentMode === 'pay-bills') {
+        setCurrentPage('view-multiple-vendor-payments');
+      }
     }
   };
 
