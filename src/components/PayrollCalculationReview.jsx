@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import PayrollWorkflowDiagram from './PayrollWorkflowDiagram';
 import CustomAlert from './CustomAlert';
 import './Enquiries.css';
 
@@ -8,8 +9,10 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
   const [expandedRows, setExpandedRows] = useState({});
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [alert, setAlert] = useState({ show: false, type: 'confirm', title: '', message: '', onConfirm: null, variant: 'warning' });
+  const [editingEmployee, setEditingEmployee] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
 
-  const payrollData = [
+  const initialPayrollData = [
     {
       employeeId: 'TMO008',
       employeeName: 'Natarajan Muruganandham',
@@ -125,6 +128,8 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
     }
   ];
 
+  const [payrollData, setPayrollData] = useState(initialPayrollData);
+
   const toggleRowExpansion = (employeeId) => {
     setExpandedRows(prev => ({
       ...prev,
@@ -163,6 +168,73 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
+  };
+
+  const handleEditEmployee = (employee) => {
+    setEditingEmployee(employee.employeeId);
+    setEditFormData({
+      ot15Pay: employee.ot15Pay,
+      ot20Pay: employee.ot20Pay,
+      weekendPay: employee.weekendPay,
+      holidayPay: employee.holidayPay,
+      additions: employee.additions,
+      variableDeductions: employee.variableDeductions
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingEmployee(null);
+    setEditFormData({});
+  };
+
+  const handleSaveEdit = () => {
+    const updatedData = payrollData.map(emp => {
+      if (emp.employeeId === editingEmployee) {
+        const newOt15 = parseFloat(editFormData.ot15Pay) || 0;
+        const newOt20 = parseFloat(editFormData.ot20Pay) || 0;
+        const newWeekend = parseFloat(editFormData.weekendPay) || 0;
+        const newHoliday = parseFloat(editFormData.holidayPay) || 0;
+        const newAdditions = parseFloat(editFormData.additions) || 0;
+        const newVarDeductions = parseFloat(editFormData.variableDeductions) || 0;
+
+        const newGrossSalary = emp.basicSalary + emp.normalPay + newOt15 + newOt20 + newWeekend + newHoliday + newAdditions;
+        const newCPFEmployee = newGrossSalary * 0.20;
+        const newSDL = newGrossSalary * 0.0025;
+        const newTotalDeductions = newCPFEmployee + newSDL + newVarDeductions;
+        const newNetSalary = newGrossSalary - newTotalDeductions;
+        const newCPFEmployer = newGrossSalary * 0.17;
+
+        return {
+          ...emp,
+          ot15Pay: newOt15,
+          ot20Pay: newOt20,
+          weekendPay: newWeekend,
+          holidayPay: newHoliday,
+          additions: newAdditions,
+          variableDeductions: newVarDeductions,
+          grossSalary: newGrossSalary,
+          cpfEmployee: newCPFEmployee,
+          cpfEmployer: newCPFEmployer,
+          sdl: newSDL,
+          totalDeductions: newTotalDeductions,
+          netSalary: newNetSalary,
+          variance: newNetSalary - emp.previousMonth
+        };
+      }
+      return emp;
+    });
+
+    setPayrollData(updatedData);
+    setEditingEmployee(null);
+    setEditFormData({});
+    showToast('Employee payroll updated successfully', 'success');
+  };
+
+  const handleFieldChange = (field, value) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   const totalGross = payrollData.reduce((sum, emp) => sum + emp.grossSalary, 0);
@@ -210,6 +282,9 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
       </div>
 
       <div className="detail-content">
+        {/* Workflow Diagram */}
+        <PayrollWorkflowDiagram currentStage="payroll-review" compact={true} />
+
         <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>
@@ -314,10 +389,29 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
                             {employee.variance >= 0 ? '+' : ''}${employee.variance.toFixed(2)}
                           </span>
                         </td>
+                        {!viewOnly && (
+                          <td style={{ textAlign: 'center' }}>
+                            <button
+                              onClick={() => handleEditEmployee(employee)}
+                              className="btn-action"
+                              style={{
+                                padding: '8px 16px',
+                                fontSize: '12px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px'
+                              }}
+                              title="Edit Employee Payroll"
+                            >
+                              <i className="fas fa-edit"></i>
+                              <span>Edit</span>
+                            </button>
+                          </td>
+                        )}
                       </tr>
                       {expandedRows[employee.employeeId] && (
                         <tr className="detail-row">
-                          <td colSpan="11">
+                          <td colSpan="12">
                             <div style={{ padding: '1.5rem', background: '#f8f9fa' }}>
                               <h4 style={{ marginBottom: '1rem', fontSize: '0.95rem', color: '#4a5568' }}>
                                 Salary Breakdown - {employee.employeeName}
@@ -426,6 +520,196 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
           </div>
         </div>
       </div>
+
+      {/* Edit Employee Modal */}
+      {editingEmployee && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: 'white',
+            borderRadius: '8px',
+            padding: '2rem',
+            width: '600px',
+            maxWidth: '90%',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}>
+            <h3 style={{ margin: '0 0 1.5rem 0', fontSize: '1.25rem', fontWeight: '600', color: '#374151' }}>
+              Edit Payroll - {payrollData.find(e => e.employeeId === editingEmployee)?.employeeName}
+            </h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
+                  OT 1.5x PAY
+                </label>
+                <input
+                  type="number"
+                  value={editFormData.ot15Pay}
+                  onChange={(e) => handleFieldChange('ot15Pay', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
+                  OT 2.0x PAY
+                </label>
+                <input
+                  type="number"
+                  value={editFormData.ot20Pay}
+                  onChange={(e) => handleFieldChange('ot20Pay', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
+                  WEEKEND PAY
+                </label>
+                <input
+                  type="number"
+                  value={editFormData.weekendPay}
+                  onChange={(e) => handleFieldChange('weekendPay', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
+                  HOLIDAY PAY
+                </label>
+                <input
+                  type="number"
+                  value={editFormData.holidayPay}
+                  onChange={(e) => handleFieldChange('holidayPay', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#10b981' }}>
+                  ADDITIONS (Bonuses)
+                </label>
+                <input
+                  type="number"
+                  value={editFormData.additions}
+                  onChange={(e) => handleFieldChange('additions', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#dc2626' }}>
+                  VARIABLE DEDUCTIONS
+                </label>
+                <input
+                  type="number"
+                  value={editFormData.variableDeductions}
+                  onChange={(e) => handleFieldChange('variableDeductions', e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}
+                  step="0.01"
+                  min="0"
+                />
+              </div>
+            </div>
+
+            <div style={{ padding: '1rem', background: '#f0f9ff', borderRadius: '6px', marginBottom: '1.5rem' }}>
+              <p style={{ margin: 0, fontSize: '12px', color: '#0369a1', lineHeight: '1.6' }}>
+                <strong>Note:</strong> Gross Salary, CPF, SDL, Total Deductions, and Net Salary will be automatically recalculated based on your changes.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+              <button
+                onClick={handleCancelEdit}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: 'white',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveEdit}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: '#3b82f6',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '600'
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Toast 
         message={toast.message} 

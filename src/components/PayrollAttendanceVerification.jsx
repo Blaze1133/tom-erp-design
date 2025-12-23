@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
 import CustomAlert from './CustomAlert';
+import PayrollWorkflowDiagram from './PayrollWorkflowDiagram';
 import './Enquiries.css';
 
 const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOnly = false }) => {
@@ -9,7 +10,7 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
   const [showExceptionsOnly, setShowExceptionsOnly] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: 'confirm', title: '', message: '', onConfirm: null, variant: 'warning' });
 
-  const attendanceData = [
+  const [attendanceData, setAttendanceData] = useState([
     {
       employeeId: 'TMO008',
       employeeName: 'Natarajan Muruganandham',
@@ -80,7 +81,7 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
       exceptionType: '',
       remarks: ''
     }
-  ];
+  ]);
 
   const handleConfirmAttendance = () => {
     const exceptionsCount = attendanceData.filter(emp => emp.hasException).length;
@@ -88,20 +89,29 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
     if (exceptionsCount > 0) {
       setAlert({
         show: true,
-        type: 'confirm',
-        title: 'Confirm Attendance with Exceptions',
-        message: `There are ${exceptionsCount} employee(s) with exceptions. Do you want to proceed with attendance confirmation?`,
-        variant: 'warning',
+        type: 'alert',
+        title: 'Cannot Confirm Attendance',
+        message: `There are ${exceptionsCount} employee(s) with exceptions. Please resolve all exceptions before confirming attendance. You can send employees back to timesheet for correction.`,
+        variant: 'error',
         onConfirm: () => {
           setAlert({ ...alert, show: false });
-          proceedWithConfirmation();
-        },
-        onCancel: () => setAlert({ ...alert, show: false })
+        }
       });
       return;
     }
 
-    proceedWithConfirmation();
+    setAlert({
+      show: true,
+      type: 'confirm',
+      title: 'Confirm Attendance',
+      message: 'All attendance records are verified. Do you want to proceed with confirmation? This will lock the attendance for this payroll run.',
+      variant: 'success',
+      onConfirm: () => {
+        setAlert({ ...alert, show: false });
+        proceedWithConfirmation();
+      },
+      onCancel: () => setAlert({ ...alert, show: false })
+    });
   };
 
   const proceedWithConfirmation = () => {
@@ -109,6 +119,63 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
     setTimeout(() => {
       if (onConfirm) onConfirm();
     }, 2000);
+  };
+
+  const handleSendBackToTimesheet = () => {
+    const selectedExceptions = selectedEmployees.filter(empId => {
+      const emp = attendanceData.find(e => e.employeeId === empId);
+      return emp && emp.hasException;
+    });
+
+    if (selectedExceptions.length === 0) {
+      showToast('Please select employees with exceptions to send back', 'error');
+      return;
+    }
+
+    // Get employee names for the confirmation message
+    const employeeNames = selectedExceptions.map(empId => {
+      const emp = attendanceData.find(e => e.employeeId === empId);
+      return emp ? `${emp.employeeId} - ${emp.employeeName}` : empId;
+    }).join(', ');
+
+    setAlert({
+      show: true,
+      type: 'confirm',
+      title: 'Send Back to Timesheet',
+      message: `Send ${selectedExceptions.length} employee(s) back to timesheet for correction?\n\nEmployees: ${employeeNames}\n\nTheir attendance records will be:\n• Unlocked for editing in timesheet\n• Marked as "Pending Correction"\n• Removed from this payroll run temporarily\n• Available for re-submission after correction`,
+      variant: 'warning',
+      onConfirm: () => {
+        setAlert({ ...alert, show: false });
+        processSendBack(selectedExceptions);
+      },
+      onCancel: () => setAlert({ ...alert, show: false })
+    });
+  };
+
+  const processSendBack = (employeeIds) => {
+    // Simulate sending back to timesheet
+    showToast('Processing send back request...', 'info');
+    
+    setTimeout(() => {
+      // Remove sent-back employees from the attendance data
+      setAttendanceData(prevData => 
+        prevData.filter(emp => !employeeIds.includes(emp.employeeId))
+      );
+      
+      // In a real application, this would:
+      // 1. Update attendance status to "Pending Correction" in database
+      // 2. Unlock timesheet records
+      // 3. Send notification to supervisors
+      // 4. Create audit log entry
+      
+      showToast(`Successfully sent ${employeeIds.length} employee(s) back to timesheet. They have been removed from this payroll run.`, 'success');
+      setSelectedEmployees([]);
+      
+      // Show additional info
+      setTimeout(() => {
+        showToast('Supervisors have been notified to correct the attendance records', 'info');
+      }, 2000);
+    }, 1000);
   };
 
   const showToast = (message, type = 'success') => {
@@ -168,6 +235,12 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
           <i className="fas fa-arrow-left"></i>
           Back
         </button>
+        {!viewOnly && totalExceptions > 0 && (
+          <button className="btn-toolbar" onClick={handleSendBackToTimesheet} style={{ background: '#f59e0b', color: 'white', border: 'none' }}>
+            <i className="fas fa-undo"></i>
+            Send Back to Timesheet
+          </button>
+        )}
         {!viewOnly && (
           <button className="btn-toolbar-primary" onClick={handleConfirmAttendance}>
             <i className="fas fa-check"></i>
@@ -185,6 +258,9 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
       </div>
 
       <div className="detail-content">
+        {/* Workflow Diagram */}
+        <PayrollWorkflowDiagram currentStage="attendance-verification" compact={true} />
+
         <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>
@@ -227,8 +303,11 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
                 <h4 style={{ margin: '0 0 0.5rem 0', color: '#dc2626', fontSize: '0.9rem' }}>
                   <i className="fas fa-exclamation-triangle"></i> Attention Required
                 </h4>
-                <p style={{ margin: 0, color: '#dc2626', fontSize: '0.85rem' }}>
-                  {totalExceptions} employee(s) have exceptions. Please review before confirming attendance.
+                <p style={{ margin: '0 0 0.5rem 0', color: '#dc2626', fontSize: '0.85rem' }}>
+                  {totalExceptions} employee(s) have exceptions. You must resolve all exceptions before confirming attendance.
+                </p>
+                <p style={{ margin: 0, color: '#dc2626', fontSize: '0.85rem', fontWeight: '600' }}>
+                  <i className="fas fa-info-circle"></i> Select employees with exceptions and click "Send Back to Timesheet" to unlock their records for correction.
                 </p>
               </div>
             </div>
@@ -308,13 +387,13 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
           <div className="section-body">
             <div style={{ padding: '1rem', background: '#f0f9ff', border: '1px solid #bfdbfe', borderRadius: '4px' }}>
               <h4 style={{ margin: '0 0 0.5rem 0', color: '#1e40af', fontSize: '0.9rem' }}>
-                <i className="fas fa-info-circle"></i> What happens when you confirm attendance?
+                <i className="fas fa-info-circle"></i> Attendance Verification Process
               </h4>
-              <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#1e40af', fontSize: '0.85rem' }}>
-                <li>Attendance data is locked for this payroll run</li>
-                <li>No further changes allowed to approved timesheets</li>
-                <li>System proceeds to next stage: Payroll Adjustments</li>
-                <li>Audit trail is created for compliance</li>
+              <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#1e40af', fontSize: '0.85rem', lineHeight: '1.8' }}>
+                <li><strong>Exceptions:</strong> Employees with exceptions (missing attendance, excessive OT, etc.) must be sent back to timesheet for correction</li>
+                <li><strong>Send Back:</strong> Select employees with exceptions and click "Send Back to Timesheet" to unlock their records</li>
+                <li><strong>Confirmation:</strong> Only employees with "OK" status can be confirmed. All exceptions must be resolved first</li>
+                <li><strong>After Confirmation:</strong> Attendance data is locked and system proceeds to Payroll Adjustments stage</li>
               </ul>
             </div>
           </div>
@@ -326,6 +405,15 @@ const PayrollAttendanceVerification = ({ payrollRunId, onBack, onConfirm, viewOn
               <i className="fas fa-arrow-left"></i>
               Back
             </button>
+            {totalExceptions > 0 && (
+              <button className="btn-toolbar" onClick={handleSendBackToTimesheet} style={{ background: '#f59e0b', color: 'white', border: 'none' }}>
+                <i className="fas fa-undo"></i>
+                Send Back to Timesheet ({selectedEmployees.filter(empId => {
+                  const emp = attendanceData.find(e => e.employeeId === empId);
+                  return emp && emp.hasException;
+                }).length})
+              </button>
+            )}
             <button className="btn-toolbar-primary" onClick={handleConfirmAttendance}>
               <i className="fas fa-check-circle"></i>
               Confirm Attendance

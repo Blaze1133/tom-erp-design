@@ -306,9 +306,6 @@ import ViewBiometricDataDetail from './components/ViewBiometricDataDetail';
 import CreateManualEntry from './components/CreateManualEntry';
 import ViewManualEntry from './components/ViewManualEntry';
 import ViewManualEntryDetail from './components/ViewManualEntryDetail';
-import ViewEmployeeDailyAttendanceList from './components/ViewEmployeeDailyAttendanceList';
-import ViewEmployeeDailyAttendanceDetail from './components/ViewEmployeeDailyAttendanceDetail';
-import EditEmployeeDailyAttendance from './components/EditEmployeeDailyAttendance';
 import ViewTimesheetPool from './components/ViewTimesheetPool';
 import ViewTimesheetPoolDetail from './components/ViewTimesheetPoolDetail';
 import CorrectTimesheetRecord from './components/CorrectTimesheetRecord';
@@ -1068,26 +1065,6 @@ function App() {
       case 'view-manual-entry-detail':
         return <ViewManualEntryDetail setCurrentPage={setCurrentPage} />;
       
-      // Employee Daily Attendance List
-      case 'employee-daily-attendance-list':
-      case 'view-employee-daily-attendance-list':
-        return <ViewEmployeeDailyAttendanceList 
-          onViewClick={() => setCurrentPage('view-employee-daily-attendance-detail')}
-          onEditClick={() => setCurrentPage('edit-employee-daily-attendance')}
-          setCurrentPage={setCurrentPage} 
-        />;
-      case 'view-employee-daily-attendance-detail':
-        return <ViewEmployeeDailyAttendanceDetail 
-          onBack={() => setCurrentPage('view-employee-daily-attendance-list')}
-          onEdit={() => setCurrentPage('edit-employee-daily-attendance')}
-          setCurrentPage={setCurrentPage} 
-        />;
-      case 'edit-employee-daily-attendance':
-        return <EditEmployeeDailyAttendance 
-          onBack={() => setCurrentPage('view-employee-daily-attendance-list')}
-          onSave={() => setCurrentPage('view-employee-daily-attendance-list')}
-          setCurrentPage={setCurrentPage} 
-        />;
       
       // Payroll Workflow - Timesheet Pool
       case 'view-timesheet-pool':

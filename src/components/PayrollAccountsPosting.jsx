@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Toast from './Toast';
+import PayrollWorkflowDiagram from './PayrollWorkflowDiagram';
 import CustomAlert from './CustomAlert';
 import './Enquiries.css';
 
@@ -176,6 +177,9 @@ const PayrollAccountsPosting = ({ payrollRunId, onBack, onComplete, viewOnly = f
       </div>
 
       <div className="detail-content">
+        {/* Workflow Diagram */}
+        <PayrollWorkflowDiagram currentStage="accounts-posting" compact={true} />
+
         <div className="detail-section">
           <div className="section-header">
             <i className="fas fa-chevron-down"></i>

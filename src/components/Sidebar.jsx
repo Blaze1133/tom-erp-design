@@ -708,8 +708,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       submenu: [
         { id: 'view-yard-data', label: 'Yard Data' },
         { id: 'view-biometric-data', label: 'Biometric Data' },
-        { id: 'view-manual-entry', label: 'Manual Entry' },
-        { id: 'employee-daily-attendance-list', label: 'Employee Daily Attendance List' }
+        { id: 'view-manual-entry', label: 'Manual Entry' }
       ]
     },
     { 
