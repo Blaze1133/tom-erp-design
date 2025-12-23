@@ -26,7 +26,10 @@ const CreateTask = ({ isEdit = false, onSave, onCancel }) => {
     subsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     department: '',
     taskClass: '',
-    notes: ''
+    notes: '',
+    parentTask: '',
+    isSubTask: false,
+    dependencyType: ''
   });
 
   const statuses = ['Not Started', 'In Progress', 'On Hold', 'Completed', 'Cancelled'];
@@ -59,6 +62,21 @@ const CreateTask = ({ isEdit = false, onSave, onCancel }) => {
     'Hydrotesting', 'Installation work', 'Manpower Supply', 'Material Supply',
     'Module /Prefab', 'Piping', 'Project Works', 'Refurbishment works',
     'Rental', 'Repair & Referable', 'Sale of Scrap Metal', 'Structure'
+  ];
+
+  const dependencyTypes = [
+    'Finish-to-Start (FS)',
+    'Start-to-Start (SS)',
+    'Finish-to-Finish (FF)',
+    'Start-to-Finish (SF)'
+  ];
+
+  const availableTasks = [
+    'TSK001 - MEP Installation - Phase 1',
+    'TSK002 - Electrical Wiring',
+    'TSK003 - Plumbing Installation',
+    'TSK004 - HVAC Setup',
+    'TSK005 - Quality Inspection'
   ];
 
   const showToast = (message, type = 'success') => {
@@ -167,6 +185,34 @@ const CreateTask = ({ isEdit = false, onSave, onCancel }) => {
                 <label>DESCRIPTION</label>
                 <textarea className="form-control" rows="3" value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} />
               </div>
+              <div className="detail-field">
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={formData.isSubTask} 
+                    onChange={(e) => handleInputChange('isSubTask', e.target.checked)}
+                  />
+                  IS SUB-TASK
+                </label>
+              </div>
+              {formData.isSubTask && (
+                <>
+                  <div className="detail-field">
+                    <label>PARENT TASK <span style={{color: 'orange'}}>*</span></label>
+                    <select className="form-control" value={formData.parentTask} onChange={(e) => handleInputChange('parentTask', e.target.value)}>
+                      <option value="">Select Parent Task</option>
+                      {availableTasks.map(task => <option key={task} value={task}>{task}</option>)}
+                    </select>
+                  </div>
+                  <div className="detail-field">
+                    <label>DEPENDENCY TYPE</label>
+                    <select className="form-control" value={formData.dependencyType} onChange={(e) => handleInputChange('dependencyType', e.target.value)}>
+                      <option value="">Finish-to-Start (FS) - Default</option>
+                      {dependencyTypes.map(type => <option key={type} value={type}>{type}</option>)}
+                    </select>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

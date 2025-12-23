@@ -6,6 +6,9 @@ const ProjectReportsAnalytics = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [selectedReport, setSelectedReport] = useState('overview');
   const [dateRange, setDateRange] = useState('this-month');
+  const [selectedProject, setSelectedProject] = useState('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -52,6 +55,19 @@ const ProjectReportsAnalytics = () => {
     { milestone: 'Refinery Inspection', project: 'PRJ005', target: '2024-12-25', status: 'Not Started', completion: 0 }
   ];
 
+  // Filter data based on selected project
+  const getFilteredData = (data) => {
+    if (selectedProject === 'all') return data;
+    return data.filter(item => {
+      const projectId = item.project?.split(' ')[0] || item.project;
+      return projectId === selectedProject;
+    });
+  };
+
+  const filteredProjectPerformance = getFilteredData(projectPerformance);
+  const filteredResourceUtilization = getFilteredData(resourceUtilization);
+  const filteredMilestoneTracking = getFilteredData(milestoneTracking);
+
   const handleExport = () => {
     showToast('Report exported successfully!', 'success');
   };
@@ -85,7 +101,7 @@ const ProjectReportsAnalytics = () => {
       </div>
 
       <div className="detail-toolbar">
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <div>
             <label style={{ marginRight: '0.5rem', fontWeight: 'bold' }}>REPORT TYPE:</label>
             <select 
@@ -102,6 +118,22 @@ const ProjectReportsAnalytics = () => {
             </select>
           </div>
           <div>
+            <label style={{ marginRight: '0.5rem', fontWeight: 'bold' }}>PROJECT:</label>
+            <select 
+              className="form-control" 
+              style={{ width: '200px', display: 'inline-block' }}
+              value={selectedProject}
+              onChange={(e) => setSelectedProject(e.target.value)}
+            >
+              <option value="all">All Projects</option>
+              <option value="PRJ001">PRJ001 - MEP Installation</option>
+              <option value="PRJ002">PRJ002 - Offshore Platform</option>
+              <option value="PRJ003">PRJ003 - Shipyard Fabrication</option>
+              <option value="PRJ004">PRJ004 - Industrial Piping</option>
+              <option value="PRJ005">PRJ005 - Refinery Maintenance</option>
+            </select>
+          </div>
+          <div>
             <label style={{ marginRight: '0.5rem', fontWeight: 'bold' }}>DATE RANGE:</label>
             <select 
               className="form-control" 
@@ -114,8 +146,33 @@ const ProjectReportsAnalytics = () => {
               <option value="this-month">This Month</option>
               <option value="this-quarter">This Quarter</option>
               <option value="this-year">This Year</option>
+              <option value="custom">Custom Range</option>
             </select>
           </div>
+          {dateRange === 'custom' && (
+            <>
+              <div>
+                <label style={{ marginRight: '0.5rem', fontWeight: 'bold' }}>FROM:</label>
+                <input 
+                  type="date"
+                  className="form-control" 
+                  style={{ width: '150px', display: 'inline-block' }}
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <label style={{ marginRight: '0.5rem', fontWeight: 'bold' }}>TO:</label>
+                <input 
+                  type="date"
+                  className="form-control" 
+                  style={{ width: '150px', display: 'inline-block' }}
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -207,7 +264,7 @@ const ProjectReportsAnalytics = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {projectPerformance.map((project, index) => (
+                  {filteredProjectPerformance.map((project, index) => (
                     <tr key={index}>
                       <td>{project.project}</td>
                       <td>
@@ -297,7 +354,7 @@ const ProjectReportsAnalytics = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {resourceUtilization.map((resource, index) => (
+                  {filteredResourceUtilization.map((resource, index) => (
                     <tr key={index}>
                       <td>{resource.resource}</td>
                       <td>
@@ -359,7 +416,7 @@ const ProjectReportsAnalytics = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {milestoneTracking.map((milestone, index) => (
+                  {filteredMilestoneTracking.map((milestone, index) => (
                     <tr key={index}>
                       <td>{milestone.milestone}</td>
                       <td>{milestone.project}</td>
