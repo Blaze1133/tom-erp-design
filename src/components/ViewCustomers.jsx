@@ -196,7 +196,7 @@ const ViewCustomers = ({ onNewClick, onViewClick, onEditClick }) => {
         </div>
       </div>
 
-      {/* Customer Financial Dashboard */}
+      {/* Customer Financial Dashboard - Same as Project Masters */}
       <div style={{ padding: '1.5rem', background: '#f8f9fa' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
           {/* Outstanding Payments */}
@@ -210,10 +210,10 @@ const ViewCustomers = ({ onNewClick, onViewClick, onEditClick }) => {
             alignItems: 'center'
           }}>
             <div>
-              <div style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>OUTSTANDING PAYMENTS</div>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem' }}>SGD {totalOutstanding.toLocaleString()}</div>
-              <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: '600' }}>
-                <i className="fas fa-exclamation-circle" style={{ fontSize: '10px' }}></i> {pendingPayments} Pending
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>OUTSTANDING PAYMENTS</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>SGD {totalOutstanding.toLocaleString()}</div>
+              <div style={{ fontSize: '11px', color: '#ef4444', fontWeight: '600' }}>
+                <i className="fas fa-exclamation-circle" style={{ fontSize: '9px' }}></i> {pendingPayments} Pending
               </div>
             </div>
             <div style={{ 
@@ -241,9 +241,9 @@ const ViewCustomers = ({ onNewClick, onViewClick, onEditClick }) => {
             alignItems: 'center'
           }}>
             <div>
-              <div style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>TOTAL INVOICES</div>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem' }}>{totalInvoices}</div>
-              <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: '600' }}>
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>TOTAL INVOICES</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>{totalInvoices}</div>
+              <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600' }}>
                 All Time
               </div>
             </div>
@@ -272,10 +272,10 @@ const ViewCustomers = ({ onNewClick, onViewClick, onEditClick }) => {
             alignItems: 'center'
           }}>
             <div>
-              <div style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>PAID THIS MONTH</div>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem' }}>SGD {paidThisMonth.toLocaleString()}</div>
-              <div style={{ fontSize: '12px', color: '#10b981', fontWeight: '600' }}>
-                <i className="fas fa-check-circle" style={{ fontSize: '10px' }}></i> December 2024
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>PAID THIS MONTH</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>SGD {paidThisMonth.toLocaleString()}</div>
+              <div style={{ fontSize: '11px', color: '#10b981', fontWeight: '600' }}>
+                <i className="fas fa-check-circle" style={{ fontSize: '9px' }}></i> December 2024
               </div>
             </div>
             <div style={{ 
@@ -303,10 +303,10 @@ const ViewCustomers = ({ onNewClick, onViewClick, onEditClick }) => {
             alignItems: 'center'
           }}>
             <div>
-              <div style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>ACTIVE CUSTOMERS</div>
-              <div style={{ fontSize: '32px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem' }}>{filteredCustomers.length}</div>
-              <div style={{ fontSize: '12px', color: '#10b981', fontWeight: '600' }}>
-                <i className="fas fa-arrow-up" style={{ fontSize: '10px' }}></i> 1982 Total
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>ACTIVE CUSTOMERS</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>{filteredCustomers.length}</div>
+              <div style={{ fontSize: '11px', color: '#10b981', fontWeight: '600' }}>
+                <i className="fas fa-arrow-up" style={{ fontSize: '9px' }}></i> 1982 Total
               </div>
             </div>
             <div style={{ 

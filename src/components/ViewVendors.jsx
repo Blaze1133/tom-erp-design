@@ -8,6 +8,12 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
   const [showInactives, setShowInactives] = useState(false);
   const [quickSort, setQuickSort] = useState('5ms');
 
+  // Dashboard metrics
+  const totalPayables = 87325.50;
+  const totalPOs = 156;
+  const totalBills = 89;
+  const paidThisMonth = 45680.25;
+
   const [vendors] = useState([
     {
       id: 1,
@@ -151,6 +157,135 @@ const ViewVendors = ({ onNewClick, onViewClick, onEditClick }) => {
           <button className="btn-view-option">List</button>
           <button className="btn-view-option">Search</button>
           <button className="btn-view-option">Audit Trail</button>
+        </div>
+      </div>
+
+      {/* Vendor Financial Dashboard */}
+      <div style={{ padding: '1.5rem', background: '#f8f9fa' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+          {/* Outstanding Payables */}
+          <div style={{ 
+            background: '#fff',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div>
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>OUTSTANDING PAYABLES</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>SGD {totalPayables.toLocaleString()}</div>
+              <div style={{ fontSize: '11px', color: '#ef4444', fontWeight: '600' }}>
+                <i className="fas fa-exclamation-circle" style={{ fontSize: '9px' }}></i> Due Soon
+              </div>
+            </div>
+            <div style={{ 
+              width: '48px', 
+              height: '48px', 
+              borderRadius: '50%',
+              background: '#ef4444',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <i className="fas fa-file-invoice-dollar" style={{ fontSize: '20px', color: '#fff' }}></i>
+            </div>
+          </div>
+
+          {/* Total Purchase Orders */}
+          <div style={{ 
+            background: '#fff',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div>
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>TOTAL PURCHASE ORDERS</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>{totalPOs}</div>
+              <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600' }}>
+                All Time
+              </div>
+            </div>
+            <div style={{ 
+              width: '48px', 
+              height: '48px', 
+              borderRadius: '50%',
+              background: '#3b82f6',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <i className="fas fa-shopping-cart" style={{ fontSize: '20px', color: '#fff' }}></i>
+            </div>
+          </div>
+
+          {/* Total Bills */}
+          <div style={{ 
+            background: '#fff',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div>
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>TOTAL BILLS</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>{totalBills}</div>
+              <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '600' }}>
+                Received
+              </div>
+            </div>
+            <div style={{ 
+              width: '48px', 
+              height: '48px', 
+              borderRadius: '50%',
+              background: '#f59e0b',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <i className="fas fa-receipt" style={{ fontSize: '20px', color: '#fff' }}></i>
+            </div>
+          </div>
+
+          {/* Paid This Month */}
+          <div style={{ 
+            background: '#fff',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div>
+              <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600', textTransform: 'uppercase', marginBottom: '0.5rem' }}>PAID THIS MONTH</div>
+              <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '0.25rem', lineHeight: '1.1' }}>SGD {paidThisMonth.toLocaleString()}</div>
+              <div style={{ fontSize: '11px', color: '#10b981', fontWeight: '600' }}>
+                <i className="fas fa-check-circle" style={{ fontSize: '9px' }}></i> December 2024
+              </div>
+            </div>
+            <div style={{ 
+              width: '48px', 
+              height: '48px', 
+              borderRadius: '50%',
+              background: '#10b981',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <i className="fas fa-check-circle" style={{ fontSize: '20px', color: '#fff' }}></i>
+            </div>
+          </div>
         </div>
       </div>
 
