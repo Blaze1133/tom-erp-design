@@ -18,17 +18,17 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
   ]);
   const [selectedSubsidiary, setSelectedSubsidiary] = useState('');
   const [vendorContacts, setVendorContacts] = useState([]);
-  const [vendorCurrencies, setVendorCurrencies] = useState([
-    {
-      id: 1,
-      currency: 'SGD',
-      balance: '0.00',
-      prepaymentBalance: '0.00',
-      unbilledOrders: '0.00'
-    }
-  ]);
-  const [newCurrency, setNewCurrency] = useState('');
-  const [currenciesActiveTab, setCurrenciesActiveTab] = useState('currencies');
+  const [financialSubTab, setFinancialSubTab] = useState('currencies');
+  const [vendorCurrencies, setVendorCurrencies] = useState(
+    isEdit ? [
+      {
+        id: 1,
+        currency: 'SGD',
+        format: 'Format Example: $1,234.56\nSymbol: $\nSymbol Placement: Before Number'
+      }
+    ] : []
+  );
+  const [selectedCurrency, setSelectedCurrency] = useState('');
   const [communicationActiveTab, setCommunicationActiveTab] = useState('messages');
   const [newContact, setNewContact] = useState({
     contact: '',
@@ -87,15 +87,23 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
 
   // Sub-table data
   const [contacts, setContacts] = useState([]);
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      defaultShipping: true,
-      defaultBilling: true,
-      label: 'Serangoon Road',
-      address: 'Serangoon Road\nSingapore\nSingapore'
-    }
-  ]);
+  const [addresses, setAddresses] = useState(
+    isEdit ? [
+      {
+        id: 1,
+        defaultShipping: true,
+        defaultBilling: true,
+        label: 'Serangoon Road',
+        address: 'Serangoon Road\nSingapore\nSingapore'
+      }
+    ] : []
+  );
+  const [newAddress, setNewAddress] = useState({
+    defaultShipping: false,
+    defaultBilling: false,
+    label: '',
+    address: ''
+  });
 
   const subsidiaries = [
     'Tech Onshore MEP Prefabricators Pte Ltd.',
@@ -198,6 +206,58 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
     if (window.confirm('Are you sure you want to remove this subsidiary?')) {
       setVendorSubsidiaries(vendorSubsidiaries.filter(s => s.id !== id));
       showToast('Subsidiary removed successfully', 'success');
+    }
+  };
+
+  // Address handlers
+  const handleAddAddress = () => {
+    if (!newAddress.label || !newAddress.address) {
+      showToast('Please fill in Label and Address fields', 'error');
+      return;
+    }
+    setAddresses([...addresses, { ...newAddress, id: Date.now() }]);
+    setNewAddress({ defaultShipping: false, defaultBilling: false, label: '', address: '' });
+    showToast('Address added successfully!', 'success');
+  };
+
+  const handleRemoveAddress = (id) => {
+    if (window.confirm('Are you sure you want to remove this address?')) {
+      setAddresses(addresses.filter(addr => addr.id !== id));
+      showToast('Address removed successfully!', 'success');
+    }
+  };
+
+  // Currency handlers
+  const handleAddCurrency = () => {
+    if (!selectedCurrency) {
+      showToast('Please select a currency', 'error');
+      return;
+    }
+    if (vendorCurrencies.some(c => c.currency === selectedCurrency)) {
+      showToast('Currency already added', 'error');
+      return;
+    }
+    const currencySymbols = {
+      'MYR': 'RM',
+      'USD': '$',
+      'EUR': '€',
+      'SGD': '$'
+    };
+    const symbol = currencySymbols[selectedCurrency] || selectedCurrency;
+    const newCurrency = {
+      id: Date.now(),
+      currency: selectedCurrency,
+      format: `Format Example: ${symbol}1,234.56\nSymbol: ${symbol}\nSymbol Placement: Before Number`
+    };
+    setVendorCurrencies([...vendorCurrencies, newCurrency]);
+    setSelectedCurrency('');
+    showToast('Currency added successfully', 'success');
+  };
+
+  const handleRemoveCurrency = (id) => {
+    if (window.confirm('Are you sure you want to remove this currency?')) {
+      setVendorCurrencies(vendorCurrencies.filter(c => c.id !== id));
+      showToast('Currency removed successfully', 'success');
     }
   };
 
@@ -1091,628 +1151,374 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
             )}
 
             {activeTab === 'address' && (
-              <div style={{ padding: '1.5rem' }}>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <button className="btn-toolbar-primary" style={{ padding: '0.5rem 1.2rem' }}>
-                    Add Address
-                  </button>
-                </div>
+              <div style={{ padding: '1rem' }}>
                 <table className="detail-items-table">
                   <thead>
                     <tr>
-                      <th style={{ width: '120px', textAlign: 'center' }}>DEFAULT SHIPPING</th>
-                      <th style={{ width: '120px', textAlign: 'center' }}>DEFAULT BILLING</th>
-                      <th style={{ width: '200px' }}>LABEL</th>
-                      <th>ADDRESS</th>
-                      <th style={{ width: '100px', textAlign: 'center' }}>EDIT</th>
+                      <th style={{ width: '12%' }}>DEFAULT SHIPPING</th>
+                      <th style={{ width: '12%' }}>DEFAULT BILLING</th>
+                      <th style={{ width: '20%' }}>LABEL</th>
+                      <th style={{ width: '46%' }}>ADDRESS</th>
+                      <th style={{ width: '10%' }}>ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
                     {addresses.map((addr) => (
                       <tr key={addr.id}>
+                        <td style={{ textAlign: 'center' }}>{addr.defaultShipping ? 'Yes' : ''}</td>
+                        <td style={{ textAlign: 'center' }}>{addr.defaultBilling ? 'Yes' : ''}</td>
+                        <td>{addr.label}</td>
+                        <td style={{ whiteSpace: 'pre-line' }}>{addr.address}</td>
                         <td style={{ textAlign: 'center' }}>
-                          <input type="checkbox" checked={addr.defaultShipping} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input type="checkbox" checked={addr.defaultBilling} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" value={addr.label} readOnly style={{ background: '#fff' }} />
-                        </td>
-                        <td>
-                          <textarea className="form-control" rows="2" value={addr.address} readOnly style={{ background: '#fff', resize: 'vertical' }} />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <button className="view-link" style={{ color: '#007bff', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}>
-                            Edit
+                          <button 
+                            className="btn btn-sm btn-secondary" 
+                            onClick={() => handleRemoveAddress(addr.id)}
+                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                          >
+                            <i className="fas fa-trash"></i>
                           </button>
                         </td>
                       </tr>
                     ))}
+                    {/* Editable Row for Adding New Address */}
+                    <tr style={{ background: '#f8f9fa' }}>
+                      <td style={{ textAlign: 'center', padding: '0.5rem' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={newAddress.defaultShipping} 
+                          onChange={(e) => setNewAddress({...newAddress, defaultShipping: e.target.checked})} 
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center', padding: '0.5rem' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={newAddress.defaultBilling} 
+                          onChange={(e) => setNewAddress({...newAddress, defaultBilling: e.target.checked})} 
+                        />
+                      </td>
+                      <td style={{ padding: '0.5rem' }}>
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          value={newAddress.label} 
+                          onChange={(e) => setNewAddress({...newAddress, label: e.target.value})} 
+                          placeholder="e.g., Office, Warehouse"
+                          style={{ fontSize: '0.85rem', padding: '0.4rem' }}
+                        />
+                      </td>
+                      <td style={{ padding: '0.5rem' }}>
+                        <textarea 
+                          className="form-control" 
+                          value={newAddress.address} 
+                          onChange={(e) => setNewAddress({...newAddress, address: e.target.value})} 
+                          rows="2"
+                          placeholder="Enter full address"
+                          style={{ fontSize: '0.85rem', padding: '0.4rem' }}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center', padding: '0.5rem' }}>
+                        <button 
+                          className="btn-toolbar-primary" 
+                          onClick={handleAddAddress}
+                          style={{ fontSize: '0.85rem', padding: '0.4rem 1rem' }}
+                        >
+                          Add
+                        </button>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             )}
 
             {activeTab === 'financial' && (
-              <div style={{ padding: '1.5rem' }}>
-                <div className="detail-section">
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Account Information</h3>
-                  </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
-                      <div className="detail-field">
-                        <label>LEGAL NAME</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={formData.account}
-                          onChange={(e) => handleInputChange('account', e.target.value)}
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>DEFAULT VENDOR PAYMENT ACCOUNT</label>
-                        <select
-                          className="form-control"
-                          value={formData.defaultVendorPaymentAccount}
-                          onChange={(e) => handleInputChange('defaultVendorPaymentAccount', e.target.value)}
-                        >
-                          <option value="">Select...</option>
-                          <option value="Cash">Cash</option>
-                          <option value="Bank Account">Bank Account</option>
-                        </select>
-                      </div>
-                      <div className="detail-field">
-                        <label>ACCOUNT</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={formData.account}
-                          onChange={(e) => handleInputChange('account', e.target.value)}
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>PRIMARY CURRENCY <span style={{ color: 'red' }}>*</span></label>
-                        <select
-                          className="form-control"
-                          value={formData.primaryCurrency}
-                          onChange={(e) => handleInputChange('primaryCurrency', e.target.value)}
-                        >
-                          {currencies.map(currency => (
-                            <option key={currency} value={currency.split(' - ')[0]}>{currency}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="detail-field">
-                        <label>DEFAULT EXPENSE ACCOUNT</label>
-                        <select
-                          className="form-control"
-                          value={formData.defaultExpenseAccount}
-                          onChange={(e) => handleInputChange('defaultExpenseAccount', e.target.value)}
-                        >
-                          <option value="">Select...</option>
-                          <option value="50400 Cost Of Sales - Tools">50400 Cost Of Sales - Tools</option>
-                          <option value="50100 Cost Of Sales">50100 Cost Of Sales</option>
-                        </select>
-                      </div>
-                      <div className="detail-field">
-                        <label>TERMS</label>
-                        <select
-                          className="form-control"
-                          value={formData.terms}
-                          onChange={(e) => handleInputChange('terms', e.target.value)}
-                        >
-                          <option value="">Select...</option>
-                          <option value="Net 30">Net 30</option>
-                          <option value="Net 15">Net 15</option>
-                          <option value="COD">COD</option>
-                          <option value="Due on Receipt">Due on Receipt</option>
-                        </select>
-                      </div>
-                      <div className="detail-field">
-                        <label>DEFAULT PAYABLES ACCOUNT</label>
-                        <select
-                          className="form-control"
-                          value={formData.defaultPayablesAccount}
-                          onChange={(e) => handleInputChange('defaultPayablesAccount', e.target.value)}
-                        >
-                          <option value="">Select...</option>
-                          <option value="Accounts Payable">Accounts Payable</option>
-                        </select>
-                      </div>
-                      <div className="detail-field">
-                        <label>CREDIT LIMIT</label>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={formData.creditLimit}
-                            onChange={(e) => handleInputChange('creditLimit', e.target.value)}
-                            step="0.01"
-                            placeholder="0.00"
-                            style={{ flex: 1 }}
-                          />
-                          <span style={{ color: '#666' }}>(SGD)</span>
-                        </div>
-                      </div>
-                      <div className="detail-field">
-                        <label>INCOTERM</label>
-                        <select
-                          className="form-control"
-                          value={formData.incoterm}
-                          onChange={(e) => handleInputChange('incoterm', e.target.value)}
-                        >
-                          <option value="">Select...</option>
-                          <option value="FOB">FOB</option>
-                          <option value="CIF">CIF</option>
-                          <option value="EXW">EXW</option>
-                        </select>
-                      </div>
-                    </div>
+              <div style={{ padding: '1rem' }}>
+                {/* Financial Sub-tabs */}
+                <div style={{ borderBottom: '2px solid #e0e0e0', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0' }}>
+                    <button 
+                      className={`tab-btn ${financialSubTab === 'currencies' ? 'active' : ''}`}
+                      onClick={() => setFinancialSubTab('currencies')}
+                      style={{ 
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: financialSubTab === 'currencies' ? '#fff' : 'transparent',
+                        borderBottom: financialSubTab === 'currencies' ? '3px solid #dc2626' : '3px solid transparent',
+                        cursor: 'pointer',
+                        fontWeight: financialSubTab === 'currencies' ? '600' : '400',
+                        color: financialSubTab === 'currencies' ? '#dc2626' : '#666'
+                      }}
+                    >
+                      Currencies
+                    </button>
+                    <button 
+                      className={`tab-btn ${financialSubTab === 'accountInfo' ? 'active' : ''}`}
+                      onClick={() => setFinancialSubTab('accountInfo')}
+                      style={{ 
+                        padding: '0.75rem 1.5rem',
+                        border: 'none',
+                        background: financialSubTab === 'accountInfo' ? '#fff' : 'transparent',
+                        borderBottom: financialSubTab === 'accountInfo' ? '3px solid #dc2626' : '3px solid transparent',
+                        cursor: 'pointer',
+                        fontWeight: financialSubTab === 'accountInfo' ? '600' : '400',
+                        color: financialSubTab === 'accountInfo' ? '#dc2626' : '#666'
+                      }}
+                    >
+                      Account Information
+                    </button>
                   </div>
                 </div>
 
-
-                {/* Tax Information */}
-                <div className="detail-section" style={{ marginTop: '1.5rem' }}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Tax Information</h3>
-                  </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
-                      <div className="detail-field">
-                        <label>TAX REG. NUMBER</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={formData.taxRegNumber}
-                          onChange={(e) => handleInputChange('taxRegNumber', e.target.value)}
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>TAX ROUNDING METHOD</label>
-                        <select
-                          className="form-control"
-                          value={formData.taxRoundingMethod}
-                          onChange={(e) => handleInputChange('taxRoundingMethod', e.target.value)}
+                {/* Currencies Tab */}
+                {financialSubTab === 'currencies' && (
+                  <div>
+                    <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#f8f9fa', borderRadius: '4px' }}>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '13px', color: '#666' }}>CURRENCY <span style={{ color: 'red' }}>*</span></label>
+                        <select 
+                          className="form-control" 
+                          style={{ maxWidth: '400px' }}
+                          value={selectedCurrency}
+                          onChange={(e) => setSelectedCurrency(e.target.value)}
                         >
-                          {taxRoundingMethods.map(method => (
-                            <option key={method} value={method}>{method}</option>
-                          ))}
+                          <option value=""></option>
+                          <option>MYR</option>
+                          <option>USD</option>
+                          <option>EUR</option>
+                          <option>SGD</option>
                         </select>
                       </div>
-                      <div className="detail-field">
-                        <label>TAX ROUNDING PRECISION</label>
-                        <select
-                          className="form-control"
-                          value={formData.taxRoundingPrecision}
-                          onChange={(e) => handleInputChange('taxRoundingPrecision', e.target.value)}
-                        >
-                          {taxRoundingPrecisions.map(precision => (
-                            <option key={precision} value={precision}>{precision}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="detail-field">
-                        <label>1099 ELIGIBLE</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={formData.taxEligible}
-                          onChange={(e) => handleInputChange('taxEligible', e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Balance Information */}
-                <div className="detail-section" style={{ marginTop: '1.5rem' }}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Balance Information</h3>
-                  </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
-                      <div className="detail-field">
-                        <label>BALANCE</label>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value="0.00"
-                            readOnly
-                            style={{ background: '#f5f5f5', flex: 1 }}
-                          />
-                          <span style={{ color: '#666' }}>(SGD)</span>
-                        </div>
-                      </div>
-                      <div className="detail-field">
-                        <label>UNBILLED ORDERS</label>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value="0.00"
-                            readOnly
-                            style={{ background: '#f5f5f5', flex: 1 }}
-                          />
-                          <span style={{ color: '#666' }}>(SGD)</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Project Information */}
-                <div className="detail-section" style={{ marginTop: '1.5rem' }}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Project Information</h3>
-                  </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
-                      <div className="detail-field">
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>PROJECT RESOURCE</label>
-                        <input
-                          type="checkbox"
-                          style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Vendor Bill Matching */}
-                <div className="detail-section" style={{ marginTop: '1.5rem' }}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Vendor Bill Matching</h3>
-                  </div>
-                  <div className="section-body">
-                    <div className="detail-grid">
-                      <div className="detail-field">
-                        <label>VENDOR BILL - PURCHASE ORDER QUANTITY TOLERANCE</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="0.00"
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>VENDOR BILL - ITEM RECEIPT QUANTITY TOLERANCE</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="0.00"
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>VENDOR BILL - PURCHASE ORDER AMOUNT TOLERANCE</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="0.00"
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>VENDOR BILL - ITEM RECEIPT AMOUNT TOLERANCE</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="0.00"
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>VENDOR BILL - PURCHASE ORDER QUANTITY DIFFERENCE</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="0.00"
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>VENDOR BILL - ITEM RECEIPT QUANTITY DIFFERENCE</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="0.00"
-                        />
-                      </div>
-                      <div className="detail-field">
-                        <label>PREPAYMENT BALANCE</label>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value="0.00"
-                            readOnly
-                            style={{ background: '#f5f5f5', flex: 1 }}
-                          />
-                          <span style={{ color: '#666' }}>(SGD)</span>
-                        </div>
-                      </div>
-                      <div className="detail-field">
-                        <label>BILLING CLASS</label>
-                        <select className="form-control">
-                          <option value="">Select...</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Currencies Sub-table with Tabs */}
-                <div className="detail-section" style={{ marginTop: '1.5rem' }}>
-                  <div className="section-header">
-                    <i className="fas fa-chevron-down"></i>
-                    <h3>Currencies</h3>
-                  </div>
-                  <div className="section-body">
-                    {/* Tabs */}
-                    <div className="detail-tabs" style={{ marginBottom: '1rem' }}>
-                      <div className="tabs-header">
-                        <button 
-                          className={`tab-btn ${currenciesActiveTab === 'currencies' ? 'active' : ''}`}
-                          onClick={() => setCurrenciesActiveTab('currencies')}
-                        >
-                          Currencies ●
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button className="btn-toolbar-primary" style={{ padding: '0.5rem 1.5rem' }} onClick={handleAddCurrency}>
+                          <i className="fas fa-check"></i> Add
                         </button>
-                        <button 
-                          className={`tab-btn ${currenciesActiveTab === 'pricing' ? 'active' : ''}`}
-                          onClick={() => setCurrenciesActiveTab('pricing')}
-                        >
-                          Pricing Schedules
-                        </button>
-                        <button 
-                          className={`tab-btn ${currenciesActiveTab === 'transactions' ? 'active' : ''}`}
-                          onClick={() => setCurrenciesActiveTab('transactions')}
-                        >
-                          Transactions ●
-                        </button>
-                        <button 
-                          className={`tab-btn ${currenciesActiveTab === 'items' ? 'active' : ''}`}
-                          onClick={() => setCurrenciesActiveTab('items')}
-                        >
-                          Items
+                        <button className="btn-toolbar" style={{ padding: '0.5rem 1.5rem' }} onClick={() => setSelectedCurrency('')}>
+                          <i className="fas fa-times"></i> Cancel
                         </button>
                       </div>
                     </div>
 
-                    {/* Currencies Tab */}
-                    {currenciesActiveTab === 'currencies' && (
-                      <div>
-                        <table className="detail-items-table">
-                          <thead>
-                            <tr>
-                              <th style={{ width: '200px' }}>CURRENCY <span style={{ color: 'red' }}>*</span></th>
-                              <th style={{ width: '150px' }}>BALANCE</th>
-                              <th style={{ width: '180px' }}>PREPAYMENT BALANCE</th>
-                              <th style={{ width: '150px' }}>UNBILLED ORDERS</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {vendorCurrencies.map((curr) => (
-                              <tr key={curr.id}>
-                                <td>
-                                  <span style={{ 
-                                    background: '#5a6c7d', 
-                                    color: 'white', 
-                                    padding: '0.25rem 0.75rem', 
-                                    borderRadius: '3px',
-                                    fontSize: '12px',
-                                    fontWeight: '500'
-                                  }}>
-                                    {curr.currency}
-                                  </span>
-                                </td>
-                                <td>{curr.balance}</td>
-                                <td>{curr.prepaymentBalance}</td>
-                                <td>{curr.unbilledOrders}</td>
-                              </tr>
-                            ))}
-                            <tr>
-                              <td>
-                                <select 
-                                  className="form-control"
-                                  value={newCurrency}
-                                  onChange={(e) => setNewCurrency(e.target.value)}
+                    <table className="detail-items-table">
+                      <thead>
+                        <tr>
+                          <th style={{ width: '50px' }}>REMOVE</th>
+                          <th style={{ width: '150px' }}>CURRENCY</th>
+                          <th>FORMAT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {vendorCurrencies.length > 0 ? (
+                          vendorCurrencies.map((curr) => (
+                            <tr key={curr.id}>
+                              <td style={{ textAlign: 'center' }}>
+                                <button 
+                                  onClick={() => handleRemoveCurrency(curr.id)}
+                                  style={{ 
+                                    background: 'transparent', 
+                                    border: 'none', 
+                                    color: '#dc3545', 
+                                    cursor: 'pointer',
+                                    padding: '0.25rem 0.5rem'
+                                  }}
+                                  title="Remove"
                                 >
-                                  <option value="">Select...</option>
-                                  <option value="SGD">SGD</option>
-                                  <option value="USD">USD</option>
-                                  <option value="EUR">EUR</option>
-                                  <option value="INR">INR</option>
-                                  <option value="MYR">MYR</option>
-                                </select>
+                                  <i className="fas fa-trash"></i>
+                                </button>
                               </td>
+                              <td>{curr.currency}</td>
                               <td>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  value="0.00" 
-                                  readOnly
-                                  style={{ background: '#f5f5f5' }}
-                                />
-                              </td>
-                              <td>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  value="0.00" 
-                                  readOnly
-                                  style={{ background: '#f5f5f5' }}
-                                />
-                              </td>
-                              <td>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  value="0.00" 
-                                  readOnly
-                                  style={{ background: '#f5f5f5' }}
-                                />
+                                <div style={{ fontSize: '12px', color: '#666', whiteSpace: 'pre-line' }}>
+                                  {curr.format}
+                                </div>
                               </td>
                             </tr>
-                          </tbody>
-                        </table>
-                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                          <button 
-                            className="btn-toolbar-primary" 
-                            onClick={() => {
-                              if (!newCurrency) {
-                                showToast('Please select a currency', 'error');
-                                return;
-                              }
-                              if (vendorCurrencies.some(c => c.currency === newCurrency)) {
-                                showToast('Currency already added', 'error');
-                                return;
-                              }
-                              const currency = {
-                                id: Date.now(),
-                                currency: newCurrency,
-                                balance: '0.00',
-                                prepaymentBalance: '0.00',
-                                unbilledOrders: '0.00'
-                              };
-                              setVendorCurrencies([...vendorCurrencies, currency]);
-                              setNewCurrency('');
-                              showToast('Currency added successfully', 'success');
-                            }}
-                            style={{ padding: '0.5rem 1.5rem' }}
-                          >
-                            <i className="fas fa-check"></i> Add
-                          </button>
-                          <button 
-                            className="btn-toolbar" 
-                            onClick={() => setNewCurrency('')}
-                            style={{ padding: '0.5rem 1.5rem' }}
-                          >
-                            <i className="fas fa-times"></i> Cancel
-                          </button>
-                          <button 
-                            className="btn-toolbar" 
-                            style={{ padding: '0.5rem 1.5rem' }}
-                          >
-                            <i className="fas fa-trash"></i> Remove
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="3" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                              No currencies added yet.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
 
-                    {/* Pricing Schedules Tab */}
-                    {currenciesActiveTab === 'pricing' && (
-                      <div>
-                        <div style={{ marginBottom: '1rem' }}>
-                          <strong>New Pricing Schedule</strong>
-                        </div>
-                        <table className="detail-items-table">
-                          <thead>
-                            <tr>
-                              <th>SCHEDULE</th>
-                              <th style={{ textAlign: 'right' }}>▲ BASE DISCOUNT</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td colSpan="2" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                                No records to show.
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                {/* Account Information Tab */}
+                {financialSubTab === 'accountInfo' && (
+                  <div>
+                    <div className="detail-section">
+                      <div className="section-header">
+                        <i className="fas fa-chevron-down"></i>
+                        <h3>Account Information</h3>
                       </div>
-                    )}
-
-                    {/* Transactions Tab */}
-                    {currenciesActiveTab === 'transactions' && (
-                      <div>
-                        <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
-                          <div>
-                            <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>VIEW</label>
-                            <select className="form-control" style={{ width: '200px' }}>
-                              <option>Search Project</option>
+                      <div className="section-body">
+                        <div className="detail-grid">
+                          <div className="detail-field">
+                            <label>LEGAL NAME</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={formData.account}
+                              onChange={(e) => handleInputChange('account', e.target.value)}
+                            />
+                          </div>
+                          <div className="detail-field">
+                            <label>DEFAULT VENDOR PAYMENT ACCOUNT</label>
+                            <select
+                              className="form-control"
+                              value={formData.defaultVendorPaymentAccount}
+                              onChange={(e) => handleInputChange('defaultVendorPaymentAccount', e.target.value)}
+                            >
+                              <option value="">Select...</option>
+                              <option value="Cash">Cash</option>
+                              <option value="Bank Account">Bank Account</option>
                             </select>
                           </div>
-                          <div>
-                            <label style={{ fontSize: '11px', color: '#666', marginBottom: '0.25rem', display: 'block' }}>CUSTOMER SUB OF <span style={{ color: 'red' }}>*</span></label>
-                            <input className="form-control" placeholder="<Type then tab>" style={{ width: '200px' }} />
+                          <div className="detail-field">
+                            <label>ACCOUNT</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={formData.account}
+                              onChange={(e) => handleInputChange('account', e.target.value)}
+                            />
+                          </div>
+                          <div className="detail-field">
+                            <label>PRIMARY CURRENCY <span style={{ color: 'red' }}>*</span></label>
+                            <select
+                              className="form-control"
+                              value={formData.primaryCurrency}
+                              onChange={(e) => handleInputChange('primaryCurrency', e.target.value)}
+                            >
+                              {currencies.map(currency => (
+                                <option key={currency} value={currency.split(' - ')[0]}>{currency}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="detail-field">
+                            <label>DEFAULT EXPENSE ACCOUNT</label>
+                            <select
+                              className="form-control"
+                              value={formData.defaultExpenseAccount}
+                              onChange={(e) => handleInputChange('defaultExpenseAccount', e.target.value)}
+                            >
+                              <option value="">Select...</option>
+                              <option value="50400 Cost Of Sales - Tools">50400 Cost Of Sales - Tools</option>
+                              <option value="50100 Cost Of Sales">50100 Cost Of Sales</option>
+                            </select>
+                          </div>
+                          <div className="detail-field">
+                            <label>TERMS</label>
+                            <select
+                              className="form-control"
+                              value={formData.terms}
+                              onChange={(e) => handleInputChange('terms', e.target.value)}
+                            >
+                              <option value="">Select...</option>
+                              <option value="Net 30">Net 30</option>
+                              <option value="Net 15">Net 15</option>
+                              <option value="COD">COD</option>
+                              <option value="Due on Receipt">Due on Receipt</option>
+                            </select>
+                          </div>
+                          <div className="detail-field">
+                            <label>DEFAULT PAYABLES ACCOUNT</label>
+                            <select
+                              className="form-control"
+                              value={formData.defaultPayablesAccount}
+                              onChange={(e) => handleInputChange('defaultPayablesAccount', e.target.value)}
+                            >
+                              <option value="">Select...</option>
+                              <option value="Accounts Payable">Accounts Payable</option>
+                            </select>
+                          </div>
+                          <div className="detail-field">
+                            <label>CREDIT LIMIT</label>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <input
+                                type="number"
+                                className="form-control"
+                                value={formData.creditLimit}
+                                onChange={(e) => handleInputChange('creditLimit', e.target.value)}
+                                step="0.01"
+                                placeholder="0.00"
+                                style={{ flex: 1 }}
+                              />
+                              <span style={{ color: '#666' }}>(SGD)</span>
+                            </div>
+                          </div>
+                          <div className="detail-field">
+                            <label>INCOTERM</label>
+                            <select
+                              className="form-control"
+                              value={formData.incoterm}
+                              onChange={(e) => handleInputChange('incoterm', e.target.value)}
+                            >
+                              <option value="">Select...</option>
+                              <option value="FOB">FOB</option>
+                              <option value="CIF">CIF</option>
+                              <option value="EXW">EXW</option>
+                            </select>
                           </div>
                         </div>
-                        <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-                          <button className="btn-toolbar">New Purchase Order</button>
-                          <button className="btn-toolbar">New Bill</button>
-                          <button className="btn-toolbar">Customize View</button>
-                        </div>
-                        <table className="detail-items-table">
-                          <thead>
-                            <tr>
-                              <th>EDIT</th>
-                              <th>DATE <span style={{ color: 'red' }}>*</span></th>
-                              <th>TYPE</th>
-                              <th>DOCUMENT NUMBER</th>
-                              <th>VENDOR</th>
-                              <th>ACCOUNT</th>
-                              <th>MEMO</th>
-                              <th>ITEM</th>
-                              <th>ITEM QTY</th>
-                              <th>ITEM UNIT PRICE</th>
-                              <th>AMOUNT</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td colSpan="11" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                                No records to show.
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
-                    )}
-
-                    {/* Items Tab */}
-                    {currenciesActiveTab === 'items' && (
-                      <div>
-                        <div style={{ marginBottom: '1rem' }}>
-                          <select className="form-control" style={{ width: '200px' }}>
-                            <option>Vendor Items</option>
-                          </select>
-                        </div>
-                        <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-                          <button className="btn-toolbar">Import Price List...</button>
-                          <button className="btn-toolbar">Customize View</button>
-                        </div>
-                        <table className="detail-items-table">
-                          <thead>
-                            <tr>
-                              <th>EDIT</th>
-                              <th>NAME</th>
-                              <th>PURCHASE DESCRIPTION</th>
-                              <th>VENDOR CODE</th>
-                              <th>VENDOR PRICE</th>
-                              <th>VENDOR SCHEDULE</th>
-                              <th>VENDOR PRICE CURRENCY</th>
-                              <th>BASE PRICE</th>
-                              <th>BOX</th>
-                              <th>ROW</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td colSpan="10" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                                No records to show.
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    </div>
+                    <div className="detail-section" style={{ marginTop: '1.5rem' }}>
+                      <div className="section-header">
+                        <i className="fas fa-chevron-down"></i>
+                        <h3>Tax Information</h3>
                       </div>
-                    )}
+                      <div className="section-body">
+                        <div className="detail-grid">
+                          <div className="detail-field">
+                            <label>TAX REG. NUMBER</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={formData.taxRegNumber}
+                              onChange={(e) => handleInputChange('taxRegNumber', e.target.value)}
+                            />
+                          </div>
+                          <div className="detail-field">
+                            <label>TAX ROUNDING METHOD</label>
+                            <select
+                              className="form-control"
+                              value={formData.taxRoundingMethod}
+                              onChange={(e) => handleInputChange('taxRoundingMethod', e.target.value)}
+                            >
+                              {taxRoundingMethods.map(method => (
+                                <option key={method} value={method}>{method}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="detail-field">
+                            <label>TAX ROUNDING PRECISION</label>
+                            <select
+                              className="form-control"
+                              value={formData.taxRoundingPrecision}
+                              onChange={(e) => handleInputChange('taxRoundingPrecision', e.target.value)}
+                            >
+                              {taxRoundingPrecisions.map(precision => (
+                                <option key={precision} value={precision}>{precision}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="detail-field">
+                            <label>1099 ELIGIBLE</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={formData.taxEligible}
+                              onChange={(e) => handleInputChange('taxEligible', e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
 

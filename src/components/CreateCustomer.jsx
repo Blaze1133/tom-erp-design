@@ -57,16 +57,25 @@ const CreateCustomer = ({ isEdit = false, onSave, onCancel }) => {
 
   // Sub-table data
   const [contacts, setContacts] = useState([]);
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      defaultShipping: true,
-      defaultBilling: true,
-      residential: false,
-      label: 'Singapore - 639606',
-      address: '101A Pioneer Road'
-    }
-  ]);
+  const [addresses, setAddresses] = useState(
+    isEdit ? [
+      {
+        id: 1,
+        defaultShipping: true,
+        defaultBilling: true,
+        residential: false,
+        label: 'Singapore - 639606',
+        address: '101A Pioneer Road'
+      }
+    ] : []
+  );
+  const [newAddress, setNewAddress] = useState({
+    defaultShipping: false,
+    defaultBilling: false,
+    residential: false,
+    label: '',
+    address: ''
+  });
   const [customerSubsidiaries, setCustomerSubsidiaries] = useState([
     {
       id: 1,
@@ -228,6 +237,28 @@ const CreateCustomer = ({ isEdit = false, onSave, onCancel }) => {
       setCustomerSubsidiaries(customerSubsidiaries.filter(s => s.id !== id));
       showToast('Subsidiary removed successfully', 'success');
     }
+  };
+
+  // Address handlers
+  const handleAddAddress = () => {
+    if (!newAddress.label || !newAddress.address) {
+      showToast('Please fill in Label and Address fields', 'error');
+      return;
+    }
+    setAddresses([...addresses, { ...newAddress, id: Date.now() }]);
+    setNewAddress({ defaultShipping: false, defaultBilling: false, residential: false, label: '', address: '' });
+    showToast('Address added successfully!', 'success');
+  };
+
+  const handleRemoveAddress = (id) => {
+    if (window.confirm('Are you sure you want to remove this address?')) {
+      setAddresses(addresses.filter(addr => addr.id !== id));
+      showToast('Address removed successfully!', 'success');
+    }
+  };
+
+  const handleCancelAddress = () => {
+    setNewAddress({ defaultShipping: false, defaultBilling: false, residential: false, label: '', address: '' });
   };
 
   // Currency handlers
@@ -1189,29 +1220,90 @@ const CreateCustomer = ({ isEdit = false, onSave, onCancel }) => {
             )}
 
             {activeTab === 'address' && (
-              <div>
+              <div style={{ padding: '1rem' }}>
                 <table className="detail-items-table">
                   <thead>
                     <tr>
-                      <th>DEFAULT SHIPPING</th>
-                      <th>DEFAULT BILLING</th>
-                      <th>RESIDENTIAL ADDRESS</th>
-                      <th>LABEL</th>
-                      <th>ADDRESS</th>
-                      <th>EDIT</th>
+                      <th style={{ width: '12%' }}>DEFAULT SHIPPING</th>
+                      <th style={{ width: '12%' }}>DEFAULT BILLING</th>
+                      <th style={{ width: '12%' }}>RESIDENTIAL ADDRESS</th>
+                      <th style={{ width: '20%' }}>LABEL</th>
+                      <th style={{ width: '34%' }}>ADDRESS</th>
+                      <th style={{ width: '10%' }}>ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
                     {addresses.map(addr => (
                       <tr key={addr.id}>
-                        <td>{addr.defaultShipping ? 'Yes' : ''}</td>
-                        <td>{addr.defaultBilling ? 'Yes' : ''}</td>
-                        <td>{addr.residential ? 'Yes' : ''}</td>
+                        <td style={{ textAlign: 'center' }}>{addr.defaultShipping ? 'Yes' : ''}</td>
+                        <td style={{ textAlign: 'center' }}>{addr.defaultBilling ? 'Yes' : ''}</td>
+                        <td style={{ textAlign: 'center' }}>{addr.residential ? 'Yes' : ''}</td>
                         <td>{addr.label}</td>
-                        <td>{addr.address}</td>
-                        <td><button className="view-link">Edit</button></td>
+                        <td style={{ whiteSpace: 'pre-line' }}>{addr.address}</td>
+                        <td style={{ textAlign: 'center' }}>
+                          <button 
+                            className="btn btn-sm btn-secondary" 
+                            onClick={() => handleRemoveAddress(addr.id)}
+                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                          >
+                            <i className="fas fa-trash"></i>
+                          </button>
+                        </td>
                       </tr>
                     ))}
+                    {/* Editable Row for Adding New Address */}
+                    <tr style={{ background: '#f8f9fa' }}>
+                      <td style={{ textAlign: 'center', padding: '0.5rem' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={newAddress.defaultShipping} 
+                          onChange={(e) => setNewAddress({...newAddress, defaultShipping: e.target.checked})} 
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center', padding: '0.5rem' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={newAddress.defaultBilling} 
+                          onChange={(e) => setNewAddress({...newAddress, defaultBilling: e.target.checked})} 
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center', padding: '0.5rem' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={newAddress.residential} 
+                          onChange={(e) => setNewAddress({...newAddress, residential: e.target.checked})} 
+                        />
+                      </td>
+                      <td style={{ padding: '0.5rem' }}>
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          value={newAddress.label} 
+                          onChange={(e) => setNewAddress({...newAddress, label: e.target.value})} 
+                          placeholder="e.g., Office, Warehouse"
+                          style={{ fontSize: '0.85rem', padding: '0.4rem' }}
+                        />
+                      </td>
+                      <td style={{ padding: '0.5rem' }}>
+                        <textarea 
+                          className="form-control" 
+                          value={newAddress.address} 
+                          onChange={(e) => setNewAddress({...newAddress, address: e.target.value})} 
+                          rows="2"
+                          placeholder="Enter full address"
+                          style={{ fontSize: '0.85rem', padding: '0.4rem' }}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center', padding: '0.5rem' }}>
+                        <button 
+                          className="btn-toolbar-primary" 
+                          onClick={handleAddAddress}
+                          style={{ fontSize: '0.85rem', padding: '0.4rem 1rem' }}
+                        >
+                          Add
+                        </button>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
