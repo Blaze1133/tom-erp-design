@@ -673,6 +673,12 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
             >
               Time Tracking
             </button>
+            <button 
+              className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setActiveTab('dashboard')}
+            >
+              Dashboard
+            </button>
           </div>
 
           <div className="tabs-content">
@@ -1643,6 +1649,219 @@ const CreateVendor = ({ isEdit = false, onSave, onCancel }) => {
                     </tr>
                   </tbody>
                 </table>
+              </div>
+            )}
+
+            {activeTab === 'dashboard' && (
+              <div style={{ padding: '1.5rem' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#333', marginBottom: '1.5rem' }}>Vendor Financial Dashboard</h4>
+                
+                <div style={{ marginBottom: '2rem' }}>
+                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '1rem' }}>Payment Details</h5>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>PAYMENT DATE</th>
+                        <th>PAYMENT METHOD</th>
+                        <th>AMOUNT (SGD)</th>
+                        <th>BILL NO</th>
+                        <th>STATUS</th>
+                        <th>REFERENCE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>18/12/2024</td>
+                        <td>Bank Transfer</td>
+                        <td>12,500.00</td>
+                        <td>BILL-2024-045</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                        <td>PMT-20241218-001</td>
+                      </tr>
+                      <tr>
+                        <td>12/12/2024</td>
+                        <td>Cheque</td>
+                        <td>8,350.75</td>
+                        <td>BILL-2024-042</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                        <td>CHQ-789456</td>
+                      </tr>
+                      <tr>
+                        <td>08/12/2024</td>
+                        <td>Bank Transfer</td>
+                        <td>15,200.00</td>
+                        <td>BILL-2024-038</td>
+                        <td><span style={{ color: '#f59e0b', fontWeight: '600' }}>Pending</span></td>
+                        <td>PMT-20241208-005</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style={{ marginBottom: '2rem' }}>
+                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '1rem' }}>Purchase Orders</h5>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>PO NO</th>
+                        <th>DATE</th>
+                        <th>DELIVERY DATE</th>
+                        <th>AMOUNT (SGD)</th>
+                        <th>RECEIVED AMOUNT (SGD)</th>
+                        <th>BALANCE (SGD)</th>
+                        <th>STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>PO-2024-156</td>
+                        <td>02/12/2024</td>
+                        <td>18/12/2024</td>
+                        <td>12,500.00</td>
+                        <td>12,500.00</td>
+                        <td>0.00</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Completed</span></td>
+                      </tr>
+                      <tr>
+                        <td>PO-2024-148</td>
+                        <td>28/11/2024</td>
+                        <td>12/12/2024</td>
+                        <td>8,350.75</td>
+                        <td>8,350.75</td>
+                        <td>0.00</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Completed</span></td>
+                      </tr>
+                      <tr>
+                        <td>PO-2024-162</td>
+                        <td>15/12/2024</td>
+                        <td>28/12/2024</td>
+                        <td>15,200.00</td>
+                        <td>0.00</td>
+                        <td>15,200.00</td>
+                        <td><span style={{ color: '#f59e0b', fontWeight: '600' }}>In Progress</span></td>
+                      </tr>
+                      <tr>
+                        <td>PO-2024-165</td>
+                        <td>20/12/2024</td>
+                        <td>05/01/2025</td>
+                        <td>9,800.00</td>
+                        <td>0.00</td>
+                        <td>9,800.00</td>
+                        <td><span style={{ color: '#3b82f6', fontWeight: '600' }}>Pending</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style={{ marginBottom: '2rem' }}>
+                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '1rem' }}>Bills</h5>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>BILL NO</th>
+                        <th>DATE</th>
+                        <th>DUE DATE</th>
+                        <th>AMOUNT (SGD)</th>
+                        <th>PAID AMOUNT (SGD)</th>
+                        <th>BALANCE (SGD)</th>
+                        <th>STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>BILL-2024-045</td>
+                        <td>05/12/2024</td>
+                        <td>18/12/2024</td>
+                        <td>12,500.00</td>
+                        <td>12,500.00</td>
+                        <td>0.00</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                      </tr>
+                      <tr>
+                        <td>BILL-2024-042</td>
+                        <td>01/12/2024</td>
+                        <td>14/12/2024</td>
+                        <td>8,350.75</td>
+                        <td>8,350.75</td>
+                        <td>0.00</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                      </tr>
+                      <tr>
+                        <td>BILL-2024-038</td>
+                        <td>25/11/2024</td>
+                        <td>08/12/2024</td>
+                        <td>15,200.00</td>
+                        <td>0.00</td>
+                        <td>15,200.00</td>
+                        <td><span style={{ color: '#ef4444', fontWeight: '600' }}>Overdue</span></td>
+                      </tr>
+                      <tr>
+                        <td>BILL-2024-050</td>
+                        <td>18/12/2024</td>
+                        <td>31/12/2024</td>
+                        <td>9,800.00</td>
+                        <td>0.00</td>
+                        <td>9,800.00</td>
+                        <td><span style={{ color: '#f59e0b', fontWeight: '600' }}>Pending</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div>
+                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '1rem' }}>Transaction Reports</h5>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>TRANSACTION ID</th>
+                        <th>DATE</th>
+                        <th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DEBIT (SGD)</th>
+                        <th>CREDIT (SGD)</th>
+                        <th>BALANCE (SGD)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>TXN-V-20241220-001</td>
+                        <td>20/12/2024</td>
+                        <td>Bill</td>
+                        <td>Purchase Bill - Raw Materials</td>
+                        <td>9,800.00</td>
+                        <td>-</td>
+                        <td>45,850.75</td>
+                      </tr>
+                      <tr>
+                        <td>TXN-V-20241218-002</td>
+                        <td>18/12/2024</td>
+                        <td>Payment</td>
+                        <td>Payment Made - Bank Transfer</td>
+                        <td>-</td>
+                        <td>12,500.00</td>
+                        <td>36,050.75</td>
+                      </tr>
+                      <tr>
+                        <td>TXN-V-20241215-003</td>
+                        <td>15/12/2024</td>
+                        <td>PO</td>
+                        <td>Purchase Order - Equipment</td>
+                        <td>15,200.00</td>
+                        <td>-</td>
+                        <td>48,550.75</td>
+                      </tr>
+                      <tr>
+                        <td>TXN-V-20241212-001</td>
+                        <td>12/12/2024</td>
+                        <td>Payment</td>
+                        <td>Payment Made - Cheque</td>
+                        <td>-</td>
+                        <td>8,350.75</td>
+                        <td>33,350.75</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>

@@ -18,7 +18,6 @@ const CreateProjectMaster = ({ isEdit = false, onSave, onCancel }) => {
     customer: isEdit ? '24 (Pirtek Asia Pte Ltd)' : '',
     status: '',
     startDate: isEdit ? '28/11/2025' : '',
-    vesselName: '',
     scopeOfWork: '',
     projectLocation: '',
     email: '',
@@ -177,10 +176,6 @@ const CreateProjectMaster = ({ isEdit = false, onSave, onCancel }) => {
               <div className="detail-field">
                 <label>START DATE</label>
                 <input type="date" className="form-control" value={formData.startDate} onChange={(e) => handleInputChange('startDate', e.target.value)} />
-              </div>
-              <div className="detail-field">
-                <label>VESSEL NAME</label>
-                <input type="text" className="form-control" value={formData.vesselName} onChange={(e) => handleInputChange('vesselName', e.target.value)} />
               </div>
               <div className="detail-field">
                 <label>PROJECT LOCATION</label>

@@ -18,7 +18,6 @@ const ViewProjectMasterDetail = ({ onBack, onEdit }) => {
     customer: '24 (Pirtek Asia Pte Ltd)',
     status: 'In Progress',
     startDate: '28/11/2025',
-    vesselName: '',
     scopeOfWork: '',
     projectLocation: '',
     email: '',
@@ -145,10 +144,6 @@ const ViewProjectMasterDetail = ({ onBack, onEdit }) => {
               <div className="detail-field">
                 <label>START DATE</label>
                 <div className="field-value">{projectData.startDate}</div>
-              </div>
-              <div className="detail-field">
-                <label>VESSEL NAME</label>
-                <div className="field-value">{projectData.vesselName || '-'}</div>
               </div>
               <div className="detail-field">
                 <label>PROJECT LOCATION</label>

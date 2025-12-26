@@ -296,6 +296,12 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             >
               Subsidiaries
             </button>
+            <button 
+              className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setActiveTab('dashboard')}
+            >
+              Dashboard
+            </button>
           </div>
 
           <div className="tabs-content">
@@ -1016,7 +1022,7 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             )}
 
             {activeTab === 'subsidiaries' && (
-              <div>
+              <div style={{ padding: '1rem' }}>
                 <table className="detail-items-table">
                   <thead>
                     <tr>
@@ -1025,7 +1031,7 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                       <th>INACTIVE</th>
                       <th>BALANCE</th>
                       <th>UNBILLED ORDERS</th>
-                      <th>DEPOSIT BALANCE</th>
+                      <th>CREDIT LIMIT</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1144,6 +1150,164 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
                       <span style={{ fontSize: '13px', fontWeight: '500' }}>FAX</span>
                     </label>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'dashboard' && (
+              <div style={{ padding: '1.5rem' }}>
+                <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#333', marginBottom: '1.5rem' }}>Customer Financial Dashboard</h4>
+                
+                <div style={{ marginBottom: '2rem' }}>
+                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '1rem' }}>Payment Details</h5>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>PAYMENT DATE</th>
+                        <th>PAYMENT METHOD</th>
+                        <th>AMOUNT (SGD)</th>
+                        <th>INVOICE NO</th>
+                        <th>STATUS</th>
+                        <th>REFERENCE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>15/12/2024</td>
+                        <td>Bank Transfer</td>
+                        <td>15,450.00</td>
+                        <td>INV-2024-001</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                        <td>TXN-20241215-001</td>
+                      </tr>
+                      <tr>
+                        <td>10/12/2024</td>
+                        <td>Cheque</td>
+                        <td>8,750.50</td>
+                        <td>INV-2024-002</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                        <td>CHQ-123456</td>
+                      </tr>
+                      <tr>
+                        <td>05/12/2024</td>
+                        <td>Bank Transfer</td>
+                        <td>22,300.00</td>
+                        <td>INV-2024-003</td>
+                        <td><span style={{ color: '#f59e0b', fontWeight: '600' }}>Pending</span></td>
+                        <td>TXN-20241205-003</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style={{ marginBottom: '2rem' }}>
+                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '1rem' }}>Invoices</h5>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>INVOICE NO</th>
+                        <th>DATE</th>
+                        <th>DUE DATE</th>
+                        <th>AMOUNT (SGD)</th>
+                        <th>PAID AMOUNT (SGD)</th>
+                        <th>BALANCE (SGD)</th>
+                        <th>STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>INV-2024-001</td>
+                        <td>01/12/2024</td>
+                        <td>15/12/2024</td>
+                        <td>15,450.00</td>
+                        <td>15,450.00</td>
+                        <td>0.00</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                      </tr>
+                      <tr>
+                        <td>INV-2024-002</td>
+                        <td>05/12/2024</td>
+                        <td>19/12/2024</td>
+                        <td>8,750.50</td>
+                        <td>8,750.50</td>
+                        <td>0.00</td>
+                        <td><span style={{ color: '#10b981', fontWeight: '600' }}>Paid</span></td>
+                      </tr>
+                      <tr>
+                        <td>INV-2024-003</td>
+                        <td>10/12/2024</td>
+                        <td>24/12/2024</td>
+                        <td>22,300.00</td>
+                        <td>0.00</td>
+                        <td>22,300.00</td>
+                        <td><span style={{ color: '#ef4444', fontWeight: '600' }}>Overdue</span></td>
+                      </tr>
+                      <tr>
+                        <td>INV-2024-004</td>
+                        <td>18/12/2024</td>
+                        <td>01/01/2025</td>
+                        <td>12,850.00</td>
+                        <td>0.00</td>
+                        <td>12,850.00</td>
+                        <td><span style={{ color: '#f59e0b', fontWeight: '600' }}>Pending</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div>
+                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#666', marginBottom: '1rem' }}>Transaction Reports</h5>
+                  <table className="detail-items-table">
+                    <thead>
+                      <tr>
+                        <th>TRANSACTION ID</th>
+                        <th>DATE</th>
+                        <th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DEBIT (SGD)</th>
+                        <th>CREDIT (SGD)</th>
+                        <th>BALANCE (SGD)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>TXN-20241218-001</td>
+                        <td>18/12/2024</td>
+                        <td>Invoice</td>
+                        <td>Sales Invoice - Project Materials</td>
+                        <td>12,850.00</td>
+                        <td>-</td>
+                        <td>35,150.00</td>
+                      </tr>
+                      <tr>
+                        <td>TXN-20241215-001</td>
+                        <td>15/12/2024</td>
+                        <td>Payment</td>
+                        <td>Payment Received - Bank Transfer</td>
+                        <td>-</td>
+                        <td>15,450.00</td>
+                        <td>22,300.00</td>
+                      </tr>
+                      <tr>
+                        <td>TXN-20241210-002</td>
+                        <td>10/12/2024</td>
+                        <td>Invoice</td>
+                        <td>Sales Invoice - Equipment Supply</td>
+                        <td>22,300.00</td>
+                        <td>-</td>
+                        <td>37,750.00</td>
+                      </tr>
+                      <tr>
+                        <td>TXN-20241210-001</td>
+                        <td>10/12/2024</td>
+                        <td>Payment</td>
+                        <td>Payment Received - Cheque</td>
+                        <td>-</td>
+                        <td>8,750.50</td>
+                        <td>15,450.00</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
