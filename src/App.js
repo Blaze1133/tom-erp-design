@@ -371,9 +371,42 @@ import ViewBankMasterDetail from './components/ViewBankMasterDetail';
 import CreateBankMaster from './components/CreateBankMaster';
 
 // Production Module Components
+import ViewProductionProjectMasters from './components/ViewProductionProjectMasters';
 import ViewProjectMasters from './components/ViewProjectMasters';
 import ViewProjectMasterDetail from './components/ViewProjectMasterDetail';
 import CreateProjectMaster from './components/CreateProjectMaster';
+
+// Plant Module Components
+import PlantScanQRCode from './components/PlantScanQRCode';
+import PlantDashboardModule from './components/PlantDashboardModule';
+import MaterialIncomingStatus from './components/MaterialIncomingStatus';
+import ViewMaterialIncomingStatuses from './components/ViewMaterialIncomingStatuses';
+import DimensionalInspection from './components/DimensionalInspection';
+import ViewDimensionalInspections from './components/ViewDimensionalInspections';
+import FitUpInspection from './components/FitUpInspection';
+import ViewFitUpInspections from './components/ViewFitUpInspections';
+import HydrostaticTest from './components/HydrostaticTest';
+import ViewHydrostaticTests from './components/ViewHydrostaticTests';
+import MaterialTraceability from './components/MaterialTraceability';
+import ViewMaterialTraceabilities from './components/ViewMaterialTraceabilities';
+import VisualInspection from './components/VisualInspection';
+import ViewVisualInspections from './components/ViewVisualInspections';
+import WeldingTraceability from './components/WeldingTraceability';
+import ViewWeldingTraceabilities from './components/ViewWeldingTraceabilities';
+import MEPComponents from './components/MEPComponents';
+import ViewPipingInspections from './components/ViewPipingInspections';
+import PlantModule from './components/PlantModule';
+import ViewPlantModules from './components/ViewPlantModules';
+import ViewPlantModuleProcesses from './components/ViewPlantModuleProcesses';
+import PlantModuleProcess from './components/PlantModuleProcess';
+import PlantUploadDrawings from './components/PlantUploadDrawings';
+import PlantProjectDocuments from './components/PlantProjectDocuments';
+import ViewPlantProjectMasters from './components/ViewPlantProjectMasters';
+import CreatePlantProjectMaster from './components/CreatePlantProjectMaster';
+import ViewPlantProjectMasterDetail from './components/ViewPlantProjectMasterDetail';
+import ViewPlantSiteLocations from './components/ViewPlantSiteLocations';
+import CreatePlantSiteLocation from './components/CreatePlantSiteLocation';
+import ViewPlantSiteLocationDetail from './components/ViewPlantSiteLocationDetail';
 import ViewTasks from './components/ViewTasks';
 import ViewTaskDetail from './components/ViewTaskDetail';
 import CreateTask from './components/CreateTask';
@@ -450,6 +483,9 @@ function App() {
   const [selectedYardData, setSelectedYardData] = useState(null);
   const [selectedBiometricData, setSelectedBiometricData] = useState(null);
   const [selectedManualEntry, setSelectedManualEntry] = useState(null);
+  const [selectedPlantProject, setSelectedPlantProject] = useState(null);
+  const [selectedPlantSite, setSelectedPlantSite] = useState(null);
+  const [selectedPlantModule, setSelectedPlantModule] = useState(null);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -1559,7 +1595,7 @@ function App() {
         />;
       // Production Module Cases
       case 'production-project-masters':
-        return <ViewProjectMasters 
+        return <ViewProductionProjectMasters 
           onNewClick={() => setCurrentPage('create-project-master')}
           onViewClick={() => setCurrentPage('view-project-master-detail')}
           onEditClick={() => setCurrentPage('create-project-master')}
@@ -1596,6 +1632,187 @@ function App() {
         return <ViewContractorDetail 
           onBack={() => setCurrentPage('production-contractors')}
           onEdit={() => setCurrentPage('create-contractor')}
+        />;
+      
+      // Plant Module Cases
+      case 'plant-scan-qr':
+        return <PlantScanQRCode setCurrentPage={setCurrentPage} />;
+      case 'plant-dashboard':
+        return <PlantDashboardModule setCurrentPage={setCurrentPage} />;
+      case 'view-material-incoming-statuses':
+        return <ViewMaterialIncomingStatuses 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('material-incoming-status')}
+          onViewClick={(record) => setCurrentPage('material-incoming-status')}
+          onEditClick={(record) => setCurrentPage('material-incoming-status')}
+        />;
+      case 'material-incoming-status':
+        return <MaterialIncomingStatus setCurrentPage={setCurrentPage} />;
+      case 'dimensional-inspection':
+        return <DimensionalInspection setCurrentPage={setCurrentPage} />;
+      case 'view-dimensional-inspections':
+        return <ViewDimensionalInspections 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('dimensional-inspection')}
+          onViewClick={(record) => setCurrentPage('dimensional-inspection')}
+          onEditClick={(record) => setCurrentPage('dimensional-inspection')}
+        />;
+      case 'fitup-inspection':
+        return <FitUpInspection setCurrentPage={setCurrentPage} />;
+      case 'view-fitup-inspections':
+        return <ViewFitUpInspections 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('fitup-inspection')}
+          onViewClick={(record) => setCurrentPage('fitup-inspection')}
+          onEditClick={(record) => setCurrentPage('fitup-inspection')}
+        />;
+      case 'hydrostatic-test':
+        return <HydrostaticTest setCurrentPage={setCurrentPage} />;
+      case 'view-hydrostatic-tests':
+        return <ViewHydrostaticTests 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('hydrostatic-test')}
+          onViewClick={(record) => setCurrentPage('hydrostatic-test')}
+          onEditClick={(record) => setCurrentPage('hydrostatic-test')}
+        />;
+      case 'material-traceability':
+        return <MaterialTraceability setCurrentPage={setCurrentPage} />;
+      case 'view-material-traceabilities':
+        return <ViewMaterialTraceabilities 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('material-traceability')}
+          onViewClick={(record) => setCurrentPage('material-traceability')}
+          onEditClick={(record) => setCurrentPage('material-traceability')}
+        />;
+      case 'visual-inspection':
+        return <VisualInspection setCurrentPage={setCurrentPage} />;
+      case 'view-visual-inspections':
+        return <ViewVisualInspections 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('visual-inspection')}
+          onViewClick={(record) => setCurrentPage('visual-inspection')}
+          onEditClick={(record) => setCurrentPage('visual-inspection')}
+        />;
+      case 'welding-traceability':
+        return <WeldingTraceability setCurrentPage={setCurrentPage} />;
+      case 'view-welding-traceabilities':
+        return <ViewWeldingTraceabilities 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('welding-traceability')}
+          onViewClick={(record) => setCurrentPage('welding-traceability')}
+          onEditClick={(record) => setCurrentPage('welding-traceability')}
+        />;
+      case 'mep-components':
+        return <MEPComponents setCurrentPage={setCurrentPage} />;
+      case 'view-piping-inspections':
+        return <ViewPipingInspections 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('mep-components')}
+          onViewClick={(record) => setCurrentPage('mep-components')}
+          onEditClick={(record) => setCurrentPage('mep-components')}
+        />;
+      case 'plant-module':
+        return <PlantModule setCurrentPage={setCurrentPage} />;
+      case 'view-plant-modules':
+        return <ViewPlantModules 
+          setCurrentPage={setCurrentPage}
+          onNewClick={() => setCurrentPage('plant-module')}
+          onViewClick={(record) => setCurrentPage('plant-module')}
+          onEditClick={(record) => setCurrentPage('plant-module')}
+        />;
+      case 'plant-module-process-list':
+        return <ViewPlantModuleProcesses 
+          onNewClick={() => {
+            setSelectedPlantModule(null);
+            setCurrentPage('plant-module-process');
+          }}
+          onViewClick={(module) => {
+            setSelectedPlantModule(module);
+            setCurrentPage('plant-module-process');
+          }}
+          onEditClick={(module) => {
+            setSelectedPlantModule(module);
+            setCurrentPage('plant-module-process');
+          }}
+        />;
+      case 'plant-module-process':
+        return <PlantModuleProcess 
+          setCurrentPage={setCurrentPage} 
+          editData={selectedPlantModule}
+        />;
+      case 'plant-upload-drawings':
+        return <PlantUploadDrawings />;
+      case 'plant-project-documents':
+        return <PlantProjectDocuments />;
+      case 'plant-project-masters':
+        return <ViewPlantProjectMasters 
+          onNewClick={() => {
+            setSelectedPlantProject(null);
+            setCurrentPage('create-plant-project-master');
+          }}
+          onViewClick={(project) => {
+            setSelectedPlantProject(project);
+            setCurrentPage('view-plant-project-master-detail');
+          }}
+          onEditClick={(project) => {
+            setSelectedPlantProject(project);
+            setCurrentPage('create-plant-project-master');
+          }}
+        />;
+      case 'create-plant-project-master':
+        return <CreatePlantProjectMaster 
+          onBack={() => {
+            setSelectedPlantProject(null);
+            setCurrentPage('plant-project-masters');
+          }}
+          editData={selectedPlantProject}
+        />;
+      case 'view-plant-project-master-detail':
+        return <ViewPlantProjectMasterDetail 
+          onBack={() => {
+            setSelectedPlantProject(null);
+            setCurrentPage('plant-project-masters');
+          }}
+          onEdit={(project) => {
+            setSelectedPlantProject(project);
+            setCurrentPage('create-plant-project-master');
+          }}
+          projectData={selectedPlantProject}
+        />;
+      case 'plant-site-locations':
+        return <ViewPlantSiteLocations 
+          onNewClick={() => {
+            setSelectedPlantSite(null);
+            setCurrentPage('create-plant-site-location');
+          }}
+          onViewClick={(site) => {
+            setSelectedPlantSite(site);
+            setCurrentPage('view-plant-site-location-detail');
+          }}
+          onEditClick={(site) => {
+            setSelectedPlantSite(site);
+            setCurrentPage('create-plant-site-location');
+          }}
+        />;
+      case 'create-plant-site-location':
+        return <CreatePlantSiteLocation 
+          onBack={() => {
+            setSelectedPlantSite(null);
+            setCurrentPage('plant-site-locations');
+          }}
+          editData={selectedPlantSite}
+        />;
+      case 'view-plant-site-location-detail':
+        return <ViewPlantSiteLocationDetail 
+          onBack={() => {
+            setSelectedPlantSite(null);
+            setCurrentPage('plant-site-locations');
+          }}
+          onEdit={(site) => {
+            setSelectedPlantSite(site);
+            setCurrentPage('create-plant-site-location');
+          }}
+          siteData={selectedPlantSite}
         />;
       case 'production-upload-drawings':
         return <UploadDrawings />;

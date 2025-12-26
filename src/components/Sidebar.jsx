@@ -13,6 +13,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const customersItemRef = useRef(null);
   const payrollItemRef = useRef(null);
   const productionItemRef = useRef(null);
+  const mepItemRef = useRef(null);
+  const plantItemRef = useRef(null);
   const masterTablesItemRef = useRef(null);
   const drawingsDocumentsItemRef = useRef(null);
   const setupItemRef = useRef(null);
@@ -33,6 +35,8 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
   const [customersSubmenuTop, setCustomersSubmenuTop] = useState(100);
   const [payrollSubmenuTop, setPayrollSubmenuTop] = useState(100);
   const [productionSubmenuTop, setProductionSubmenuTop] = useState(100);
+  const [mepSubmenuTop, setMepSubmenuTop] = useState(100);
+  const [plantSubmenuTop, setPlantSubmenuTop] = useState(100);
   const [masterTablesSubmenuTop, setMasterTablesSubmenuTop] = useState(100);
   const [drawingsDocumentsSubmenuTop, setDrawingsDocumentsSubmenuTop] = useState(100);
   const [setupSubmenuTop, setSetupSubmenuTop] = useState(100);
@@ -135,6 +139,20 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     if (productionItemRef.current) {
       const rect = productionItemRef.current.getBoundingClientRect();
       setProductionSubmenuTop(calculateSubmenuPosition(rect, productionSubItems));
+    }
+  };
+
+  const handleMepHover = () => {
+    if (mepItemRef.current) {
+      const rect = mepItemRef.current.getBoundingClientRect();
+      setMepSubmenuTop(calculateSubmenuPosition(rect, mepSubItems));
+    }
+  };
+
+  const handlePlantHover = () => {
+    if (plantItemRef.current) {
+      const rect = plantItemRef.current.getBoundingClientRect();
+      setPlantSubmenuTop(calculateSubmenuPosition(rect, plantSubItems));
     }
   };
 
@@ -894,7 +912,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     }
   ];
 
-  const productionSubItems = [
+  const mepSubItems = [
     { id: 'scan-qr-code', label: 'Scan QR Code', hideArrow: true },
     { 
       id: 'production-dashboard',
@@ -909,7 +927,7 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     { id: 'status-all-modules', label: 'Status All Modules', hideArrow: true },
     { 
       id: 'production-stages',
-      label: 'Production Stages',
+      label: 'MEP Stages',
       hasSubmenu: true,
       submenu: [
         { id: 'frame-fabrication', label: 'Fabrication' },
@@ -947,6 +965,32 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     },
     { id: 'production-time-tracking', label: 'Module Wise Time Tracking', hideArrow: true }
   ];
+
+  const plantSubItems = [
+    { id: 'plant-dashboard', label: 'Plant Dashboard' },
+    { id: 'plant-scan-qr', label: 'Scan QR Code' },
+    { id: 'plant-module-process-list', label: 'Plant Module Process' },
+    { 
+      id: 'plant-documents',
+      label: 'Documents',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'plant-upload-drawings', label: 'Upload Drawings' },
+        { id: 'plant-project-documents', label: 'Project Documents' }
+      ]
+    },
+    { 
+      id: 'plant-master-tables',
+      label: 'Master Tables',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'plant-project-masters', label: 'Project Masters' },
+        { id: 'plant-site-locations', label: 'Site Locations' }
+      ]
+    }
+  ];
+
+  const productionSubItems = [];
 
   const menuItems = [
     { id: 'dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
@@ -1576,17 +1620,17 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           </div>
         </div>
         
-        {/* Production Menu with Submenu */}
-        <div className="nav-item-parent" onMouseEnter={handleProductionHover}>
+        {/* MEP Module Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleMepHover}>
           <div
-            ref={productionItemRef}
+            ref={mepItemRef}
             className="nav-item"
           >
-            <i className="fas fa-industry"></i>
-            <span>Production</span>
+            <i className="fas fa-tools"></i>
+            <span>MEP Module</span>
           </div>
-          <div className="submenu" style={{ top: `${productionSubmenuTop}px`, '--submenu-top': `${productionSubmenuTop}px` }}>
-            {productionSubItems.map((subItem) => (
+          <div className="submenu" style={{ top: `${mepSubmenuTop}px`, '--submenu-top': `${mepSubmenuTop}px` }}>
+            {mepSubItems.map((subItem) => (
               <div key={subItem.id} className="submenu-item-wrapper">
                 {subItem.hasSubmenu ? (
                   <>
@@ -1600,6 +1644,55 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
                     <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={() => setCurrentPage(nestedItem.id)}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Plant Module Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handlePlantHover}>
+          <div
+            ref={plantItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-industry"></i>
+            <span>Plant Module</span>
+          </div>
+          <div className="submenu" style={{ top: `${plantSubmenuTop}px`, '--submenu-top': `${plantSubmenuTop}px` }}>
+            {plantSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `plant-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`plant-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`plant-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}
