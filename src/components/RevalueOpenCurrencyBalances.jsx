@@ -116,190 +116,189 @@ const RevalueOpenCurrencyBalances = ({ setCurrentPage }) => {
             <h3>Revaluation Criteria</h3>
           </div>
           <div className="section-body">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 300px', gap: '20px' }}>
-              {/* Left Section - Main Form Fields */}
-              <div style={{ gridColumn: '1 / 3', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                <div className="detail-field">
-                  <label>POSTING PERIOD <span className="required">*</span></label>
-                  <select 
-                    className="form-control"
-                    value={formData.postingPeriod}
-                    onChange={(e) => handleInputChange('postingPeriod', e.target.value)}
-                  >
-                    <option>May 2025</option>
-                    <option>Jun 2025</option>
-                    <option>Jul 2025</option>
-                    <option>Aug 2025</option>
-                    <option>Sep 2025</option>
-                    <option>Oct 2025</option>
-                    <option>Nov 2025</option>
-                    <option>Dec 2025</option>
-                  </select>
-                </div>
-                <div className="detail-field">
-                  <label>MEMO</label>
-                  <input 
-                    type="text" 
-                    className="form-control"
-                    value={formData.memo}
-                    onChange={(e) => handleInputChange('memo', e.target.value)}
-                  />
-                </div>
-                
-                <div className="detail-field">
-                  <label>SUBSIDIARY <span className="required">*</span></label>
-                  <select 
-                    className="form-control"
-                    value={formData.subsidiary}
-                    onChange={(e) => handleInputChange('subsidiary', e.target.value)}
-                  >
-                    <option>Tech Onshore MEP Prefabricators Pte Ltd.</option>
-                    <option>Tech Electric & Automation Pte Ltd</option>
-                    <option>Tech Marine Offshore (S) Pte Ltd</option>
-                    <option>Tech Offshore Marine (DQ) Pte Ltd</option>
-                    <option>Tech Offshore Marine (s) Pte Ltd</option>
-                    <option>Tech Offshore Marine (SV) Pte Ltd</option>
-                  </select>
-                </div>
-                <div className="detail-field">
-                  <label>CLASS</label>
-                  <select 
-                    className="form-control"
-                    value={formData.class}
-                    onChange={(e) => handleInputChange('class', e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                    <option>Consumable Item</option>
-                    <option>Electrical Works</option>
-                    <option>Engineering Services</option>
-                    <option>Installation Works</option>
-                    <option>Maintenance Services</option>
-                    <option>Marine Equipment</option>
-                    <option>Material Supply</option>
-                    <option>MEP Works</option>
-                    <option>Offshore Services</option>
-                    <option>Piping Works</option>
-                    <option>Project Management</option>
-                    <option>Repair & Maintenance</option>
-                    <option>Safety Equipment</option>
-                    <option>Shipyard Services</option>
-                    <option>Steel Fabrication</option>
-                    <option>Technical Consultancy</option>
-                    <option>Welding Services</option>
-                  </select>
-                </div>
-                
-                <div className="detail-field">
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={formData.includeChildren}
-                      onChange={(e) => handleInputChange('includeChildren', e.target.checked)}
-                      style={{ width: 'auto', margin: 0 }}
-                    />
-                    <span>INCLUDE CHILDREN</span>
-                  </label>
-                </div>
-                <div className="detail-field">
-                  <label>DEPARTMENT</label>
-                  <select 
-                    className="form-control"
-                    value={formData.department}
-                    onChange={(e) => handleInputChange('department', e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                    <option>Construction</option>
-                    <option>MEP</option>
-                    <option>MEP MARINE</option>
-                    <option>O&G</option>
-                    <option>Piping</option>
-                    <option>Shipyard</option>
-                    <option>Shipyard : Keppel Fels</option>
-                    <option>Shipyard : Keppel Shipyard</option>
-                    <option>Shipyard : Sembcorp Marine</option>
-                    <option>Shipyard : SembMarine Admiralty</option>
-                    <option>Shipyard : SembMarine Tuas</option>
-                    <option>Shipyard : ST Marine</option>
-                  </select>
-                </div>
-                
-                {!formData.includeChildren && (
-                  <div className="detail-field">
-                    <label>CURRENCY</label>
-                    <select 
-                      className="form-control"
-                      value={formData.currency}
-                      onChange={(e) => handleInputChange('currency', e.target.value)}
-                    >
-                      <option>SGD</option>
-                      <option>USD</option>
-                      <option>EUR</option>
-                      <option>MYR</option>
-                      <option>GBP</option>
-                    </select>
-                  </div>
-                )}
-                <div className="detail-field">
-                  <label>LOCATION</label>
-                  <select 
-                    className="form-control"
-                    value={formData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                    <option>Bok Seng Yard</option>
-                    <option>Hong Hang Shipyard</option>
-                    <option>Mega yard</option>
-                    <option>MEP MARINE CC</option>
-                    <option>Shipyards/Construction</option>
-                    <option>Singapore(MEP)</option>
-                    <option>TOM - 11</option>
-                    <option>TOM - 12</option>
-                    <option>TOM - 13</option>
-                    <option>TOM - 14</option>
-                    <option>TOM - 15</option>
-                    <option>TOM - 16</option>
-                    <option>TOM - 17</option>
-                    <option>TOM - 18</option>
-                    <option>TOM - 19</option>
-                    <option>TOM - 20</option>
-                  </select>
-                </div>
+            <div className="detail-grid">
+              <div className="detail-field">
+                <label>POSTING PERIOD <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.postingPeriod}
+                  onChange={(e) => handleInputChange('postingPeriod', e.target.value)}
+                >
+                  <option>May 2025</option>
+                  <option>Jun 2025</option>
+                  <option>Jul 2025</option>
+                  <option>Aug 2025</option>
+                  <option>Sep 2025</option>
+                  <option>Oct 2025</option>
+                  <option>Nov 2025</option>
+                  <option>Dec 2025</option>
+                </select>
               </div>
 
-              {/* Right Section - Match Source Classification and Account Type */}
-              <div style={{ gridColumn: '3', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="detail-field">
+                <label>MEMO</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  value={formData.memo}
+                  onChange={(e) => handleInputChange('memo', e.target.value)}
+                />
+              </div>
+
+              {!formData.includeChildren && (
                 <div className="detail-field">
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={formData.matchSourceClassification}
-                      onChange={(e) => handleInputChange('matchSourceClassification', e.target.checked)}
-                      style={{ width: 'auto', margin: 0 }}
-                    />
-                    <span>MATCH SOURCE CLASSIFICATION</span>
-                  </label>
-                </div>
-                <div className="detail-field">
-                  <label>{formData.includeChildren ? 'ACCOUNT CATEGORY' : 'ACCOUNT TYPE'}</label>
+                  <label>CURRENCY</label>
                   <select 
                     className="form-control"
-                    value={formData.accountType}
-                    onChange={(e) => handleInputChange('accountType', e.target.value)}
+                    value={formData.currency}
+                    onChange={(e) => handleInputChange('currency', e.target.value)}
                   >
-                    <option>All</option>
-                    <option>Accounts Payable</option>
-                    <option>Accounts Receivable</option>
-                    <option>Bank</option>
-                    <option>Credit Card</option>
-                    <option>Deferred Expense</option>
-                    <option>Deferred Revenue</option>
-                    <option>Fixed Asset</option>
-                    <option>Long Term Liability</option>
-                    <option>Other Current Asset</option>
-                    <option>Other Current Liability</option>
+                    <option>SGD</option>
+                    <option>USD</option>
+                    <option>EUR</option>
+                    <option>MYR</option>
+                    <option>GBP</option>
                   </select>
                 </div>
+              )}
+              
+              <div className="detail-field">
+                <label>SUBSIDIARY <span className="required">*</span></label>
+                <select 
+                  className="form-control"
+                  value={formData.subsidiary}
+                  onChange={(e) => handleInputChange('subsidiary', e.target.value)}
+                >
+                  <option>Tech Onshore MEP Prefabricators Pte Ltd.</option>
+                  <option>Tech Electric & Automation Pte Ltd</option>
+                  <option>Tech Marine Offshore (S) Pte Ltd</option>
+                  <option>Tech Offshore Marine (DQ) Pte Ltd</option>
+                  <option>Tech Offshore Marine (s) Pte Ltd</option>
+                  <option>Tech Offshore Marine (SV) Pte Ltd</option>
+                </select>
+              </div>
+
+              <div className="detail-field">
+                <label>CLASS</label>
+                <select 
+                  className="form-control"
+                  value={formData.class}
+                  onChange={(e) => handleInputChange('class', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>Consumable Item</option>
+                  <option>Electrical Works</option>
+                  <option>Engineering Services</option>
+                  <option>Installation Works</option>
+                  <option>Maintenance Services</option>
+                  <option>Marine Equipment</option>
+                  <option>Material Supply</option>
+                  <option>MEP Works</option>
+                  <option>Offshore Services</option>
+                  <option>Piping Works</option>
+                  <option>Project Management</option>
+                  <option>Repair & Maintenance</option>
+                  <option>Safety Equipment</option>
+                  <option>Shipyard Services</option>
+                  <option>Steel Fabrication</option>
+                  <option>Technical Consultancy</option>
+                  <option>Welding Services</option>
+                </select>
+              </div>
+
+              <div className="detail-field">
+                <label>DEPARTMENT</label>
+                <select 
+                  className="form-control"
+                  value={formData.department}
+                  onChange={(e) => handleInputChange('department', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>Construction</option>
+                  <option>MEP</option>
+                  <option>MEP MARINE</option>
+                  <option>O&G</option>
+                  <option>Piping</option>
+                  <option>Shipyard</option>
+                  <option>Shipyard : Keppel Fels</option>
+                  <option>Shipyard : Keppel Shipyard</option>
+                  <option>Shipyard : Sembcorp Marine</option>
+                  <option>Shipyard : SembMarine Admiralty</option>
+                  <option>Shipyard : SembMarine Tuas</option>
+                  <option>Shipyard : ST Marine</option>
+                </select>
+              </div>
+
+              <div className="detail-field">
+                <label>LOCATION</label>
+                <select 
+                  className="form-control"
+                  value={formData.location}
+                  onChange={(e) => handleInputChange('location', e.target.value)}
+                >
+                  <option value="">Select...</option>
+                  <option>Bok Seng Yard</option>
+                  <option>Hong Hang Shipyard</option>
+                  <option>Mega yard</option>
+                  <option>MEP MARINE CC</option>
+                  <option>Shipyards/Construction</option>
+                  <option>Singapore(MEP)</option>
+                  <option>TOM - 11</option>
+                  <option>TOM - 12</option>
+                  <option>TOM - 13</option>
+                  <option>TOM - 14</option>
+                  <option>TOM - 15</option>
+                  <option>TOM - 16</option>
+                  <option>TOM - 17</option>
+                  <option>TOM - 18</option>
+                  <option>TOM - 19</option>
+                  <option>TOM - 20</option>
+                </select>
+              </div>
+
+              <div className="detail-field">
+                <label>{formData.includeChildren ? 'ACCOUNT CATEGORY' : 'ACCOUNT TYPE'}</label>
+                <select 
+                  className="form-control"
+                  value={formData.accountType}
+                  onChange={(e) => handleInputChange('accountType', e.target.value)}
+                >
+                  <option>All</option>
+                  <option>Accounts Payable</option>
+                  <option>Accounts Receivable</option>
+                  <option>Bank</option>
+                  <option>Credit Card</option>
+                  <option>Deferred Expense</option>
+                  <option>Deferred Revenue</option>
+                  <option>Fixed Asset</option>
+                  <option>Long Term Liability</option>
+                  <option>Other Current Asset</option>
+                  <option>Other Current Liability</option>
+                </select>
+              </div>
+
+              <div className="detail-field">
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginBottom: '0.35rem' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={formData.includeChildren}
+                    onChange={(e) => handleInputChange('includeChildren', e.target.checked)}
+                    style={{ width: '16px', height: '16px', margin: 0, cursor: 'pointer' }}
+                  />
+                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#888', textTransform: 'uppercase', letterSpacing: '0.3px' }}>INCLUDE CHILDREN</span>
+                </label>
+              </div>
+
+              <div className="detail-field">
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', marginBottom: '0.35rem' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={formData.matchSourceClassification}
+                    onChange={(e) => handleInputChange('matchSourceClassification', e.target.checked)}
+                    style={{ width: '16px', height: '16px', margin: 0, cursor: 'pointer' }}
+                  />
+                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#888', textTransform: 'uppercase', letterSpacing: '0.3px' }}>MATCH SOURCE CLASSIFICATION</span>
+                </label>
               </div>
             </div>
           </div>

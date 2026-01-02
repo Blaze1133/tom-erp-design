@@ -16,7 +16,7 @@ const CreateTask = ({ isEdit = false, onSave, onCancel }) => {
     project: isEdit ? 'PRJ001 - MEP Installation Project' : '',
     status: isEdit ? 'In Progress' : 'Not Started',
     priority: isEdit ? 'High' : 'Medium',
-    assignedTo: isEdit ? 'John Tan' : '',
+    assignedTo: isEdit ? ['John Tan', 'Michael Lee', 'Sarah Chen'] : [],
     startDate: isEdit ? '2024-12-01' : '',
     dueDate: isEdit ? '2024-12-15' : '',
     completionPercentage: isEdit ? 65 : 0,
@@ -31,6 +31,27 @@ const CreateTask = ({ isEdit = false, onSave, onCancel }) => {
     isSubTask: false,
     dependencyType: ''
   });
+
+  const [selectedEmployee, setSelectedEmployee] = useState('');
+
+  const availableEmployees = [
+    'John Tan',
+    'Michael Lee',
+    'Sarah Chen',
+    'Alex Tan',
+    'Kevin Wong',
+    'Rachel Ng',
+    'Kevin Lim',
+    'David Tan',
+    'Sarah Lim',
+    'James Wong',
+    'Peter Tan',
+    'Ali Rahman',
+    'Kumar Singh',
+    'Michael Wong',
+    'David Chen',
+    'Emily Ng'
+  ];
 
   const statuses = ['Not Started', 'In Progress', 'On Hold', 'Completed', 'Cancelled'];
   const priorities = ['Low', 'Medium', 'High', 'Critical'];
@@ -87,9 +108,30 @@ const CreateTask = ({ isEdit = false, onSave, onCancel }) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleAddEmployee = () => {
+    if (selectedEmployee && !formData.assignedTo.includes(selectedEmployee)) {
+      setFormData(prev => ({
+        ...prev,
+        assignedTo: [...prev.assignedTo, selectedEmployee]
+      }));
+      setSelectedEmployee('');
+    }
+  };
+
+  const handleRemoveEmployee = (employeeName) => {
+    setFormData(prev => ({
+      ...prev,
+      assignedTo: prev.assignedTo.filter(name => name !== employeeName)
+    }));
+  };
+
   const handleSave = () => {
     if (!formData.taskName.trim()) {
       showToast('Task name is required', 'error');
+      return;
+    }
+    if (formData.assignedTo.length === 0) {
+      showToast('At least one employee must be assigned', 'error');
       return;
     }
     showToast(`Task ${isEdit ? 'updated' : 'created'} successfully!`, 'success');
@@ -278,7 +320,72 @@ const CreateTask = ({ isEdit = false, onSave, onCancel }) => {
             <div className="detail-grid">
               <div className="detail-field">
                 <label>ASSIGNED TO <span style={{color: 'orange'}}>*</span></label>
-                <input type="text" className="form-control" value={formData.assignedTo} onChange={(e) => handleInputChange('assignedTo', e.target.value)} />
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <select 
+                    className="form-control" 
+                    value={selectedEmployee}
+                    onChange={(e) => setSelectedEmployee(e.target.value)}
+                    style={{ flex: 1 }}
+                  >
+                    <option value="">Select Employee</option>
+                    {availableEmployees.map(emp => (
+                      <option key={emp} value={emp}>{emp}</option>
+                    ))}
+                  </select>
+                  <button 
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleAddEmployee}
+                    disabled={!selectedEmployee}
+                    style={{ whiteSpace: 'nowrap' }}
+                  >
+                    <i className="fas fa-plus"></i> Add
+                  </button>
+                </div>
+                {formData.assignedTo.length > 0 && (
+                  <div style={{ 
+                    border: '1px solid #e0e0e0', 
+                    borderRadius: '4px', 
+                    padding: '0.75rem',
+                    background: '#f9fafb'
+                  }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#6b7280', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                      Assigned Employees ({formData.assignedTo.length})
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      {formData.assignedTo.map((employee, idx) => (
+                        <div 
+                          key={idx}
+                          style={{ 
+                            display: 'flex', 
+                            justifyContent: 'space-between', 
+                            alignItems: 'center',
+                            padding: '0.5rem',
+                            background: 'white',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '4px'
+                          }}
+                        >
+                          <span style={{ fontSize: '0.875rem', color: '#374151' }}>{employee}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveEmployee(employee)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#dc2626',
+                              cursor: 'pointer',
+                              padding: '0.25rem 0.5rem',
+                              fontSize: '0.875rem'
+                            }}
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

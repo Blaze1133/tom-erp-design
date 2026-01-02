@@ -4,7 +4,8 @@ import './Enquiries.css';
 
 const ViewWriteCheckDetail = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [activeTab, setActiveTab] = useState('expenses');
+  const [activeTab, setActiveTab] = useState('expensesItems');
+  const [expenseItemTab, setExpenseItemTab] = useState('expense');
   const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
   const [classificationCollapsed, setClassificationCollapsed] = useState(false);
 
@@ -228,8 +229,7 @@ const ViewWriteCheckDetail = ({ setCurrentPage }) => {
 
         <div className="detail-tabs" style={{ marginTop: '2rem' }}>
           <div className="tabs-header">
-            <button className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`} onClick={() => setActiveTab('expenses')}>Expenses</button>
-            <button className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`} onClick={() => setActiveTab('items')}>Items</button>
+            <button className={`tab-btn ${activeTab === 'expensesItems' ? 'active' : ''}`} onClick={() => setActiveTab('expensesItems')}>Expenses & Items</button>
             <button className={`tab-btn ${activeTab === 'relatedRecords' ? 'active' : ''}`} onClick={() => setActiveTab('relatedRecords')}>Related Records</button>
             <button className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`} onClick={() => setActiveTab('relationships')}>Relationships</button>
             <button className={`tab-btn ${activeTab === 'communication' ? 'active' : ''}`} onClick={() => setActiveTab('communication')}>Communication</button>
@@ -239,7 +239,52 @@ const ViewWriteCheckDetail = ({ setCurrentPage }) => {
             <button className={`tab-btn ${activeTab === 'system' ? 'active' : ''}`} onClick={() => setActiveTab('system')}>System Information</button>
           </div>
 
-          {activeTab === 'expenses' && (
+          {activeTab === 'expensesItems' && (
+            <div className="tab-content" style={{ padding: '0' }}>
+              <div style={{ display: 'flex', gap: '0', borderBottom: '2px solid #e0e0e0', paddingLeft: '1.5rem', background: '#f8f8f8' }}>
+                <button 
+                  onClick={() => setExpenseItemTab('expense')}
+                  style={{ 
+                    padding: '0.75rem 1.5rem',
+                    background: expenseItemTab === 'expense' ? '#5b6b8a' : 'transparent',
+                    color: expenseItemTab === 'expense' ? '#fff' : 'rgba(0,0,0,0.6)',
+                    border: 'none',
+                    borderRight: '1px solid rgba(0,0,0,0.1)',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    fontWeight: expenseItemTab === 'expense' ? '600' : '500',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <i className="fas fa-receipt"></i>
+                  Expense
+                </button>
+                <button 
+                  onClick={() => setExpenseItemTab('item')}
+                  style={{ 
+                    padding: '0.75rem 1.5rem',
+                    background: expenseItemTab === 'item' ? '#5b6b8a' : 'transparent',
+                    color: expenseItemTab === 'item' ? '#fff' : 'rgba(0,0,0,0.6)',
+                    border: 'none',
+                    borderRight: '1px solid rgba(0,0,0,0.1)',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    fontWeight: expenseItemTab === 'item' ? '600' : '500',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <i className="fas fa-box"></i>
+                  Item
+                </button>
+              </div>
+
+              {expenseItemTab === 'expense' && (
             <div className="tab-content">
               <div className="items-table-container">
                 <table className="items-table">
@@ -295,9 +340,9 @@ const ViewWriteCheckDetail = ({ setCurrentPage }) => {
                 </div>
               </div>
             </div>
-          )}
+              )}
 
-          {activeTab === 'items' && (
+              {expenseItemTab === 'item' && (
             <div className="tab-content">
               {checkData.items.length === 0 ? (
                 <div style={{ padding: '40px', textAlign: 'center', color: '#999' }}>
@@ -348,6 +393,8 @@ const ViewWriteCheckDetail = ({ setCurrentPage }) => {
                     </tbody>
                   </table>
                 </div>
+              )}
+            </div>
               )}
             </div>
           )}

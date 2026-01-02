@@ -535,11 +535,12 @@
 
 .detail-toolbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     padding: 1rem 2rem;
     background: #f8f8f8;
     border-bottom: 1px solid #e0e0e0;
+    gap: 0.5rem;
 }
 
 .toolbar-left {
@@ -552,6 +553,7 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    margin-left: auto;
 }
 
 .btn-toolbar-primary {
@@ -567,15 +569,10 @@
     align-items: center;
     gap: 0.5rem;
     transition: all 0.2s ease;
-    order: 2;
 }
 
 .btn-toolbar-primary:hover {
     background: #c82333;
-}
-
-.detail-toolbar .btn-toolbar:first-child {
-    order: 1;
 }
 
 .btn-toolbar {
@@ -1843,4 +1840,14 @@
 
 .table-row-with-actions:hover {
     background-color: #fafafa;
+}
+
+.table-row-with-actions.active,
+.table-row-with-actions.selected {
+    background-color: #e3f2fd !important;
+}
+
+.table-row-with-actions.active:hover,
+.table-row-with-actions.selected:hover {
+    background-color: #bbdefb !important;
 }

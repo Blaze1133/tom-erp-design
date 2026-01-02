@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewCustomers = ({ onNewClick, onViewClick, onEditClick }) => {
+const ViewCustomers = ({ onNewClick, onViewClick, onEditClick, onDashboardClick }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [viewFilter, setViewFilter] = useState('all');
   const [showInactives, setShowInactives] = useState(false);
@@ -182,6 +182,15 @@ const ViewCustomers = ({ onNewClick, onViewClick, onEditClick }) => {
         <div className="list-title">
           <i className="fas fa-users"></i>
           <h1>Customers & Projects</h1>
+          <button 
+            onClick={onDashboardClick}
+            className="btn-action"
+            style={{
+              marginLeft: '1rem'
+            }}
+          >
+            <i className="fas fa-chart-line"></i> Dashboard
+          </button>
         </div>
         <div className="list-actions">
           <button className="btn-view-option">List</button>

@@ -34,22 +34,22 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
       previousMonth: 1700.00,
       breakdown: {
         earnings: [
-          { component: 'Basic Salary', amount: 1700.00 },
-          { component: 'Normal Hours Pay', amount: 1700.00 },
-          { component: 'OT 1.5x Pay', amount: 160.50 },
-          { component: 'OT 2.0x Pay', amount: 142.72 },
-          { component: 'Weekend Pay', amount: 214.08 },
-          { component: 'Holiday Pay', amount: 107.04 },
-          { component: 'Performance Bonus', amount: 500.00 }
+          { component: 'Basic Salary', amount: 1700.00, editable: false },
+          { component: 'Normal Hours Pay', amount: 1700.00, editable: false },
+          { component: 'OT 1.5x Pay', amount: 160.50, editable: true },
+          { component: 'OT 2.0x Pay', amount: 142.72, editable: true },
+          { component: 'Weekend Pay', amount: 214.08, editable: true },
+          { component: 'Holiday Pay', amount: 107.04, editable: true },
+          { component: 'Performance Bonus', amount: 500.00, editable: true }
         ],
         deductions: [
-          { component: 'CPF Employee (20%)', amount: 680.00 },
-          { component: 'SDL', amount: 8.47 },
-          { component: 'Loan Recovery', amount: 100.00 }
+          { component: 'CPF Employee (20%)', amount: 680.00, editable: false },
+          { component: 'SDL', amount: 8.47, editable: false },
+          { component: 'Loan Recovery', amount: 100.00, editable: true }
         ],
         employer: [
-          { component: 'CPF Employer (17%)', amount: 578.00 },
-          { component: 'SDL (0.25%)', amount: 8.47 }
+          { component: 'CPF Employer (17%)', amount: 578.00, editable: false },
+          { component: 'SDL (0.25%)', amount: 8.47, editable: false }
         ]
       }
     },
@@ -74,19 +74,19 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
       previousMonth: 2200.00,
       breakdown: {
         earnings: [
-          { component: 'Basic Salary', amount: 2200.00 },
-          { component: 'Normal Hours Pay', amount: 2200.00 },
-          { component: 'OT 1.5x Pay', amount: 110.00 },
-          { component: 'Weekend Pay', amount: 110.00 },
-          { component: 'Transport Allowance', amount: 150.00 }
+          { component: 'Basic Salary', amount: 2200.00, editable: false },
+          { component: 'Normal Hours Pay', amount: 2200.00, editable: false },
+          { component: 'OT 1.5x Pay', amount: 110.00, editable: true },
+          { component: 'Weekend Pay', amount: 110.00, editable: true },
+          { component: 'Transport Allowance', amount: 150.00, editable: true }
         ],
         deductions: [
-          { component: 'CPF Employee (20%)', amount: 740.00 },
-          { component: 'SDL', amount: 7.71 }
+          { component: 'CPF Employee (20%)', amount: 740.00, editable: false },
+          { component: 'SDL', amount: 7.71, editable: false }
         ],
         employer: [
-          { component: 'CPF Employer (17%)', amount: 629.00 },
-          { component: 'SDL (0.25%)', amount: 7.71 }
+          { component: 'CPF Employer (17%)', amount: 629.00, editable: false },
+          { component: 'SDL (0.25%)', amount: 7.71, editable: false }
         ]
       }
     },
@@ -111,18 +111,18 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
       previousMonth: 1800.00,
       breakdown: {
         earnings: [
-          { component: 'Basic Salary', amount: 1800.00 },
-          { component: 'Normal Hours Pay', amount: 1800.00 },
-          { component: 'OT 1.5x Pay', amount: 55.00 },
-          { component: 'Site Allowance', amount: 200.00 }
+          { component: 'Basic Salary', amount: 1800.00, editable: false },
+          { component: 'Normal Hours Pay', amount: 1800.00, editable: false },
+          { component: 'OT 1.5x Pay', amount: 55.00, editable: true },
+          { component: 'Site Allowance', amount: 200.00, editable: true }
         ],
         deductions: [
-          { component: 'CPF Employee (20%)', amount: 720.00 },
-          { component: 'SDL', amount: 6.17 }
+          { component: 'CPF Employee (20%)', amount: 720.00, editable: false },
+          { component: 'SDL', amount: 6.17, editable: false }
         ],
         employer: [
-          { component: 'CPF Employer (17%)', amount: 612.00 },
-          { component: 'SDL (0.25%)', amount: 6.17 }
+          { component: 'CPF Employer (17%)', amount: 612.00, editable: false },
+          { component: 'SDL (0.25%)', amount: 6.17, editable: false }
         ]
       }
     }
@@ -172,13 +172,15 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
 
   const handleEditEmployee = (employee) => {
     setEditingEmployee(employee.employeeId);
+    
+    // Create editable breakdown structure
+    const editableBreakdown = {
+      earnings: employee.breakdown.earnings.map(item => ({ ...item })),
+      deductions: employee.breakdown.deductions.map(item => ({ ...item }))
+    };
+    
     setEditFormData({
-      ot15Pay: employee.ot15Pay,
-      ot20Pay: employee.ot20Pay,
-      weekendPay: employee.weekendPay,
-      holidayPay: employee.holidayPay,
-      additions: employee.additions,
-      variableDeductions: employee.variableDeductions
+      breakdown: editableBreakdown
     });
   };
 
@@ -190,35 +192,75 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
   const handleSaveEdit = () => {
     const updatedData = payrollData.map(emp => {
       if (emp.employeeId === editingEmployee) {
-        const newOt15 = parseFloat(editFormData.ot15Pay) || 0;
-        const newOt20 = parseFloat(editFormData.ot20Pay) || 0;
-        const newWeekend = parseFloat(editFormData.weekendPay) || 0;
-        const newHoliday = parseFloat(editFormData.holidayPay) || 0;
-        const newAdditions = parseFloat(editFormData.additions) || 0;
-        const newVarDeductions = parseFloat(editFormData.variableDeductions) || 0;
-
-        const newGrossSalary = emp.basicSalary + emp.normalPay + newOt15 + newOt20 + newWeekend + newHoliday + newAdditions;
+        // Calculate totals from breakdown
+        const totalEarnings = editFormData.breakdown.earnings.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+        
+        // Get all deductions except CPF and SDL (which are auto-calculated)
+        const variableDeductions = editFormData.breakdown.deductions
+          .filter(d => d.component !== 'CPF Employee (20%)' && d.component !== 'SDL')
+          .reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+        
+        const newGrossSalary = totalEarnings;
         const newCPFEmployee = newGrossSalary * 0.20;
         const newSDL = newGrossSalary * 0.0025;
-        const newTotalDeductions = newCPFEmployee + newSDL + newVarDeductions;
+        const newTotalDeductions = newCPFEmployee + newSDL + variableDeductions;
         const newNetSalary = newGrossSalary - newTotalDeductions;
         const newCPFEmployer = newGrossSalary * 0.17;
 
+        // Update calculated fields in breakdown and ensure all amounts are numbers
+        const updatedEarningsBreakdown = editFormData.breakdown.earnings.map(item => ({ 
+          ...item, 
+          amount: parseFloat(item.amount) || 0 
+        }));
+        const updatedDeductionsBreakdown = editFormData.breakdown.deductions.map(item => {
+          if (item.component === 'CPF Employee (20%)') {
+            return { ...item, amount: newCPFEmployee };
+          } else if (item.component === 'SDL') {
+            return { ...item, amount: newSDL };
+          }
+          return { ...item, amount: parseFloat(item.amount) || 0 };
+        });
+
+        const updatedEmployerBreakdown = emp.breakdown.employer.map(item => {
+          if (item.component === 'CPF Employer (17%)') {
+            return { ...item, amount: newCPFEmployer };
+          } else if (item.component === 'SDL (0.25%)') {
+            return { ...item, amount: newSDL };
+          }
+          return { ...item };
+        });
+
+        // Extract individual values for backward compatibility
+        const ot15Item = updatedEarningsBreakdown.find(e => e.component === 'OT 1.5x Pay');
+        const ot20Item = updatedEarningsBreakdown.find(e => e.component === 'OT 2.0x Pay');
+        const weekendItem = updatedEarningsBreakdown.find(e => e.component === 'Weekend Pay');
+        const holidayItem = updatedEarningsBreakdown.find(e => e.component === 'Holiday Pay');
+        
+        // Calculate additions (bonuses/allowances) - everything except basic, normal, and OT-related
+        const additionsTotal = updatedEarningsBreakdown
+          .filter(e => !['Basic Salary', 'Normal Hours Pay', 'OT 1.5x Pay', 'OT 2.0x Pay', 'Weekend Pay', 'Holiday Pay'].includes(e.component))
+          .reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+
         return {
           ...emp,
-          ot15Pay: newOt15,
-          ot20Pay: newOt20,
-          weekendPay: newWeekend,
-          holidayPay: newHoliday,
-          additions: newAdditions,
-          variableDeductions: newVarDeductions,
+          ot15Pay: ot15Item ? parseFloat(ot15Item.amount) : 0,
+          ot20Pay: ot20Item ? parseFloat(ot20Item.amount) : 0,
+          weekendPay: weekendItem ? parseFloat(weekendItem.amount) : 0,
+          holidayPay: holidayItem ? parseFloat(holidayItem.amount) : 0,
+          additions: additionsTotal,
+          variableDeductions: variableDeductions,
           grossSalary: newGrossSalary,
           cpfEmployee: newCPFEmployee,
           cpfEmployer: newCPFEmployer,
           sdl: newSDL,
           totalDeductions: newTotalDeductions,
           netSalary: newNetSalary,
-          variance: newNetSalary - emp.previousMonth
+          variance: newNetSalary - emp.previousMonth,
+          breakdown: {
+            earnings: updatedEarningsBreakdown,
+            deductions: updatedDeductionsBreakdown,
+            employer: updatedEmployerBreakdown
+          }
         };
       }
       return emp;
@@ -230,11 +272,12 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
     showToast('Employee payroll updated successfully', 'success');
   };
 
-  const handleFieldChange = (field, value) => {
-    setEditFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleBreakdownFieldChange = (type, index, value) => {
+    setEditFormData(prev => {
+      const updated = { ...prev };
+      updated.breakdown[type][index].amount = value;
+      return updated;
+    });
   };
 
   const totalGross = payrollData.reduce((sum, emp) => sum + emp.grossSalary, 0);
@@ -522,171 +565,185 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
       </div>
 
       {/* Edit Employee Modal */}
-      {editingEmployee && (
+      {editingEmployee && editFormData.breakdown && (
         <div style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
+          background: 'rgba(0,0,0,0.4)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
+          padding: '1rem'
         }}>
           <div style={{
             background: 'white',
-            borderRadius: '8px',
-            padding: '2rem',
-            width: '600px',
-            maxWidth: '90%',
+            borderRadius: '6px',
+            width: '800px',
+            maxWidth: '100%',
             maxHeight: '90vh',
-            overflowY: 'auto'
+            overflow: 'hidden',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            display: 'flex',
+            flexDirection: 'column'
           }}>
-            <h3 style={{ margin: '0 0 1.5rem 0', fontSize: '1.25rem', fontWeight: '600', color: '#374151' }}>
-              Edit Payroll - {payrollData.find(e => e.employeeId === editingEmployee)?.employeeName}
-            </h3>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
-                  OT 1.5x PAY
-                </label>
-                <input
-                  type="number"
-                  value={editFormData.ot15Pay}
-                  onChange={(e) => handleFieldChange('ot15Pay', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                  }}
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
-                  OT 2.0x PAY
-                </label>
-                <input
-                  type="number"
-                  value={editFormData.ot20Pay}
-                  onChange={(e) => handleFieldChange('ot20Pay', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                  }}
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
-                  WEEKEND PAY
-                </label>
-                <input
-                  type="number"
-                  value={editFormData.weekendPay}
-                  onChange={(e) => handleFieldChange('weekendPay', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                  }}
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#374151' }}>
-                  HOLIDAY PAY
-                </label>
-                <input
-                  type="number"
-                  value={editFormData.holidayPay}
-                  onChange={(e) => handleFieldChange('holidayPay', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                  }}
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#10b981' }}>
-                  ADDITIONS (Bonuses)
-                </label>
-                <input
-                  type="number"
-                  value={editFormData.additions}
-                  onChange={(e) => handleFieldChange('additions', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                  }}
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '12px', fontWeight: '600', color: '#dc2626' }}>
-                  VARIABLE DEDUCTIONS
-                </label>
-                <input
-                  type="number"
-                  value={editFormData.variableDeductions}
-                  onChange={(e) => handleFieldChange('variableDeductions', e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                  }}
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-            </div>
-
-            <div style={{ padding: '1rem', background: '#f0f9ff', borderRadius: '6px', marginBottom: '1.5rem' }}>
-              <p style={{ margin: 0, fontSize: '12px', color: '#0369a1', lineHeight: '1.6' }}>
-                <strong>Note:</strong> Gross Salary, CPF, SDL, Total Deductions, and Net Salary will be automatically recalculated based on your changes.
+            {/* Header */}
+            <div style={{ 
+              padding: '1.5rem 2rem', 
+              borderBottom: '1px solid #e5e7eb',
+              background: '#fafafa'
+            }}>
+              <h3 style={{ 
+                margin: 0, 
+                fontSize: '1.125rem', 
+                fontWeight: '600', 
+                color: '#1f2937'
+              }}>
+                Edit Payroll Components
+              </h3>
+              <p style={{ 
+                margin: '0.25rem 0 0 0', 
+                fontSize: '0.875rem', 
+                color: '#6b7280'
+              }}>
+                {payrollData.find(e => e.employeeId === editingEmployee)?.employeeName}
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+            {/* Content */}
+            <div style={{ 
+              flex: 1, 
+              overflow: 'auto', 
+              padding: '2rem',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '2rem'
+            }}>
+              {/* Earnings Section */}
+              <div>
+                <h4 style={{ 
+                  margin: '0 0 1rem 0', 
+                  fontSize: '0.875rem', 
+                  fontWeight: '600', 
+                  color: '#374151',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>
+                  Earnings Components
+                </h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {editFormData.breakdown.earnings.map((item, idx) => (
+                    <div key={idx}>
+                      <label style={{ 
+                        display: 'block', 
+                        marginBottom: '0.375rem', 
+                        fontSize: '0.8125rem', 
+                        fontWeight: '500', 
+                        color: '#374151'
+                      }}>
+                        {item.component}
+                      </label>
+                      <input
+                        type="number"
+                        value={item.amount}
+                        onChange={(e) => handleBreakdownFieldChange('earnings', idx, e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '0.625rem 0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '4px',
+                          fontSize: '0.875rem',
+                          color: '#374151',
+                          background: 'white'
+                        }}
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Deductions Section */}
+              <div>
+                <h4 style={{ 
+                  margin: '0 0 1rem 0', 
+                  fontSize: '0.875rem', 
+                  fontWeight: '600', 
+                  color: '#374151',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>
+                  Deduction Components
+                </h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {editFormData.breakdown.deductions.map((item, idx) => (
+                    <div key={idx}>
+                      <label style={{ 
+                        display: 'block', 
+                        marginBottom: '0.375rem', 
+                        fontSize: '0.8125rem', 
+                        fontWeight: '500', 
+                        color: '#374151'
+                      }}>
+                        {item.component}
+                      </label>
+                      <input
+                        type="number"
+                        value={item.amount}
+                        onChange={(e) => handleBreakdownFieldChange('deductions', idx, e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '0.625rem 0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '4px',
+                          fontSize: '0.875rem',
+                          color: '#374151',
+                          background: 'white'
+                        }}
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Info Note */}
+            <div style={{ padding: '0 2rem 1rem 2rem' }}>
+              <div style={{ padding: '0.75rem 1rem', background: '#eff6ff', borderRadius: '4px', border: '1px solid #bfdbfe' }}>
+                <p style={{ margin: 0, fontSize: '0.8125rem', color: '#1e40af', lineHeight: '1.5' }}>
+                  <strong>Note:</strong> All fields are editable. CPF, SDL, Gross Salary, Total Deductions, and Net Salary will be recalculated automatically.
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div style={{ 
+              padding: '1.25rem 2rem', 
+              borderTop: '1px solid #e5e7eb',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '0.75rem',
+              background: '#fafafa'
+            }}>
               <button
                 onClick={handleCancelEdit}
                 style={{
-                  padding: '0.75rem 1.5rem',
+                  padding: '0.625rem 1.25rem',
                   background: 'white',
                   border: '1px solid #d1d5db',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '500'
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#374151'
                 }}
               >
                 Cancel
@@ -694,14 +751,14 @@ const PayrollCalculationReview = ({ payrollRunId, onBack, onApprove, viewOnly = 
               <button
                 onClick={handleSaveEdit}
                 style={{
-                  padding: '0.75rem 1.5rem',
+                  padding: '0.625rem 1.25rem',
                   background: '#3b82f6',
                   color: 'white',
                   border: 'none',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '600'
+                  fontSize: '0.875rem',
+                  fontWeight: '500'
                 }}
               >
                 Save Changes

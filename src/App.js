@@ -363,9 +363,11 @@ import CreateRetroactivePayment from './components/CreateRetroactivePayment';
 import ViewCustomers from './components/ViewCustomers';
 import ViewCustomerDetail from './components/ViewCustomerDetail';
 import CreateCustomer from './components/CreateCustomer';
+import CustomerDashboard from './components/CustomerDashboard';
 import ViewVendors from './components/ViewVendors';
 import ViewVendorDetail from './components/ViewVendorDetail';
 import CreateVendor from './components/CreateVendor';
+import VendorDashboard from './components/VendorDashboard';
 import ViewBankMasters from './components/ViewBankMasters';
 import ViewBankMasterDetail from './components/ViewBankMasterDetail';
 import CreateBankMaster from './components/CreateBankMaster';
@@ -2499,6 +2501,11 @@ function App() {
           onNewClick={() => setCurrentPage('create-customer-master')}
           onViewClick={() => setCurrentPage('view-customer-master-detail')}
           onEditClick={() => setCurrentPage('edit-customer-master')}
+          onDashboardClick={() => setCurrentPage('customer-dashboard')}
+        />;
+      case 'customer-dashboard':
+        return <CustomerDashboard 
+          onBack={() => setCurrentPage('view-customer-masters')}
         />;
       case 'view-customer-master-detail':
         return <ViewCustomerDetail 
@@ -2524,6 +2531,11 @@ function App() {
           onNewClick={() => setCurrentPage('create-vendor-master')}
           onViewClick={() => setCurrentPage('view-vendor-master-detail')}
           onEditClick={() => setCurrentPage('edit-vendor-master')}
+          onDashboardClick={() => setCurrentPage('vendor-dashboard')}
+        />;
+      case 'vendor-dashboard':
+        return <VendorDashboard 
+          onBack={() => setCurrentPage('view-vendor-masters')}
         />;
       case 'view-vendor-master-detail':
         return <ViewVendorDetail 

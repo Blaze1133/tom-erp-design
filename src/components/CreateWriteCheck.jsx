@@ -4,7 +4,8 @@ import './Enquiries.css';
 
 const CreateWriteCheck = ({ setCurrentPage }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [activeTab, setActiveTab] = useState('expenses');
+  const [activeTab, setActiveTab] = useState('expensesItems');
+  const [expenseItemTab, setExpenseItemTab] = useState('expense');
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -688,11 +689,8 @@ const CreateWriteCheck = ({ setCurrentPage }) => {
 
         <div className="detail-tabs" style={{ marginTop: '2rem' }}>
           <div className="tabs-header">
-            <button className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`} onClick={() => setActiveTab('expenses')}>
-              Expenses {calculateExpensesTotal()}
-            </button>
-            <button className={`tab-btn ${activeTab === 'items' ? 'active' : ''}`} onClick={() => setActiveTab('items')}>
-              Items {calculateItemsTotal()}
+            <button className={`tab-btn ${activeTab === 'expensesItems' ? 'active' : ''}`} onClick={() => setActiveTab('expensesItems')}>
+              Expenses & Items
             </button>
             <button className={`tab-btn ${activeTab === 'relationships' ? 'active' : ''}`} onClick={() => setActiveTab('relationships')}>
               Relationships
@@ -708,12 +706,54 @@ const CreateWriteCheck = ({ setCurrentPage }) => {
             </button>
           </div>
 
-          {activeTab === 'expenses' && (
-            <div className="form-section" style={{ padding: '1.5rem' }}>
-              <h2 className="section-title">
-                <i className="fas fa-receipt"></i>
-                Expenses {calculateExpensesTotal()}
-              </h2>
+          {activeTab === 'expensesItems' && (
+            <div className="form-section" style={{ padding: '0' }}>
+              <div style={{ display: 'flex', gap: '0', borderBottom: '2px solid #e0e0e0', paddingLeft: '1.5rem', background: '#f8f8f8' }}>
+                <button 
+                  onClick={() => setExpenseItemTab('expense')}
+                  style={{ 
+                    padding: '0.75rem 1.5rem',
+                    background: expenseItemTab === 'expense' ? '#5b6b8a' : 'transparent',
+                    color: expenseItemTab === 'expense' ? '#fff' : 'rgba(0,0,0,0.6)',
+                    border: 'none',
+                    borderRight: '1px solid rgba(0,0,0,0.1)',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    fontWeight: expenseItemTab === 'expense' ? '600' : '500',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <i className="fas fa-receipt"></i>
+                  Expense ({calculateExpensesTotal()})
+                </button>
+                <button 
+                  onClick={() => setExpenseItemTab('item')}
+                  style={{ 
+                    padding: '0.75rem 1.5rem',
+                    background: expenseItemTab === 'item' ? '#5b6b8a' : 'transparent',
+                    color: expenseItemTab === 'item' ? '#fff' : 'rgba(0,0,0,0.6)',
+                    border: 'none',
+                    borderRight: '1px solid rgba(0,0,0,0.1)',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    fontWeight: expenseItemTab === 'item' ? '600' : '500',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <i className="fas fa-box"></i>
+                  Item ({calculateItemsTotal()})
+                </button>
+              </div>
+              <div style={{ padding: '1.5rem' }}>
+
+              {expenseItemTab === 'expense' && (
+                <div>
               
               <div className="items-table-container" style={{ marginBottom: '1rem' }}>
                 <table className="items-table">
@@ -889,15 +929,11 @@ const CreateWriteCheck = ({ setCurrentPage }) => {
                 <i className="fas fa-plus"></i>
                 Add Expense
               </button>
-            </div>
-          )}
+                </div>
+              )}
 
-          {activeTab === 'items' && (
-            <div className="form-section" style={{ padding: '1.5rem' }}>
-              <h2 className="section-title">
-                <i className="fas fa-box"></i>
-                Items {calculateItemsTotal()}
-              </h2>
+              {expenseItemTab === 'item' && (
+                <div>
               
               <div className="items-table-container" style={{ marginBottom: '1rem' }}>
                 <table className="items-table">
@@ -1124,6 +1160,9 @@ const CreateWriteCheck = ({ setCurrentPage }) => {
                 <i className="fas fa-plus"></i>
                 Add Item
               </button>
+                </div>
+              )}
+              </div>
             </div>
           )}
 
