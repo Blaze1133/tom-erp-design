@@ -826,17 +826,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       ]
     },
     {
-      id: 'setup-crm',
-      label: 'CRM',
-      hasSubmenu: true,
-      submenu: [
-        { id: 'setup-customer-status-list', label: 'Customer Status List' },
-        { id: 'setup-crm-lists', label: 'CRM Lists' },
-        { id: 'setup-crm-preferences', label: 'CRM Preferences' },
-        { id: 'setup-crm-enquiry', label: 'CRM Enquiry' }
-      ]
-    },
-    {
       id: 'setup-users-roles',
       label: 'Users/Roles',
       hasSubmenu: true,
@@ -990,7 +979,75 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
     }
   ];
 
-  const productionSubItems = [];
+  const productionSubItems = [
+    { id: 'production-scan-qr', label: 'Scan QR Code', hideArrow: true },
+    { 
+      id: 'production-dashboards',
+      label: 'Dashboards',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'production-dashboard-overall', label: 'Overall Dashboard' },
+        { id: 'dashboard-module', label: 'Module Dashboard' },
+        { id: 'production-workshop-dashboard', label: 'Workshop Dashboard' },
+        { id: 'plant-dashboard', label: 'Plant Dashboard' }
+      ]
+    },
+    { id: 'status-all-modules', label: 'Status All Modules', hideArrow: true },
+    { 
+      id: 'production-master-tables',
+      label: 'Master Tables',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'production-project-masters', label: 'Project Masters' },
+        { id: 'production-site-locations', label: 'Site Locations' },
+        { id: 'production-contractors', label: 'Contractors' }
+      ]
+    },
+    { 
+      id: 'production-drawings-documents',
+      label: 'Drawings & Documents',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'production-upload-drawings', label: 'Upload Drawings' },
+        { id: 'production-project-documents', label: 'Project Documents' }
+      ]
+    },
+    { 
+      id: 'production-stages',
+      label: 'MEP Stages',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'frame-fabrication', label: 'Fabrication' },
+        { id: 'production-me-services', label: 'M&E Assembly' },
+        { id: 'testing-alignment', label: 'Testing & Alignment' },
+        { id: 'fabrication-qa-qc', label: 'Fabrication QA & QC' },
+        { id: 'packaging', label: 'Packaging' },
+        { id: 'production-delivery', label: 'Delivery' },
+        { id: 'anchoring', label: 'Anchoring' },
+        { id: 'hoisting', label: 'Hoisting' },
+        { id: 'positioning', label: 'Positioning' },
+        { id: 'me-hookup', label: 'M&E Hookup' },
+        { id: 'installation', label: 'Installation' },
+        { id: 'final-qa-qc', label: 'Final QA QC' }
+      ]
+    },
+    { 
+      id: 'production-plant-stages',
+      label: 'Plant Stages',
+      hasSubmenu: true,
+      submenu: [
+        { id: 'plant-material-incoming', label: 'Material Incoming Status' },
+        { id: 'plant-material-traceability', label: 'Material Traceability' },
+        { id: 'plant-fit-up', label: 'FIT-Up' },
+        { id: 'plant-visual-inspection', label: 'Visual Inspection' },
+        { id: 'plant-dimensional-inspection', label: 'Dimensional Inspection' },
+        { id: 'plant-welding-traceability', label: 'Welding Traceability' },
+        { id: 'plant-mep-components', label: 'MEP Components' },
+        { id: 'plant-hydrostatic-test', label: 'Hydrostatic Test' }
+      ]
+    },
+    { id: 'production-time-tracking', label: 'Module Wise Time Tracking', hideArrow: true }
+  ];
 
   const menuItems = [
     { id: 'dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
@@ -1595,6 +1652,55 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
                       <i className="fas fa-chevron-right nested-arrow"></i>
                     </div>
                     <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`hr-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`hr-${subItem.id}`] || 0}px` }}>
+                      {subItem.submenu.map((nestedItem) => (
+                        <div
+                          key={nestedItem.id}
+                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
+                          onClick={() => setCurrentPage(nestedItem.id)}
+                        >
+                          <span>{nestedItem.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(subItem.id)}
+                  >
+                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
+                    <span>{subItem.label}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Production Menu with Submenu */}
+        <div className="nav-item-parent" onMouseEnter={handleProductionHover}>
+          <div
+            ref={productionItemRef}
+            className="nav-item"
+          >
+            <i className="fas fa-cogs"></i>
+            <span>Production</span>
+          </div>
+          <div className="submenu" style={{ top: `${productionSubmenuTop}px`, '--submenu-top': `${productionSubmenuTop}px` }}>
+            {productionSubItems.map((subItem) => (
+              <div key={subItem.id} className="submenu-item-wrapper">
+                {subItem.hasSubmenu ? (
+                  <>
+                    <div
+                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(subItem.id)}
+                      onMouseEnter={(e) => handleNestedHover(e, `production-${subItem.id}`)}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                      <span>{subItem.label}</span>
+                      <i className="fas fa-chevron-right nested-arrow"></i>
+                    </div>
+                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px` }}>
                       {subItem.submenu.map((nestedItem) => (
                         <div
                           key={nestedItem.id}

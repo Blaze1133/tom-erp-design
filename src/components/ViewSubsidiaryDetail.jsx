@@ -11,6 +11,8 @@ const ViewSubsidiaryDetail = ({ setCurrentPage }) => {
   const [formData] = useState({
     subsidiaryIsInactive: false,
     name: subsidiary.name || 'Tech Onshore MEP Prefabricators Pte Ltd.',
+    isChildSubsidiary: false,
+    parentSubsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     alwaysDisplaySubsidiaryName: true,
     subsidiaryLogo: 'TOM_LOGO.png',
     subsidiaryLogoImages: 'TOM_LOGO.png',
@@ -38,7 +40,6 @@ const ViewSubsidiaryDetail = ({ setCurrentPage }) => {
     
     // LWF Check
     cpfSubmissionNumber: '199507962E-PTE-02',
-    biometricIntegration: true,
     authorizePersonPhoneNo: '',
     irasAuthorizedPerson: 'MEP049 Camila Shirde',
     paymentMode: 'All Payment Made by Giro to Tech Onshore MEP-Prefabricators Pte. Ltd. At DBS Bank A/C No.: 003-906132-3, Swift Code: DBSSSGSG',
@@ -151,9 +152,16 @@ const ViewSubsidiaryDetail = ({ setCurrentPage }) => {
           </div>
 
           <div className="form-group">
-            <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>PARENT SUBSIDIARY</label>
-            <div style={{ fontSize: '13px', color: '#333' }}>Tech Onshore MEP Prefabricators Pte Ltd.</div>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>IS CHILD SUBSIDIARY</label>
+            <div style={{ fontSize: '13px', color: '#333' }}>{formData.isChildSubsidiary ? 'Yes' : 'No'}</div>
           </div>
+
+          {formData.isChildSubsidiary && (
+            <div className="form-group">
+              <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>PARENT SUBSIDIARY</label>
+              <div style={{ fontSize: '13px', color: '#333' }}>{formData.parentSubsidiary || '-'}</div>
+            </div>
+          )}
 
           <div className="form-group">
             <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>INTERCOMPANY ACCOUNT</label>
@@ -193,16 +201,6 @@ const ViewSubsidiaryDetail = ({ setCurrentPage }) => {
           <div className="form-group">
             <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>VAT REGISTRATION NO.</label>
             <div style={{ fontSize: '13px', color: '#333' }}>{formData.vatRegistrationNo}</div>
-          </div>
-
-          <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input
-              type="checkbox"
-              checked={formData.biometricIntegration}
-              disabled
-              style={{ width: '14px', height: '14px' }}
-            />
-            <label style={{ margin: 0, fontSize: '12px' }}>BIOMETRIC INTEGRATION</label>
           </div>
 
           <div className="form-group">

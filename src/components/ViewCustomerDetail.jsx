@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewCustomerDetail = ({ onBack, onEdit }) => {
+const ViewCustomerDetail = ({ onBack, onEdit, onViewDashboard }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('relationships');
   const [primaryInfoCollapsed, setPrimaryInfoCollapsed] = useState(false);
@@ -56,6 +56,12 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
     }
   };
 
+  const handleViewDashboard = () => {
+    if (onViewDashboard) {
+      onViewDashboard(customerData);
+    }
+  };
+
   return (
     <div className="enquiry-detail">
       <div className="detail-header">
@@ -76,7 +82,10 @@ const ViewCustomerDetail = ({ onBack, onEdit }) => {
             <i className="fas fa-arrow-right"></i>
           </button>
           <button className="btn-action">List</button>
-          <button className="btn-action">View Dashboard</button>
+          <button className="btn-action" onClick={handleViewDashboard}>
+            <i className="fas fa-chart-line"></i>
+            View Dashboard
+          </button>
           <button className="btn-action">View Customer 360</button>
           <button className="btn-action">Search</button>
         </div>

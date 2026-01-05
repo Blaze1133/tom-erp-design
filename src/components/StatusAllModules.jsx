@@ -233,6 +233,7 @@ const StatusAllModules = () => {
           <div className="list-title">
             <i className="fas fa-chart-bar"></i>
             <h1>Status All Modules</h1>
+            <span style={{ marginLeft: '1rem', padding: '0.35rem 0.85rem', background: '#4a90e2', color: 'white', borderRadius: '4px', fontSize: '0.8rem', fontWeight: '600' }}>MEP MODULE</span>
           </div>
           <div className="list-actions">
             <button className="btn-view-option">List</button>

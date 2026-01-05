@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
 
-const ViewVendorDetail = ({ onBack, onEdit }) => {
+const ViewVendorDetail = ({ onBack, onEdit, onViewDashboard }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeTab, setActiveTab] = useState('subsidiaries');
   const [communicationActiveTab, setCommunicationActiveTab] = useState('messages');
@@ -88,6 +88,12 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
     }
   };
 
+  const handleViewDashboard = () => {
+    if (onViewDashboard) {
+      onViewDashboard({ id: vendorData.id, name: vendorData.name });
+    }
+  };
+
   return (
     <div className="enquiry-detail">
       <div className="detail-header">
@@ -110,7 +116,7 @@ const ViewVendorDetail = ({ onBack, onEdit }) => {
             <i className="fas fa-arrow-right"></i>
           </button>
           <button className="btn-action">List</button>
-          <button className="btn-action">View Dashboard</button>
+          <button className="btn-action" onClick={handleViewDashboard}>View Dashboard</button>
           <button className="btn-action">Search</button>
         </div>
       </div>

@@ -9,6 +9,7 @@ const NewSubsidiary = ({ setCurrentPage }) => {
   const [formData, setFormData] = useState({
     subsidiaryIsInactive: false,
     name: '',
+    isChildSubsidiary: false,
     parentSubsidiary: 'Tech Onshore MEP Prefabricators Pte Ltd.',
     alwaysDisplaySubsidiaryName: false,
     subsidiaryLogo: '',
@@ -32,7 +33,6 @@ const NewSubsidiary = ({ setCurrentPage }) => {
     organisationIdType: 'UEN - Local Company Registration number issued by ACRA',
     salaryPayableAccount: '',
     cpfSubmissionNumber: '',
-    biometricIntegration: false,
     authorizePersonPhoneNo: '',
     irasAuthorizedPerson: '',
     paymentMode: '',
@@ -49,6 +49,14 @@ const NewSubsidiary = ({ setCurrentPage }) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleIsChildSubsidiaryChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      isChildSubsidiary: value,
+      parentSubsidiary: value ? prev.parentSubsidiary : ''
     }));
   };
 
@@ -163,15 +171,41 @@ const NewSubsidiary = ({ setCurrentPage }) => {
           </div>
 
           <div className="form-group">
-            <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>PARENT SUBSIDIARY</label>
-            <select
-              className="form-control"
-              value={formData.parentSubsidiary}
-              onChange={(e) => handleInputChange('parentSubsidiary', e.target.value)}
-            >
-              <option value="Tech Onshore MEP Prefabricators Pte Ltd.">Tech Onshore MEP Prefabricators Pte Ltd.</option>
-            </select>
+            <label style={{ display: 'block', marginBottom: '6px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>IS CHILD SUBSIDIARY</label>
+            <div style={{ display: 'flex', gap: '15px', alignItems: 'center', height: '38px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', margin: 0, fontSize: '12px' }}>
+                <input
+                  type="radio"
+                  name="isChildSubsidiary"
+                  checked={formData.isChildSubsidiary === true}
+                  onChange={() => handleIsChildSubsidiaryChange(true)}
+                />
+                Yes
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', margin: 0, fontSize: '12px' }}>
+                <input
+                  type="radio"
+                  name="isChildSubsidiary"
+                  checked={formData.isChildSubsidiary === false}
+                  onChange={() => handleIsChildSubsidiaryChange(false)}
+                />
+                No
+              </label>
+            </div>
           </div>
+
+          {formData.isChildSubsidiary && (
+            <div className="form-group">
+              <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>PARENT SUBSIDIARY</label>
+              <select
+                className="form-control"
+                value={formData.parentSubsidiary}
+                onChange={(e) => handleInputChange('parentSubsidiary', e.target.value)}
+              >
+                <option value="Tech Onshore MEP Prefabricators Pte Ltd.">Tech Onshore MEP Prefabricators Pte Ltd.</option>
+              </select>
+            </div>
+          )}
 
           <div className="form-group">
             <label style={{ display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: '600', color: '#666', textTransform: 'uppercase' }}>INTERCOMPANY ACCOUNT</label>
@@ -246,16 +280,6 @@ const NewSubsidiary = ({ setCurrentPage }) => {
               value={formData.vatRegistrationNo}
               onChange={(e) => handleInputChange('vatRegistrationNo', e.target.value)}
             />
-          </div>
-
-          <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input
-              type="checkbox"
-              checked={formData.biometricIntegration}
-              onChange={(e) => handleInputChange('biometricIntegration', e.target.checked)}
-              style={{ width: '14px', height: '14px' }}
-            />
-            <label style={{ margin: 0, fontSize: '12px' }}>BIOMETRIC INTEGRATION</label>
           </div>
 
           <div className="form-group">

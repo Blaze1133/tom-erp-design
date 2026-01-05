@@ -92,7 +92,8 @@ const ViewProductionProjectMasters = ({ onNewClick, onViewClick, onEditClick }) 
       <div className="list-header">
         <div className="list-title">
           <i className="fas fa-project-diagram"></i>
-          <h1>Project Masters</h1>
+          <h1>Projects_Master</h1>
+          <span style={{ marginLeft: '1rem', padding: '0.35rem 0.85rem', background: '#4a90e2', color: 'white', borderRadius: '4px', fontSize: '0.8rem', fontWeight: '600' }}>MEP MODULE</span>
         </div>
         <div className="list-actions">
           <button className="btn-view-option">List</button>

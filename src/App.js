@@ -364,6 +364,7 @@ import ViewCustomers from './components/ViewCustomers';
 import ViewCustomerDetail from './components/ViewCustomerDetail';
 import CreateCustomer from './components/CreateCustomer';
 import CustomerDashboard from './components/CustomerDashboard';
+import CustomersDashboard from './components/CustomersDashboard';
 import ViewVendors from './components/ViewVendors';
 import ViewVendorDetail from './components/ViewVendorDetail';
 import CreateVendor from './components/CreateVendor';
@@ -427,6 +428,7 @@ import CreateContractor from './components/CreateContractor';
 import UploadDrawings from './components/UploadDrawings';
 import ProjectDocuments from './components/ProjectDocuments';
 import ScanQRCode from './components/ScanQRCode';
+import ProductionScanQRCode from './components/ProductionScanQRCode';
 import DashboardModule from './components/DashboardModule';
 import FrameFabrication from './components/FrameFabrication';
 import TestingAlignment from './components/TestingAlignment';
@@ -488,6 +490,8 @@ function App() {
   const [selectedPlantProject, setSelectedPlantProject] = useState(null);
   const [selectedPlantSite, setSelectedPlantSite] = useState(null);
   const [selectedPlantModule, setSelectedPlantModule] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedVendor, setSelectedVendor] = useState(null);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -1822,6 +1826,8 @@ function App() {
         return <ProjectDocuments />;
       case 'scan-qr-code':
         return <ScanQRCode setCurrentPage={setCurrentPage} />;
+      case 'production-scan-qr':
+        return <ProductionScanQRCode setCurrentPage={setCurrentPage} />;
       case 'dashboard-module':
         return <DashboardModule setCurrentPage={setCurrentPage} />;
       case 'status-all-modules':
@@ -2501,16 +2507,26 @@ function App() {
           onNewClick={() => setCurrentPage('create-customer-master')}
           onViewClick={() => setCurrentPage('view-customer-master-detail')}
           onEditClick={() => setCurrentPage('edit-customer-master')}
-          onDashboardClick={() => setCurrentPage('customer-dashboard')}
+          onDashboardClick={() => setCurrentPage('customers-dashboard')}
+        />;
+      case 'customers-dashboard':
+        return <CustomersDashboard 
+          onBack={() => setCurrentPage('view-customer-masters')}
         />;
       case 'customer-dashboard':
         return <CustomerDashboard 
-          onBack={() => setCurrentPage('view-customer-masters')}
+          customerId={selectedCustomer?.id}
+          customerName={selectedCustomer?.name}
+          onBack={() => setCurrentPage('view-customer-master-detail')}
         />;
       case 'view-customer-master-detail':
         return <ViewCustomerDetail 
           onBack={() => setCurrentPage('view-customer-masters')}
           onEdit={() => setCurrentPage('edit-customer-master')}
+          onViewDashboard={(customer) => {
+            setSelectedCustomer(customer);
+            setCurrentPage('customer-dashboard');
+          }}
         />;
       case 'create-customer-master':
         return <CreateCustomer 
@@ -2537,10 +2553,20 @@ function App() {
         return <VendorDashboard 
           onBack={() => setCurrentPage('view-vendor-masters')}
         />;
+      case 'vendor-individual-dashboard':
+        return <VendorDashboard 
+          vendorId={selectedVendor?.id}
+          vendorName={selectedVendor?.name}
+          onBack={() => setCurrentPage('view-vendor-master-detail')}
+        />;
       case 'view-vendor-master-detail':
         return <ViewVendorDetail 
           onBack={() => setCurrentPage('view-vendor-masters')}
           onEdit={() => setCurrentPage('edit-vendor-master')}
+          onViewDashboard={(vendor) => {
+            setSelectedVendor(vendor);
+            setCurrentPage('vendor-individual-dashboard');
+          }}
         />;
       case 'create-vendor-master':
         return <CreateVendor 

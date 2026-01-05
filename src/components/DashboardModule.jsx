@@ -169,7 +169,7 @@ const DashboardModule = ({ setCurrentPage }) => {
         <div className="list-header">
           <div className="list-title">
             <i className="fas fa-tachometer-alt"></i>
-            <h1>Dashboard - Module</h1>
+            <h1>MEP Module Dashboard</h1>
           </div>
           <div className="list-actions">
             <button className="btn-view-option">Overview</button>
