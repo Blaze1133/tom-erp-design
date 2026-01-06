@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const MaterialIncomingStatus = ({ setCurrentPage }) => {
+const MaterialIncomingStatus = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     moduleNo: 'SANYU-CHWP-01',
@@ -47,6 +48,15 @@ const MaterialIncomingStatus = ({ setCurrentPage }) => {
   ]);
 
   const [supportingDocuments, setSupportingDocuments] = useState([]);
+
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData }));
+    if (Array.isArray(viewData.inspectionDetails)) setInspectionDetails(viewData.inspectionDetails);
+    if (Array.isArray(viewData.supportingDocuments)) {
+      setSupportingDocuments(viewData.supportingDocuments.map((name) => ({ name })));
+    }
+  }, [viewData]);
   
   // Signature canvas refs
   const qcSignatureRef = useRef(null);
@@ -61,6 +71,14 @@ const MaterialIncomingStatus = ({ setCurrentPage }) => {
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
+  };
+
+  const handleBack = () => {
+    if (viewOnly) {
+      setCurrentPage(returnPageId || 'production-plant-stages');
+      return;
+    }
+    setCurrentPage('plant-dashboard');
   };
 
   const handleInputChange = (e) => {
@@ -114,19 +132,30 @@ const MaterialIncomingStatus = ({ setCurrentPage }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (viewOnly) return;
     
     if (!formData.moduleNo) {
       showToast('Module No is required', 'error');
       return;
     }
 
-    // Save to localStorage to update Plant Dashboard
-    localStorage.setItem('plantMaterialIncomingStatus', 'Completed');
-    localStorage.setItem('plantMaterialIncomingData', JSON.stringify({
+    const payload = {
       ...formData,
       inspectionDetails,
       supportingDocuments: supportingDocuments.map(f => f.name)
-    }));
+    };
+
+    // Save to localStorage to update Plant Dashboard
+    localStorage.setItem('plantMaterialIncomingStatus', 'Completed');
+    localStorage.setItem('plantMaterialIncomingData', JSON.stringify(payload));
+
+    addStageSubmission({
+      module: 'Plant',
+      stageId: 'plant-material-incoming',
+      stageLabel: 'Material Incoming Status',
+      payload
+    });
 
     showToast('Material Incoming Status submitted successfully!', 'success');
     
@@ -175,7 +204,7 @@ const MaterialIncomingStatus = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="enquiry-detail">
+    <div className={`enquiry-detail ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="detail-header">
         <div className="detail-title">
           <i className="fas fa-clipboard-check"></i>
@@ -195,14 +224,14 @@ const MaterialIncomingStatus = ({ setCurrentPage }) => {
 
       <div className="detail-toolbar">
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button className="btn-toolbar" type="button" onClick={() => setCurrentPage('plant-dashboard')}>
+          <button className="btn-toolbar view-only-back" type="button" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <button className="btn-toolbar" type="button" onClick={() => setCurrentPage('plant-dashboard')}>
+          <button className="btn-toolbar" type="button" onClick={handleBack}>
             Cancel
           </button>
-          <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit}>
+          <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit} disabled={viewOnly}>
             <i className="fas fa-save"></i>
             Save
           </button>
@@ -211,6 +240,7 @@ const MaterialIncomingStatus = ({ setCurrentPage }) => {
 
       <div className="detail-content">
         <form onSubmit={handleSubmit}>
+          <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
           {/* Incoming Inspection Header */}
           <div className="detail-section">
             <div className="section-header">
@@ -1089,6 +1119,7 @@ const MaterialIncomingStatus = ({ setCurrentPage }) => {
             )}
             </div>
           </div>
+          </fieldset>
         </form>
       </div>
 

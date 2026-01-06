@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const DimensionalInspection = ({ setCurrentPage }) => {
+const DimensionalInspection = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     moduleNo: 'SANYU-CHWP-001',
@@ -47,8 +48,28 @@ const DimensionalInspection = ({ setCurrentPage }) => {
   const [clientApprovedDate, setClientApprovedDate] = useState('');
   const [clientWitnessedDate, setClientWitnessedDate] = useState('');
 
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData }));
+    if (Array.isArray(viewData.inspectionDetails)) setInspectionDetails(viewData.inspectionDetails);
+    if (Array.isArray(viewData.supportingDocuments)) {
+      setSupportingDocuments(viewData.supportingDocuments.map((name) => ({ name })));
+    }
+    if (viewData.tomDate != null) setTomDate(viewData.tomDate);
+    if (viewData.clientApprovedDate != null) setClientApprovedDate(viewData.clientApprovedDate);
+    if (viewData.clientWitnessedDate != null) setClientWitnessedDate(viewData.clientWitnessedDate);
+  }, [viewData]);
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
+  };
+
+  const handleBack = () => {
+    if (viewOnly) {
+      setCurrentPage(returnPageId || 'production-plant-stages');
+      return;
+    }
+    setCurrentPage('plant-dashboard');
   };
 
   const handleInputChange = (e) => {
@@ -100,22 +121,33 @@ const DimensionalInspection = ({ setCurrentPage }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (viewOnly) return;
     
     if (!formData.moduleNo) {
       showToast('Module No is required', 'error');
       return;
     }
 
-    // Save to localStorage to update Plant Dashboard
-    localStorage.setItem('plantDimensionalInspectionStatus', 'Completed');
-    localStorage.setItem('plantDimensionalInspectionData', JSON.stringify({
+    const payload = {
       ...formData,
       inspectionDetails,
       supportingDocuments: supportingDocuments.map(f => f.name),
       tomDate,
       clientApprovedDate,
       clientWitnessedDate
-    }));
+    };
+
+    // Save to localStorage to update Plant Dashboard
+    localStorage.setItem('plantDimensionalInspectionStatus', 'Completed');
+    localStorage.setItem('plantDimensionalInspectionData', JSON.stringify(payload));
+
+    addStageSubmission({
+      module: 'Plant',
+      stageId: 'plant-dimensional-inspection',
+      stageLabel: 'Dimensional Inspection',
+      payload
+    });
 
     showToast('Dimensional Inspection submitted successfully!', 'success');
     
@@ -164,7 +196,7 @@ const DimensionalInspection = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="enquiry-detail">
+    <div className={`enquiry-detail ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="detail-header">
         <div className="detail-title">
           <i className="fas fa-ruler-combined"></i>
@@ -184,14 +216,14 @@ const DimensionalInspection = ({ setCurrentPage }) => {
 
       <div className="detail-toolbar">
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button className="btn-toolbar" type="button" onClick={() => setCurrentPage('plant-dashboard')}>
+          <button className="btn-toolbar view-only-back" type="button" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <button className="btn-toolbar" type="button" onClick={() => setCurrentPage('plant-dashboard')}>
+          <button className="btn-toolbar" type="button" onClick={handleBack}>
             Cancel
           </button>
-          <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit}>
+          <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit} disabled={viewOnly}>
             <i className="fas fa-save"></i>
             Save
           </button>
@@ -200,6 +232,7 @@ const DimensionalInspection = ({ setCurrentPage }) => {
 
       <div className="detail-content">
         <form onSubmit={handleSubmit}>
+          <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
           {/* Dimensional Inspection Header */}
           <div className="detail-section">
             <div className="section-header">
@@ -862,12 +895,13 @@ const DimensionalInspection = ({ setCurrentPage }) => {
                 <i className="fas fa-arrow-left"></i>
                 Back
               </button>
-              <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit}>
+              <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit} disabled={viewOnly}>
                 <i className="fas fa-save"></i>
                 Save
               </button>
             </div>
           </div>
+          </fieldset>
         </form>
       </div>
 

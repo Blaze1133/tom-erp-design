@@ -919,18 +919,18 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       label: 'MEP Stages',
       hasSubmenu: true,
       submenu: [
-        { id: 'frame-fabrication', label: 'Fabrication' },
-        { id: 'production-me-services', label: 'M&E Assembly' },
-        { id: 'testing-alignment', label: 'Testing & Alignment' },
-        { id: 'fabrication-qa-qc', label: 'Fabrication QA & QC' },
-        { id: 'packaging', label: 'Packaging' },
-        { id: 'production-delivery', label: 'Delivery' },
-        { id: 'anchoring', label: 'Anchoring' },
-        { id: 'hoisting', label: 'Hoisting' },
-        { id: 'positioning', label: 'Positioning' },
-        { id: 'me-hookup', label: 'M&E Hookup' },
-        { id: 'installation', label: 'Installation' },
-        { id: 'final-qa-qc', label: 'Final QA QC' }
+        { id: 'mep-stage-frame-fabrication', label: 'Fabrication' },
+        { id: 'mep-stage-production-me-services', label: 'M&E Assembly' },
+        { id: 'mep-stage-testing-alignment', label: 'Testing & Alignment' },
+        { id: 'mep-stage-fabrication-qa-qc', label: 'Fabrication QA & QC' },
+        { id: 'mep-stage-packaging', label: 'Packaging' },
+        { id: 'mep-stage-production-delivery', label: 'Delivery' },
+        { id: 'mep-stage-anchoring', label: 'Anchoring' },
+        { id: 'mep-stage-hoisting', label: 'Hoisting' },
+        { id: 'mep-stage-positioning', label: 'Positioning' },
+        { id: 'mep-stage-me-hookup', label: 'M&E Hookup' },
+        { id: 'mep-stage-installation', label: 'Installation' },
+        { id: 'mep-stage-final-qa-qc', label: 'Final QA QC' }
       ]
     },
     { 
@@ -1017,18 +1017,18 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       label: 'MEP Stages',
       hasSubmenu: true,
       submenu: [
-        { id: 'frame-fabrication', label: 'Fabrication' },
-        { id: 'production-me-services', label: 'M&E Assembly' },
-        { id: 'testing-alignment', label: 'Testing & Alignment' },
-        { id: 'fabrication-qa-qc', label: 'Fabrication QA & QC' },
-        { id: 'packaging', label: 'Packaging' },
-        { id: 'production-delivery', label: 'Delivery' },
-        { id: 'anchoring', label: 'Anchoring' },
-        { id: 'hoisting', label: 'Hoisting' },
-        { id: 'positioning', label: 'Positioning' },
-        { id: 'me-hookup', label: 'M&E Hookup' },
-        { id: 'installation', label: 'Installation' },
-        { id: 'final-qa-qc', label: 'Final QA QC' }
+        { id: 'mep-stage-frame-fabrication', label: 'Fabrication' },
+        { id: 'mep-stage-production-me-services', label: 'M&E Assembly' },
+        { id: 'mep-stage-testing-alignment', label: 'Testing & Alignment' },
+        { id: 'mep-stage-fabrication-qa-qc', label: 'Fabrication QA & QC' },
+        { id: 'mep-stage-packaging', label: 'Packaging' },
+        { id: 'mep-stage-production-delivery', label: 'Delivery' },
+        { id: 'mep-stage-anchoring', label: 'Anchoring' },
+        { id: 'mep-stage-hoisting', label: 'Hoisting' },
+        { id: 'mep-stage-positioning', label: 'Positioning' },
+        { id: 'mep-stage-me-hookup', label: 'M&E Hookup' },
+        { id: 'mep-stage-installation', label: 'Installation' },
+        { id: 'mep-stage-final-qa-qc', label: 'Final QA QC' }
       ]
     },
     { 

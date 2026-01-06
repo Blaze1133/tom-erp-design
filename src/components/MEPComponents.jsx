@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toast from './Toast';
 import PipingInspectionModal from './PipingInspectionModal';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const MEPComponents = ({ setCurrentPage }) => {
+const MEPComponents = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     moduleNo: 'SANYU-CHWP-001',
@@ -15,8 +16,23 @@ const MEPComponents = ({ setCurrentPage }) => {
   const [showPipingModal, setShowPipingModal] = useState(false);
   const [pipingInspectionData, setPipingInspectionData] = useState(null);
 
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData }));
+    if (viewData.pipingInspectionData) setPipingInspectionData(viewData.pipingInspectionData);
+    setShowPipingModal(false);
+  }, [viewData]);
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
+  };
+
+  const handleBack = () => {
+    if (viewOnly) {
+      setCurrentPage(returnPageId || 'production-plant-stages');
+      return;
+    }
+    setCurrentPage('plant-dashboard');
   };
 
   const handleInputChange = (e) => {
@@ -53,6 +69,8 @@ const MEPComponents = ({ setCurrentPage }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (viewOnly) return;
     
     if (!formData.moduleNo) {
       showToast('Module No is required', 'error');
@@ -75,6 +93,13 @@ const MEPComponents = ({ setCurrentPage }) => {
     localStorage.setItem('plantMEPComponentsStatus', status);
     localStorage.setItem('plantMEPComponentsData', JSON.stringify(finalData));
 
+    addStageSubmission({
+      module: 'Plant',
+      stageId: 'plant-mep-components',
+      stageLabel: 'MEP Components',
+      payload: finalData
+    });
+
     showToast('MEP Components submitted successfully!', 'success');
     
     // Redirect to plant dashboard
@@ -94,7 +119,7 @@ const MEPComponents = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="enquiry-detail">
+    <div className={`enquiry-detail ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="detail-header">
         <div className="detail-title">
           <i className="fas fa-cogs"></i>
@@ -106,7 +131,7 @@ const MEPComponents = ({ setCurrentPage }) => {
           </div>
         </div>
         <div className="detail-actions">
-          <button className="btn-action" type="button" onClick={() => setCurrentPage('plant-dashboard')}>Back</button>
+          <button className="btn-action view-only-back" type="button" onClick={handleBack}>Back</button>
           <button className="btn-action" type="button">Search</button>
           <button className="btn-action" type="button">Customize</button>
         </div>
@@ -114,6 +139,7 @@ const MEPComponents = ({ setCurrentPage }) => {
 
       <div className="detail-content">
         <form onSubmit={handleSubmit}>
+          <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
           <div className="detail-section">
             <div className="section-header">
               <i className="fas fa-chevron-down"></i>
@@ -204,12 +230,14 @@ const MEPComponents = ({ setCurrentPage }) => {
               </div>
             </div>
           </div>
+          </fieldset>
 
           {/* Bottom Buttons */}
           <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #e5e7eb' }}>
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button 
                 type="submit"
+                disabled={viewOnly}
                 style={{
                   padding: '0.75rem 2rem',
                   backgroundColor: '#28a745',
@@ -229,6 +257,7 @@ const MEPComponents = ({ setCurrentPage }) => {
               <button 
                 type="button"
                 onClick={handleReset}
+                disabled={viewOnly}
                 style={{
                   padding: '0.75rem 2rem',
                   backgroundColor: '#6c757d',

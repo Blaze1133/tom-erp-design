@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const Packaging = ({ setCurrentPage }) => {
+const Packaging = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     moduleNo: 'GERA53-DFMA-10',
@@ -11,6 +12,11 @@ const Packaging = ({ setCurrentPage }) => {
     photo: '',
     projectName: 'GERA5-2'
   });
+
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData }));
+  }, [viewData]);
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -23,12 +29,24 @@ const Packaging = ({ setCurrentPage }) => {
     }));
   };
 
+  const handleBack = () => {
+    setCurrentPage(returnPageId || 'production-stages');
+  };
+
   const handleSubmit = () => {
+    if (viewOnly) return;
     // Validate required fields
     if (!formData.moduleNo) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
+
+    addStageSubmission({
+      module: 'MEP',
+      stageId: 'packaging',
+      stageLabel: 'Packaging',
+      payload: formData
+    });
 
     // Store completion status in localStorage to persist across components
     localStorage.setItem('packagingStatus', 'Completed');
@@ -54,21 +72,25 @@ const Packaging = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="enquiries-list">
+    <div className={`enquiries-list ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="list-header">
         <div className="list-title">
           <i className="fas fa-box"></i>
           <h1>Packaging</h1>
         </div>
         <div className="list-actions">
+          {viewOnly && (
+            <button className="btn-view-option view-only-back" onClick={handleBack}>Back</button>
+          )}
           <button className="btn-view-option">Form</button>
           <button className="btn-view-option">Package</button>
           <button className="btn-view-option">History</button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        <div className="form-section">
+      <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
+        <div className="quotation-container">
+          <div className="form-section">
           {/* Basic Information */}
           <div style={{ marginBottom: '2rem' }}>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.875rem' }}>
@@ -267,7 +289,8 @@ const Packaging = ({ setCurrentPage }) => {
             </button>
           </div>
         </div>
-      </div>
+        </div>
+      </fieldset>
 
       <Toast 
         message={toast.message} 

@@ -3,6 +3,23 @@
     padding: 0;
 }
 
+/* View-only mode for stage forms opened from consolidated stage lists */
+.view-only-stage button:not(.view-only-back) {
+  display: none !important;
+}
+
+.view-only-stage input[type="file"] {
+  display: none !important;
+}
+
+.view-only-stage input[type="file"] + label {
+  display: none !important;
+}
+
+.view-only-stage canvas {
+  display: none !important;
+}
+
 .list-header {
     display: flex;
     justify-content: space-between;

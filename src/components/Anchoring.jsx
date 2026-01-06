@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const Anchoring = ({ setCurrentPage }) => {
+const Anchoring = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [formData, setFormData] = useState({
     moduleNo: 'L14-DFMA-015',
     completionStatus: 'Completed',
@@ -12,6 +13,12 @@ const Anchoring = ({ setCurrentPage }) => {
 
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
   const [photoPreview, setPhotoPreview] = useState(null);
+
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData, photo: null }));
+    setPhotoPreview(null);
+  }, [viewData]);
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -42,6 +49,7 @@ const Anchoring = ({ setCurrentPage }) => {
   };
 
   const handleSubmit = () => {
+    if (viewOnly) return;
     // Validation
     if (!formData.moduleNo) {
       showToast('Please enter Module No', 'error');
@@ -56,6 +64,16 @@ const Anchoring = ({ setCurrentPage }) => {
     // Save to localStorage
     localStorage.setItem('anchoringStatus', formData.completionStatus);
     localStorage.setItem('anchoringCompletedOn', formData.completedOn);
+
+    addStageSubmission({
+      module: 'MEP',
+      stageId: 'anchoring',
+      stageLabel: 'Anchoring',
+      payload: {
+        ...formData,
+        photo: formData.photo ? (formData.photo.name || '') : ''
+      }
+    });
     
     showToast('Anchoring status updated successfully!', 'success');
     
@@ -77,11 +95,15 @@ const Anchoring = ({ setCurrentPage }) => {
   };
 
   const handleBack = () => {
+    if (viewOnly) {
+      setCurrentPage(returnPageId || 'production-stages');
+      return;
+    }
     setCurrentPage('dashboard-module');
   };
 
   return (
-    <div className="enquiries-list">
+    <div className={`enquiries-list ${viewOnly ? 'view-only-stage' : ''}`}>
       {toast.show && (
         <Toast
           message={toast.message}
@@ -96,6 +118,9 @@ const Anchoring = ({ setCurrentPage }) => {
           <h1>Anchoring</h1>
         </div>
         <div className="list-actions">
+          {viewOnly && (
+            <button className="btn-view-option view-only-back" onClick={handleBack}>Back</button>
+          )}
           <button className="btn-view-option">Form</button>
           <button className="btn-view-option">History</button>
         </div>
@@ -103,7 +128,8 @@ const Anchoring = ({ setCurrentPage }) => {
 
       <div className="quotation-container">
         <div className="form-section">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+          <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
             {/* Module No */}
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.875rem' }}>
@@ -244,6 +270,7 @@ const Anchoring = ({ setCurrentPage }) => {
               </div>
             </div>
           </div>
+          </fieldset>
 
           {/* Action Buttons */}
           <div style={{ 
@@ -256,6 +283,7 @@ const Anchoring = ({ setCurrentPage }) => {
           }}>
             <button
               onClick={handleSubmit}
+              disabled={viewOnly}
               style={{
                 padding: '0.75rem 2rem',
                 background: '#4a90e2',
@@ -275,6 +303,7 @@ const Anchoring = ({ setCurrentPage }) => {
             </button>
             <button
               onClick={handleReset}
+              disabled={viewOnly}
               style={{
                 padding: '0.75rem 2rem',
                 background: '#6b7280',

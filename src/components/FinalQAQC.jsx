@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const FinalQAQC = ({ setCurrentPage }) => {
+const FinalQAQC = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     moduleNo: 'L4-2FMA-016',
@@ -16,6 +17,17 @@ const FinalQAQC = ({ setCurrentPage }) => {
     verifiedDate: '',
     photo: null
   });
+
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({
+      ...prev,
+      ...viewData,
+      checkedBySignature: null,
+      verifiedBySignature: null,
+      photo: null
+    }));
+  }, [viewData]);
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -39,11 +51,24 @@ const FinalQAQC = ({ setCurrentPage }) => {
   };
 
   const handleSubmit = () => {
+    if (viewOnly) return;
     // Validate required fields
     if (!formData.moduleNo || !formData.completionStatus) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
+
+    addStageSubmission({
+      module: 'MEP',
+      stageId: 'final-qa-qc',
+      stageLabel: 'Final QA QC',
+      payload: {
+        ...formData,
+        checkedBySignature: formData.checkedBySignature ? (formData.checkedBySignature.name || '') : '',
+        verifiedBySignature: formData.verifiedBySignature ? (formData.verifiedBySignature.name || '') : '',
+        photo: formData.photo ? (formData.photo.name || '') : ''
+      }
+    });
 
     // Store completion status in localStorage
     localStorage.setItem('finalQAQCStatus', 'Completed');
@@ -72,29 +97,38 @@ const FinalQAQC = ({ setCurrentPage }) => {
     showToast('Form reset successfully', 'success');
   };
 
+  const handleBack = () => {
+    if (viewOnly) {
+      setCurrentPage(returnPageId || 'production-stages');
+      return;
+    }
+    setCurrentPage('dashboard-module');
+  };
+
   return (
-    <div className="sales-quotation">
+    <div className={`sales-quotation ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="page-header">
         <div className="page-title">
           <i className="fas fa-clipboard-check" style={{ fontSize: '24px', color: '#4a90e2' }}></i>
           <h1>Final QA/QC</h1>
         </div>
         <div className="page-actions">
-          <button className="btn btn-secondary" onClick={() => setCurrentPage('dashboard-module')}>
+          <button className="btn btn-secondary view-only-back" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <button className="btn btn-primary" onClick={handleSubmit}>
+          <button className="btn btn-primary" onClick={handleSubmit} disabled={viewOnly}>
             <i className="fas fa-save"></i>
             Submit
           </button>
-          <button className="btn btn-secondary" onClick={handleReset}>
+          <button className="btn btn-secondary" onClick={handleReset} disabled={viewOnly}>
             <i className="fas fa-redo"></i>
             Reset
           </button>
         </div>
       </div>
 
+      <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
       <div className="quotation-container">
         {/* Primary Information */}
         <div className="form-section">
@@ -313,6 +347,7 @@ const FinalQAQC = ({ setCurrentPage }) => {
           </div>
         </div>
       </div>
+      </fieldset>
 
       <Toast 
         message={toast.message} 

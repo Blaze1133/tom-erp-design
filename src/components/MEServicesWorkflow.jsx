@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ViewMEServices from './ViewMEServices';
 import UploadMEServices from './UploadMEServices';
 import PreviewMEServices from './PreviewMEServices';
 import Toast from './Toast';
+import { addStageSubmissions } from '../utils/stageSubmissions';
 
-const MEServicesWorkflow = () => {
+const MEServicesWorkflow = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [currentStep, setCurrentStep] = useState('list'); // 'list', 'upload', 'preview'
   const [previewData, setPreviewData] = useState([]);
   const [fileName, setFileName] = useState('');
   const [importedData, setImportedData] = useState([]);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
+  useEffect(() => {
+    if (!viewOnly) return;
+    setCurrentStep('list');
+    if (viewData) {
+      setImportedData([viewData]);
+    }
+  }, [viewOnly, viewData]);
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
 
   const handleUploadClick = () => {
+    if (viewOnly) return;
     setCurrentStep('upload');
   };
 
@@ -26,6 +36,7 @@ const MEServicesWorkflow = () => {
   };
 
   const handleImport = (selectedData, onImportComplete) => {
+    if (viewOnly) return;
     // Map the imported data to match the ViewMEServices structure
     const mappedData = selectedData.map((item, index) => ({
       id: Date.now() + index, // Generate unique ID
@@ -65,6 +76,13 @@ const MEServicesWorkflow = () => {
 
     // Add the mapped data to the main list
     setImportedData(prev => [...prev, ...mappedData]);
+
+    addStageSubmissions({
+      module: 'MEP',
+      stageId: 'production-me-services',
+      stageLabel: 'M&E Assembly',
+      payloads: mappedData
+    });
     
     // Call completion callback if provided
     if (onImportComplete) {
@@ -84,6 +102,11 @@ const MEServicesWorkflow = () => {
     setCurrentStep('list');
     setPreviewData([]);
     setFileName('');
+  };
+
+  const handleBack = () => {
+    if (!setCurrentPage) return;
+    setCurrentPage(returnPageId || 'production-stages');
   };
 
   const handleSettings = () => {
@@ -126,7 +149,7 @@ const MEServicesWorkflow = () => {
       default:
         return (
           <ViewMEServices
-            onUploadClick={handleUploadClick}
+            onUploadClick={viewOnly ? null : handleUploadClick}
             onViewClick={handleViewService}
             onEditClick={handleEditService}
             importedData={importedData}
@@ -137,7 +160,23 @@ const MEServicesWorkflow = () => {
 
   return (
     <>
-      {renderCurrentStep()}
+      {viewOnly && (
+        <div className="enquiries-list view-only-stage" style={{ marginBottom: '0.5rem' }}>
+          <div className="list-header">
+            <div className="list-title">
+              <i className="fas fa-cogs"></i>
+              <h1>M&E Services (View Only)</h1>
+            </div>
+            <div className="list-actions">
+              <button className="btn-view-option view-only-back" onClick={handleBack}>Back</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className={viewOnly ? 'view-only-stage' : ''}>
+        {renderCurrentStep()}
+      </div>
       
       
       <Toast 

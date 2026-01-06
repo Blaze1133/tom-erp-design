@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const VisualInspection = ({ setCurrentPage }) => {
+const VisualInspection = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     moduleNo: 'SANYU-CHWP-001',
@@ -47,8 +48,25 @@ const VisualInspection = ({ setCurrentPage }) => {
   const [clientApprovedDate, setClientApprovedDate] = useState('');
   const [clientWitnessedDate, setClientWitnessedDate] = useState('');
 
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData }));
+    if (Array.isArray(viewData.inspectionDetails)) setInspectionDetails(viewData.inspectionDetails);
+    if (viewData.tomDate != null) setTomDate(viewData.tomDate);
+    if (viewData.clientApprovedDate != null) setClientApprovedDate(viewData.clientApprovedDate);
+    if (viewData.clientWitnessedDate != null) setClientWitnessedDate(viewData.clientWitnessedDate);
+  }, [viewData]);
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
+  };
+
+  const handleBack = () => {
+    if (viewOnly) {
+      setCurrentPage(returnPageId || 'production-plant-stages');
+      return;
+    }
+    setCurrentPage('plant-dashboard');
   };
 
   const handleInputChange = (e) => {
@@ -100,21 +118,32 @@ const VisualInspection = ({ setCurrentPage }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (viewOnly) return;
     
     if (!formData.moduleNo) {
       showToast('Module No is required', 'error');
       return;
     }
 
-    // Save to localStorage to update Plant Dashboard
-    localStorage.setItem('plantVisualInspectionStatus', 'Completed');
-    localStorage.setItem('plantVisualInspectionData', JSON.stringify({
+    const payload = {
       ...formData,
       inspectionDetails,
       tomDate,
       clientApprovedDate,
       clientWitnessedDate
-    }));
+    };
+
+    // Save to localStorage to update Plant Dashboard
+    localStorage.setItem('plantVisualInspectionStatus', 'Completed');
+    localStorage.setItem('plantVisualInspectionData', JSON.stringify(payload));
+
+    addStageSubmission({
+      module: 'Plant',
+      stageId: 'plant-visual-inspection',
+      stageLabel: 'Visual Inspection',
+      payload
+    });
 
     showToast('Visual Inspection submitted successfully!', 'success');
     
@@ -163,7 +192,7 @@ const VisualInspection = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="enquiry-detail">
+    <div className={`enquiry-detail ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="detail-header">
         <div className="detail-title">
           <i className="fas fa-eye"></i>
@@ -183,14 +212,14 @@ const VisualInspection = ({ setCurrentPage }) => {
 
       <div className="detail-toolbar">
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button className="btn-toolbar" type="button" onClick={() => setCurrentPage('plant-dashboard')}>
+          <button className="btn-toolbar view-only-back" type="button" onClick={handleBack}>
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <button className="btn-toolbar" type="button" onClick={() => setCurrentPage('plant-dashboard')}>
+          <button className="btn-toolbar" type="button" onClick={handleBack}>
             Cancel
           </button>
-          <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit}>
+          <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit} disabled={viewOnly}>
             <i className="fas fa-save"></i>
             Save
           </button>
@@ -199,6 +228,7 @@ const VisualInspection = ({ setCurrentPage }) => {
 
       <div className="detail-content">
         <form onSubmit={handleSubmit}>
+          <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
           {/* Visual Inspection Header */}
           <div className="detail-section">
             <div className="section-header">
@@ -531,12 +561,13 @@ const VisualInspection = ({ setCurrentPage }) => {
                 <i className="fas fa-arrow-left"></i>
                 Back
               </button>
-              <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit}>
+              <button className="btn-toolbar-primary" type="submit" onClick={handleSubmit} disabled={viewOnly}>
                 <i className="fas fa-save"></i>
                 Save
               </button>
             </div>
           </div>
+          </fieldset>
         </form>
       </div>
 

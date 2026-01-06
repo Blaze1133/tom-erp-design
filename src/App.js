@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './App.css';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
+import StageSubmissionsList from './components/StageSubmissionsList';
+import StageSubmissionsOverview from './components/StageSubmissionsOverview';
+import { mepStageListConfigs, plantStageListConfigs } from './constants/stageListConfigs';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Quotation from './components/Quotation';
@@ -492,6 +495,7 @@ function App() {
   const [selectedPlantModule, setSelectedPlantModule] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedVendor, setSelectedVendor] = useState(null);
+  const [stageViewContext, setStageViewContext] = useState(null);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -511,6 +515,27 @@ function App() {
 
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  React.useEffect(() => {
+    const raw = sessionStorage.getItem('stageViewContext');
+    if (!raw) {
+      setStageViewContext(null);
+      return;
+    }
+
+    sessionStorage.removeItem('stageViewContext');
+
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.page === currentPage) {
+        setStageViewContext(parsed);
+      } else {
+        setStageViewContext(null);
+      }
+    } catch {
+      setStageViewContext(null);
+    }
+  }, [currentPage]);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -1653,9 +1678,9 @@ function App() {
           onEditClick={(record) => setCurrentPage('material-incoming-status')}
         />;
       case 'material-incoming-status':
-        return <MaterialIncomingStatus setCurrentPage={setCurrentPage} />;
+        return <MaterialIncomingStatus setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'dimensional-inspection':
-        return <DimensionalInspection setCurrentPage={setCurrentPage} />;
+        return <DimensionalInspection setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'view-dimensional-inspections':
         return <ViewDimensionalInspections 
           setCurrentPage={setCurrentPage}
@@ -1664,7 +1689,7 @@ function App() {
           onEditClick={(record) => setCurrentPage('dimensional-inspection')}
         />;
       case 'fitup-inspection':
-        return <FitUpInspection setCurrentPage={setCurrentPage} />;
+        return <FitUpInspection setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'view-fitup-inspections':
         return <ViewFitUpInspections 
           setCurrentPage={setCurrentPage}
@@ -1673,7 +1698,7 @@ function App() {
           onEditClick={(record) => setCurrentPage('fitup-inspection')}
         />;
       case 'hydrostatic-test':
-        return <HydrostaticTest setCurrentPage={setCurrentPage} />;
+        return <HydrostaticTest setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'view-hydrostatic-tests':
         return <ViewHydrostaticTests 
           setCurrentPage={setCurrentPage}
@@ -1682,7 +1707,7 @@ function App() {
           onEditClick={(record) => setCurrentPage('hydrostatic-test')}
         />;
       case 'material-traceability':
-        return <MaterialTraceability setCurrentPage={setCurrentPage} />;
+        return <MaterialTraceability setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'view-material-traceabilities':
         return <ViewMaterialTraceabilities 
           setCurrentPage={setCurrentPage}
@@ -1691,7 +1716,7 @@ function App() {
           onEditClick={(record) => setCurrentPage('material-traceability')}
         />;
       case 'visual-inspection':
-        return <VisualInspection setCurrentPage={setCurrentPage} />;
+        return <VisualInspection setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'view-visual-inspections':
         return <ViewVisualInspections 
           setCurrentPage={setCurrentPage}
@@ -1700,7 +1725,7 @@ function App() {
           onEditClick={(record) => setCurrentPage('visual-inspection')}
         />;
       case 'welding-traceability':
-        return <WeldingTraceability setCurrentPage={setCurrentPage} />;
+        return <WeldingTraceability setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'view-welding-traceabilities':
         return <ViewWeldingTraceabilities 
           setCurrentPage={setCurrentPage}
@@ -1709,7 +1734,7 @@ function App() {
           onEditClick={(record) => setCurrentPage('welding-traceability')}
         />;
       case 'mep-components':
-        return <MEPComponents setCurrentPage={setCurrentPage} />;
+        return <MEPComponents setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'view-piping-inspections':
         return <ViewPipingInspections 
           setCurrentPage={setCurrentPage}
@@ -1832,30 +1857,90 @@ function App() {
         return <DashboardModule setCurrentPage={setCurrentPage} />;
       case 'status-all-modules':
         return <StatusAllModules setCurrentPage={setCurrentPage} />;
+
+      // Consolidated stage views (view-only)
+      case 'production-stages':
+        return (
+          <StageSubmissionsOverview
+            title="MEP Stages"
+            configs={Object.entries(mepStageListConfigs).map(([pageId, config]) => ({ ...config, pageId }))}
+            setCurrentPage={setCurrentPage}
+          />
+        );
+      case 'mep-stage-frame-fabrication':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-frame-fabrication']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-frame-fabrication" />;
+      case 'mep-stage-production-me-services':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-production-me-services']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-production-me-services" />;
+      case 'mep-stage-testing-alignment':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-testing-alignment']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-testing-alignment" />;
+      case 'mep-stage-fabrication-qa-qc':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-fabrication-qa-qc']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-fabrication-qa-qc" />;
+      case 'mep-stage-packaging':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-packaging']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-packaging" />;
+      case 'mep-stage-production-delivery':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-production-delivery']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-production-delivery" />;
+      case 'mep-stage-anchoring':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-anchoring']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-anchoring" />;
+      case 'mep-stage-hoisting':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-hoisting']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-hoisting" />;
+      case 'mep-stage-positioning':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-positioning']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-positioning" />;
+      case 'mep-stage-me-hookup':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-me-hookup']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-me-hookup" />;
+      case 'mep-stage-installation':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-installation']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-installation" />;
+      case 'mep-stage-final-qa-qc':
+        return <StageSubmissionsList config={mepStageListConfigs['mep-stage-final-qa-qc']} setCurrentPage={setCurrentPage} returnPageId="mep-stage-final-qa-qc" />;
+
+      case 'production-plant-stages':
+        return (
+          <StageSubmissionsOverview
+            title="Plant Stages"
+            configs={Object.entries(plantStageListConfigs).map(([pageId, config]) => ({ ...config, pageId }))}
+            setCurrentPage={setCurrentPage}
+          />
+        );
+      case 'plant-material-incoming':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-material-incoming']} setCurrentPage={setCurrentPage} returnPageId="plant-material-incoming" />;
+      case 'plant-material-traceability':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-material-traceability']} setCurrentPage={setCurrentPage} returnPageId="plant-material-traceability" />;
+      case 'plant-fit-up':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-fit-up']} setCurrentPage={setCurrentPage} returnPageId="plant-fit-up" />;
+      case 'plant-visual-inspection':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-visual-inspection']} setCurrentPage={setCurrentPage} returnPageId="plant-visual-inspection" />;
+      case 'plant-dimensional-inspection':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-dimensional-inspection']} setCurrentPage={setCurrentPage} returnPageId="plant-dimensional-inspection" />;
+      case 'plant-welding-traceability':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-welding-traceability']} setCurrentPage={setCurrentPage} returnPageId="plant-welding-traceability" />;
+      case 'plant-mep-components':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-mep-components']} setCurrentPage={setCurrentPage} returnPageId="plant-mep-components" />;
+      case 'plant-hydrostatic-test':
+        return <StageSubmissionsList config={plantStageListConfigs['plant-hydrostatic-test']} setCurrentPage={setCurrentPage} returnPageId="plant-hydrostatic-test" />;
+
       case 'frame-fabrication':
-        return <FrameFabrication setCurrentPage={setCurrentPage} />;
+        return <FrameFabrication setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'testing-alignment':
-        return <TestingAlignment setCurrentPage={setCurrentPage} />;
+        return <TestingAlignment setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'fabrication-qa-qc':
-        return <FabricationQAQC setCurrentPage={setCurrentPage} />;
+        return <FabricationQAQC setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'packaging':
-        return <Packaging setCurrentPage={setCurrentPage} />;
+        return <Packaging setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'production-delivery':
-        return <ProductionDelivery />;
+        return <ProductionDelivery setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'anchoring':
-        return <Anchoring setCurrentPage={setCurrentPage} />;
+        return <Anchoring setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'hoisting':
-        return <Hoisting setCurrentPage={setCurrentPage} />;
+        return <Hoisting setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'positioning':
-        return <Positioning setCurrentPage={setCurrentPage} />;
+        return <Positioning setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'me-hookup':
-        return <MEHookup setCurrentPage={setCurrentPage} />;
+        return <MEHookup setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'installation':
-        return <Installation setCurrentPage={setCurrentPage} />;
+        return <Installation setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'final-qa-qc':
-        return <FinalQAQC setCurrentPage={setCurrentPage} />;
+        return <FinalQAQC setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'production-me-services':
-        return <MEServicesWorkflow />;
+        return <MEServicesWorkflow setCurrentPage={setCurrentPage} viewOnly={stageViewContext?.viewOnly === true} viewData={stageViewContext?.data} returnPageId={stageViewContext?.returnPageId} />;
       case 'production-time-tracking':
         return <ModuleWiseTimeTracking />;
       case 'module-wise-time-tracking':

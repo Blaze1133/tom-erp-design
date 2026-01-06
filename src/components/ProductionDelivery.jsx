@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const ProductionDelivery = ({ setCurrentPage }) => {
+const ProductionDelivery = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   // Form state
@@ -54,6 +55,11 @@ const ProductionDelivery = ({ setCurrentPage }) => {
     }
   });
 
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData }));
+  }, [viewData]);
+
   const adjustmentLocations = [
     'Hong Hang Shipyard',
     'Mega yard',
@@ -67,6 +73,10 @@ const ProductionDelivery = ({ setCurrentPage }) => {
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
+  };
+
+  const handleBack = () => {
+    setCurrentPage(returnPageId || 'production-stages');
   };
 
   const handleInputChange = (field, value) => {
@@ -98,6 +108,19 @@ const ProductionDelivery = ({ setCurrentPage }) => {
   };
 
   const handleSubmit = () => {
+    if (viewOnly) return;
+    const payload = {
+      ...formData,
+      photo: formData.photo && typeof formData.photo === 'object' ? (formData.photo.name || '') : formData.photo
+    };
+
+    addStageSubmission({
+      module: 'MEP',
+      stageId: 'production-delivery',
+      stageLabel: 'Delivery',
+      payload
+    });
+
     // Store completion status in localStorage to persist across components
     localStorage.setItem('deliveryStatus', 'Completed');
     
@@ -295,21 +318,25 @@ const ProductionDelivery = ({ setCurrentPage }) => {
   );
 
   return (
-    <div className="enquiries-list">
+    <div className={`enquiries-list ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="list-header">
         <div className="list-title">
           <i className="fas fa-truck"></i>
           <h1>Delivery</h1>
         </div>
         <div className="list-actions">
+          {viewOnly && (
+            <button className="btn-view-option view-only-back" onClick={handleBack}>Back</button>
+          )}
           <button className="btn-view-option">Form</button>
           <button className="btn-view-option">Delivery</button>
           <button className="btn-view-option">History</button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        <div className="form-section">
+      <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
+        <div className="quotation-container">
+          <div className="form-section">
           {/* Basic Information */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '1.5rem' }}>
             <div>
@@ -528,8 +555,9 @@ const ProductionDelivery = ({ setCurrentPage }) => {
               Reset
             </button>
           </div>
+          </div>
         </div>
-      </div>
+      </fieldset>
 
       <Toast 
         message={toast.message} 

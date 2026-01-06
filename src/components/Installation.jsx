@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const Installation = ({ setCurrentPage }) => {
+const Installation = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [formData, setFormData] = useState({
     moduleNo: 'L14-DFMA-015',
     checkListNumber: '',
@@ -42,6 +43,17 @@ const Installation = ({ setCurrentPage }) => {
     witnessedBy: false,
     approvedBy: false
   });
+
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData, photo: null }));
+    setPhotoPreview(null);
+    setSignatures({
+      checkedBy: null,
+      witnessedBy: null,
+      approvedBy: null
+    });
+  }, [viewData]);
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -126,6 +138,7 @@ const Installation = ({ setCurrentPage }) => {
   };
 
   const handleSubmit = () => {
+    if (viewOnly) return;
     // Validation
     if (!formData.moduleNo) {
       showToast('Please enter Module No', 'error');
@@ -145,6 +158,16 @@ const Installation = ({ setCurrentPage }) => {
     // Save to localStorage
     localStorage.setItem('installationStatus', 'Completed');
     localStorage.setItem('installationCompletedOn', formData.dateOfInstallation);
+
+    addStageSubmission({
+      module: 'MEP',
+      stageId: 'installation',
+      stageLabel: 'Installation',
+      payload: {
+        ...formData,
+        photo: formData.photo ? (formData.photo.name || '') : ''
+      }
+    });
     
     showToast('Installation details saved successfully!', 'success');
     
@@ -183,6 +206,10 @@ const Installation = ({ setCurrentPage }) => {
   };
 
   const handleBack = () => {
+    if (viewOnly) {
+      setCurrentPage(returnPageId || 'production-stages');
+      return;
+    }
     setCurrentPage('dashboard-module');
   };
 
@@ -195,7 +222,7 @@ const Installation = ({ setCurrentPage }) => {
   ];
 
   return (
-    <div className="enquiries-list">
+    <div className={`enquiries-list ${viewOnly ? 'view-only-stage' : ''}`}>
       {toast.show && (
         <Toast
           message={toast.message}
@@ -210,6 +237,9 @@ const Installation = ({ setCurrentPage }) => {
           <h1>Installation</h1>
         </div>
         <div className="list-actions">
+          {viewOnly && (
+            <button className="btn-view-option view-only-back" onClick={handleBack}>Back</button>
+          )}
           <button className="btn-view-option">Form</button>
           <button className="btn-view-option">History</button>
         </div>
@@ -217,6 +247,7 @@ const Installation = ({ setCurrentPage }) => {
 
       <div className="quotation-container">
         <div className="form-section">
+          <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
           {/* Basic Information */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
             <div>
@@ -683,6 +714,7 @@ const Installation = ({ setCurrentPage }) => {
             </div>
           </div>
 
+          </fieldset>
           {/* Action Buttons */}
           <div style={{ 
             display: 'flex', 
@@ -694,6 +726,7 @@ const Installation = ({ setCurrentPage }) => {
           }}>
             <button
               onClick={handleSubmit}
+              disabled={viewOnly}
               style={{
                 padding: '0.75rem 2rem',
                 background: '#4a90e2',
@@ -713,6 +746,7 @@ const Installation = ({ setCurrentPage }) => {
             </button>
             <button
               onClick={handleReset}
+              disabled={viewOnly}
               style={{
                 padding: '0.75rem 2rem',
                 background: '#6b7280',

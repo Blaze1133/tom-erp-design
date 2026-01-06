@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Toast from './Toast';
 import './Enquiries.css';
+import { addStageSubmission } from '../utils/stageSubmissions';
 
-const FrameFabrication = ({ setCurrentPage }) => {
+const FrameFabrication = ({ setCurrentPage, viewOnly = false, viewData = null, returnPageId = '' }) => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [formData, setFormData] = useState({
     module: '',
@@ -44,6 +45,11 @@ const FrameFabrication = ({ setCurrentPage }) => {
     calibrationDate: '19-Mar-2025'
   });
 
+  useEffect(() => {
+    if (!viewData) return;
+    setFormData(prev => ({ ...prev, ...viewData }));
+  }, [viewData]);
+
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
   };
@@ -65,12 +71,24 @@ const FrameFabrication = ({ setCurrentPage }) => {
     }));
   };
 
+  const handleBack = () => {
+    setCurrentPage(returnPageId || 'production-stages');
+  };
+
   const handleSubmit = () => {
+    if (viewOnly) return;
     // Validate required fields
     if (!formData.clientName || !formData.checkListNo) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
+
+    addStageSubmission({
+      module: 'MEP',
+      stageId: 'frame-fabrication',
+      stageLabel: 'Fabrication',
+      payload: formData
+    });
 
     // Store completion status in localStorage to persist across components
     localStorage.setItem('fabricationStatus', 'Completed');
@@ -136,21 +154,25 @@ const FrameFabrication = ({ setCurrentPage }) => {
   ];
 
   return (
-    <div className="enquiries-list">
+    <div className={`enquiries-list ${viewOnly ? 'view-only-stage' : ''}`}>
       <div className="list-header">
         <div className="list-title">
           <i className="fas fa-industry"></i>
           <h1>Frame Fabrication</h1>
         </div>
         <div className="list-actions">
+          {viewOnly && (
+            <button className="btn-view-option view-only-back" onClick={handleBack}>Back</button>
+          )}
           <button className="btn-view-option">Form</button>
           <button className="btn-view-option">Checklist</button>
           <button className="btn-view-option">History</button>
         </div>
       </div>
 
-      <div className="quotation-container">
-        <div className="form-section">
+      <fieldset disabled={viewOnly} style={{ border: 0, padding: 0, margin: 0 }}>
+        <div className="quotation-container">
+          <div className="form-section">
           {/* Module Header */}
           <div style={{ 
             marginBottom: '2rem', 
@@ -884,8 +906,9 @@ const FrameFabrication = ({ setCurrentPage }) => {
               Reset
             </button>
           </div>
+          </div>
         </div>
-      </div>
+      </fieldset>
 
       <Toast 
         message={toast.message} 

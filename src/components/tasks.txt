@@ -1,2 +1,48 @@
-in subsdiary masters for hte is child subsiday instead of yes or no like just a check box , do it in that way
-next the customer masters overall dashboar dis looking like a report rather than a dashboard, pleease change it and maek the design look clean and neat
+The MEP Stages and Plant Stages screens are already created and follow the list-view layout shown in the reference image (for example: MEP Stages – Fabrication). These screens currently load correctly but do not show any data.
+
+What needs to be implemented is:
+
+For each stage under MEP Stages and Plant Stages, show at least 2 dummy records in the table. These records are only for UI representation and testing.
+
+Table Behavior
+
+The table columns must be stage-dependent.
+
+Columns should not be the same for all stages.
+
+For each stage (e.g., Fabrication, Installation, Testing, etc.), go through the existing “New” form of that stage and pick the relevant form fields.
+
+Use those selected form fields as the table columns for that particular stage.
+
+No new fields should be added and no existing fields should be modified.
+
+View Action
+
+Each row should have a View action.
+
+On clicking View, open the existing “New” screen of the same stage.
+
+The screen must open in view-only (read-only) mode:
+
+All input fields should be disabled
+
+No edit, save, or submit actions should be allowed
+
+No separate view screens should be created.
+
+General Rules
+
+Follow the same list-view design already used in the project.
+
+Do not change the UI layout, spacing, or styling.
+
+
+Dummy data is sufficient; no real data integration is required.
+
+This same implementation must be done for:
+
+All MEP stages
+
+All Plant stages
+
+The end result should be a stage-wise, read-only overview, with stage-specific table columns, and proper navigation to the existing “New” screens in view-only mode.
