@@ -986,10 +986,9 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
       label: 'Dashboards',
       hasSubmenu: true,
       submenu: [
-        { id: 'production-dashboard-overall', label: 'Overall Dashboard' },
-        { id: 'dashboard-module', label: 'Module Dashboard' },
+        { id: 'production-dashboard-overall', label: 'MEP Overall Dashboard' },
         { id: 'production-workshop-dashboard', label: 'Workshop Dashboard' },
-        { id: 'plant-dashboard', label: 'Plant Dashboard' }
+        { id: 'plant-modules-dashboard', label: 'Plant Modules Dashboard' }
       ]
     },
     { id: 'status-all-modules', label: 'Status All Modules', hideArrow: true },
@@ -1726,103 +1725,6 @@ const Sidebar = ({ collapsed, setCollapsed, currentPage, setCurrentPage }) => {
           </div>
         </div>
         
-        {/* MEP Module Menu with Submenu */}
-        <div className="nav-item-parent" onMouseEnter={handleMepHover}>
-          <div
-            ref={mepItemRef}
-            className="nav-item"
-          >
-            <i className="fas fa-tools"></i>
-            <span>MEP Module</span>
-          </div>
-          <div className="submenu" style={{ top: `${mepSubmenuTop}px`, '--submenu-top': `${mepSubmenuTop}px` }}>
-            {mepSubItems.map((subItem) => (
-              <div key={subItem.id} className="submenu-item-wrapper">
-                {subItem.hasSubmenu ? (
-                  <>
-                    <div
-                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
-                      onClick={() => setCurrentPage(subItem.id)}
-                      onMouseEnter={(e) => handleNestedHover(e, `production-${subItem.id}`)}
-                    >
-                      <i className="fas fa-chevron-right"></i>
-                      <span>{subItem.label}</span>
-                      <i className="fas fa-chevron-right nested-arrow"></i>
-                    </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`production-${subItem.id}`] || 0}px` }}>
-                      {subItem.submenu.map((nestedItem) => (
-                        <div
-                          key={nestedItem.id}
-                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
-                          onClick={() => setCurrentPage(nestedItem.id)}
-                        >
-                          <span>{nestedItem.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div
-                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
-                    onClick={() => setCurrentPage(subItem.id)}
-                  >
-                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
-                    <span>{subItem.label}</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Plant Module Menu with Submenu */}
-        <div className="nav-item-parent" onMouseEnter={handlePlantHover}>
-          <div
-            ref={plantItemRef}
-            className="nav-item"
-          >
-            <i className="fas fa-industry"></i>
-            <span>Plant Module</span>
-          </div>
-          <div className="submenu" style={{ top: `${plantSubmenuTop}px`, '--submenu-top': `${plantSubmenuTop}px` }}>
-            {plantSubItems.map((subItem) => (
-              <div key={subItem.id} className="submenu-item-wrapper">
-                {subItem.hasSubmenu ? (
-                  <>
-                    <div
-                      className={`submenu-item has-nested ${currentPage === subItem.id ? 'active' : ''}`}
-                      onClick={() => setCurrentPage(subItem.id)}
-                      onMouseEnter={(e) => handleNestedHover(e, `plant-${subItem.id}`)}
-                    >
-                      <i className="fas fa-chevron-right"></i>
-                      <span>{subItem.label}</span>
-                      <i className="fas fa-chevron-right nested-arrow"></i>
-                    </div>
-                    <div className="nested-submenu" style={{ top: `${nestedSubmenuTop[`plant-${subItem.id}`] || 0}px`, '--nested-submenu-top': `${nestedSubmenuTop[`plant-${subItem.id}`] || 0}px` }}>
-                      {subItem.submenu.map((nestedItem) => (
-                        <div
-                          key={nestedItem.id}
-                          className={`nested-submenu-item ${currentPage === nestedItem.id ? 'active' : ''}`}
-                          onClick={() => setCurrentPage(nestedItem.id)}
-                        >
-                          <span>{nestedItem.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div
-                    className={`submenu-item ${currentPage === subItem.id ? 'active' : ''}`}
-                    onClick={() => setCurrentPage(subItem.id)}
-                  >
-                    {!subItem.hideArrow && <i className="fas fa-chevron-right"></i>}
-                    <span>{subItem.label}</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
         
         
         {/* Masters Menu with Submenu */}

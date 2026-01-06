@@ -385,6 +385,7 @@ import CreateProjectMaster from './components/CreateProjectMaster';
 // Plant Module Components
 import PlantScanQRCode from './components/PlantScanQRCode';
 import PlantDashboardModule from './components/PlantDashboardModule';
+import PlantModulesDashboard from './components/PlantModulesDashboard';
 import MaterialIncomingStatus from './components/MaterialIncomingStatus';
 import ViewMaterialIncomingStatuses from './components/ViewMaterialIncomingStatuses';
 import DimensionalInspection from './components/DimensionalInspection';
@@ -1670,6 +1671,8 @@ function App() {
         return <PlantScanQRCode setCurrentPage={setCurrentPage} />;
       case 'plant-dashboard':
         return <PlantDashboardModule setCurrentPage={setCurrentPage} />;
+      case 'plant-modules-dashboard':
+        return <PlantModulesDashboard />;
       case 'view-material-incoming-statuses':
         return <ViewMaterialIncomingStatuses 
           setCurrentPage={setCurrentPage}
