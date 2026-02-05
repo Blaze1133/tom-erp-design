@@ -12,7 +12,7 @@ const Login = ({ onLogin }) => {
     setError('');
     
     // Validate credentials
-    if (email === 'admin@gmail.com' && password === 'info@123$') {
+    if (email === 'admin@gmail.com' && password === 'Info@123$65') {
       onLogin();
     } else {
       setError('Invalid email or password. Please try again.');

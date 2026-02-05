@@ -1628,16 +1628,25 @@ function App() {
       // Production Module Cases
       case 'production-project-masters':
         return <ViewProductionProjectMasters 
-          onNewClick={() => setCurrentPage('create-project-master')}
-          onViewClick={() => setCurrentPage('view-project-master-detail')}
-          onEditClick={() => setCurrentPage('create-project-master')}
+          onNewClick={() => setCurrentPage('create-production-project-master')}
+          onViewClick={() => setCurrentPage('view-production-project-master-detail')}
+          onEditClick={() => setCurrentPage('edit-production-project-master')}
         />;
-      case 'create-project-master':
-        return <CreateProjectMaster />;
-      case 'view-project-master-detail':
+      case 'create-production-project-master':
+        return <CreateProjectMaster 
+          onSave={() => setCurrentPage('production-project-masters')}
+          onCancel={() => setCurrentPage('production-project-masters')}
+        />;
+      case 'view-production-project-master-detail':
         return <ViewProjectMasterDetail 
-          onBack={() => setCurrentPage('production-project-masters')}
-          onEdit={() => setCurrentPage('create-project-master')}
+          onBack={() => setCurrentPage('production-project-masters')} 
+          onEdit={() => setCurrentPage('edit-production-project-master')}
+        />;
+      case 'edit-production-project-master':
+        return <CreateProjectMaster 
+          isEdit={true}
+          onSave={() => setCurrentPage('production-project-masters')}
+          onCancel={() => setCurrentPage('view-production-project-master-detail')}
         />;
       case 'production-site-locations':
         return <ViewSiteLocations 
